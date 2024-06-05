@@ -19,5 +19,5 @@ Route::middleware('auth')->group(function () {
 
 require __DIR__.'/auth.php';
 require __DIR__.'/web_activites.php';
-include __DIR__.'/web_candidatures.php';
 require __DIR__.'/web_rapport.php';
+require __DIR__.'/web_candidatures.php';
