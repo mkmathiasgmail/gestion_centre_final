@@ -12,8 +12,10 @@ class EmplayabiliteController extends Controller
      * Display a listing of the resource.
      */
     public function index()
+
     {
-        //
+            $employabilites = Emplayabilite::all();
+        return view('employabilite.index', compact('employabilites'));
     }
 
     /**
