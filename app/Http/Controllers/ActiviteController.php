@@ -23,7 +23,18 @@ class ActiviteController extends Controller
 
     public function store(Request $request)
     {
-        //
+        $activites = Activite::create([
+            'title' => $request->title,
+            'description' => $request->description,
+            'image' => $request->image,
+            'lieu' => 'kinshasa',
+            'status' => 1,
+            'date_debut' => $request->date_debut,
+            'date_fin' => $request->date_fin
+        ]);
+
+    
+        return redirect()->route('activites.index', compact('activites'));
     }
 
 

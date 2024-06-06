@@ -1,9 +1,79 @@
 <x-app-layout>
 
     <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
-            {{ __('Activites') }}
-        </h2>
+        <div class="flex justify-between items-center">
+            <div>
+                <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
+                    {{ __('Gestion Activites') }}
+                </h2>
+            </div>
+
+            <div class=" flex items-center gap-5">
+                <div>
+                    <ul class="flex gap-2 text-white">
+                        <li><a href="{{ route('activites.index') }}">Activites</a></li>
+                        <li><a href="{{ route('encours') }}">Activites-encours</a></li>
+                        <li><a href="">Categories</a></li>
+                        <li><a href="">Etiquettes</a></li>
+                    </ul>
+                </div>
+                <div class="">
+                    <form class="max-w-lg mx-auto">
+                        <div class="flex">
+                            <label for="search-dropdown"
+                                class="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white">Your
+                                Email</label>
+                            <button id="dropdown-button" data-dropdown-toggle="dropdown"
+                                class="flex-shrink-0 z-10 inline-flex items-center py-2.5 px-4 text-sm font-medium text-center text-gray-900 bg-gray-100 border border-gray-300 rounded-s-lg hover:bg-gray-200 focus:ring-4 focus:outline-none focus:ring-gray-100 dark:bg-gray-700 dark:hover:bg-gray-600 dark:focus:ring-gray-700 dark:text-white dark:border-gray-600"
+                                type="button">All categories <svg class="w-2.5 h-2.5 ms-2.5" aria-hidden="true"
+                                    xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
+                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                        stroke-width="2" d="m1 1 4 4 4-4" />
+                                </svg></button>
+                            <div id="dropdown"
+                                class="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700">
+                                <ul class="py-2 text-sm text-gray-700 dark:text-gray-200"
+                                    aria-labelledby="dropdown-button">
+                                    <li>
+                                        <button type="button"
+                                            class="inline-flex w-full px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Mockups</button>
+                                    </li>
+                                    <li>
+                                        <button type="button"
+                                            class="inline-flex w-full px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Templates</button>
+                                    </li>
+                                    <li>
+                                        <button type="button"
+                                            class="inline-flex w-full px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Design</button>
+                                    </li>
+                                    <li>
+                                        <button type="button"
+                                            class="inline-flex w-full px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Logos</button>
+                                    </li>
+                                </ul>
+                            </div>
+                            <div class="relative w-full">
+                                <input type="search" id="search-dropdown"
+                                    class="block p-2.5 w-full z-20 text-sm text-gray-900 bg-gray-50 rounded-e-lg border-s-gray-50 border-s-2 border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-s-gray-700  dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:border-blue-500"
+                                    placeholder="Search Mockups, Logos, Design Templates..." required />
+                                <button type="submit"
+                                    class="absolute top-0 end-0 p-2.5 text-sm font-medium h-full text-white bg-blue-700 rounded-e-lg border border-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+                                    <svg class="w-4 h-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
+                                        fill="none" viewBox="0 0 20 20">
+                                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                            stroke-width="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z" />
+                                    </svg>
+                                    <span class="sr-only">Search</span>
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+
+            </div>
+
+        </div>
+
     </x-slot>
 
 
@@ -28,6 +98,9 @@
             <thead class="text-xs text-white uppercase bg-gray-50 dark:bg-gray-700 dark:text-white">
                 <tr>
                     <th scope="col" class="px-6 py-3">
+                        Id
+                    </th>
+                    <th scope="col" class="px-6 py-3">
                         Title
                     </th>
                     <th scope="col" class="px-6 py-3">
@@ -48,9 +121,11 @@
                 </tr>
             </thead>
             <tbody>
-                @foreach ($activite as $item)
+                @foreach ($activite as $i => $item)
                     <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
-
+                        <td class="px-6 py-4">
+                            {{ +$i }}
+                        </td>
                         <td class="px-6 py-4">
                             <a href="{{ route('activites.show', $item->id) }}">{{ $item->title }}</a>
                         </td>
@@ -81,9 +156,9 @@
     <div id="default-modal1" tabindex="-1" aria-hidden="true"
         class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
         <div class="relative p-4 w-full max-w-2xl max-h-full">
-            <!-- Modal content -->
+
             <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
-                <!-- Modal header -->
+         
                 <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
                     <h3 class="text-xl font-semibold text-gray-900 dark:text-white">
                         Terms of Service
@@ -93,78 +168,94 @@
                         data-modal-hide="default-modal">
                         <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
                             viewBox="0 0 14 14">
-                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
+                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
                         </svg>
                         <span class="sr-only">Close modal</span>
                     </button>
                 </div>
-                <!-- Modal body -->
-                <form action="" method="post">
-                    <div class="p-4 md:p-5 space-y-4">
+                <form action="{{route('activites.store')}}" method="post">
+                    <div class="p-5 md:p-5 space-y-4 text-white items-center">
 
                         @csrf
-                        <div class="flex gap-6 mb-5 text-white">
-                            <div>
-                                <div><label for="titre">Title</label></div>
-                                <div><input type="text" name="titre" id="titre" class=" h-8 rounded-md"
-                                        placeholder="Donne un titre a votre Article" required></div>
-                            </div>
-                            <div>
-                                <div><label for="contenue">Image (Url)</label></div>
-                                <div><input type="text" name="path" id="path" class="  h-8 rounded-md"
-                                        placeholder="Inserer un lien d'image pour votre article" required></div>
-                            </div>
-
+                        <div>
+                            <div><label for="title">Title</label></div>
+                            <div><input type="text" name="title" id="title" class="w-full h-8 rounded-md text-gray-600"
+                                    placeholder="Donne un titre a votre Article" required></div>
                         </div>
 
-                        <div class=" flex gap-8">
-                            <div>
-                                <div><label for="tags">Tags</label></div>
-                                <div>
-                                    <select name="tags[]" id="tags" multiple class=" h-8 rounded-md">
-                                        <option value="" disabled>selectionner un Etiquette</option>
-
-                                        <option value=""></option>
-
-                                    </select>
-                                </div>
-                            </div>
-
-                            <div>
-                                <div><label for="category_id">Categorie</label></div>
-                                <div>
-                                    <select name="categorie_id" id="categorie_id" class=" w h-8 rounded-md">
-                                        <option value="" disabled>selectionner une Categorie</option>
-
-                                        <option value=""></option>
-
-                                    </select>
-                                </div>
-                            </div>
-
+                        <div class="">
+                            <div><label for="image">Image (Url)</label></div>
+                            <div><input type="text" name="image" id="image" class=" w-full h-8 rounded-md text-gray-600"
+                                    placeholder="Inserer un lien d'image pour votre article" required></div>
                         </div>
 
+                        <div >
+                            <div><label for="date_debut">Date debut</label></div>
+                            <div><input type="date" name="date_debut" id="date_debut" class="w-full h-8 rounded-md text-gray-600"
+                                    placeholder="Donne un titre a votre Article" required></div>
+                        </div>
+                        <div>
+                            <div><label for="date_fin">Date fin</label></div>
+                            <div><input type="date" name="date_fin" id="date_fin" class="w-full h-8 rounded-md text-gray-600"
+                                    placeholder="Donne un titre a votre Article" required></div>
+                        </div>
 
+                        <div>
+                            <div><label for="lieu">Lieu</label></div>
+                            <div>
+                                <select name="lieu" id="lieu" class="w-full h-8 rounded-md text-gray-600">
+                                    <option value="kinshasa">Kinshasa</option>
+                                    <option value="lumubumbashi">Lubumbashi</option>
+                                </select>
+                            </div>
+                        </div>
 
+                        <div>
+                            <div><label for="tags">Tags</label></div>
+                            <div>
+                                <select name="tags" id="tags" multiple class="w-full h-8 rounded-md text-gray-600">
+                                    <option value="" disabled>selectionner un Etiquette</option>
+
+                                    <option value=""></option>
+
+                                </select>
+                            </div>
+                        </div>
+
+                        <div>
+                            <div><label for="category_id">Categorie</label></div>
+                            <div>
+                                <select name="categorie_id" id="categorie_id" class="w-full h-8 rounded-md">
+                                    <option value="" disabled>selectionner une Categorie</option>
+
+                                    <option value=""></option>
+
+                                </select>
+                            </div>
+                        </div>
 
                         <div class=" mb-5 mt-5">
-                            <label for="contenue">Content</label>
-                            <textarea name="contenue" id="contenue"></textarea>
+                            <div>
+                                <label for="contenue">Content</label>
+                            </div>
+                            <div>
+                                <textarea name="description" id="contenue" required class="w-full text-gray-600"></textarea>
+                            </div>
+
                         </div>
                     </div>
                     <!-- Modal footer -->
                     <div class="flex items-center p-4 md:p-5 border-t border-gray-200 rounded-b dark:border-gray-600">
-                        <button data-modal-hide="default-modal" type="button"
+                        <button data-modal-hide="default-modal" type="submit"
                             class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">I
                             accept</button>
-                        <button data-modal-hide="default-modal" type="button"
+                        <button data-modal-hide="default-modal" type="reset"
                             class="py-2.5 px-5 ms-3 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">Decline</button>
                     </div>
                 </form>
             </div>
         </div>
     </div>
-
 
 </x-app-layout>
