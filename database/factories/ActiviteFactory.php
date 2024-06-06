@@ -22,8 +22,6 @@ class ActiviteFactory extends Factory
             'lieu'=> $this->faker->address,
             'image'=> $this->faker->url,
             'status'=> $this->faker->boolean,
-            'categorie_id'=> $this->faker->randomDigit,
-            'user_id'=> $this->faker->randomDigit,
             'date_debut'=> $this->faker->date,
             'date_fin'=> $this->faker->date
         ];
