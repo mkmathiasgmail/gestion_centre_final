@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Emplayabilite;
+use Illuminate\Routing\Controller;
 use App\Http\Requests\StoreEmplayabiliteRequest;
 use App\Http\Requests\UpdateEmplayabiliteRequest;
 
@@ -23,7 +24,7 @@ class EmplayabiliteController extends Controller
      */
     public function create()
     {
-        //
+        return view('employabilite.create');
     }
 
     /**
@@ -39,7 +40,8 @@ class EmplayabiliteController extends Controller
      */
     public function show(Emplayabilite $emplayabilite)
     {
-        //
+        $emplayabilites = Emplayabilite::all();
+        return view('employabilite.show', compact('emplayabilites'));
     }
 
     /**
@@ -55,7 +57,8 @@ class EmplayabiliteController extends Controller
      */
     public function update(UpdateEmplayabiliteRequest $request, Emplayabilite $emplayabilite)
     {
-        //
+       $emplayabilite->update($request->all());
+       return redirect()->route('employabilite.index');
     }
 
     /**

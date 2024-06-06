@@ -17,7 +17,11 @@ class EmplayabiliteFactory extends Factory
     public function definition(): array
     {
         return [
-            //
+            'name' => $this->faker->name,
+            'type_contrat' => $this->faker->sentence,
+            'genre_contrat' => $this->faker->sentence,
+            'nomboite' => $this->faker->jobTitle,
+            'periode' => $this->faker->date,
         ];
     }
 }
