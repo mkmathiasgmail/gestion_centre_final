@@ -11,15 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('activites', function (Blueprint $table) {
+        Schema::create('emplayabilites', function (Blueprint $table) {
             $table->id();
-            $table->string('title');
-            $table->text('description');
-            $table->string('lieu');
-            $table->string('image');
-            $table->boolean('status');
-            $table->date('date_debut');
-            $table->date('date_fin');
+            $table->string('name');
+            $table->string('type_contrat');
+            $table->string('genre_contrat');
+            $table->string('nomboite');
+            $table->string('periode');
             $table->timestamps();
         });
     }
@@ -29,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('activites');
+        Schema::dropIfExists('emplayabilites');
     }
 };
