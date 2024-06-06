@@ -2,8 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Activite;
 use Carbon\Carbon;
+use App\Models\Activite;
+use App\Models\Categorie;
 use Illuminate\Http\Request;
 
 class ActiviteController extends Controller
@@ -11,10 +12,9 @@ class ActiviteController extends Controller
 
     public function index(){
         $activite= Activite::all();
-
-        return view('activites.index',compact('activite'));
+        $cat = Categorie::all();
+        return view('activites.index',compact('activite','cat'));
     }
-
 
     public function create()
     {
@@ -30,10 +30,10 @@ class ActiviteController extends Controller
             'lieu' => 'kinshasa',
             'status' => 1,
             'date_debut' => $request->date_debut,
+            'categorie_id' => $request->categorie_id,
             'date_fin' => $request->date_fin
         ]);
 
-    
         return redirect()->route('activites.index', compact('activites'));
     }
 
@@ -53,29 +53,21 @@ class ActiviteController extends Controller
 
     public function update(Request $request, Activite $activite)
     {
-        //
+        $activite->update($request->all());
+        return redirect()->route('activites.index')
+                        ->with('success', 'Activite updated successfully.');
     }
-
 
     public function destroy(Activite $activite)
     {
-        //
+        $activite->delete();
+        return redirect()->route('activites.index')
+                        ->with('success', 'Activite deleted successfully.');
     }
 
-
     Public function encours(){
-
         $today= Carbon::today();
-
         $activites= Activite::where('date_debut','<=',$today)->where('date_fin','>=',$today)->get();
-
         return view('encours',compact('activites'));
-
-
-
-
-
-
-
     }
 }
