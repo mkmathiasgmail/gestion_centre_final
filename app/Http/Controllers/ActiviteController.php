@@ -8,16 +8,17 @@ use Illuminate\Http\Request;
 
 class ActiviteController extends Controller
 {
-    
+
     public function index(){
         $activite= Activite::all();
+
         return view('activites.index',compact('activite'));
     }
 
-    
+
     public function create()
     {
-        
+
     }
 
     public function store(Request $request)
@@ -39,23 +40,23 @@ class ActiviteController extends Controller
 
     public function show(Activite $activite)
     {
-        $show= $activite;
+        $show= $activite; 
         return view('activites.show',compact('show'));
     }
 
-    
+
     public function edit(Activite $activite)
     {
         //
     }
 
-   
+
     public function update(Request $request, Activite $activite)
     {
         //
     }
 
-    
+
     public function destroy(Activite $activite)
     {
         //
@@ -69,11 +70,11 @@ class ActiviteController extends Controller
         $activites= Activite::where('date_debut','<=',$today)->where('date_fin','>=',$today)->get();
 
         return view('encours',compact('activites'));
-       
 
 
 
-       
+
+
 
 
     }

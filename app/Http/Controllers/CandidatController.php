@@ -13,7 +13,9 @@ class CandidatController extends Controller
      */
     public function index()
     {
-        //
+        $candidats = Candidat::latest()->get();
+
+        return view('candidats.index', compact('candidats')) ;
     }
 
     /**
