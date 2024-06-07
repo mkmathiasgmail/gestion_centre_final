@@ -17,6 +17,8 @@
     },
     "dependencies": {
         "assemblyai": "^4.4.5",
-        "flowbite": "^2.3.0"
+        "ckeditor5": "^41.4.2",
+        "flowbite": "^2.3.0",
+        "quill": "^2.0.2"
     }
 }
