@@ -110,6 +110,9 @@
                         Lieu
                     </th>
                     <th scope="col" class="px-6 py-3">
+                        Categories
+                    </th>
+                    <th scope="col" class="px-6 py-3">
                         Date_debut
                     </th>
                     <th scope="col" class="px-6 py-3">
@@ -133,6 +136,9 @@
                             {{ substr($item->description, 0, 100) }}
                         </td>
                         <td class="px-6 py-4">
+                            {{ $item->categorie->categorie}}
+                        </td>
+                        <td class="px-6 py-4">
                             {{ $item->lieu }}
                         </td>
                         <td class="px-6 py-4">
@@ -141,6 +147,8 @@
                         <td class="px-6 py-4">
                             {{ $item->date_fin }}
                         </td>
+
+                        
                         <td class="px-6 py-4 flex gap-4">
                             <a href="{{ route('activites.update', $item->id) }}"
                                 class=" p-2 bg-blue-600">Modification</a>
@@ -158,7 +166,7 @@
         <div class="relative p-4 w-full max-w-2xl max-h-full">
 
             <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
-         
+
                 <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
                     <h3 class="text-xl font-semibold text-gray-900 dark:text-white">
                         Terms of Service
@@ -174,30 +182,34 @@
                         <span class="sr-only">Close modal</span>
                     </button>
                 </div>
-                <form action="{{route('activites.store')}}" method="post">
+                <form action="{{ route('activites.store') }}" method="post">
                     <div class="p-5 md:p-5 space-y-4 text-white items-center">
 
                         @csrf
                         <div>
                             <div><label for="title">Title</label></div>
-                            <div><input type="text" name="title" id="title" class="w-full h-8 rounded-md text-gray-600"
+                            <div><input type="text" name="title" id="title"
+                                    class="w-full h-8 rounded-md text-gray-600"
                                     placeholder="Donne un titre a votre Article" required></div>
                         </div>
 
                         <div class="">
                             <div><label for="image">Image (Url)</label></div>
-                            <div><input type="text" name="image" id="image" class=" w-full h-8 rounded-md text-gray-600"
+                            <div><input type="text" name="image" id="image"
+                                    class=" w-full h-8 rounded-md text-gray-600"
                                     placeholder="Inserer un lien d'image pour votre article" required></div>
                         </div>
 
-                        <div >
+                        <div>
                             <div><label for="date_debut">Date debut</label></div>
-                            <div><input type="date" name="date_debut" id="date_debut" class="w-full h-8 rounded-md text-gray-600"
+                            <div><input type="date" name="date_debut" id="date_debut"
+                                    class="w-full h-8 rounded-md text-gray-600"
                                     placeholder="Donne un titre a votre Article" required></div>
                         </div>
                         <div>
                             <div><label for="date_fin">Date fin</label></div>
-                            <div><input type="date" name="date_fin" id="date_fin" class="w-full h-8 rounded-md text-gray-600"
+                            <div><input type="date" name="date_fin" id="date_fin"
+                                    class="w-full h-8 rounded-md text-gray-600"
                                     placeholder="Donne un titre a votre Article" required></div>
                         </div>
 
@@ -214,7 +226,8 @@
                         <div>
                             <div><label for="tags">Tags</label></div>
                             <div>
-                                <select name="tags" id="tags" multiple class="w-full h-8 rounded-md text-gray-600">
+                                <select name="tags" id="tags" multiple
+                                    class="w-full h-8 rounded-md text-gray-600">
                                     <option value="" disabled>selectionner un Etiquette</option>
 
                                     <option value=""></option>
@@ -228,9 +241,9 @@
                             <div>
                                 <select name="categorie_id" id="categorie_id" class="w-full h-8 rounded-md">
                                     <option value="" disabled>selectionner une Categorie</option>
-
-                                    <option value=""></option>
-
+                                    @foreach ($cat as $category)
+                                    <option value="{{ $category->id }}">{{ $category->categorie}}</option>
+                                    @endforeach
                                 </select>
                             </div>
                         </div>

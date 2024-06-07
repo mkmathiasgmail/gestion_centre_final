@@ -20,6 +20,7 @@ return new class extends Migration
             $table->boolean('status');
             $table->date('date_debut');
             $table->date('date_fin');
+            $table->foreignId('categorie_id')->constrained()->onDelete('cascade')->onUpdate('no action');
             $table->timestamps();
         });
     }
