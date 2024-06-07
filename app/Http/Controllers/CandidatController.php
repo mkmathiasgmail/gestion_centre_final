@@ -40,7 +40,7 @@ class CandidatController extends Controller
      */
     public function show(Candidat $candidat)
     {
-        //
+        return view('candidats.show', compact('candidat')) ;
     }
 
     /**
