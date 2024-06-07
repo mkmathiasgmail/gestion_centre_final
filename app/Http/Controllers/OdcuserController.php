@@ -49,7 +49,7 @@ class OdcuserController extends Controller
      */
     public function edit(Odcuser $odcuser)
     {
-        //
+        return view('odcusers.edit', compact('odcuser'));
     }
 
     /**
