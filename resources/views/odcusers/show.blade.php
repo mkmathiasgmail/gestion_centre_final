@@ -46,8 +46,8 @@
                 <span class="text-base text-gray-500 dark:text-gray-400">{{ $odcuser->profession }}</span>
             </div>
             <div>
-                <div class="flex">
-                    <div class="" justify-center items-center gap-8 py-6">
+                <div class="flex gap-9 justify-center">
+                    <div class="justify-center items-center gap-8 py-6">
                         <div class="flex mb-3 gap-3 items-center">
                             <label for="website-admin" class="block mb-2 text-base font-black text-gray-900 dark:text-white">Firstname : </label>
 
@@ -70,52 +70,50 @@
                         </div>
 
                     </div>
-                </div>
-                <div class="flex justify-center items-center gap-8 py-6">
-                    <div class="flex items-center mb-3 gap-3">
-                        <label for="website-admin" class="block mb-2 text-base font-black text-gray-900 dark:text-white">Birthdate : </label>
-                        <p class="block mb-2 text-base font-medium text-gray-900 dark:text-white">{{ $odcuser->birthdate }}</p>
+                    <div class="justify-center items-center gap-8 py-6">
+                        <div class="flex items-center mb-3 gap-3">
+                            <label for="website-admin" class="block mb-2 text-base font-black text-gray-900 dark:text-white">Birthdate : </label>
+                            <p class="block mb-2 text-base font-medium text-gray-900 dark:text-white">{{ $odcuser->birthdate }}</p>
+
+                        </div>
+                        <div class="flex items-center mb-3 gap-3">
+                            <label for="website-admin" class="block mb-2 text-base font-black text-gray-900 dark:text-white">Phone number : </label>
+                            <p class="block mb-2 text-base font-medium text-gray-900 dark:text-white">{{ $odcuser->phone }}</p>
+
+                        </div>
+                        <div class="flex items-center mb-3 gap-3">
+                            <label for="website-admin" class="block mb-2 text-base font-black text-gray-900 dark:text-white">LinkedIn :</label>
+                            <p class="block mb-2 text-base font-medium text-gray-900 dark:text-white">{{ $odcuser->linkedin }}</p>
+
+                        </div>
+                        <div class="flex items-center mb-3 gap-3">
+                            <label for="website-admin" class="block mb-2 text-base font-black text-gray-900 dark:text-white">Profession :</label>
+                            <p class="block mb-2 text-base font-medium text-gray-900 dark:text-white">{{ $odcuser->profession }}</p>
+
+                        </div>
 
                     </div>
-                    <div class="flex items-center mb-3 gap-3">
-                        <label for="website-admin" class="block mb-2 text-base font-black text-gray-900 dark:text-white">Phone number : </label>
-                        <p class="block mb-2 text-base font-medium text-gray-900 dark:text-white">{{ $odcuser->phone }}</p>
+                    <div class="justify-center items-center gap-8 py-6 mb-9">
+                        <div class="flex items-center mb-3 gap-3">
+                            <label for="website-admin" class="block mb-2 text-base font-blackm text-gray-900 dark:text-white">Company :</label>
+                            <p class="block mb-2 text-base font-medium text-gray-900 dark:text-white">{{ $odcuser->company }}</p>
 
-                    </div>
-                    <div class="flex items-center mb-3 gap-3">
-                        <label for="website-admin" class="block mb-2 text-base font-black text-gray-900 dark:text-white">LinkedIn :</label>
-                        <p class="block mb-2 text-base font-medium text-gray-900 dark:text-white">{{ $odcuser->linkedin }}</p>
+                        </div>
+                        <div class="flex items-center mb-3 gap-3">
+                            <label for="website-admin" class="block mb-2 text-base font-black text-gray-900 dark:text-white">University :</label>
+                            <p class="block mb-2 text-base font-medium text-gray-900 dark:text-white">{{ $odcuser->university }}</p>
 
-                    </div>
-                    <div class="flex items-center mb-3 gap-3">
-                        <label for="website-admin" class="block mb-2 text-base font-black text-gray-900 dark:text-white">Profession :</label>
-                        <p class="block mb-2 text-base font-medium text-gray-900 dark:text-white">{{ $odcuser->profession }}</p>
+                        </div>
+                        <div class="flex items-center mb-3 gap-3">
+                            <label for="website-admin" class="block mb-2 text-base font-black text-gray-900 dark:text-white">Country :</label>
+                            <p class="block mb-2 text-base font-medium text-gray-900 dark:text-white">{{ $odcuser->country }}</p>
 
-                    </div>
+                        </div>
+                        <div class="flex items-center mb-3 gap-3">
+                            <label for="website-admin" class="block mb-2 text-base font-black text-gray-900 dark:text-white">Speciality :</label>
+                            <p class="block mb-2 text-base font-medium text-gray-900 dark:text-white">{{ $odcuser->speciality }}</p>
 
-                </div>
-                <div class="flex justify-center items-center gap-8 py-6 mb-9">
-                    <div class="flex items-center mb-3 gap-3">
-                        <label for="website-admin" class="block mb-2 text-base font-blackm text-gray-900 dark:text-white">Company :</label>
-                        <p class="block mb-2 text-base font-medium text-gray-900 dark:text-white">{{ $odcuser->company }}</p>
-
-                    </div>
-                    <div class="flex items-center mb-3 gap-3">
-                        <label for="website-admin" class="block mb-2 text-base font-black text-gray-900 dark:text-white">University :</label>
-                        <p class="block mb-2 text-base font-medium text-gray-900 dark:text-white">{{ $odcuser->university }}</p>
-
-                    </div>
-                </div>
-                <div class="flex justify-center items-center gap-8 py-6 mb-9">
-                    <div class="flex items-center mb-3 gap-3">
-                        <label for="website-admin" class="block mb-2 text-base font-black text-gray-900 dark:text-white">Country :</label>
-                        <p class="block mb-2 text-base font-medium text-gray-900 dark:text-white">{{ $odcuser->country }}</p>
-
-                    </div>
-                    <div class="flex items-center mb-3 gap-3">
-                        <label for="website-admin" class="block mb-2 text-base font-black text-gray-900 dark:text-white">Speciality :</label>
-                        <p class="block mb-2 text-base font-medium text-gray-900 dark:text-white">{{ $odcuser->speciality }}</p>
-
+                        </div>
                     </div>
                 </div>
             </div>
