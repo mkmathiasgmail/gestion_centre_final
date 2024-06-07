@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Emplayabilite;
+use Illuminate\Routing\Controller;
 use App\Http\Requests\StoreEmplayabiliteRequest;
 use App\Http\Requests\UpdateEmplayabiliteRequest;
 
@@ -12,8 +13,10 @@ class EmplayabiliteController extends Controller
      * Display a listing of the resource.
      */
     public function index()
+
     {
-        //
+            $employabilites = Emplayabilite::all();
+        return view('employabilite.index', compact('employabilites'));
     }
 
     /**
@@ -21,7 +24,7 @@ class EmplayabiliteController extends Controller
      */
     public function create()
     {
-        //
+        return view('employabilite.create');
     }
 
     /**
@@ -29,7 +32,18 @@ class EmplayabiliteController extends Controller
      */
     public function store(StoreEmplayabiliteRequest $request)
     {
-        //
+        $activites = Emplayabilite::create([
+            'name' => $request->name,
+            'type_contrat' => $request->type_contrat,
+            'genre_contrat' => $request->genre_contrat,
+            'nomboite' => $request->nomboite,
+            'periode' => $request->periode,
+
+
+        ]);
+
+
+        return redirect()->route('employabilite.index', compact('employabilites'));
     }
 
     /**
@@ -37,7 +51,8 @@ class EmplayabiliteController extends Controller
      */
     public function show(Emplayabilite $emplayabilite)
     {
-        //
+        $emplayabilites = Emplayabilite::all();
+        return view('employabilite.show', compact('emplayabilites'));
     }
 
     /**
@@ -53,7 +68,8 @@ class EmplayabiliteController extends Controller
      */
     public function update(UpdateEmplayabiliteRequest $request, Emplayabilite $emplayabilite)
     {
-        //
+       $emplayabilite->update($request->all());
+       return redirect()->route('employabilite.index');
     }
 
     /**
