@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Candidat;
 use App\Http\Requests\StoreCandidatRequest;
 use App\Http\Requests\UpdateCandidatRequest;
+use App\Models\Odcuser;
 
 class CandidatController extends Controller
 {
@@ -13,7 +14,7 @@ class CandidatController extends Controller
      */
     public function index()
     {
-        $candidats = Candidat::latest()->get();
+        $candidats = Candidat::has('odcuser')->get();
 
         return view('candidats.index', compact('candidats')) ;
     }

@@ -18,7 +18,7 @@ class CandidatFactory extends Factory
     {
         return [
             'activite_id' => $this->faker->numberBetween(1, 10),
-            'odcuser_id' => $this->faker->numberBetween(1, 10),
+            'odcuser_id' => $this->faker->randomElement([1, 2, 3, 4]),
             'status' => $this->faker->boolean
         ];
 
