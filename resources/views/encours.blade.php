@@ -116,7 +116,7 @@
                                 <a href="{{ route('activites.show', $item->id) }}">{{ $item->title }}</a>
                             </td>
                             <td class="px-6 py-4">
-                                {{ $item->description }}
+                                {{ substr($item->description, 0, 200) }}
                             </td>
                             <td class="px-6 py-4">
                                 {{ $item->lieu }}
@@ -130,8 +130,7 @@
                             <td class="px-6 py-4 flex gap-4">
                                 <a href="{{ route('activites.update', $item->id) }}"
                                     class=" p-2 bg-blue-600">Modification</a>
-                                <a href="{{ route('activites.destroy', $item->id) }}"
-                                    class=" p-2 bg-red-600">Supprimer</a>
+                                
                             </td>
                         </tr>
                     @endforeach

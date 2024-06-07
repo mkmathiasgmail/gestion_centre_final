@@ -9,14 +9,7 @@
             </div>
 
             <div class=" flex items-center gap-5">
-                <div>
-                    <ul class="flex gap-2 text-white">
-                        <li><a href="{{ route('activites.index') }}">Activites</a></li>
-                        <li><a href="{{ route('encours') }}">Activites-encours</a></li>
-                        <li><a href="">Categories</a></li>
-                        <li><a href="">Etiquettes</a></li>
-                    </ul>
-                </div>
+                
                 <div class="">
                     <form class="max-w-lg mx-auto">
                         <div class="flex">
