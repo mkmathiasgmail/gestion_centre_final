@@ -13,8 +13,8 @@
             inévitablement par la tenue d'une liste exhaustive des employés.!</p>
 
 
-        <a class=" mt-5 bg-teal-600 p-2 rounded-sm font-bold"data-modal-target="popup-modal"
-            data-modal-toggle="popup-modal">AJOUTER</a>
+        <a class=" mt-5 bg-teal-600 p-2 rounded-sm font-bold"data-modal-target="default-modal1"
+            data-modal-toggle="default-modal1">AJOUTER</a>
 
 
     </div>
@@ -81,7 +81,7 @@
 
 
 
-    </form>
+
 
     <button
         class="block text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
@@ -89,77 +89,91 @@
 
     </button>
 
-    <div id="popup-modal" tabindex="-1"
-        class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
-        <div class="relative p-4 w-full max-w-md max-h-full">
-            <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
+
+
+
+    <div id="default-modal1" tabindex="-1" aria-hidden="true"
+    class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
+    <div class="relative p-4 w-full max-w-2xl max-h-full">
+
+        <div class="relative rounded-lg shadow dark:bg-gray-700">
+
+            <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
+                <h3 class="text-xl font-semibold text-gray-900">
+
+                </h3>
                 <button type="button"
-                    class="absolute top-3 end-2.5 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
-                    data-modal-hide="popup-modal">
+                    class="text-gray-400 bg-transparent  hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
+                    data-modal-hide="default-modal">
                     <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
                         viewBox="0 0 14 14">
-                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
+                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                            stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
                     </svg>
-                    <span class="sr-only"></span>
+                    <span class="sr-only">Close modal</span>
                 </button>
-                <div class="p-4 md:p-5 text-center">
-                    <div class="container">
-                        <div class="row">
-                            <div class="col-md-12">
-                                <div class="card">
-                                    <div class="card-header ">
-                                        <h4 class="text-center text 2xl:text-3xl font-bold text-yellow-500">Inserer</h4>
-                                    </div>
-                                    <div class=" card-body ">
+            </div>
+            <form action="{{route('employabilite.store')}}" method="post">
+                <div class="p-5 md:p-5 space-y-4 items-center">
 
-                                        <form action="/index" method="POST" >
-                                            <div class="form-group">
-                                                <label for="">Name</label>
-                                                <input type="text" class="form-control" name="name"
-                                                    id="">
-                                            </div>
-                                            <div class="form-group">
-                                                <label for="">Type contrat</label>
-                                                <select name="type_contrat" class="form-control" id="type">
-                                                    <option value="">--choisir type contrat--</option>
-                                                    <option value="">CDI</option>
-                                                    <option value="">CDD</option>
-                                                    <option value="">Stage</option>
-                                                    <option value="">Alternance</option>
-                                                </select>
-                                            </div>
+                    @csrf
 
-                                            <div class="form-group">
-                                                <label for="">genre contrat</label>
-                                                <input type="genre" class="form-control" name="genre_contrat"
-                                                    id="">
-                                            </div>
-
-                                            <div class="form-group">
-                                                <label for="">peroide</label>
-                                                <input type="date" class="form-control" name="periode"
-                                                    id="periode">
-                                            </div>
-
-
-                                        </form>
-                                        <br>
-
-                                                <button data-modal-hide="popup-modal" type="button" class="text-white bg-red-600 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 dark:focus:ring-red-800 font-medium rounded-lg text-sm inline-flex items-center px-5 py-2.5 text-center">
-                                                      ajouter
-                                                </button>
-
-
-                                     </div>
-                                </div>
-                            </div>
-
-                        </div>
-
+                            <h1 class="text-xl font-semibold text-yellow-500">inserer</h1>
+                    <div>
+                        <div><label for="name">name</label></div>
+                        <div><input type="text" name="name" id="name" class="w-full h-8 rounded-md text-gray-600"
+                                placeholder="" required></div>
                     </div>
 
+                            <div class="form-group">
+                                <label for="type_contrat">Type contrat</label>
+                                <select name="type_contrat" class="form-control" id="type">
+                                    <option value="">--choisir type contrat--</option>
+                                    <option value="">CDI</option>
+                                    <option value="">CDD</option>
+                                    <option value="">Stage</option>
+                                    <option value="">Alternance</option>
+                                </select>
+                            </div>
+                            <div>
+                                <div><label for="genre">genre contrat</label></div>
+                                <div><input type="text" name="genre_contrat" id="genre" class="w-full h-8 rounded-md text-gray-600"
+                                        placeholder="" required></div>
+                            </div>
+
+
+                            <div>
+                                <div><label for="nomboite">nom entreprise</label></div>
+                                <div><input type="text" name="nomboite" id="nomboite" class="w-full h-8 rounded-md text-gray-600"
+                                        placeholder="" required></div>
+                            </div>
+
+
+                    <div >
+                        <div><label for="date_debut">periode</label></div>
+                        <div><input type="date" name="periode" id="date_debut" class="w-full h-8 rounded-md text-gray-600"
+                                placeholder=""></div>
+                    </div>
+
+
                 </div>
-            </div>
+                <!-- Modal footer -->
+                <a href="/index" class="flex items-center p-4 md:p-5 border-t border-gray-200 rounded-b dark:border-gray-600">
+                    <button data-modal-hide="default-modal" type="submit"
+                        class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">I
+                        accept</button>
+                    <button data-modal-hide="default-modal" type="reset"
+                        class="py-2.5 px-5 ms-3 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">Decline</button>
+                </div>
+            </form>
         </div>
+    </div>
+</div>
+
+
+
+
+
+
+
 </x-app-layout>

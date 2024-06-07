@@ -32,7 +32,18 @@ class EmplayabiliteController extends Controller
      */
     public function store(StoreEmplayabiliteRequest $request)
     {
-        //
+        $activites = Emplayabilite::create([
+            'name' => $request->name,
+            'type_contrat' => $request->type_contrat,
+            'genre_contrat' => $request->genre_contrat,
+            'nomboite' => $request->nomboite,
+            'periode' => $request->periode,
+
+
+        ]);
+
+
+        return redirect()->route('employabilite.index', compact('employabilites'));
     }
 
     /**
