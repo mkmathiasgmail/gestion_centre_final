@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Carbon\Carbon;
 use App\Models\Activite;
+use App\Models\Candidat;
 use App\Models\Categorie;
 use Illuminate\Http\Request;
 
@@ -40,8 +41,9 @@ class ActiviteController extends Controller
 
     public function show(Activite $activite)
     {
-        $show= $activite; 
-        return view('activites.show',compact('show'));
+        $show= $activite;
+        $candidats = Candidat::has('activite')->get();
+        return view('activites.show', compact('show', 'candidats'));
     }
 
 
