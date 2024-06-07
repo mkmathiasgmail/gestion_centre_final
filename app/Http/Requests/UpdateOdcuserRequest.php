@@ -11,7 +11,7 @@ class UpdateOdcuserRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -22,7 +22,17 @@ class UpdateOdcuserRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'firstname' => 'required',
+            'lastname' => 'required',
+            'email' => 'required|email',
+            'password' => 'required',
+            'gender' => 'required',
+            'birthdate' => 'required',
+            'phone' => 'required',
+            'profession' => 'required',
+            'country' => 'required',
+            'cv' => 'required',
+            'photo' => 'required'
         ];
     }
 }

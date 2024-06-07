@@ -110,46 +110,46 @@
                 </tr>
             </thead>
             <tbody>
-                @foreach ($odcusers as $odcuser)
+                @foreach ($candidats as $candidat)
                     <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
                         <td class="px-6 py-4">
-                            {{ $odcuser->firstname }}
+                            {{ $candidat->odcuser_id }}
                         </td>
                         <td class="px-6 py-4">
-                            {{ $odcuser->lastname }}
+                            {{ $candidat->odcuser->lastname }}
                         </td>
                         <td class="px-6 py-4">
-                            {{ $odcuser->email }}
+                            {{ $candidat->odcuser->email }}
                         </td>
                         <td class="px-6 py-4">
-                            {{ $odcuser->gender }}
+                            {{ $candidat->odcuser->gender }}
                         </td>
                         <td class="px-6 py-4">
-                            {{ $odcuser->phone }}
+                            {{ $candidat->odcuser->phone }}
                         </td>
                         <td class="px-6 py-4">
-                            {{ $odcuser->profession }}
+                            {{ $candidat->odcuser->profession }}
                         </td>
                         <td class="px-6 py-4">
-                            {{ $odcuser->country }}
+                            {{ $candidat->odcuser->country }}
                         </td>
                         <td class="px-6 py-4 flex">
                             {{-- Show --}}
-                            <a href="{{ route('odcusers.show', $odcuser->id) }}">
+                            <a href="{{ route('candidats.show', $candidat->id) }}">
                                 <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
                                     <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 11h2v5m-2 0h4m-2.592-8.5h.01M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/>
                                 </svg>
                             </a>
                             {{-- Edit --}}
-                            <a href="{{ route('odcusers.edit', $odcuser->id)}}">
-                                <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
-                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m14.304 4.844 2.852 2.852M7 7H4a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h11a1 1 0 0 0 1-1v-4.5m2.409-9.91a2.017 2.017 0 0 1 0 2.853l-6.844 6.844L8 14l.713-3.565 6.844-6.844a2.015 2.015 0 0 1 2.852 0Z"/>
+                            <a href="{{ route('candidats.edit', $candidat->id)}}">
+                                <svg class="w-6 h-6 text-gray-800 candidatark:text-white" aria-hicandidaten="true" xmlns="http://www.w3.org/2000/svg" wicandidatth="24" height="24" fill="none" viewBox="0 0 24 24">
+                                    <path stroke="currentColor" stroke-linecap="rouncandidat" stroke-linejoin="rouncandidat" stroke-wicandidatth="2" candidat="m14.304 4.844 2.852 2.852M7 7H4a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h11a1 1 0 0 0 1-1v-4.5m2.409-9.91a2.017 2.017 0 0 1 0 2.853l-6.844 6.844L8 14l.713-3.565 6.844-6.844a2.015 2.015 0 0 1 2.852 0Z"/>
                                 </svg>
                             </a>
                             {{-- Remove --}}
                             <a href="">
-                                <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
-                                    <path fill-rule="evenodd" d="M5 8a4 4 0 1 1 8 0 4 4 0 0 1-8 0Zm-2 9a4 4 0 0 1 4-4h4a4 4 0 0 1 4 4v1a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-1Zm13-6a1 1 0 1 0 0 2h4a1 1 0 1 0 0-2h-4Z" clip-rule="evenodd"/>
+                                <svg class="w-6 h-6 text-gray-800 candidatark:text-white" aria-hicandidaten="true" xmlns="http://www.w3.org/2000/svg" wicandidatth="24" height="24" fill="currentColor" viewBox="0 0 24 24">
+                                    <path fill-rule="evenocandidatd" d="M5 8a4 4 0 1 1 8 0 4 4 0 0 1-8 0Zm-2 9a4 4 0 0 1 4-4h4a4 4 0 0 1 4 4v1a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-1Zm13-6a1 1 0 1 0 0 2h4a1 1 0 1 0 0-2h-4Z" clip-rule="evenodd"/>
                                 </svg>
                             </a>
                         </td>
