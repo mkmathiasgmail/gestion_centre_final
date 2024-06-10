@@ -2,8 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\MonthlyPlanningExport;
+use App\Models\Activite;
 use App\Models\Evaluation;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Maatwebsite\Excel\Facades\Excel;
 
 class EvaluationController extends Controller
 {
@@ -61,5 +65,19 @@ class EvaluationController extends Controller
     public function destroy(Evaluation $evaluation)
     {
         //
+    }
+
+    public function monthlyPlanningExport()
+    {
+        $data = Activite::select("date_debut")->get();
+
+        $dateTime = Carbon::now()->format("Y-m-d_H-i-s");
+        $fileName = "monthly_planning_data_" . $dateTime . ".xlsx";
+
+        $filePath = "public/reports/monthlyplanning/" . $fileName;
+
+        // Excel::store(new MonthlyPlanningExport($data), $filePath);
+        return Excel::download(new MonthlyPlanningExport($data), $fileName);
+
     }
 }
