@@ -9,7 +9,7 @@
             </div>
 
             <div class=" flex items-center gap-5">
-                
+
                 <div class="">
                     <form class="max-w-lg mx-auto">
                         <div class="flex">
@@ -135,13 +135,6 @@
                                 Phone
                             </th>
                             <th scope="col" class="px-6 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                Profession
-                            </th>
-                            <th scope="col" class="px-6 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                Country
-                            </th>
-                            <th scope="col" class="px-6 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                Activity
                             </th>
                             <th scope="col" class="px-6 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                                 Actions
@@ -167,13 +160,7 @@
                                     {{ $candidat->odcuser->phone }}
                                 </td>
                                 <td class="px-6 py-4">
-                                    {{ $candidat->odcuser->profession }}
-                                </td>
-                                <td class="px-6 py-4">
-                                    {{ $candidat->odcuser->country }}
-                                </td>
-                                <td class="px-6 py-4">
-                                    {{ $candidat->activite->title }}
+
                                 </td>
                                 <td class="px-6 py-4 flex">
                                     {{-- Show --}}
