@@ -119,53 +119,54 @@
                 </tr>
             </thead>
             <tbody>
-                @foreach ($odcusers as $odcuser)
-                    <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
-                        <td class="px-6 py-4">
-                            {{ $odcuser->firstname }}
-                        </td>
-                        <td class="px-6 py-4">
-                            {{ $odcuser->lastname }}
-                        </td>
-                        <td class="px-6 py-4">
-                            {{ $odcuser->email }}
-                        </td>
-                        <td class="px-6 py-4">
-                            {{ $odcuser->gender }}
-                        </td>
-                        <td class="px-6 py-4">
-                            {{ $odcuser->phone }}
-                        </td>
-                        <td class="px-6 py-4">
-                            {{ $odcuser->profession }}
-                        </td>
-                        <td class="px-6 py-4">
-                            {{ $odcuser->country }}
-                        </td>
+
+            </tbody>
+        </table>
+    </div>
+
+    @section('script')
+        <script>
+            function show(event, id) {
+                event.preventDefault()
+                link = "{{ route('odcusers.show', ':odcuserid') }}"
+                link = link.replace(':odcuserid', id)
+                alert(link)
+            }
+            addEventListener('load', async () => {
+                let odcusers = await fetch("http://10.252.252.54:8000/api/users/active").then(response => response.json())
+                console.log(odcusers)
+                odcusers.map(odcuser => {
+                    let tr = document.createElement('tr')
+                    tr.innerHTML = `
+                        <td class="px-6 py-4">${odcuser.firstname}</td>
+                        <td class="px-6 py-4">${odcuser.lastname}</td>
+                        <td class="px-6 py-4">${odcuser.email}</td>
+                        <td class="px-6 py-4">${odcuser.gender}</td>
+                        <td class="px-6 py-4">${odcuser.phone}</td>
+                        <td class="px-6 py-4">${odcuser.profession}</td>
+                        <td class="px-6 py-4">${odcuser.country}</td>
                         <td class="px-6 py-4 flex">
-                            {{-- Show --}}
-                            <a href="{{ route('odcusers.show', $odcuser->id) }}">
+                            <a href="http://127.0.0.1:8000/api/odcusers/${odcuser.id}" >
                                 <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
                                     <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 11h2v5m-2 0h4m-2.592-8.5h.01M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/>
                                 </svg>
                             </a>
-                            {{-- Edit --}}
-                            <a href="{{ route('odcusers.edit', $odcuser->id)}}">
+                            <a href="">
                                 <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
                                     <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m14.304 4.844 2.852 2.852M7 7H4a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h11a1 1 0 0 0 1-1v-4.5m2.409-9.91a2.017 2.017 0 0 1 0 2.853l-6.844 6.844L8 14l.713-3.565 6.844-6.844a2.015 2.015 0 0 1 2.852 0Z"/>
                                 </svg>
                             </a>
-                            {{-- Add new user --}}
-                            <a href="{{ route('odcusers.edit', $odcuser->id)}}">
+                            <a href="">
                                 <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
                                 <path fill-rule="evenodd" d="M9 4a4 4 0 1 0 0 8 4 4 0 0 0 0-8Zm-2 9a4 4 0 0 0-4 4v1a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2v-1a4 4 0 0 0-4-4H7Zm8-1a1 1 0 0 1 1-1h1v-1a1 1 0 1 1 2 0v1h1a1 1 0 1 1 0 2h-1v1a1 1 0 1 1-2 0v-1h-1a1 1 0 0 1-1-1Z" clip-rule="evenodd"/>
                               </svg>
                             </a>
                         </td>
-                    </tr>
-                @endforeach
-            </tbody>
-        </table>
-    </div>
 
+                    `
+                    document.querySelector('tbody').prepend(tr)
+                })
+            })
+        </script>
+    @endsection
 </x-app-layout>
