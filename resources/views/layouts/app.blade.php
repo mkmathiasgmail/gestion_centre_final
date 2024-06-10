@@ -8,7 +8,7 @@
 
         <title>{{ $title??'Gestion Centre' }}</title>
 
-        <link href="https://cdn.jsdelivr.net/npm/quill@2.0.2/dist/quill.snow.css" rel="stylesheet" />
+        <link rel="stylesheet" href="/DataTables/datatables.css"/>
 
         <!-- Fonts -->
         <link rel="preconnect" href="https://fonts.bunny.net">
