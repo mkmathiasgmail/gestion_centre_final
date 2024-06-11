@@ -12,14 +12,16 @@ class ActiviteController extends Controller
 {
 
     public function index(){
-        $activite= Activite::all();
-        $cat = Categorie::all();
-        return view('activites.index',compact('activite','cat'));
+        $rep= Activite::all();
+    
+       return view('activites.index',compact('rep'));
     }
 
     public function create()
     {
 
+        $cat = Categorie::all();
+        return view("components.form",compact("cat"));
     }
 
     public function store(Request $request)
