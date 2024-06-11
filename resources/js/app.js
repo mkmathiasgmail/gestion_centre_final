@@ -8,5 +8,6 @@ window.Alpine = Alpine;
 
 Alpine.start();
 
-
-
+let table = new DataTable('#myTable', {
+    responsive: true
+});
