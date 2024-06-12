@@ -17,9 +17,10 @@ return new class extends Migration
             $table->text('description');
             $table->string('lieu');
             $table->string('image');
-            $table->boolean('status');
+            $table->boolean('status')->default(true);
             $table->date('date_debut');
             $table->date('date_fin');
+            $table->foreignId('categorie_id')->constrained()->onDelete('cascade')->onUpdate('no action');
             $table->timestamps();
         });
     }

@@ -39,7 +39,9 @@ class OdcuserController extends Controller
      */
     public function show(Odcuser $odcuser)
     {
-        //
+        $odcusers = Odcuser::all();
+
+        return view('odcusers.show', compact('odcuser', 'odcusers'));
     }
 
     /**
@@ -47,7 +49,7 @@ class OdcuserController extends Controller
      */
     public function edit(Odcuser $odcuser)
     {
-        //
+        return view('odcusers.edit', compact('odcuser'));
     }
 
     /**
@@ -55,7 +57,23 @@ class OdcuserController extends Controller
      */
     public function update(UpdateOdcuserRequest $request, Odcuser $odcuser)
     {
-        //
+        $odcuser->update([
+            'firstname' => $request->firstname,
+            'lastname' => $request->lastname,
+            'email' => $request->email,
+            'phone' => $request->phone,
+            'gender' => $request->gender,
+            'bithdate' => $request->bithdate,
+            'phone' => $request->phone,
+            'linkedin' => $request->linkedin,
+            'profession' => $request->profession,
+            'company' => $request->company,
+            'university' => $request->university,
+            'speciality' => $request->speciality,
+            'country' => $request->country,
+        ]);
+
+        return redirect()->route('odcusers.index')->with('success', 'Odcuser updated successfully');
     }
 
     /**

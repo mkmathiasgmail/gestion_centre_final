@@ -2,21 +2,18 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Candidat;
-use App\Http\Requests\StoreCandidatRequest;
-use App\Http\Requests\UpdateCandidatRequest;
-use App\Models\Odcuser;
+use App\Models\Categorie;
+use App\Http\Requests\StoreCategorieRequest;
+use App\Http\Requests\UpdateCategorieRequest;
 
-class CandidatController extends Controller
+class CategorieController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        $candidats = Candidat::has('odcuser')->get();
-
-        return view('candidats.index', compact('candidats')) ;
+        //
     }
 
     /**
@@ -30,7 +27,7 @@ class CandidatController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreCandidatRequest $request)
+    public function store(StoreCategorieRequest $request)
     {
         //
     }
@@ -38,15 +35,15 @@ class CandidatController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Candidat $candidat)
+    public function show(Categorie $categorie)
     {
-        return view('candidats.show', compact('candidat')) ;
+        //
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Candidat $candidat)
+    public function edit(Categorie $categorie)
     {
         //
     }
@@ -54,7 +51,7 @@ class CandidatController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateCandidatRequest $request, Candidat $candidat)
+    public function update(UpdateCategorieRequest $request, Categorie $categorie)
     {
         //
     }
@@ -62,7 +59,7 @@ class CandidatController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Candidat $candidat)
+    public function destroy(Categorie $categorie)
     {
         //
     }
