@@ -2,12 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Emplayabilite;
+use App\Models\Employabilite;
 use Illuminate\Routing\Controller;
-use App\Http\Requests\StoreEmplayabiliteRequest;
-use App\Http\Requests\UpdateEmplayabiliteRequest;
+use App\Http\Requests\StoreEmployabiliteRequest;
+use App\Http\Requests\UpdateEmployabiliteRequest;
 
-class EmplayabiliteController extends Controller
+class EmployabiliteController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -15,7 +15,7 @@ class EmplayabiliteController extends Controller
     public function index()
 
     {
-            $employabilites = Emplayabilite::all();
+            $employabilites = Employabilite::all();
         return view('employabilite.index', compact('employabilites'));
     }
 
@@ -30,9 +30,9 @@ class EmplayabiliteController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreEmplayabiliteRequest $request)
+    public function store(StoreEmployabiliteRequest $request)
     {
-        $activites = Emplayabilite::create([
+        $activites = Employabilite::create([
             'name' => $request->name,
             'type_contrat' => $request->type_contrat,
             'genre_contrat' => $request->genre_contrat,
@@ -49,16 +49,16 @@ class EmplayabiliteController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Emplayabilite $emplayabilite)
+    public function show(Employabilite $employabilite)
     {
-        $emplayabilites = Emplayabilite::all();
-        return view('employabilite.show', compact('emplayabilites'));
+        $employabilites = Employabilite::all();
+        return view('employabilite.show', compact('employabilites'));
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Emplayabilite $emplayabilite)
+    public function edit(Employabilite $employabilite)
     {
         //
     }
@@ -66,16 +66,16 @@ class EmplayabiliteController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateEmplayabiliteRequest $request, Emplayabilite $emplayabilite)
+    public function update(UpdateEmployabiliteRequest $request, Employabilite $employabilite)
     {
-       $emplayabilite->update($request->all());
+       $employabilite->update($request->all());
        return redirect()->route('employabilite.index');
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Emplayabilite $emplayabilite)
+    public function destroy(Employabilite $employabilite)
     {
         //
     }
