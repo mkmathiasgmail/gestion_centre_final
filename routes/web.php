@@ -22,3 +22,4 @@ require __DIR__.'/web_activites.php';
 require __DIR__.'/web_rapport.php';
 require __DIR__.'/web_candidatures.php';
 require __DIR__.'/web_employabilite.php';
+require __DIR__.'/web_semestriel_rapport';
