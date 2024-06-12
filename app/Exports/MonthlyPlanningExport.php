@@ -30,20 +30,19 @@ class MonthlyPlanningExport implements WithMultipleSheets
     public function sheets(): array
     {
         $sheets = [];
+        
         $months = $this->data->groupBy(function ($item) {
             return Carbon::parse($item->date_debut)->format("F");
         });
 
-        $monthNumeric = $months->mapWithKeys(function ($item, $month){
-            return [Carbon::parse($item->first()->date_debut)->format("n") => $item];
+        $years = $this->data->groupBy(function ($item) {
+            return Carbon::parse($item->date_debut)->format("Y");
         });
 
-        $sortedMonth = $monthNumeric->sortKeys();
+        $month = $months->keys()->first();
+        $year = $years->keys()->first();
 
-        foreach ($sortedMonth as $month => $items) {
-            $monthName = Carbon::create()->month($month)->format("F");
-            $sheets[] = new SingleMonthSheet($monthName);
-        }
+        $sheets[] = new SingleMonthSheet($month, $year);
 
         return $sheets;
     }
@@ -53,15 +52,17 @@ class MonthlyPlanningExport implements WithMultipleSheets
 class SingleMonthSheet implements FromCollection, WithMapping, WithHeadings, WithTitle, ShouldAutoSize, WithEvents
 {
     protected $month;
+    protected $year;
 
-    public function __construct($month){
+    public function __construct($month, $year){
         $this->month = $month;
+        $this->year = $year;
     }
 
     public function collection()
     {
         $monthformat = Carbon::parse($this->month)->format("m");
-        $activities = Activite::select("title", "lieu", "date_debut", "date_fin")->whereMonth("date_debut", $monthformat)->get();
+        $activities = Activite::select("title", "lieu", "date_debut", "date_fin")->whereMonth("date_debut", $monthformat)->whereYear("date_debut", $this->year)->get();
 
         $combineData = new Collection();
 
@@ -134,7 +135,7 @@ class SingleMonthSheet implements FromCollection, WithMapping, WithHeadings, Wit
                 $part1->getFont()->setColor(new \PhpOffice\PhpSpreadsheet\Style\Color("ff000000"));
                 $part1->getFont()->setSize(18);
 
-                $part2 = $richText->createTextRun(": ". $this->month . " " . Carbon::now()->format("Y"));
+                $part2 = $richText->createTextRun(": ". $this->month . " " . $this->year);
                 $part2->getFont()->setBold(true);
                 $part2->getFont()->setColor(new \PhpOffice\PhpSpreadsheet\Style\Color("ffffaa40"));
                 $part2->getFont()->setSize(18);
