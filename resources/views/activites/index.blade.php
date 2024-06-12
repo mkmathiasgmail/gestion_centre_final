@@ -210,7 +210,7 @@
                     <td><strong></strong> ${new Date(item.startDate).toLocaleString()}</td>
                     <td><strong></strong> ${new Date(item.endDate).toLocaleString()}</td>
                     <td>
-                        
+
 
                         <button id="dropdownMenuIconButton" data-dropdown-toggle="dropdownDots" class="inline-flex items-center p-2 text-sm font-medium text-center text-gray-900 bg-white rounded-lg hover:bg-gray-100 focus:ring-4 focus:outline-none dark:text-white focus:ring-gray-50 dark:bg-gray-800 dark:hover:bg-gray-700 dark:focus:ring-gray-600" type="button">
                             <svg class="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 4 15">
@@ -236,10 +236,10 @@
                             </div>
                         </div>
 
-                        
+
                     </td>
-                    
-                   
+
+
                 `;
                     document.querySelector("tbody").prepend(tr);
                 });
