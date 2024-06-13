@@ -19,31 +19,39 @@
                       <span class="sr-only">Close modal</span>
                   </button>
               </div>
+
+
               <!-- Modal body -->
               <form class="p-4 md:p-5" action="{{route('employabilites.store')}}" method="post">
                 @csrf
 
                   <div class="grid gap-4 mb-4 grid-cols-2">
-                      <div class="col-span-2">
-                          <label for="name" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Name</label>
-                          <input type="text" name="name" id="name" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-                          placeholder="Type product name" required="">
-                      </div>
+
                       <div class="col-span-2">
                           <label for="email" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">email</label>
                           <input type="email" name="email" id="email" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
                           placeholder="" required="">
                       </div>
                       <div class="col-span-2 ">
-                        <label for="category" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Category</label>
-                        <select id="category" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
-                            <option selected="">Select category</option>
-                            <option value="TV">TV/Monitors</option>
-                            <option value="PC">PC</option>
-                            <option value="GA">Gaming/Console</option>
-                            <option value="PH">Phones</option>
+                        <label for="type_contrat" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">type contrat</label>
+                        <select id="type_contrat"  name="type_contrat" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
+                            <option value="#">selectionner type</option>
+                            <option value="CDI">CDI</option>
+                            <option value="CDD">CDD</option>
+                            <option value="ALTERNANCE">ALTERNANCE</option>
+                            <option value="INTERIM">INTERIM</option>
+                            <option value="STAGE">STAGE</option>
+                            <option value="APPRENTI">APPRENTI</option>
+                            <option value="CONTRAT_PRO">CONTRAT_PRO</option>
                         </select>
                     </div>
+
+                    <div class="col-span-2">
+                        <label for="nomboite" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Entreprise</label>
+                        <input id="nomboite" name="nomboite" type="text" rows="4" class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                        placeholder=""></input>
+                    </div>
+
                       <div class="col-span-2">
                           <label for="periode" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">periode</label>
                           <input id="periode" name="periode" type="date" rows="4" class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"

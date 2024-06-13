@@ -6,6 +6,7 @@ use App\Models\Employabilite;
 use Illuminate\Routing\Controller;
 use App\Http\Requests\StoreEmployabiliteRequest;
 use App\Http\Requests\UpdateEmployabiliteRequest;
+use App\Models\Odcuser;
 
 class EmployabiliteController extends Controller
 {
@@ -32,20 +33,24 @@ class EmployabiliteController extends Controller
      */
     public function store(StoreEmployabiliteRequest $request)
     {
-        $employabilite = Employabilite::select(["id" , "email"  ]);
+        $email = $_POST["email"];
+        $employabilite = Odcuser::select(["id" , "email", "firstname"])->where("email", $email)->first();
+        if(!empty($employabilite)){
+            $name = $employabilite->firstname;
+            $id = $employabilite->id;
+            $employabilites = Employabilite::create([
+                'name' =>$name,
+                'type_contrat' => $request->type_contrat,
+                'nomboite' => $request->nomboite,
+                'periode' => $request->periode,
+                'odcuser_id' => $id,
+            ]);
+            return redirect()->route('employabilites.index');
+        }
+        else{
+            return back()->with('error', 'Utilisateur non trouvé');
 
-        $employabilites = Employabilite::create([
-            'name' => $request->name,
-            'type_contrat' => $request->type_contrat,
-            'genre_contrat' => $request->genre_contrat,
-            'nomboite' => $request->nomboite,
-            'periode' => $request->periode,
-
-
-        ]);
-
-
-        return redirect()->route('employabilites.index', compact('employabilites'));
+        }
     }
 
     /**
@@ -53,7 +58,7 @@ class EmployabiliteController extends Controller
      */
     public function show(Employabilite $employabilite)
     {
-        $employabilites = Employabilite::all();
+        $employabilites = $employabilite::all();
         return view('employabilites.show', compact('employabilites'));
     }
 
