@@ -19,8 +19,8 @@ class ActiviteController extends Controller
     public function create()
     {
 
-        $cat = Categorie::all();
-        return view("components.form",compact("cat"));
+        $categories = Categorie::all();
+        return view("components.form", compact("categories"));
     }
 
     public function store(Request $request)
@@ -42,7 +42,7 @@ class ActiviteController extends Controller
 
     public function show(Activite $activite)
     {
-        $show= $activite;
+        $show = $activite;
         $candidats = Candidat::has('activite')->get();
         return view('activites.show', compact('show', 'candidats'));
     }
@@ -58,14 +58,14 @@ class ActiviteController extends Controller
     {
         $activite->update($request->all());
         return redirect()->route('activites.index')
-                        ->with('success', 'Activite updated successfully.');
+            ->with('success', 'Activite updated successfully.');
     }
 
     public function destroy(Activite $activite)
     {
         $activite->delete();
         return redirect()->route('activites.index')
-                        ->with('success', 'Activite deleted successfully.');
+            ->with('success', 'Activite deleted successfully.');
     }
 
     Public function encours(){

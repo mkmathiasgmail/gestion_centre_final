@@ -11,13 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('emplayabilites', function (Blueprint $table) {
+        Schema::create('tests', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->string('type_contrat');
-            $table->string('genre_contrat');
-            $table->string('nomboite');
-            $table->string('periode');
+            $table->string('firstName', 100) ;
+            $table->string('lastName', 100) ;
+            $table->string('gender') ;
             $table->timestamps();
         });
     }
@@ -27,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('emplayabilites');
+        Schema::dropIfExists('tests');
     }
 };

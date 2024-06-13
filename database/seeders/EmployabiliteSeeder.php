@@ -2,17 +2,17 @@
 
 namespace Database\Seeders;
 
-use App\Models\Emplayabilite;
+use App\Models\Employabilite;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
-class EmplayabiliteSeeder extends Seeder
+class EmployabiliteSeeder extends Seeder
 {
     /**
      * Run the database seeds.
      */
     public function run(): void
     {
-        Emplayabilite::factory()->count(100)->create();
+        Employabilite::factory()->count(100)->create();
     }
 }
