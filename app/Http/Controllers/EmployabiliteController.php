@@ -16,7 +16,7 @@ class EmployabiliteController extends Controller
 
     {
             $employabilites = Employabilite::all();
-        return view('employabilite.index', compact('employabilites'));
+        return view('employabilites.index', compact('employabilites'));
     }
 
     /**
@@ -32,7 +32,9 @@ class EmployabiliteController extends Controller
      */
     public function store(StoreEmployabiliteRequest $request)
     {
-        $activites = Employabilite::create([
+        $employabilite = Employabilite::select(["id" , "email"  ]);
+
+        $employabilites = Employabilite::create([
             'name' => $request->name,
             'type_contrat' => $request->type_contrat,
             'genre_contrat' => $request->genre_contrat,
@@ -43,7 +45,7 @@ class EmployabiliteController extends Controller
         ]);
 
 
-        return redirect()->route('employabilite.index', compact('employabilites'));
+        return redirect()->route('employabilites.index', compact('employabilites'));
     }
 
     /**
@@ -52,7 +54,7 @@ class EmployabiliteController extends Controller
     public function show(Employabilite $employabilite)
     {
         $employabilites = Employabilite::all();
-        return view('employabilite.show', compact('employabilites'));
+        return view('employabilites.show', compact('employabilites'));
     }
 
     /**
@@ -68,8 +70,7 @@ class EmployabiliteController extends Controller
      */
     public function update(UpdateEmployabiliteRequest $request, Employabilite $employabilite)
     {
-       $employabilite->update($request->all());
-       return redirect()->route('employabilite.index');
+
     }
 
     /**
