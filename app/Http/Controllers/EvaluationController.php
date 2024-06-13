@@ -7,9 +7,6 @@ use App\Models\Activite;
 use App\Models\Evaluation;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Redirect;
-use Maatwebsite\Excel\Facades\Excel;
-
 class EvaluationController extends Controller
 {
     /**
@@ -68,22 +65,26 @@ class EvaluationController extends Controller
         //
     }
 
-    public function monthlyPlanningExport()
+    public function monthlyPlanningExport(Request $request)
     {
-        $date = $_POST['month'];
+        $date = $request->input('month');
         $carbonDate = Carbon::parse($date);
         $month = $carbonDate->format("m");
         $year = $carbonDate->format("Y");
         $data = Activite::select("date_debut")->whereMonth("date_debut", $month)->whereYear("date_debut", $year)->get();
 
-        $dateTime = Carbon::now()->format("Y-m-d_H-i-s");
-        $fileName = "monthly_planning_data_" . $dateTime . ".xlsx";
-
-        if ($data->isNotEmpty()) {
-            return Excel::download(new MonthlyPlanningExport($data), $fileName);
-        }
-        else {
+        if ($data->isEmpty()) {
             return back()->with("erreur", "Pas d'activité pour ce mois du " . $carbonDate->format("F Y"));
         }
+
+        $export = new MonthlyPlanningExport($data);
+        $fileName = $export->export();
+
+        return response()->download(storage_path("app/public/{$fileName}"));
+    }
+
+    public function suivieHebdomadaireExport(Request $request)
+    {
+        // 
     }
 }
