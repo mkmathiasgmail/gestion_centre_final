@@ -45,7 +45,7 @@ class EmployabiliteController extends Controller
                 'periode' => $request->periode,
                 'odcuser_id' => $id,
             ]);
-            return redirect()->route('employabilites.index');
+            return redirect()->route('employabilites.index')->with('success', 'Employé ajoutée avec succès');
         }
         else{
             return back()->with('error', 'Utilisateur non trouvé');
@@ -58,8 +58,8 @@ class EmployabiliteController extends Controller
      */
     public function show(Employabilite $employabilite)
     {
-        $employabilites = $employabilite::all();
-        return view('employabilites.show', compact('employabilites'));
+        $employabilites = Employabilite::find($employabilite->id);
+        return view('employabilites.show')->with('employabilites', $employabilites);
     }
 
     /**
