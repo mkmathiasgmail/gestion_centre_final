@@ -33,7 +33,7 @@ class EmployabiliteController extends Controller
      */
     public function store(StoreEmployabiliteRequest $request)
     {
-        $email = $request["email"];
+        $email = $request->email;
         $employabilite = Odcuser::select(["id" , "email", "firstname"])->where("email", $email)->first();
         if(!empty($employabilite)){
             $name = $employabilite->firstname;

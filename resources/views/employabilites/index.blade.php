@@ -58,6 +58,9 @@
             <thead class="text-xs text-white uppercase bg-gray-50 dark:bg-gray-700 dark:text-white">
                 <tr>
                     <th scope="col" class="px-6 py-3">
+                        Id
+                    </th>
+                    <th scope="col" class="px-6 py-3">
                         Name
                     </th>
                     <th scope="col" class="px-6 py-3">
@@ -99,8 +102,21 @@
 
 
                         <td class="px-6 py-4 flex gap-4">
+
                             <a href="{{ route('employabilites.show', $item->id) }}"
-                                class=" p-2 bg-black  text-1xl  text-white" >details</a>
+                                class="flex items-center p-2 text-gray-900 rounded-lg dark:text-black hover:bg-gray-100 bg-yellow-500 dark:hover:bg-gray-100 group">
+                                <svg class="w-6 h-6 text-yellow-800 dark:text-black" aria-hidden="true"
+                                    xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>eye-outline</title>
+                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                        stroke-width="2"
+                                        d="M12,9A3,3 0 0,1 15,12A3,3 0 0,1 12,15A3,3 0 0,1 9,12A3,3 0 0,1 12,9M12,4.5C17,4.5 21.27,7.61 23,12C21.27,16.39
+                                        17,19.5 12,19.5C7,19.5 2.73,16.39 1,12C2.73,7.61 7,4.5 12,4.5M3.18,12C4.83,15.36 8.24,17.5 12,17.5C15.76,17.5
+                                        19.17,15.36 20.82,12C19.17,8.64 15.76,6.5 12,6.5C8.24,6.5 4.83,8.64 3.18,12Z" />
+                                </svg>
+
+                                <span class="ms-3">details</span>
+
+                            </a>
                         </td>
                     </tr>
                 @endforeach
