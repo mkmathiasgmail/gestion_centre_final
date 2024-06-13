@@ -5,6 +5,7 @@ namespace App\Console\Commands;
 use App\Models\Odcuser;
 use Carbon\Carbon;
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\Http;
 
 class SyncDataFromApi extends Command
 {
@@ -29,22 +30,28 @@ class SyncDataFromApi extends Command
     {
         $this->info("Start syncing data from API to database");
 
+        $apiResponse = Http::timeout(500)->get("http://10.252.252.16:8000/api/users/active") ;
         // Absolute path to your JSON file
-        $jsonFileName = base_path('odcusers_from_api.json');
+        // $jsonFileName = base_path('odcusers_from_api.json');
 
         // Read JSON data from file
-        $jsonData = file_get_contents($jsonFileName);
+        // $jsonData = file_get_contents($jsonFileName);
 
         // Decode JSON data
-        $apiData = json_decode($jsonData);
+        // $apiData = json_decode($jsonData);
 
         // Vérification si la requête a réussi
-        if ($apiData !== null) {
-
+        if ($apiResponse->successful()) {
+            $apiData = $apiResponse->object() ;
             $data = $apiData->data;
+
             foreach ($data as $person) {
                 // Vérification si les données existent déjà dans la base de données
                 $existingData = Odcuser::all();
+                $birthDay = Carbon::parse($person->birthDay);
+                $createdAt = Carbon::parse($person->createdAt);
+                $updatedAt = Carbon::parse($person->updatedAt);
+                $last_connection = Carbon::parse($person->last_connection);
                 // Check if the 'detailProfession' property is set and not null
                 if (isset($person->detailProfession)) {
                     // If it's set, encode it using json_encode()
@@ -56,43 +63,42 @@ class SyncDataFromApi extends Command
 
                 // if ($existingData) {
                 //     // Mise à jour des données existantes
-                //     $existingData->update([
-                //         'firstName' => $person->firstName,
-                //         'lastName' => $person->lastName,
-                //         'email' => $person->email,
-                //         'password' => $person->password,
-                //         'gender' => $person->gender,
-                //         'birthDay' => $person->birthDay,
-                //         'linkedIn' => isset($person->linkedIn) ? $person->linkedIn : "",
-                //         'profession' => json_encode($person->profession),
-                //         'odcCountry' => json_encode($person->odcCountry),
-                //         'role' => $person->role,
-                //         'isActive' => $person->isActive,
-                //         'hashtags' => json_encode($person->hashtags),
-                //         'codingSchool' => $person->codingSchool,
-                //         'fabLabSolidaire' => $person->fabLabSolidaire,
-                //         'training' => $person->training,
-                //         'internship' => $person->internship,
-                //         'event' => $person->event,
-                //         'subscribe' => $person->subscribe,
-                //         'newsletters' => $person->newsletters,
-                //         'topics' => json_encode($person->topics), // Assuming 'topics' is an array
-                //         'last_connection' => $person->last_connection,
-                //         '_id' => $person->_id,
-                //         'detailProfession' => $detailProfessionValue,
-                //         'createdAt' => $person->createdAt, // Assuming this is in the JSON data
-                //         'updatedAt' => $person->updatedAt, // Assuming this is in the JSON data
-                //         'picture' => isset($person->picture) ? $person->picture : "",
-                //         'userCV' => isset($person->userCV) ? $person->userCV : "",
-                //     ]);
+                //     foreach ($existingData as $record) {
+                //         $record->update([
+                //             'firstName' => $person->firstName,
+                //             'lastName' => $person->lastName,
+                //             'email' => $person->email,
+                //             'password' => $person->password,
+                //             'gender' => $person->gender,
+                //             'birthDay' => $birthDay,
+                //             'linkedIn' => isset($person->linkedIn) ? $person->linkedIn : "",
+                //             'profession' => json_encode($person->profession),
+                //             'odcCountry' => json_encode($person->odcCountry),
+                //             'role' => $person->role,
+                //             'isActive' => $person->isActive,
+                //             'hashtags' => json_encode($person->hashtags),
+                //             'codingSchool' => $person->codingSchool,
+                //             'fabLabSolidaire' => $person->fabLabSolidaire,
+                //             'training' => $person->training,
+                //             'internship' => $person->internship,
+                //             'event' => $person->event,
+                //             'subscribe' => $person->subscribe,
+                //             'newsletters' => json_encode($person->newsletters),
+                //             'topics' => json_encode($person->topics), // Assuming 'topics' is an array
+                //             'last_connection' => $last_connection,
+                //             '_id' => $person->_id,
+                //             'detailProfession' => $detailProfessionValue,
+                //             'createdAt' => $createdAt, // Assuming this is in the JSON data
+                //             'updatedAt' => $updatedAt, // Assuming this is in the JSON data
+                //             'picture' => isset($person->picture) ? $person->picture : "",
+                //             'userCV' => isset($person->userCV) ? $person->userCV : "",
+                //         ]);
+                //     }
                 // } else {
+
 
                 // }
 
-                $birthDay = Carbon::parse($person->birthDay);
-                $createdAt = Carbon::parse($person->createdAt);
-                $updatedAt = Carbon::parse($person->updatedAt);
-                $last_connection = Carbon::parse($person->last_connection);
                 // Insertion de nouvelles données
                 Odcuser::create([
                     'firstName' => $person->firstName,
@@ -123,9 +129,8 @@ class SyncDataFromApi extends Command
                     'picture' => isset($person->picture) ? $person->picture : "",
                     'userCV' => isset($person->userCV) ? $person->userCV : "",
                 ]);
+                $this->info('Data synced successfully.');
             }
-
-            $this->info('Data synced successfully.');
         } else {
             $this->error('Failed to retrieve data from API.');
         }

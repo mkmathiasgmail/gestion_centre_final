@@ -43,6 +43,11 @@ class Odcuser extends Model
         'userCV'
     ] ;
 
+    protected $casts = [
+        'profession' => 'array',
+        'detailProfession' => 'array'
+    ];
+
     public function activite(): HasMany
     {
         return $this->hasMany(Activite::class);
