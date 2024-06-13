@@ -17,6 +17,7 @@ return new class extends Migration
             $table->string('typeEvent');
             $table->renameColumn('date_debut', 'startDate');
             $table->renameColumn('date_fin', 'endDate');
+            $table->dropColumn('image');
             
         });
     }

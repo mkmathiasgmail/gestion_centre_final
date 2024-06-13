@@ -12,9 +12,8 @@ class ActiviteController extends Controller
 {
 
     public function index(){
-        $rep= Activite::all();
-    
-       return view('activites.index',compact('rep'));
+        $activites= Activite::all();
+       return view('activites.index',compact('activites'));
     }
 
     public function create()
@@ -71,7 +70,7 @@ class ActiviteController extends Controller
 
     Public function encours(){
         $today= Carbon::today();
-        $activites= Activite::where('date_debut','<=',$today)->where('date_fin','>=',$today)->get();
+        $activites= Activite::where('startDate','<=',$today)->where('endDate','>=',$today)->get();
         return view('encours',compact('activites'));
     }
 }
