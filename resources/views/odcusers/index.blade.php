@@ -119,17 +119,26 @@
                 </tr>
             </thead>
             <tbody>
-
+                @foreach ($odcusers as $odcuser)
+                    <tr>
+                        <td>{{ $odcuser->firstName }}</td>
+                        <td>{{ $odcuser->lastName }}</td>
+                    </tr>
+                @endforeach
             </tbody>
         </table>
     </div>
 
     @section('script')
-    <script>
-        addEventListener('load', async () => {
-            let odcusers = await fetch("http://10.252.252.54:8000/api/users/active").then(response => response.json())
-
-        })
-    </script>
+        <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+        <script src="https://cdn.datatables.net/2.0.8/js/dataTables.js"></script>
+        <script>
+            addEventListener('load', async () => {
+                let odcusers = await fetch("http://10.252.252.54:8000/api/users/active").then(response => response.json())
+            })
+        </script>
+        <script>
+            new DataTable('#usersTable');
+        </script>
     @endsection
 </x-app-layout>

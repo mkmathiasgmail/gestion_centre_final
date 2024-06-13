@@ -13,23 +13,35 @@ class Odcuser extends Model
 
     protected $table = "odcusers" ;
     protected $fillable = [
-        'firstname',
-        'lastname',
+        'firstName',
+        'lastName',
         'email',
         'password',
         'gender',
-        'birthdate',
-        'phone',
-        'linkedin',
+        'birthDay',
+        'linkedIn',
         'profession',
-        'company',
-        'university',
-        'speciality',
-        'country',
-        'cv',
-        'photo'
+        'odcCountry',
+        'role',
+        'isActive',
+        'hashtags',
+        'codingSchool',
+        'fabLabSolidaire',
+        'training',
+        'internship',
+        'event',
+        'subscribe',
+        'newsletters',
+        'topics',
+        'last_connection',
+        '_id',
+        'detailProfession',
+        'createdAt',
+        'updatedAt',
+        '__v',
+        'picture',
+        'userCV'
     ] ;
-    protected $primaryKey = 'id' ;
 
     public function activite(): HasMany
     {
