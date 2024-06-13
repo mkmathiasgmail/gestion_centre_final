@@ -5,5 +5,5 @@ use Illuminate\Support\Facades\Route;
 
 
 
-Route::resource('/employabilite', EmployabiliteController::class);
+Route::resource('employabilites', EmployabiliteController::class);
 
