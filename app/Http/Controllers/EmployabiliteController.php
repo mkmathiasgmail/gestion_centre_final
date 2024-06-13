@@ -6,6 +6,7 @@ use App\Models\Employabilite;
 use Illuminate\Routing\Controller;
 use App\Http\Requests\StoreEmployabiliteRequest;
 use App\Http\Requests\UpdateEmployabiliteRequest;
+use App\Models\Odcuser;
 
 class EmployabiliteController extends Controller
 {
@@ -16,7 +17,7 @@ class EmployabiliteController extends Controller
 
     {
             $employabilites = Employabilite::all();
-        return view('employabilite.index', compact('employabilites'));
+        return view('employabilites.index', compact('employabilites'));
     }
 
     /**
@@ -32,18 +33,24 @@ class EmployabiliteController extends Controller
      */
     public function store(StoreEmployabiliteRequest $request)
     {
-        $activites = Employabilite::create([
-            'name' => $request->name,
-            'type_contrat' => $request->type_contrat,
-            'genre_contrat' => $request->genre_contrat,
-            'nomboite' => $request->nomboite,
-            'periode' => $request->periode,
+        $email = $_POST["email"];
+        $employabilite = Odcuser::select(["id" , "email", "firstname"])->where("email", $email)->first();
+        if(!empty($employabilite)){
+            $name = $employabilite->firstname;
+            $id = $employabilite->id;
+            $employabilites = Employabilite::create([
+                'name' =>$name,
+                'type_contrat' => $request->type_contrat,
+                'nomboite' => $request->nomboite,
+                'periode' => $request->periode,
+                'odcuser_id' => $id,
+            ]);
+            return redirect()->route('employabilites.index')->with('success', 'Employé ajoutée avec succès');
+        }
+        else{
+            return back()->with('error', 'Utilisateur non trouvé');
 
-
-        ]);
-
-
-        return redirect()->route('employabilite.index', compact('employabilites'));
+        }
     }
 
     /**
@@ -51,8 +58,8 @@ class EmployabiliteController extends Controller
      */
     public function show(Employabilite $employabilite)
     {
-        $employabilites = Employabilite::all();
-        return view('employabilite.show', compact('employabilites'));
+        $employabilites = Employabilite::find($employabilite->id);
+        return view('employabilites.show')->with('employabilites', $employabilites);
     }
 
     /**
@@ -68,8 +75,7 @@ class EmployabiliteController extends Controller
      */
     public function update(UpdateEmployabiliteRequest $request, Employabilite $employabilite)
     {
-       $employabilite->update($request->all());
-       return redirect()->route('employabilite.index');
+
     }
 
     /**

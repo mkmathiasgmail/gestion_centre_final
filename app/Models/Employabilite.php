@@ -11,10 +11,15 @@ class Employabilite extends Model
     protected $fillable = [
         'name',
         'type_contrat',
-        'genre_contrat',
         'nomboite',
         'periode',
+        'odcuser_id'
 
     ];
+
+    public function odcuser()
+    {
+        return $this->belongsTo(Odcuser::class);
+    }
 
 }
