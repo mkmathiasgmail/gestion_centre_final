@@ -105,7 +105,7 @@
                                         d="M15 4h3a1 1 0 0 1 1 1v15a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1V5a1 1 0 0 1 1-1h3m0 3h6m-3 5h3m-6 0h.01M12 16h3m-6 0h.01M10 3v4h4V3h-4Z" />
                                 </svg>
                                 <span>Activite</span>
-
+                                
                             </button>
                         </h2>
                         <div id="accordion-flush-body-1" class="hidden" aria-labelledby="accordion-flush-heading-1">
@@ -128,7 +128,7 @@
                                 d="M12 4a4 4 0 1 0 0 8 4 4 0 0 0 0-8Zm-2 9a4 4 0 0 0-4 4v1a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2v-1a4 4 0 0 0-4-4h-4Z"
                                 clip-rule="evenodd" />
                         </svg>
-                        <span class="ms-3">ODC Users</span>
+                        <span class="ms-3">ODC User</span>
 
                     </a>
                 </li>

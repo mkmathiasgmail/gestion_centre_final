@@ -13,6 +13,6 @@ class OdcuserSeeder extends Seeder
      */
     public function run(): void
     {
-        Odcuser::factory()->count(100)->create();
+        Odcuser::factory()->count(10)->create();
     }
 }
