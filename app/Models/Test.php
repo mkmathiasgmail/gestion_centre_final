@@ -11,5 +11,5 @@ class Test extends Model
 
     protected $table = "tests" ;
 
-    protected $fillable = ["firstName", "lastName", "gender"];
+    protected $fillable = ["nickName", "lastName", "gender"];
 }
