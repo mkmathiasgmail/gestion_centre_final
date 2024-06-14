@@ -14,14 +14,22 @@ class Notification extends Mailable
 {
     use Queueable, SerializesModels;
 
+    public $name;
+
     /**
      * Create a new message instance.
      */
-    public function __construct()
+    public function __construct($name)
     {
-        Mail::to('musongelacarlo54@gmail.com')->send(new Notification([
-            'name' => 'mcleroi01',
-       ]));
+        $this->name = $name;
+    }
+
+    public function build()
+    {
+        return $this->view('emails.test')
+            ->with([
+                'name' => $this->name,
+            ]);
     }
 
     /**

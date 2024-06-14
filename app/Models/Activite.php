@@ -7,18 +7,21 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Activite extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['title', 'description', 'lieu', 'image', 'status', 'date_debut', 'date_fin','categorie_id'];
+    protected $fillable = ['title', 'content', 'location',  'status', 'typeEvent', 'startDate', 'endDate', 'categorie_id'];
+    protected $casts = [
+        'categories' => 'array'
+    ];
 
-
-    // public function etiquette()
-    // {
-    //     return $this->belongsToMany(Etiquette::class);
-    // }
+    public function hashtag(): BelongsToMany
+    {
+        return $this->belongsToMany(Hashtag::class);
+    }
 
     public function categorie(): BelongsTo
     {

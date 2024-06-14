@@ -11,10 +11,9 @@ use Illuminate\Http\Request;
 class ActiviteController extends Controller
 {
 
-    public function index()
-    {
-        $activites = Activite::all();
-        return view('activites.index', compact('activites'));
+    public function index(){
+        $activites= Activite::all();
+       return view('activites.index',compact('activites'));
     }
 
     public function create()
@@ -69,10 +68,9 @@ class ActiviteController extends Controller
             ->with('success', 'Activite deleted successfully.');
     }
 
-    public function encours()
-    {
-        $today = Carbon::today();
-        $activites = Activite::where('date_debut', '<=', $today)->where('date_fin', '>=', $today)->get();
-        return view('encours', compact('activites'));
+    Public function encours(){
+        $today= Carbon::today();
+        $activites= Activite::where('startDate','<=',$today)->where('endDate','>=',$today)->get();
+        return view('encours',compact('activites'));
     }
 }
