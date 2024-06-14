@@ -15,6 +15,16 @@ Homestead.json
 Homestead.yaml
 auth.json
 odcusers_from_api.json
+aws.json
+cm.json
+conf.json
+entretien.json
+Estime_soi.json
+finance.json
+gestion_stress.json
+git.json
+parole.json
+projet.json
 npm-debug.log
 yarn-error.log
 /.fleet

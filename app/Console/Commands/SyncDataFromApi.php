@@ -2,6 +2,8 @@
 
 namespace App\Console\Commands;
 
+use App\Models\Activite;
+use App\Models\Candidat;
 use App\Models\Odcuser;
 use Carbon\Carbon;
 use Illuminate\Console\Command;
@@ -31,11 +33,11 @@ class SyncDataFromApi extends Command
         $this->info("Start syncing data from API to database");
 
         //$apiResponse = Http::timeout(500)->get("http://10.252.252.16:8000/api/users/active") ;
-        // Absolute path to your JSON file
-        $jsonFileName = base_path('odcusers_from_api.json');
+        // Chemin absolu vers le fichier JSON contenant les odcusers
+        $jsonOdcusers = base_path('odcusers_from_api.json');
 
         //Read JSON data from file
-        $jsonData = file_get_contents($jsonFileName);
+        $jsonData = file_get_contents($jsonOdcusers);
 
         //Decode JSON data
         $apiData = json_decode($jsonData);
@@ -48,7 +50,8 @@ class SyncDataFromApi extends Command
             $i = 1 ;
             foreach ($data as $person) {
                 // Vérification si les données existent déjà dans la base de données
-                $existingData = Odcuser::all();
+                $existingUser = Odcuser::where('email', $person->email)->first();
+                
                 $birthDay = Carbon::parse($person->birthDay);
                 $createdAt = Carbon::parse($person->createdAt);
                 $updatedAt = Carbon::parse($person->updatedAt);
@@ -62,46 +65,8 @@ class SyncDataFromApi extends Command
                     $detailProfessionValue = json_encode(""); // Or json_encode([]) for an empty array
                 }
 
-                // if ($existingData) {
-                //     // Mise à jour des données existantes
-                //     foreach ($existingData as $record) {
-                //         $record->update([
-                //             'firstName' => $person->firstName,
-                //             'lastName' => $person->lastName,
-                //             'email' => $person->email,
-                //             'password' => $person->password,
-                //             'gender' => $person->gender,
-                //             'birthDay' => $birthDay,
-                //             'linkedIn' => isset($person->linkedIn) ? $person->linkedIn : "",
-                //             'profession' => json_encode($person->profession),
-                //             'odcCountry' => json_encode($person->odcCountry),
-                //             'role' => $person->role,
-                //             'isActive' => $person->isActive,
-                //             'hashtags' => json_encode($person->hashtags),
-                //             'codingSchool' => $person->codingSchool,
-                //             'fabLabSolidaire' => $person->fabLabSolidaire,
-                //             'training' => $person->training,
-                //             'internship' => $person->internship,
-                //             'event' => $person->event,
-                //             'subscribe' => $person->subscribe,
-                //             'newsletters' => json_encode($person->newsletters),
-                //             'topics' => json_encode($person->topics), // Assuming 'topics' is an array
-                //             'last_connection' => $last_connection,
-                //             '_id' => $person->_id,
-                //             'detailProfession' => $detailProfessionValue,
-                //             'createdAt' => $createdAt, // Assuming this is in the JSON data
-                //             'updatedAt' => $updatedAt, // Assuming this is in the JSON data
-                //             'picture' => isset($person->picture) ? $person->picture : "",
-                //             'userCV' => isset($person->userCV) ? $person->userCV : "",
-                //         ]);
-                //     }
-                // } else {
-
-
-                // }
-
-                // Insertion de nouvelles données
-                Odcuser::create([
+                // Collect the user data
+                $userData = [
                     'firstName' => $person->firstName,
                     'lastName' => $person->lastName,
                     'email' => $person->email,
@@ -129,13 +94,25 @@ class SyncDataFromApi extends Command
                     'updatedAt' => $updatedAt, // Assuming this is in the JSON data
                     'picture' => isset($person->picture) ? $person->picture : "",
                     'userCV' => isset($person->userCV) ? $person->userCV : "",
-                ]);
-                
+                ];
+
+                if ($existingUser) {
+                    // Update the existing user
+                    $existingUser->update($userData);
+                    $this->info("User updated successfully: " . $person->email);
+                } else {
+                    // Insertion de nouvelles données
+                    Odcuser::create($userData);
+                    $this->info("User created successfully: " . $person->email);
+                }
+
                 $this->info("Data synced successfully : " . $i . " %");
                 $i++;
             }
         } else {
             $this->error('Failed to retrieve data from API.');
         }
+
+        
     }
 }
