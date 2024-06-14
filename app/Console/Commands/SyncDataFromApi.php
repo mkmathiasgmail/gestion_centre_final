@@ -30,21 +30,22 @@ class SyncDataFromApi extends Command
     {
         $this->info("Start syncing data from API to database");
 
-        $apiResponse = Http::timeout(500)->get("http://10.252.252.16:8000/api/users/active") ;
+        //$apiResponse = Http::timeout(500)->get("http://10.252.252.16:8000/api/users/active") ;
         // Absolute path to your JSON file
-        // $jsonFileName = base_path('odcusers_from_api.json');
+        $jsonFileName = base_path('odcusers_from_api.json');
 
-        // Read JSON data from file
-        // $jsonData = file_get_contents($jsonFileName);
+        //Read JSON data from file
+        $jsonData = file_get_contents($jsonFileName);
 
-        // Decode JSON data
-        // $apiData = json_decode($jsonData);
+        //Decode JSON data
+        $apiData = json_decode($jsonData);
 
         // Vérification si la requête a réussi
-        if ($apiResponse->successful()) {
-            $apiData = $apiResponse->object() ;
+        if ($apiData !== null) {
+        // if ($apiResponse->successful()) {
+            //$apiData = $apiResponse->object() ;
             $data = $apiData->data;
-
+            $i = 1 ;
             foreach ($data as $person) {
                 // Vérification si les données existent déjà dans la base de données
                 $existingData = Odcuser::all();
@@ -129,7 +130,9 @@ class SyncDataFromApi extends Command
                     'picture' => isset($person->picture) ? $person->picture : "",
                     'userCV' => isset($person->userCV) ? $person->userCV : "",
                 ]);
-                $this->info('Data synced successfully.');
+                
+                $this->info("Data synced successfully : " . $i . " %");
+                $i++;
             }
         } else {
             $this->error('Failed to retrieve data from API.');
