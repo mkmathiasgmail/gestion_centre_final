@@ -18,7 +18,6 @@ class Candidat extends Model
         'status'
     ] ;
     protected $table = "candidats" ;
-    protected $primaryKey = "id" ;
 
     public function odcuser(): BelongsTo
     {
