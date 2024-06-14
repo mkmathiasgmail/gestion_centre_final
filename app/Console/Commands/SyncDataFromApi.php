@@ -107,7 +107,7 @@ class SyncDataFromApi extends Command
                     $this->info("User created successfully: " . $person->email);
                 }
 
-                $this->info("Data synced successfully : " . $i . " %");
+                $this->info("Data synced successfully : " . $i . "");
                 $i++;
             }
         } else {
