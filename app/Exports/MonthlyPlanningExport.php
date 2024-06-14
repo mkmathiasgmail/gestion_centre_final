@@ -26,11 +26,11 @@ class MonthlyPlanningExport
         $spreadsheet->removeSheetByIndex(0); // Remove default sheet
         
         $months = $this->data->groupBy(function ($item) {
-            return Carbon::parse($item->date_debut)->format("F");
+            return Carbon::parse($item->startDate)->format("F");
         });
 
         $years = $this->data->groupBy(function ($item) {
-            return Carbon::parse($item->date_debut)->format("Y");
+            return Carbon::parse($item->startDate)->format("Y");
         });
 
         $month = $months->keys()->first();
@@ -80,7 +80,7 @@ class MonthlyPlanningExport
 
         $sheet->getStyle("A6")->applyFromArray([
             "font" => [
-                "size" => 18
+                "size" => 16
             ],
             "alignment" => [
                 "horizontal" => Alignment::HORIZONTAL_CENTER,
@@ -92,6 +92,7 @@ class MonthlyPlanningExport
                     "argb" => "ff4040ff"
                 ]
             ]
+            
         ]);
 
         $sheet->getStyle("A4:I4")->applyFromArray([
@@ -121,23 +122,23 @@ class MonthlyPlanningExport
     protected function populateData(Worksheet $sheet, $month, $year)
     {
         $monthFormat = Carbon::parse($month)->format("m");
-        $activities = Activite::select("title", "lieu", "date_debut", "date_fin")
-            ->whereMonth("date_debut", $monthFormat)
-            ->whereYear("date_debut", $year)
+        $activities = Activite::select("title", "location", "startDate", "endDate")
+            ->whereMonth("startDate", $monthFormat)
+            ->whereYear("startDate", $year)
             ->get();
 
         $data = [];
         $data[] = ["title" => "", "periode" => "", "duree" => "", "cible" => "", "nombre" => "", "lieu" => "", "intervenant" => "", "theme" => "", "observateur" => ""];
 
         foreach ($activities as $item) {
-            $differenceDay = $item->date_debut && $item->date_fin ? Carbon::parse($item->date_debut)->diffInDays(Carbon::parse($item->date_fin)) : 1;
+            $differenceDay = $item->startDate && $item->endDate ? Carbon::parse($item->startDate)->diffInDays(Carbon::parse($item->endDate)) : 1;
             $data[] = [
                 "title" => $item->title,
-                "periode" => $item->date_fin ? Carbon::parse($item->date_debut)->translatedFormat("d-M") . " - " . Carbon::parse($item->date_fin)->translatedFormat("d-M") : Carbon::parse($item->date_debut)->translatedFormat("d-M"),
+                "periode" => $item->startDate ? Carbon::parse($item->startDate)->translatedFormat("d-M") . " - " . Carbon::parse($item->endDate)->translatedFormat("d-M") : Carbon::parse($item->startDate)->translatedFormat("d-M"),
                 "duree" => $differenceDay > 1 ? $differenceDay . " jours" : $differenceDay . " jour",
                 "cible" => null,
                 "nombre" => null,
-                "lieu" => $item->lieu,
+                "lieu" => $item->location,
                 "intervenant" => null,
                 "theme" => null,
                 "observateur" => null,
@@ -160,7 +161,15 @@ class MonthlyPlanningExport
     protected function autoSizeColumns(Worksheet $sheet)
     {
         foreach (range('A', 'I') as $columnID) {
-            $sheet->getColumnDimension($columnID)->setAutoSize(true);
+            if ($columnID === 'A') {
+                $sheet->getColumnDimension($columnID)->setWidth(50);
+                $sheet->getStyle($columnID)->getAlignment()->setWrapText(true);
+                $sheet->getRowDimension("2")->setRowHeight(30);
+                $sheet->getRowDimension("6")->setRowHeight(25);
+            }
+            else {
+                $sheet->getColumnDimension($columnID)->setAutoSize(true);
+            }
         }
     }
 }
