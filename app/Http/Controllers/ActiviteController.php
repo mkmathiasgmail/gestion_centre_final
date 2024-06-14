@@ -7,6 +7,8 @@ use App\Models\Activite;
 use App\Models\Candidat;
 use App\Models\Categorie;
 use Illuminate\Http\Request;
+use Illuminate\Routing\Controller;
+use Illuminate\Support\Facades\Log;
 
 class ActiviteController extends Controller
 {
@@ -30,7 +32,6 @@ class ActiviteController extends Controller
             'description' => $request->description,
             'image' => $request->image,
             'lieu' => 'kinshasa',
-            'status' => 1,
             'date_debut' => $request->date_debut,
             'categorie_id' => $request->categorie_id,
             'date_fin' => $request->date_fin

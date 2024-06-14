@@ -13,7 +13,7 @@ class Activite extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['title', 'content', 'location',  'status', 'typeEvent', 'startDate', 'endDate', 'categorie_id'];
+    protected $fillable = ['title', 'content', 'location',  'status', 'typeEvent', 'startDate', 'endDate', 'categorie_id', '_id', 'showInSlider', 'publishStatus', 'send', 'form', 'miniatureColor', 'showInCalendar', 'liveStatus', 'bookASeat', 'isEvents', 'createdAt', 'updatedAt', 'creator'];
     protected $casts = [
         'categories' => 'array'
     ];
