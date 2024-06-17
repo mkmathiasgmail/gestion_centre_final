@@ -14,7 +14,6 @@ return new class extends Migration
         Schema::table('activites', function (Blueprint $table) {
             $table->renameColumn('description', 'content');
             $table->renameColumn('lieu', 'location');
-            $table->string('typeEvent');
             $table->string('_id');
             $table->boolean('showInSlider');
             $table->string('publishStatus');
@@ -31,6 +30,7 @@ return new class extends Migration
             $table->renameColumn('date_debut', 'startDate');
             $table->renameColumn('date_fin', 'endDate');
             $table->dropColumn('image');
+            
 
             
         });

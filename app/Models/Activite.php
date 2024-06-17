@@ -32,4 +32,9 @@ class Activite extends Model
     {
         return $this->hasMany(Candidat::class);
     }
+
+    public function typEvent(): BelongsToMany
+    {
+        return $this->belongsToMany(TypeEvent::class);
+    }
 }
