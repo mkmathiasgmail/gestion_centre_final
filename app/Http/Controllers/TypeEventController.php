@@ -33,8 +33,8 @@ class TypeEventController extends Controller
     public function store(Request $request)
     {
         $typeEvent = TypeEvent::create([
-            'code' => $request->type,
-            'typeEvent' => $request->code,
+            'code' => $request->code,
+            'typeEvent' => $request->type,
            
         ]);
 
