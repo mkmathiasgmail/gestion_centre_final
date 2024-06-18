@@ -27,8 +27,8 @@ class ActiviteController extends Controller
     public function create()
     {
 
-        $cat = Categorie::all();
-        return view("components.form", compact("cat"));
+        $categories = Categorie::all();
+        return view("components.form", compact("categories"));
     }
 
     public function store(Request $request)
@@ -61,9 +61,32 @@ class ActiviteController extends Controller
 
     public function show(Activite $activite)
     {
+        // Trouver l'Activite correspondant et récupérer le champ '_id'
+        $id = $activite->id;
         $show = $activite;
-        $candidats = Candidat::has('activite')->get();
-        return view('activites.show', compact('show', 'candidats'));
+        $activiteId = Activite::where('id', $id)->first(['_id']);
+        
+        // Récupérer les candidats liés à cette activité
+        $candidats = Candidat::where('activite_id', $id)->get();
+        $jsonPath = base_path('aws.json');
+        $jsonData = json_decode(file_get_contents($jsonPath));
+        $awsInfo = $jsonData->data;
+
+        foreach ($awsInfo as $value) {
+            $userId = $value->user->_id;
+            $idCandidat = Odcuser::where('_id', $userId)->first(['id']);
+            if($idCandidat !== null){
+
+                Candidat::create([
+                    'odcuser_id' => $idCandidat->id,
+                    'activite_id' => $id, 
+                    'status' => 1
+                ]);
+            }
+        }
+        $candidats = Candidat::where('activite_id', $id);
+        
+        return view('activites.show', compact('show', 'id', 'candidats', 'activiteId', 'awsInfo'));
     }
 
 
