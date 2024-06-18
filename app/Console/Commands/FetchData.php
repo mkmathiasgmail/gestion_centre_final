@@ -34,7 +34,7 @@ class FetchData extends Command
         // Fetch data from the API
         try {
 
-            $response = Http::timeout("100000")->get('http://10.252.252.16:8000/api/events/active');
+            $response = Http::timeout("100000")->get($_ENV['API_EVENTS']);
 
             if ($response->successful()) {
                 $workshops = $response->json()['data'];

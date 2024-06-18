@@ -114,6 +114,7 @@
                                 <p class="text-gray-500 mb-2 hover:text-white dark:text-gray-400"><a href="{{route('encours')}}">Activites encours</a></p>
                                 <p class="text-gray-500 mb-2 hover:text-white dark:text-gray-400"><a href="#">Liste Categories</a></p>
                                 <p class="text-gray-500 mb-2 hover:text-white dark:text-gray-400"><a href="#">Liste Etiquettes</a></p>
+                                <p class="text-gray-500 mb-2 hover:text-white dark:text-gray-400"><a href="{{route('typevents.index')}}">Type Evenement</a></p>
                             </div>
                         </div>
                     </div>
