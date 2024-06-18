@@ -36,36 +36,32 @@ class RecupererCandidats extends Command
             $e = 1 ;
 
             foreach ($CandidatsAWS as $candidat) {
+                $this->info($candidat->user->_id);
                 $odcuser = Odcuser::where('_id', $candidat->user->_id)->first();
-                //$activite = Activite::where('_id', $candidat->event->_id)->first();
+                $activite = Activite::where('_id', $candidat->event->_id)->first();
                 
-                if($odcuser){
+                if($odcuser && $activite){
                     $candidatInfo = [
                         'odcuser_id' => $odcuser->id,
-                        'activite_id' => 1,
+                        'activite_id' => $activite->id,
                         'status' => 1
                     ] ;
 
                     // creation et mise a jour
                     $existingCandidat = Candidat::where('odcuser_id', $odcuser->id)->first() ;
 
-                    // if($existingCandidat) {
-                    //     $existingCandidat->update($candidatInfo) ;
-                    //     $this->info("{$candidat->user->firstName} mis a jour avec succes ! ");
-                    // } else {
-                    // }
-                    Candidat::create($candidatInfo);
-                    $this->info("Candidate created successfully.");
+                    if($existingCandidat) {
+                        $existingCandidat->update($candidatInfo) ;
+                        $this->info("{$candidat->user->firstName} mis a jour avec succes ! ");
+                    } else {
+                        Candidat::create($candidatInfo);
+                        $this->info("Candidate {$e} created successfully.");
+                    }
                 }
-                // if ($existingCandidat) {
-                //     $existingCandidat->update($candidatInfo);
-                //     $this->info("{$candidat->user->firstName} updated successfully.");
-                // } else {
-                // }
-
-                $this->info("Data synced successfully : " . $e . "");
                 $e++;
+
             }
+            $this->info("Data synced successfully");
         } else {
             $this->info("Failed to retrieve candidates data ! Please retry !");
         }

@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Odcuser;
+use App\Models\Activite;
 use App\Models\Candidat;
+use Illuminate\Http\Request;
 use App\Http\Requests\StoreCandidatRequest;
 use App\Http\Requests\UpdateCandidatRequest;
-use App\Models\Odcuser;
 
 class CandidatController extends Controller
 {
@@ -30,9 +32,30 @@ class CandidatController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreCandidatRequest $request)
+    public function store(Request $request)
     {
-        //
+        // Validate the incoming request data
+        $validatedData = $request->validate([
+            'odcuser_id' => 'required|string',
+            'activite_id' => 'required|string'
+        ]);
+
+        // Find the Odcuser and Activite by their respective _id fields
+        $odcuser = Odcuser::where('_id', $validatedData['odcuser_id'])->first();
+        $activite = Activite::where('_id', $validatedData['activite_id'])->first();
+
+        if ($odcuser && $activite) {
+            // Create a new Candidat record
+            $candidat = Candidat::create([
+                'odcuser_id' => $odcuser->id,
+                'activite_id' => $activite->id,
+                'status' => 1 // Assuming default status is 1
+            ]);
+
+            return response()->json(['success' => true, 'candidat' => $candidat], 200);
+        } else {
+            return response()->json(['success' => false, 'message' => 'User or Event not found'], 404);
+        }
     }
 
     /**

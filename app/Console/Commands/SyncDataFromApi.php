@@ -32,7 +32,7 @@ class SyncDataFromApi extends Command
     {
         $this->info("Start syncing data from API to database");
 
-        $apiResponse = Http::timeout(1000)->get("http://10.252.252.16:8000/api/users/active") ;
+        //$apiResponse = Http::timeout(1000)->get("http://10.252.252.16:8000/api/users/active") ;
         
         // Chemin absolu vers le fichier JSON contenant les odcusers
         $jsonOdcusers = base_path('odcusers_from_api.json');
@@ -44,9 +44,9 @@ class SyncDataFromApi extends Command
         $apiData = json_decode($jsonData);
 
         // Vérification si la requête a réussi
-        // if ($apiData !== null) {
-        if ($apiResponse->successful()) {
-            $apiData = $apiResponse->object() ;
+        if ($apiData !== null) {
+        // if ($apiResponse->successful()) {
+            //$apiData = $apiResponse->object() ;
             $data = $apiData->data;
             $i = 1 ;
             foreach ($data as $person) {
