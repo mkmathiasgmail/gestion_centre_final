@@ -6,44 +6,62 @@ use Carbon\Carbon;
 use App\Models\Activite;
 use App\Models\Candidat;
 use App\Models\Categorie;
+use App\Models\Hashtag;
+use App\Models\TypeEvent;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
-use Illuminate\Support\Facades\Log;
+
 
 class ActiviteController extends Controller
 {
 
-    public function index(){
-        $activites= Activite::all();
-       return view('activites.index',compact('activites'));
+    public function index()
+    {
+        $activites = Activite::all();
+        $typeEvent=TypeEvent::all();
+        $categories=Categorie::all();
+        $hashtag=Hashtag::all();
+        return view('activites.index', compact('activites','typeEvent','categories','hashtag'));
     }
 
     public function create()
     {
 
         $cat = Categorie::all();
-        return view("components.form",compact("cat"));
+        return view("components.form", compact("cat"));
     }
 
     public function store(Request $request)
     {
         $activites = Activite::create([
             'title' => $request->title,
-            'description' => $request->description,
-            'image' => $request->image,
-            'lieu' => 'kinshasa',
-            'date_debut' => $request->date_debut,
             'categorie_id' => $request->categorie_id,
-            'date_fin' => $request->date_fin
+            'content' => $request->description,
+            'startDate' => $request->date_debut,
+            'endDate' => $request->date_fin,
+            'publishStatus' => $request->publishStatus,
+            'showInSlider' => $request->showInSlider,
+            'send' => $request->send,
+            'form' => $request->form,
+            'miniatureColor' => $request->miniatureColor,
+            'showInCalendar' => $request->showInCalendar,
+            'liveStatus' => $request->liveStatus,
+            'bookASeat' => $request->bookASeat,
+            'isEvents' => $request->isEvents,
+            'creator' => $request->create,
+            'location' => $request->lieu,
+         
         ]);
 
+        $activites->hashtag()->attach($request->tags);
+        $activites->typEvent()->attach($request->typeEvent);
         return redirect()->route('activites.index', compact('activites'));
     }
 
 
     public function show(Activite $activite)
     {
-        $show= $activite;
+        $show = $activite;
         $candidats = Candidat::has('activite')->get();
         return view('activites.show', compact('show', 'candidats'));
     }
@@ -51,7 +69,10 @@ class ActiviteController extends Controller
 
     public function edit(Activite $activite)
     {
-        //
+        $typeEvent = TypeEvent::has('activite')->get();
+        $categories = Categorie::has('articles')->get();
+        $hashtag = Hashtag::has('activite')->get();
+        return view('activites.edit',compact('activite','typeEvent','categories','hashtag'));
     }
 
 
@@ -59,19 +80,20 @@ class ActiviteController extends Controller
     {
         $activite->update($request->all());
         return redirect()->route('activites.index')
-                        ->with('success', 'Activite updated successfully.');
+            ->with('success', 'Activite updated successfully.');
     }
 
     public function destroy(Activite $activite)
     {
         $activite->delete();
         return redirect()->route('activites.index')
-                        ->with('success', 'Activite deleted successfully.');
+            ->with('success', 'Activite deleted successfully.');
     }
 
-    Public function encours(){
-        $today= Carbon::today();
-        $activites= Activite::where('startDate','<=',$today)->where('endDate','>=',$today)->get();
-        return view('encours',compact('activites'));
+    public function encours()
+    {
+        $today = Carbon::today();
+        $activites = Activite::where('startDate', '<=', $today)->where('endDate', '>=', $today)->get();
+        return view('encours', compact('activites'));
     }
 }
