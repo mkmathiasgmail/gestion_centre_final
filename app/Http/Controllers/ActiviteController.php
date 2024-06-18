@@ -6,16 +6,21 @@ use Carbon\Carbon;
 use App\Models\Activite;
 use App\Models\Candidat;
 use App\Models\Categorie;
+use App\Models\Odcuser;
+use Error;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
 class ActiviteController extends Controller
 {
 
-    public function index(){
-        $activites= Activite::all();
-       return view('activites.index',compact('activites'));
+    public function index()
+    {
+        $activites = Activite::all();
+        return view('activites.index', compact('activites'));
     }
 
     public function create()
@@ -43,9 +48,32 @@ class ActiviteController extends Controller
 
     public function show(Activite $activite)
     {
+        // Trouver l'Activite correspondant et récupérer le champ '_id'
+        $id = $activite->id;
         $show = $activite;
-        $candidats = Candidat::has('activite')->get();
-        return view('activites.show', compact('show', 'candidats'));
+        $activiteId = Activite::where('id', $id)->first(['_id']);
+        
+        // Récupérer les candidats liés à cette activité
+        $candidats = Candidat::where('activite_id', $id)->get();
+        $jsonPath = base_path('aws.json');
+        $jsonData = json_decode(file_get_contents($jsonPath));
+        $awsInfo = $jsonData->data;
+
+        foreach ($awsInfo as $value) {
+            $userId = $value->user->_id;
+            $idCandidat = Odcuser::where('_id', $userId)->first(['id']);
+            if($idCandidat !== null){
+
+                Candidat::create([
+                    'odcuser_id' => $idCandidat->id,
+                    'activite_id' => $id, 
+                    'status' => 1
+                ]);
+            }
+        }
+        $candidats = Candidat::where('activite_id', $id);
+        
+        return view('activites.show', compact('show', 'id', 'candidats', 'activiteId', 'awsInfo'));
     }
 
 
@@ -69,9 +97,10 @@ class ActiviteController extends Controller
             ->with('success', 'Activite deleted successfully.');
     }
 
-    Public function encours(){
-        $today= Carbon::today();
-        $activites= Activite::where('startDate','<=',$today)->where('endDate','>=',$today)->get();
-        return view('encours',compact('activites'));
+    public function encours()
+    {
+        $today = Carbon::today();
+        $activites = Activite::where('startDate', '<=', $today)->where('endDate', '>=', $today)->get();
+        return view('encours', compact('activites'));
     }
 }
