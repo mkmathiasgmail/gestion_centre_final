@@ -118,7 +118,7 @@
             aria-labelledby="dashboard-tab">
 
             <div class="py-6 relative overflow-x-auto">
-                <a href="#"
+                <a href="#" onclick="Reload()"
                     class="text-white bg-blue-700 hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 font-medium rounded-full text-sm px-5 py-2.5 text-center me-2 mb-4 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Actualiser</a>
 
                 <table id="tableCandidats"
@@ -215,6 +215,9 @@
                 classes to control the content visibility and styling.</p>
         </div>
     </div>
+    @php
+        $url = env('API_URL');
+    @endphp
 
     @section('script')
         <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
@@ -222,15 +225,47 @@
         <script>
             new DataTable('#tableCandidats');
         </script>
-        <script>
-            document.addEventListener('DOMContentLoaded', async () => {
-                const eventData = {!! json_encode($awsInfo) !!};
-                let _idEvent = {!! json_encode($activiteId) !!}
-                let idEvent =  {!! json_encode($id) !!}
-                
-                let activiteId = {!! json_encode($activiteId) !!};
 
+        <script>
+            let url = "{!! $url !!}"
+            let id = @json($id);
+            let idEvent = "{!! $activite_Id !!}"
+            let idUsers = @json($odcusers);
+            let user = {};
+            idUsers.forEach(element => {
+                user[element._id] = element.id
+                console.log(user)
             });
+            
+            function Reload() {
+                let candidats = [];
+
+                fetch(`${url}/events/show/${idEvent}`)
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('Network response was not ok');
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
+                        let events = data.data;
+                        events.forEach(event => {
+                            let userId = event.user._id;
+                            if (user.hasOwnProperty(userId)) {
+                                // Ajouter un objet au tableau candidats avec `odcuser_id` contenant `id`
+                                candidats.push({
+                                    'odcuser_id': user[userId],
+                                    'activite_id': idEvent, // ou utilisez event.activite_id si disponible
+                                    'status': 1
+                                });
+                            }
+                        });
+                    })
+                    .catch(error => {
+                        console.error('There was a problem with the fetch operation:', error);
+                    });
+
+            }
         </script>
     @endsection
 </x-app-layout>

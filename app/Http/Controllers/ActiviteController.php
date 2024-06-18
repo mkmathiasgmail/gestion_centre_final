@@ -12,6 +12,7 @@ use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 
 class ActiviteController extends Controller
@@ -51,29 +52,31 @@ class ActiviteController extends Controller
         // Trouver l'Activite correspondant et récupérer le champ '_id'
         $id = $activite->id;
         $show = $activite;
-        $activiteId = Activite::where('id', $id)->first(['_id']);
+        $activite_Id = $activite->_id;
+        $url = env('API_URL');
+        $odcusers = Odcuser::all(['id', '_id']);
+
         
+
+        // $response = Http::timeout(10000)->get("$url/events/show/$activite_Id");
+        // if ($response->successful()) {
+        //     $workshops = $response->object();
+        //     $data = $workshops->data ;
+        //     foreach ($data as $value) {
+        //         $userId = $value->user->_id;
+        //         $idCandidat = Odcuser::where('_id', $userId)->first(['id']);
+        //         if($idCandidat !== null){
+        //             Candidat::firstOrCreate([
+        //                 'odcuser_id' => $idCandidat->id,
+        //                 'activite_id' => $id, 
+        //                 'status' => 1
+        //             ]);
+        //         }
+        //     }
+        // }
         // Récupérer les candidats liés à cette activité
         $candidats = Candidat::where('activite_id', $id)->get();
-        $jsonPath = base_path('aws.json');
-        $jsonData = json_decode(file_get_contents($jsonPath));
-        $awsInfo = $jsonData->data;
-
-        foreach ($awsInfo as $value) {
-            $userId = $value->user->_id;
-            $idCandidat = Odcuser::where('_id', $userId)->first(['id']);
-            if($idCandidat !== null){
-
-                Candidat::create([
-                    'odcuser_id' => $idCandidat->id,
-                    'activite_id' => $id, 
-                    'status' => 1
-                ]);
-            }
-        }
-        $candidats = Candidat::where('activite_id', $id);
-        
-        return view('activites.show', compact('show', 'id', 'candidats', 'activiteId', 'awsInfo'));
+        return view('activites.show', compact('show', 'id', 'candidats', 'activite_Id', 'odcusers'));
     }
 
 
