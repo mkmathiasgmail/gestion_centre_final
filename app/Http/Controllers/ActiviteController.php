@@ -56,24 +56,6 @@ class ActiviteController extends Controller
         $url = env('API_URL');
         $odcusers = Odcuser::all(['id', '_id']);
 
-        
-
-        // $response = Http::timeout(10000)->get("$url/events/show/$activite_Id");
-        // if ($response->successful()) {
-        //     $workshops = $response->object();
-        //     $data = $workshops->data ;
-        //     foreach ($data as $value) {
-        //         $userId = $value->user->_id;
-        //         $idCandidat = Odcuser::where('_id', $userId)->first(['id']);
-        //         if($idCandidat !== null){
-        //             Candidat::firstOrCreate([
-        //                 'odcuser_id' => $idCandidat->id,
-        //                 'activite_id' => $id, 
-        //                 'status' => 1
-        //             ]);
-        //         }
-        //     }
-        // }
         // Récupérer les candidats liés à cette activité
         $candidats = Candidat::where('activite_id', $id)->get();
         return view('activites.show', compact('show', 'id', 'candidats', 'activite_Id', 'odcusers'));

@@ -6,8 +6,9 @@ use App\Models\Activite;
 use App\Models\Candidat;
 use App\Models\Odcuser;
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\Http;
 
-class RecupererCandidats extends Command
+class FetchCandidats extends Command
 {
     /**
      * The name and signature of the console command.
@@ -21,21 +22,29 @@ class RecupererCandidats extends Command
      *
      * @var string
      */
-    protected $description = 'Command description';
+    protected $description = 'Command for fetching all  the candidates from the api';
 
     /**
      * Execute the console command.
      */
     public function handle()
     {
-        $jsonCandidatsAWS = base_path('aws.json') ;
-        $candidatsData = json_decode(file_get_contents($jsonCandidatsAWS));
+        $this->info('Syncing candidates from api ...');
+        // $jsonCandidatsAWS = base_path('aws.json') ;
+        // $candidatsData = json_decode(file_get_contents($jsonCandidatsAWS));
+        $url = env('API_URL');
+        $activites = Activite::pluck('_id')->toArray();
+
+        foreach ($activites as $key => $value) {
+            $queryEvent = Http::timeout(10000)->get("$url/events/show/$value") ;
+        }
         
-        if ($candidatsData !== null) {
-            $CandidatsAWS = $candidatsData->data ;  
+        if ($queryEvent->successful()) {
+            $data = $queryEvent->object();
+            $candidats = $data->data ; 
             $e = 1 ;
 
-            foreach ($CandidatsAWS as $candidat) {
+            foreach ($candidats as $candidat) {
                 $this->info($candidat->user->_id);
                 $odcuser = Odcuser::where('_id', $candidat->user->_id)->first();
                 $activite = Activite::where('_id', $candidat->event->_id)->first();
@@ -52,7 +61,7 @@ class RecupererCandidats extends Command
 
                     if($existingCandidat) {
                         $existingCandidat->update($candidatInfo) ;
-                        $this->info("{$candidat->user->firstName} mis a jour avec succes ! ");
+                        $this->info("Update success ! ");
                     } else {
                         Candidat::create($candidatInfo);
                         $this->info("Candidate {$e} created successfully.");
