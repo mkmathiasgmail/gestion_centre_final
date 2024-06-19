@@ -4,8 +4,8 @@ namespace App\Models;
 
 use App\Models\Activite;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Odcuser extends Model
 {
@@ -48,9 +48,9 @@ class Odcuser extends Model
         'detailProfession' => 'array'
     ];
 
-    public function activite(): HasMany
+    public function activite(): BelongsToMany
     {
-        return $this->hasMany(Activite::class);
+        return $this->belongsToMany(Activite::class);
     }
 
 }
