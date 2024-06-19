@@ -3,16 +3,17 @@
 namespace App\Http\Controllers;
 
 use Carbon\Carbon;
+use App\Models\Hashtag;
+use App\Models\Odcuser;
 use App\Models\Activite;
 use App\Models\Candidat;
 use App\Models\Categorie;
-use App\Models\Hashtag;
 use App\Models\TypeEvent;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Http;
 
 class ActiviteController extends Controller
 {
