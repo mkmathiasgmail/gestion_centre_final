@@ -5,4 +5,12 @@
         </h2>
     </x-slot>
 
+
+
+    <script>
+        $(document).ready(function() {
+            alert(1)
+        })
+    </script>
+
 </x-app-layout>
