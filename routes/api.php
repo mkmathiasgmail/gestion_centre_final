@@ -12,3 +12,5 @@ Route::get('/user', function (Request $request) {
 
 
 require __DIR__.'/api_activites.php';
+require __DIR__.'/api_employabilite.php';
+

@@ -2,11 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Odcuser;
 use App\Models\Employabilite;
 use Illuminate\Routing\Controller;
 use App\Http\Requests\StoreEmployabiliteRequest;
 use App\Http\Requests\UpdateEmployabiliteRequest;
-use App\Models\Odcuser;
+use Database\Seeders\OdcuserSeeder;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class EmployabiliteController extends Controller
 {
@@ -85,4 +88,17 @@ class EmployabiliteController extends Controller
     {
         //
     }
+
+    public function getAutocompleteData(Request $request){
+       
+
+        if($request->has('term')){
+
+
+            return Odcuser::where('email','like','%'.$request->input('term').'%')->get();
+        }
+
+    }
+
+
 }
