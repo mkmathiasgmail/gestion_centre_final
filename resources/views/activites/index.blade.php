@@ -15,13 +15,6 @@
     </x-slot>
 
     <div class=" mb-4 mt-4 text-white">
-        <h2 class=" text-4xl font-bold">Gestion des Activites</h2>
-        <p class=" w-full md:w-1/2 dark:text-gray-400 mb-4 mt-4">Lorem ipsum dolor sit amet consectetur adipisicing elit.
-            Natus,
-            quas voluptas iure, excepturi, inventore
-            ipsam error itaque repellat maxime quidem quaerat? Porro harum consectetur minus delectus dignissimos quas
-            labore amet!</p>
-
 
         <a class=" cursor-pointer mt-5 bg-slate-600 p-2 rounded-sm font-bold" data-modal-target="default-modal1"
             data-modal-toggle="default-modal1">Create Activites</a>
@@ -68,7 +61,7 @@
             </thead>
             <tbody>
                 @foreach ($activites as $i => $item)
-                    <tr>
+                    <tr id="rowAll">
                         <th scope="col" class="px-6 py-3">
                             {{ $i + 1 }}
                         </th>
@@ -94,15 +87,15 @@
                             {{ $item->location }}
                         </td>
 
-                        <td scope="col" class="px-6 py-3">
+                        <td scope="col" class="px-6 py-3" id="startdate">
                             {{ $item->startDate }}
                         </td>
 
-                        <td scope="col" class="px-6 py-3">
+                        <td scope="col" class="px-6 py-3" id="endate">
                             {{ $item->endDate }}
                         </td>
 
-                        <td>
+                        <td id="nbredays">
 
                         </td>
 
@@ -127,10 +120,9 @@
                                             class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">View</a>
                                     </li>
                                     <li>
-                                        <a href="{{ route('activites.destroy', $item->id) }}"
+                                        <a onclick="destroy(event)" href="{{ route('activites.destroy', $item->id) }}"
                                             class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
-                                            data-modal-target="delete" data-modal-toggle="delete"
-                                            onclick="delete(event)">Delete</a>
+                                            data-modal-target="delete" data-modal-toggle="delete">Delete</a>
                                     </li>
                                     <li>
                                         <a href="{{ route('activites.edit', $item->id) }}"
@@ -171,7 +163,7 @@
                         <span class="sr-only">Close modal</span>
                     </button>
                 </div>
-                <form action="{{ route('activites.store') }}" method="post">
+                <form action="{{ route('activites.store') }}" method="post" id="delete">
                     <div class="p-5 md:p-5 space-y-4 text-white items-center">
 
                         @csrf
@@ -269,8 +261,13 @@
     </div>
 
     @section('script')
-        <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4="
-            crossorigin="anonymous"></script>
+        <script>
+            function destroy(event) {
+                event.preventDefault();
+                let link = event.target.getAttribute('href');
+                document.querySelector('#delete').setAttribute('action', link);
+            }
+        </script>
         <script src="https://cdn.ckeditor.com/ckeditor5/41.4.2/classic/ckeditor.js"></script>
 
         <script>
@@ -422,7 +419,65 @@
 
         <script src="https://cdn.datatables.net/2.0.8/js/dataTables.js"></script>
         <script>
-            new DataTable('#table');
+            new DataTable('#table', {
+                // responsive: true,
+                // columnDefs: [{
+                //         responsivePriority: 1,
+                //         targets: 0
+                //     },
+                //     {
+                //         responsivePriority: 2,
+                //         targets: -1
+                //     }
+                // ],
+                // layout: {
+                //     topStart: {
+                //         pageLength: {
+                //             menu: [10, 25, 50, 100, 200]
+                //         }
+                //     },
+                //     topEnd: {
+                //         search: {
+                //             placeholder: 'Type search here'
+                //         }
+                //     },
+                //     bottomEnd: {
+                //         paging: {
+                //             numbers: 3
+                //         }
+                //     },
+
+                // }
+
+                scrollY: 600,
+                paging: false
+
+            });
+
+            document.addEventListener('DOMContentLoaded', function() {
+                var rows = document.querySelectorAll('#table tbody tr');
+
+                rows.forEach(function(row) {
+                    var startDateText = row.querySelector('#startdate').textContent.trim();
+                    var endDateText = row.querySelector('#endate').textContent.trim();
+
+                    var startDate = new Date(startDateText);
+                    var endDate = new Date(endDateText);
+
+                    if (!isNaN(startDate) && !isNaN(endDate)) {
+                        var differenceInTime = endDate - startDate;
+                        var differenceInDays = Math.ceil(differenceInTime / (1000 * 60 * 60 * 24));
+                        row.querySelector('#nbredays').textContent = differenceInDays + ' jours';
+                    } else {
+                        row.querySelector('#nbredays').textContent = 'Invalid dates';
+                    }
+                });
+            });
+
+            document.querySelector('.dt-layout-row label').setAttribute('class', 'text-white text-sm font-bold');
+            document.querySelector('.dt-length select').setAttribute('class', 'w-1/2 h-9 rounded-md text-gray-600');
+            document.querySelector('.dt-search input').setAttribute('class', 'w-1/2 h-9 rounded-md text-gray-600');
+            document.querySelector('.dt-search label').setAttribute('class', 'text-white text-sm font-bold');
         </script>
     @endsection
 

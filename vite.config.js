@@ -5,8 +5,10 @@ export default defineConfig({
     plugins: [
         laravel({
             input: [
-                'resources/css/app.css',
-                'resources/js/app.js',
+                "resources/css/app.css",
+                "resources/js/app.js",
+                "node_modules/jquery/dist/jquery.min.js",
+                "node_modules/datatables.net-dt/js/dataTables.dataTables.js",
             ],
             refresh: true,
         }),
