@@ -14,23 +14,23 @@ return new class extends Migration
         Schema::table('activites', function (Blueprint $table) {
             $table->renameColumn('description', 'content');
             $table->renameColumn('lieu', 'location');
-            $table->string('typeEvent');
-            $table->string('_id');
-            $table->boolean('showInSlider');
-            $table->string('publishStatus');
-            $table->boolean('send');
-            $table->string('form');
-            $table->string('miniatureColor');
-            $table->boolean('showInCalendar');
-            $table->boolean('liveStatus');
-            $table->boolean('bookASeat');
-            $table->boolean('isEvents');
-            $table->date('createdAt');
-            $table->date('updatedAt');
-            $table->json('creator');
+            $table->string('_id')->nullable();
+            $table->boolean('showInSlider')->default(false)->nullable();
+            $table->string('publishStatus')->default('public')->nullable();
+            $table->boolean('send')->default(false)->nullable();
+            $table->string('form')->nullable();
+            $table->string('miniatureColor')->nullable();
+            $table->boolean('showInCalendar')->default(false)->nullable();
+            $table->boolean('liveStatus')->default(false)->nullable();
+            $table->boolean('bookASeat')->default(false)->nullable();
+            $table->boolean('isEvents')->default(false)->nullable();
+            $table->date('createdAt')->nullable();
+            $table->date('updatedAt')->nullable();
+            $table->json('creator')->nullable();
             $table->renameColumn('date_debut', 'startDate');
             $table->renameColumn('date_fin', 'endDate');
             $table->dropColumn('image');
+            
 
             
         });

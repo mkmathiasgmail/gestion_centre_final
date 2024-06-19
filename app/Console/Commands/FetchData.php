@@ -34,13 +34,16 @@ class FetchData extends Command
         // Fetch data from the API
         try {
 
-            $response = Http::timeout("100000")->get('http://10.252.252.16:8000/api/events/active');
+            $response = Http::timeout("100000")->get($_ENV['API_EVENTS']);
 
             if ($response->successful()) {
                 $workshops = $response->json()['data'];
+
+                $result=array_reverse($workshops);
+    
                 $this->info('Fetch Events data from API and store in database........');
                 $i = 1 ;
-                foreach ($workshops as $workshopData) {
+                foreach ($result as $workshopData) {
                     $existingWorkshop = Activite::where('updated_At', $workshopData['updatedAt'])
                         ->where('startDate', $workshopData['startDate'])
                         ->first();
@@ -60,12 +63,11 @@ class FetchData extends Command
                         $startD = Carbon::parse($workshopData['createdAt']);
                         $upD = Carbon::parse($workshopData['updatedAt']);
 
-                        $activites = Activite::create([
+                        $activites = Activite::firstOrCreate([
                             'title' => $workshopData['translations']['fr']['title'],
                             'content' => json_encode($workshopData['translations']['fr']['content']),
                             'categorie_id' => $category->id,
                             'startDate' => $start,
-                            'typeEvent' => '',
                             'status' => $workshopData['status'],
                             '_id' => $workshopData['_id'],
                             'publishStatus' => $workshopData['publishStatus'],
