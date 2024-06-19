@@ -2,12 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use Log;
 use App\Models\Odcuser;
 use App\Models\Activite;
 use App\Models\Candidat;
 use Illuminate\Http\Request;
 use App\Http\Requests\StoreCandidatRequest;
 use App\Http\Requests\UpdateCandidatRequest;
+use Illuminate\Support\Facades\Log as FacadesLog;
 
 class CandidatController extends Controller
 {
@@ -34,10 +36,11 @@ class CandidatController extends Controller
      */
     public function store(Request $request)
     {
+        FacadesLog::info('storeCandidats called');
         // Validate the incoming request data
         $validatedData = $request->validate([
-            'odcuser_id' => 'required|string',
-            'activite_id' => 'required|string'
+            'odcuser_id' => 'required',
+            'activite_id' => 'required'
         ]);
 
         // Find the Odcuser and Activite by their respective _id fields
@@ -46,12 +49,12 @@ class CandidatController extends Controller
 
         if ($odcuser && $activite) {
             // Create a new Candidat record
-            $candidat = Candidat::create([
+            $candidat = Candidat::firstOrCreate([
                 'odcuser_id' => $odcuser->id,
                 'activite_id' => $activite->id,
                 'status' => 1 // Assuming default status is 1
             ]);
-
+            FacadesLog::warning('User or Event not found', ['odcuser_id' => $candidat['odcuser_id'], 'activite_id' => $candidat['activite_id']]);
             return response()->json(['success' => true, 'candidat' => $candidat], 200);
         } else {
             return response()->json(['success' => false, 'message' => 'User or Event not found'], 404);

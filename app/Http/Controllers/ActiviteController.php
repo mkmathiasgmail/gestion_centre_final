@@ -3,14 +3,17 @@
 namespace App\Http\Controllers;
 
 use Carbon\Carbon;
+use App\Models\Hashtag;
+use App\Models\Odcuser;
 use App\Models\Activite;
 use App\Models\Candidat;
 use App\Models\Categorie;
-use App\Models\Hashtag;
 use App\Models\TypeEvent;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
-
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Http;
 
 class ActiviteController extends Controller
 {
@@ -64,29 +67,13 @@ class ActiviteController extends Controller
         // Trouver l'Activite correspondant et récupérer le champ '_id'
         $id = $activite->id;
         $show = $activite;
-        $activiteId = Activite::where('id', $id)->first(['_id']);
-        
+        $activite_Id = $activite->_id;
+        $url = env('API_URL');
+        $odcusers = Odcuser::all(['id', '_id']);
+
         // Récupérer les candidats liés à cette activité
         $candidats = Candidat::where('activite_id', $id)->get();
-        $jsonPath = base_path('aws.json');
-        $jsonData = json_decode(file_get_contents($jsonPath));
-        $awsInfo = $jsonData->data;
-
-        foreach ($awsInfo as $value) {
-            $userId = $value->user->_id;
-            $idCandidat = Odcuser::where('_id', $userId)->first(['id']);
-            if($idCandidat !== null){
-
-                Candidat::create([
-                    'odcuser_id' => $idCandidat->id,
-                    'activite_id' => $id, 
-                    'status' => 1
-                ]);
-            }
-        }
-        $candidats = Candidat::where('activite_id', $id);
-        
-        return view('activites.show', compact('show', 'id', 'candidats', 'activiteId', 'awsInfo'));
+        return view('activites.show', compact('show', 'id', 'candidats', 'activite_Id', 'odcusers'));
     }
 
 

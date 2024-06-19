@@ -117,12 +117,12 @@
         <div class="hidden p-4 rounded-lg bg-gray-50 dark:bg-gray-800" id="styled-dashboard" role="tabpanel"
             aria-labelledby="dashboard-tab">
 
-            <div class="py-6 relative overflow-x-auto">
-                <a href="#"
-                    class="text-white bg-blue-700 hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 font-medium rounded-full text-sm px-5 py-2.5 text-center me-2 mb-4 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Actualiser</a>
+            <a href="#" onclick="Reload()"
+                class="text-white bg-blue-700 hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 font-medium rounded-full text-sm px-5 py-2.5 text-center me-2 mb-4 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Actualiser</a>
 
-                <table id="tableCandidats"
-                    class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400 my-4">
+            <div class="py-6 relative overflow-x-auto">
+                <table id="candidatTable"
+                    class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
                     <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                         <tr>
                             <th scope="col"
@@ -143,56 +143,60 @@
                             </th>
                             <th scope="col"
                                 class="px-6 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                Profession
+                            </th>
+                            <th scope="col"
+                                class="px-6 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                                 Actions
                             </th>
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach ($candidats as $candidat)
+                        @foreach ($candidats as $key => $candidat)
                             <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                                <td class="px-6 py-4">{{ $candidat->odcuser->firstName }}</td>
+                                <td class="px-6 py-4">{{ $candidat->odcuser->lastName }}</td>
+                                <td class="px-6 py-4">{{ $candidat->odcuser->email }}</td>
+                                <td class="px-6 py-4">{{ $candidat->odcuser->gender }}</td>
                                 <td class="px-6 py-4">
-                                    {{ $show->id }}
+                                    @php
+                                        $profession = json_decode($candidat->odcuser->profession, true);
+
+                                    @endphp
+                                    {{ $profession['translations']['fr']['profession'] ?? '' }}
                                 </td>
-                                <td class="px-6 py-4">
-                                    {{ $candidat->odcuser->lastName }}
-                                </td>
-                                <td class="px-6 py-4">
-                                    {{ $candidat->odcuser->email }}
-                                </td>
-                                <td class="px-6 py-4">
-                                    {{ $candidat->odcuser->gender }}
-                                </td>
-                                <td class="px-6 py-4 flex">
-                                    {{-- Show --}}
-                                    <a href="{{ route('candidats.show', $candidat->id) }}">
-                                        <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true"
-                                            xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                            fill="none" viewBox="0 0 24 24">
-                                            <path stroke="currentColor" stroke-linecap="round"
-                                                stroke-linejoin="round" stroke-width="2"
-                                                d="M10 11h2v5m-2 0h4m-2.592-8.5h.01M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                                <td>
+                                    <button id="dropdownMenuIconButton"
+                                        data-dropdown-toggle="dropdownDots{{ $key }}"
+                                        class="inline-flex items-center p-2 text-sm font-medium text-center text-gray-900 bg-white rounded-lg hover:bg-gray-100 focus:ring-4 focus:outline-none dark:text-white focus:ring-gray-50 dark:bg-gray-800 dark:hover:bg-gray-700 dark:focus:ring-gray-600"
+                                        type="button">
+                                        <svg class="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
+                                            fill="currentColor" viewBox="0 0 4 15">
+                                            <path
+                                                d="M3.5 1.5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0Zm0 6.041a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0Zm0 5.959a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0Z" />
                                         </svg>
-                                    </a>
-                                    {{-- Remove --}}
-                                    <a href="{{ route('candidats.destroy', $candidat->id) }}">
-                                        <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true"
-                                            xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                            fill="currentColor" viewBox="0 0 24 24">
-                                            <path fill-rule="evenodd"
-                                                d="M5 8a4 4 0 1 1 8 0 4 4 0 0 1-8 0Zm-2 9a4 4 0 0 1 4-4h4a4 4 0 0 1 4 4v1a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-1Zm13-6a1 1 0 1 0 0 2h4a1 1 0 1 0 0-2h-4Z"
-                                                clip-rule="evenodd" />
-                                        </svg>
-                                    </a>
-                                    {{-- Add new candidate --}}
-                                    <a href="{{ route('candidats.create', $candidat->id) }}">
-                                        <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true"
-                                            xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                            fill="currentColor" viewBox="0 0 24 24">
-                                            <path fill-rule="evenodd"
-                                                d="M9 4a4 4 0 1 0 0 8 4 4 0 0 0 0-8Zm-2 9a4 4 0 0 0-4 4v1a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2v-1a4 4 0 0 0-4-4H7Zm8-1a1 1 0 0 1 1-1h1v-1a1 1 0 1 1 2 0v1h1a1 1 0 1 1 0 2h-1v1a1 1 0 1 1-2 0v-1h-1a1 1 0 0 1-1-1Z"
-                                                clip-rule="evenodd" />
-                                        </svg>
-                                    </a>
+                                    </button>
+
+                                    <!-- Dropdown menu -->
+                                    <div id="dropdownDots{{ $key }}"
+                                        class="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700 dark:divide-gray-600">
+                                        <ul class="py-2 text-sm text-gray-700 dark:text-gray-200"
+                                            aria-labelledby="dropdownMenuIconButton">
+                                            <li>
+                                                <a href="{{ route('candidats.show', $candidat->id) }}"
+                                                    class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Voir
+                                                    plus de details</a>
+                                            </li>
+                                            <li>
+                                                <a href="{{ route('candidats.edit', $candidat->id) }}"
+                                                    class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Editer</a>
+                                            </li>
+                                            <li>
+                                                <a href="#"
+                                                    class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Desactiver</a>
+                                            </li>
+                                        </ul>
+                                    </div>
                                 </td>
                             </tr>
                         @endforeach
@@ -215,22 +219,81 @@
                 classes to control the content visibility and styling.</p>
         </div>
     </div>
+    @php
+        $url = env('API_URL');
+    @endphp
 
     @section('script')
         <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
         <script src="https://cdn.datatables.net/2.0.8/js/dataTables.js"></script>
+        
         <script>
-            new DataTable('#tableCandidats');
+            new DataTable('#candidatTable');
         </script>
-        <script>
-            document.addEventListener('DOMContentLoaded', async () => {
-                const eventData = {!! json_encode($awsInfo) !!};
-                let _idEvent = {!! json_encode($activiteId) !!}
-                let idEvent =  {!! json_encode($id) !!}
-                
-                let activiteId = {!! json_encode($activiteId) !!};
 
+        <script>
+            let url = "{!! $url !!}"
+            let id = @json($id);
+            let idEvent = "{!! $activite_Id !!}"
+            let idUsers = @json($odcusers);
+            let user = {};
+            // Initialiser l'objet user avec les paires de `_id` et `id`
+            idUsers.forEach(element => {
+                user[element._id] = element.id;
             });
+
+
+            function Reload() {
+
+                fetch(`${url}/events/show/${idEvent}`)
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('Network response was not ok');
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
+                        let events = data.data;
+                        events.forEach(event => {
+                            let userId = event.user._id;
+                            if (user.hasOwnProperty(userId)) {
+                                // Ajouter un objet au tableau candidat avec `odcuser_id` contenant `id`
+                                let candidat = {
+                                    'odcuser_id': user[userId],
+                                    'activite_id': id, // ou utilisez event.activite_id si disponible
+                                    'status': 1
+                                };
+                                console.log(candidat)
+                                storeCandidats(candidat);
+                            }
+                        });
+                    })
+                    .catch(error => {
+                        console.error('There was a problem with the fetch operation:', error);
+                    });
+            }
+
+            function storeCandidats(candidat) {
+                fetch('/api/candidat', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify(candidat)
+                    })
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('Network response was not ok');
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
+                        console.log('Candidats stored successfully:', data);
+                    })
+                    .catch(error => {
+                        console.error('There was a problem with the fetch operation:', error);
+                    });
+            }
         </script>
     @endsection
 </x-app-layout>
