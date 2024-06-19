@@ -80,7 +80,7 @@
     </x-slot>
 
     <div class="py-6 relative overflow-x-auto">
-        <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+        <table id="candidatIndexTable" class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
             <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                 <tr>
                     <th scope="col" class="px-6 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">
@@ -128,7 +128,10 @@
                             {{ $candidat->odcuser->phone }}
                         </td>
                         <td class="px-6 py-4">
-                            {{ $candidat->odcuser->profession }}
+                            @php
+                                $profession = json_decode($candidat->odcuser->profession, true)
+                            @endphp
+                            {{ $profession['translations']['fr']['profession'] ?? '' }}
                         </td>
                         <td class="px-6 py-4">
                             {{ $candidat->odcuser->country }}
@@ -160,4 +163,12 @@
         </table>
     </div>
 
+    @section('script')
+        <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+        <script src="https://cdn.datatables.net/2.0.8/js/dataTables.js"></script>
+        <script>
+            new DataTable('#candidatIndexTable');
+        </script>
+    @endsection
 </x-app-layout>
+

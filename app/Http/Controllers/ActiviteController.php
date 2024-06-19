@@ -3,14 +3,17 @@
 namespace App\Http\Controllers;
 
 use Carbon\Carbon;
+use App\Models\Hashtag;
+use App\Models\Odcuser;
 use App\Models\Activite;
 use App\Models\Candidat;
 use App\Models\Categorie;
-use App\Models\Hashtag;
 use App\Models\TypeEvent;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
-
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Http;
 
 class ActiviteController extends Controller
 {
@@ -27,8 +30,8 @@ class ActiviteController extends Controller
     public function create()
     {
 
-        $cat = Categorie::all();
-        return view("components.form", compact("cat"));
+        $categories = Categorie::all();
+        return view("components.form", compact("categories"));
     }
 
     public function store(Request $request)
@@ -61,9 +64,16 @@ class ActiviteController extends Controller
 
     public function show(Activite $activite)
     {
+        // Trouver l'Activite correspondant et récupérer le champ '_id'
+        $id = $activite->id;
         $show = $activite;
-        $candidats = Candidat::has('activite')->get();
-        return view('activites.show', compact('show', 'candidats'));
+        $activite_Id = $activite->_id;
+        $url = env('API_URL');
+        $odcusers = Odcuser::all(['id', '_id']);
+
+        // Récupérer les candidats liés à cette activité
+        $candidats = Candidat::where('activite_id', $id)->get();
+        return view('activites.show', compact('show', 'id', 'candidats', 'activite_Id', 'odcusers'));
     }
 
 
