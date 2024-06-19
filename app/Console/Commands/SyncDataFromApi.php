@@ -16,7 +16,7 @@ class SyncDataFromApi extends Command
      *
      * @var string
      */
-    protected $signature = 'sync:data';
+    protected $signature = 'sync:odcusers';
 
     /**
      * The console command description.
@@ -31,17 +31,17 @@ class SyncDataFromApi extends Command
     public function handle()
     {
         $this->info("Start syncing data from API to database");
-
-        $apiResponse = Http::timeout(1000)->get("http://10.252.252.16:8000/api/users/active") ;
+        $url = env('API_URL');
+        $apiResponse = Http::timeout(10000)->get("$url/users/active") ;
         
         // Chemin absolu vers le fichier JSON contenant les odcusers
-        $jsonOdcusers = base_path('odcusers_from_api.json');
+        //$jsonOdcusers = base_path('odcusers_from_api.json');
 
         //Read JSON data from file
-        $jsonData = file_get_contents($jsonOdcusers);
+        //$jsonData = file_get_contents($jsonOdcusers);
 
         //Decode JSON data
-        $apiData = json_decode($jsonData);
+        //$apiData = json_decode($jsonData);
 
         // Vérification si la requête a réussi
         // if ($apiData !== null) {

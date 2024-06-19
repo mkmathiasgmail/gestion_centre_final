@@ -3,19 +3,28 @@
 namespace App\Http\Controllers;
 
 use Carbon\Carbon;
+use App\Models\Hashtag;
+use App\Models\Odcuser;
 use App\Models\Activite;
 use App\Models\Candidat;
 use App\Models\Categorie;
+use App\Models\TypeEvent;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Http;
 
 class ActiviteController extends Controller
 {
 
-    public function index(){
-        $activites= Activite::all();
-       return view('activites.index',compact('activites'));
+    public function index()
+    {
+        $activites = Activite::all();
+        $typeEvent=TypeEvent::all();
+        $categories=Categorie::all();
+        $hashtag=Hashtag::all();
+        return view('activites.index', compact('activites','typeEvent','categories','hashtag'));
     }
 
     public function create()
@@ -29,29 +38,51 @@ class ActiviteController extends Controller
     {
         $activites = Activite::create([
             'title' => $request->title,
-            'description' => $request->description,
-            'image' => $request->image,
-            'lieu' => 'kinshasa',
-            'date_debut' => $request->date_debut,
             'categorie_id' => $request->categorie_id,
-            'date_fin' => $request->date_fin
+            'content' => $request->description,
+            'startDate' => $request->date_debut,
+            'endDate' => $request->date_fin,
+            'publishStatus' => $request->publishStatus,
+            'showInSlider' => $request->showInSlider,
+            'send' => $request->send,
+            'form' => $request->form,
+            'miniatureColor' => $request->miniatureColor,
+            'showInCalendar' => $request->showInCalendar,
+            'liveStatus' => $request->liveStatus,
+            'bookASeat' => $request->bookASeat,
+            'isEvents' => $request->isEvents,
+            'creator' => $request->create,
+            'location' => $request->lieu,
+         
         ]);
 
+        $activites->hashtag()->attach($request->tags);
+        $activites->typEvent()->attach($request->typeEvent);
         return redirect()->route('activites.index', compact('activites'));
     }
 
 
     public function show(Activite $activite)
     {
+        // Trouver l'Activite correspondant et récupérer le champ '_id'
+        $id = $activite->id;
         $show = $activite;
-        $candidats = Candidat::has('activite')->get();
-        return view('activites.show', compact('show', 'candidats'));
+        $activite_Id = $activite->_id;
+        $url = env('API_URL');
+        $odcusers = Odcuser::all(['id', '_id']);
+
+        // Récupérer les candidats liés à cette activité
+        $candidats = Candidat::where('activite_id', $id)->get();
+        return view('activites.show', compact('show', 'id', 'candidats', 'activite_Id', 'odcusers'));
     }
 
 
     public function edit(Activite $activite)
     {
-        //
+        $typeEvent = TypeEvent::has('activite')->get();
+        $categories = Categorie::has('articles')->get();
+        $hashtag = Hashtag::has('activite')->get();
+        return view('activites.edit',compact('activite','typeEvent','categories','hashtag'));
     }
 
 
@@ -69,9 +100,10 @@ class ActiviteController extends Controller
             ->with('success', 'Activite deleted successfully.');
     }
 
-    Public function encours(){
-        $today= Carbon::today();
-        $activites= Activite::where('startDate','<=',$today)->where('endDate','>=',$today)->get();
-        return view('encours',compact('activites'));
+    public function encours()
+    {
+        $today = Carbon::today();
+        $activites = Activite::where('startDate', '<=', $today)->where('endDate', '>=', $today)->get();
+        return view('encours', compact('activites'));
     }
 }

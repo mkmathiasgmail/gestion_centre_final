@@ -2,16 +2,21 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Evaluation;
+use App\Models\TypeEvent;
+use App\Http\Requests\StoreTypeEventRequest;
+use App\Http\Requests\UpdateTypeEventRequest;
 use Illuminate\Http\Request;
-class EvaluationController extends Controller
+
+class TypeEventController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        return view("evaluations.index");
+       $typEvent= TypeEvent::all();
+       return view('typEvents.index',compact("typEvent"));
+      
     }
 
     /**
@@ -27,13 +32,19 @@ class EvaluationController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $typeEvent = TypeEvent::create([
+            'code' => $request->code,
+            'typeEvent' => $request->type,
+           
+        ]);
+
+        return redirect()->route('typevents.index', compact('typeEvent'));
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(Evaluation $evaluation)
+    public function show(TypeEvent $typeEvent)
     {
         //
     }
@@ -41,7 +52,7 @@ class EvaluationController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Evaluation $evaluation)
+    public function edit(TypeEvent $typeEvent)
     {
         //
     }
@@ -49,7 +60,7 @@ class EvaluationController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Evaluation $evaluation)
+    public function update(UpdateTypeEventRequest $request, TypeEvent $typeEvent)
     {
         //
     }
@@ -57,7 +68,7 @@ class EvaluationController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Evaluation $evaluation)
+    public function destroy(TypeEvent $typeEvent)
     {
         //
     }

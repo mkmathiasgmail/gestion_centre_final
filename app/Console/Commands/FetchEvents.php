@@ -10,14 +10,14 @@ use Carbon\Carbon;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Http;
 
-class FetchData extends Command
+class FetchEvents extends Command
 {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'app:fetch-data';
+    protected $signature = 'sync:events';
 
     /**
      * The console command description.
@@ -33,17 +33,14 @@ class FetchData extends Command
     {
         // Fetch data from the API
         try {
-
-            $response = Http::timeout("100000")->get($_ENV['API_EVENTS']);
+            $url = env('API_BASE_URL');
+            $response = Http::timeout(100000)->get("http://10.252.252.6:8000/api/events/active");
 
             if ($response->successful()) {
                 $workshops = $response->json()['data'];
-
-                $result=array_reverse($workshops);
-    
                 $this->info('Fetch Events data from API and store in database........');
                 $i = 1 ;
-                foreach ($result as $workshopData) {
+                foreach ($workshops as $workshopData) {
                     $existingWorkshop = Activite::where('updated_At', $workshopData['updatedAt'])
                         ->where('startDate', $workshopData['startDate'])
                         ->first();
@@ -63,11 +60,12 @@ class FetchData extends Command
                         $startD = Carbon::parse($workshopData['createdAt']);
                         $upD = Carbon::parse($workshopData['updatedAt']);
 
-                        $activites = Activite::firstOrCreate([
+                        $activites = Activite::create([
                             'title' => $workshopData['translations']['fr']['title'],
                             'content' => json_encode($workshopData['translations']['fr']['content']),
                             'categorie_id' => $category->id,
                             'startDate' => $start,
+                            'typeEvent' => '',
                             'status' => $workshopData['status'],
                             '_id' => $workshopData['_id'],
                             'publishStatus' => $workshopData['publishStatus'],

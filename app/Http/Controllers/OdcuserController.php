@@ -14,6 +14,10 @@ class OdcuserController extends Controller
     public function index()
     {
         $odcusers = Odcuser::latest()->get();
+        if (request()->expectsJson()) {
+            return response()->json($odcusers);
+        }
+    
 
         return view('odcusers.index', compact('odcusers'));
     }
