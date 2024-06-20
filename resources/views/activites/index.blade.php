@@ -16,7 +16,8 @@
 
     <div class=" mb-4 mt-4 text-white">
 
-        <a class=" cursor-pointer mt-5 bg-slate-600 p-2 rounded-sm font-bold">Create Activites</a>
+        <a class=" cursor-pointer mt-5 bg-slate-600 p-2 rounded-sm font-bold" data-modal-target="create"
+            data-modal-toggle="create">Create Activites</a>
 
 
     </div>
@@ -95,7 +96,7 @@
                         </td>
 
                         <td id="nbredays">
-
+                            {{ $item->differenceInDays }} Jours
                         </td>
 
                         <td>
@@ -143,34 +144,42 @@
                     <th scope="col" class="px-6 py-3">
                         Id
                     </th>
-                    <th scope="col" class="px-6 py-3">
-                        Created At
-                    </th>
-                    <th scope="col" class="px-6 py-3">
+                    <td scope="col" class="px-6 py-3">
                         Title
-                    </th>
-                    <th scope="col" class="px-6 py-3">
+                    </td>
+                    <td scope="col" class="px-6 py-3">
+                        categories
+                    </td>
+                    <td scope="col" class="px-6 py-3">
+                        hashtag
+                    </td>
+                    <td scope="col" class="px-6 py-3">
+                        type event
+                    </td>
+                    <td scope="col" class="px-6 py-3">
                         Lieu
-                    </th>
-                    <th scope="col" class="px-6 py-3">
-                        Categories
-                    </th>
-                    <th scope="col" class="px-6 py-3">
+                    </td>
+
+                    <td scope="col" class="px-6 py-3">
                         Date_debut
-                    </th>
-                    <th scope="col" class="px-6 py-3">
+                    </td>
+                    <td scope="col" class="px-6 py-3">
                         Date_fin
-                    </th>
-                    <th scope="col" class="px-6 py-3">
+                    </td>
+                    <td scope="col" class="px-6 py-3">
+                        Duree
+                    </td>
+                    <td scope="col" class="px-6 py-3">
                         Action
-                    </th>
+                    </td>
                 </tr>
             </tfoot>
         </table>
     </div>
 
     <x-delete :name="__('Are you sure you want to delete this product? ')" />
-    <div id="default-modal1" tabindex="-1" aria-hidden="true"
+
+    <div id="create" tabindex="-1" aria-hidden="true"
         class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center max-w-9xl md:inset-0 h-[calc(100%-1rem)] max-h-full">
         <div class="relative p-4 w-full max-w-6xl max-h-full">
             <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
@@ -184,8 +193,8 @@
                         data-modal-hide="default-modal">
                         <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
                             viewBox="0 0 14 14">
-                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
+                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
                         </svg>
                         <span class="sr-only">Close modal</span>
                     </button>
@@ -447,60 +456,40 @@
         <script src="https://cdn.datatables.net/2.0.8/js/dataTables.js"></script>
         <script>
             new DataTable('#table', {
-                // responsive: true,
-                // columnDefs: [{
-                //         responsivePriority: 1,
-                //         targets: 0
-                //     },
-                //     {
-                //         responsivePriority: 2,
-                //         targets: -1
-                //     }
-                // ],
-                // layout: {
-                //     topStart: {
-                //         pageLength: {
-                //             menu: [10, 25, 50, 100, 200]
-                //         }
-                //     },
-                //     topEnd: {
-                //         search: {
-                //             placeholder: 'Type search here'
-                //         }
-                //     },
-                //     bottomEnd: {
-                //         paging: {
-                //             numbers: 3
-                //         }
-                //     },
-
-                // }
-
-                scrollY: 600,
-                paging: false
-
-            });
-
-            document.addEventListener('DOMContentLoaded', function() {
-                var rows = document.querySelectorAll('#table tbody tr');
-
-                rows.forEach(function(row) {
-                    var startDateText = row.querySelector('#startdate').textContent.trim();
-                    var endDateText = row.querySelector('#endate').textContent.trim();
-
-                    var startDate = new Date(startDateText);
-                    var endDate = new Date(endDateText);
-
-                    if (!isNaN(startDate) && !isNaN(endDate)) {
-                        var differenceInTime = endDate - startDate;
-                        var differenceInDays = Math.ceil(differenceInTime / (1000 * 60 * 60 * 24));
-                        row.querySelector('#nbredays').textContent = differenceInDays + ' jours';
-                    } else {
-                        row.querySelector('#nbredays').textContent = 'Invalid dates';
+                responsive: true,
+                columnDefs: [{
+                        responsivePriority: 1,
+                        targets: 0
+                    },
+                    {
+                        responsivePriority: 2,
+                        targets: -1
                     }
-                });
+                ],
+                layout: {
+                    topStart: {
+                        pageLength: {
+                            menu: [10, 25, 50, 100, 200]
+                        }
+                    },
+                    topEnd: {
+                        search: {
+                            placeholder: 'Type search here'
+                        }
+                    },
+                    bottomEnd: {
+                        paging: {
+                            numbers: 3
+                        }
+                    },
+
+                }
+
+               
+
             });
 
+            
             document.querySelector('.dt-layout-row label').setAttribute('class', 'text-white text-sm font-bold');
             document.querySelector('.dt-length select').setAttribute('class', 'w-1/2 h-9 rounded-md text-gray-600');
             document.querySelector('.dt-search input').setAttribute('class', 'w-1/2 h-9 rounded-md text-gray-600');

@@ -20,10 +20,29 @@ class ActiviteController extends Controller
 
     public function index()
     {
+
+        
         $activites = Activite::all();
         $typeEvent=TypeEvent::all();
         $categories=Categorie::all();
         $hashtag=Hashtag::all();
+
+        foreach ($activites as $activite) {
+            $startDate = Carbon::parse($activite->startDate);
+            $endDate = Carbon::parse($activite->endDate);
+
+            
+            $differenceInDays = $startDate->diffInDays($endDate);
+
+            if ($differenceInDays==0) {
+                $activite->differenceInDays = 1;
+            }else {
+                $activite->differenceInDays = $differenceInDays;
+            }
+
+           
+            
+        }
         return view('activites.index', compact('activites','typeEvent','categories','hashtag'));
     }
 
