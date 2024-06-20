@@ -20,18 +20,35 @@ class ActiviteController extends Controller
 
     public function index()
     {
+
+        
         $activites = Activite::all();
         $typeEvent=TypeEvent::all();
         $categories=Categorie::all();
         $hashtag=Hashtag::all();
+
+        foreach ($activites as $activite) {
+            $startDate = Carbon::parse($activite->startDate);
+            $endDate = Carbon::parse($activite->endDate);
+
+            
+            $differenceInDays = $startDate->diffInDays($endDate);
+
+            if ($differenceInDays==0) {
+                $activite->differenceInDays = 1;
+            }else {
+                $activite->differenceInDays = $differenceInDays;
+            }
+
+           
+            
+        }
         return view('activites.index', compact('activites','typeEvent','categories','hashtag'));
     }
 
     public function create()
     {
 
-        $categories = Categorie::all();
-        return view("components.form", compact("categories"));
     }
 
     public function store(Request $request)
@@ -66,14 +83,13 @@ class ActiviteController extends Controller
     {
         // Trouver l'Activite correspondant et récupérer le champ '_id'
         $id = $activite->id;
-        $show = $activite;
         $activite_Id = $activite->_id;
         $url = env('API_URL');
         $odcusers = Odcuser::all(['id', '_id']);
 
         // Récupérer les candidats liés à cette activité
         $candidats = Candidat::where('activite_id', $id)->get();
-        return view('activites.show', compact('show', 'id', 'candidats', 'activite_Id', 'odcusers'));
+        return view('activites.show', compact('activite', 'id', 'candidats', 'activite_Id', 'odcusers'));
     }
 
 
