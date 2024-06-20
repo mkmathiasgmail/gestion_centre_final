@@ -90,6 +90,13 @@
             <li class="me-2" role="presentation">
                 <button
                     class="inline-block p-4 border-b-2 rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300"
+                    id="presence-styled-tab" data-tabs-target="#content-presence" type="button" role="tab"
+                    aria-controls="presence" aria-selected="false">Presence</button>
+            </li>
+           
+            <li class="me-2" role="presentation">
+                <button
+                    class="inline-block p-4 border-b-2 rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300"
                     id="settings-styled-tab" data-tabs-target="#styled-settings" type="button" role="tab"
                     aria-controls="settings" aria-selected="false">Settings</button>
             </li>
@@ -101,17 +108,12 @@
             </li>
         </ul>
     </div>
+
     <div id="default-styled-tab-content">
-        <div class="hidden p-4 rounded-lg bg-gray-50 dark:bg-gray-800" id="styled-profile" role="tabpanel"
-            aria-labelledby="profile-tab">
-            <div class=" text-white">
-                <h2 class=" text-5xl">{{ $show->title }}</h2>
-                <img src="{{ $show->image }}" alt="" class=" rounded-md mt-5 mb-5">
-                <span
-                    class="rounded-full mt-5 mb-5 bg-slate-600 pr-4 pl-4 pt-1 pb-1 text-3xl font-bold">{{ $show->categorie->categorie }}</span>
-                <p class="mt-5 mb-5">{{ $show->content }}</p>
-            </div>
-        </div>
+
+        <x-activitesShow :show="$activite" />
+
+
 
         {{-- Affichage des candidats sur l'activité affichée --}}
         <div class="hidden p-4 rounded-lg bg-gray-50 dark:bg-gray-800" id="styled-dashboard" role="tabpanel"
@@ -211,6 +213,10 @@
                 Clicking another tab will toggle the visibility of this one for the next. The tab JavaScript swaps
                 classes to control the content visibility and styling.</p>
         </div>
+        <div class="hidden p-4 rounded-lg bg-gray-50 dark:bg-gray-800" id="content-presence" role="tabpanel"
+            aria-labelledby="settings-tab">
+           <x-activite-presence-component :dates="$dates" :presences="$presences "/>
+        </div>
         <div class="hidden p-4 ro unded-lg bg-gray-50 dark:bg-gray-800" id="styled-contacts" role="tabpanel"
             aria-labelledby="contacts-tab">
             <p class="text-sm text-gray-500 dark:text-gray-400">This is some placeholder content the <strong
@@ -219,6 +225,9 @@
                 classes to control the content visibility and styling.</p>
         </div>
     </div>
+
+
+
     @php
         $url = env('API_URL');
     @endphp
@@ -226,7 +235,7 @@
     @section('script')
         <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
         <script src="https://cdn.datatables.net/2.0.8/js/dataTables.js"></script>
-        
+
         <script>
             new DataTable('#candidatTable');
         </script>
@@ -294,6 +303,9 @@
                         console.error('There was a problem with the fetch operation:', error);
                     });
             }
+            function redirectToPresence() {
+        window.location.href = '{{ route('presences.index') }}';
+    }
         </script>
     @endsection
 </x-app-layout>

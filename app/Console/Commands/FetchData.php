@@ -34,6 +34,8 @@ class FetchData extends Command
         // Fetch data from the API
         try {
 
+            $this->info('Fetch Events data from API and store in database........');
+
             $response = Http::timeout("100000")->get($_ENV['API_EVENTS']);
 
             if ($response->successful()) {
@@ -41,7 +43,7 @@ class FetchData extends Command
 
                 $result=array_reverse($workshops);
     
-                $this->info('Fetch Events data from API and store in database........');
+                
                 $i = 1 ;
                 foreach ($result as $workshopData) {
                     $existingWorkshop = Activite::where('updated_At', $workshopData['updatedAt'])

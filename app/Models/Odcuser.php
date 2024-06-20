@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Models\Activite;
+use App\Models\Candidat;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
@@ -51,6 +52,10 @@ class Odcuser extends Model
     public function activite(): BelongsToMany
     {
         return $this->belongsToMany(Activite::class);
+    }
+    public function candidat(): HasMany
+    {
+        return $this->hasMany(Candidat::class, 'odcuser_id');
     }
 
 }

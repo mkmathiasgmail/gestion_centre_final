@@ -16,7 +16,8 @@
 
     <div class=" mb-4 mt-4 text-white">
 
-        <a class=" cursor-pointer mt-5 bg-slate-600 p-2 rounded-sm font-bold">Create Activites</a>
+        <a class=" cursor-pointer mt-5 bg-slate-600 p-2 rounded-sm font-bold" data-modal-target="create"
+            data-modal-toggle="create">Create Activites</a>
 
 
     </div>
@@ -95,7 +96,7 @@
                         </td>
 
                         <td id="nbredays">
-
+                            {{ $item->differenceInDays }} Jours
                         </td>
 
                         <td>
@@ -143,149 +144,43 @@
                     <th scope="col" class="px-6 py-3">
                         Id
                     </th>
-                    <th scope="col" class="px-6 py-3">
-                        Created At
-                    </th>
-                    <th scope="col" class="px-6 py-3">
+                    <td scope="col" class="px-6 py-3">
                         Title
-                    </th>
-                    <th scope="col" class="px-6 py-3">
+                    </td>
+                    <td scope="col" class="px-6 py-3">
+                        categories
+                    </td>
+                    <td scope="col" class="px-6 py-3">
+                        hashtag
+                    </td>
+                    <td scope="col" class="px-6 py-3">
+                        type event
+                    </td>
+                    <td scope="col" class="px-6 py-3">
                         Lieu
-                    </th>
-                    <th scope="col" class="px-6 py-3">
-                        Categories
-                    </th>
-                    <th scope="col" class="px-6 py-3">
+                    </td>
+
+                    <td scope="col" class="px-6 py-3">
                         Date_debut
-                    </th>
-                    <th scope="col" class="px-6 py-3">
+                    </td>
+                    <td scope="col" class="px-6 py-3">
                         Date_fin
-                    </th>
-                    <th scope="col" class="px-6 py-3">
+                    </td>
+                    <td scope="col" class="px-6 py-3">
+                        Duree
+                    </td>
+                    <td scope="col" class="px-6 py-3">
                         Action
-                    </th>
+                    </td>
                 </tr>
             </tfoot>
         </table>
     </div>
 
     <x-delete :name="__('Are you sure you want to delete this product? ')" />
-    <div id="default-modal1" tabindex="-1" aria-hidden="true"
-        class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center max-w-9xl md:inset-0 h-[calc(100%-1rem)] max-h-full">
-        <div class="relative p-4 w-full max-w-6xl max-h-full">
-            <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
+    <x-form :hash="$hashtag" :event="$typeEvent" :categories="$categories" />
 
-                <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
-                    <h3 class="text-xl font-semibold text-gray-900 dark:text-white">
-                        Creation activites
-                    </h3>
-                    <button type="button"
-                        class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
-                        data-modal-hide="default-modal">
-                        <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
-                            viewBox="0 0 14 14">
-                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
-                        </svg>
-                        <span class="sr-only">Close modal</span>
-                    </button>
-                </div>
-                <form action="{{ route('activites.store') }}" method="post" id="delete">
-                    <div class="p-5 md:p-5 space-y-4 text-white items-center">
-
-                        @csrf
-                        <div>
-                            <div><label for="title">Title</label></div>
-                            <div><input type="text" name="title" id="title"
-                                    class="w-full h-10 rounded-md text-gray-600"
-                                    placeholder="Donne un titre a votre Article" required></div>
-                        </div>
-
-                        <div>
-                            <div><label for="date_debut">Star Date</label></div>
-                            <div><input type="date" name="date_debut" id="date_debut"
-                                    class="w-full h-10 rounded-md text-gray-600"
-                                    placeholder="Donne un titre a votre Article" required></div>
-                        </div>
-                        <div>
-                            <div><label for="date_fin">end Date</label></div>
-                            <div><input type="date" name="date_fin" id="date_fin"
-                                    class="w-full h-10 rounded-md text-gray-600"
-                                    placeholder="Donne un titre a votre Article" required></div>
-                        </div>
-
-                        <div>
-                            <div><label for="lieu">Location</label></div>
-                            <div>
-                                <select name="lieu" id="lieu" class="w-full h-9 rounded-md text-gray-600">
-                                    <option value="kinshasa">Kinshasa</option>
-                                    <option value="lumubumbashi">Lubumbashi</option>
-                                </select>
-                            </div>
-                        </div>
-
-                        <div>
-                            <div><label for="tags">Hashtags</label></div>
-                            <div>
-                                <select name="tags" id="tags" multiple
-                                    class="w-full  rounded-md text-gray-600">
-                                    @foreach ($hashtag as $item)
-                                        <option value="{{ $item->id }}">{{ $item->hashtag }}</option>
-                                    @endforeach
-
-                                </select>
-                            </div>
-                        </div>
-
-                        <div class=" flex gap-4 w-full">
-                            <div class=" w-1/2">
-                                <div><label for="category_id">Type Events</label></div>
-                                <div>
-                                    <select name="typeEvent" id="categorie_id"
-                                        class="w-full  rounded-md text-gray-600" multiple>
-                                        @foreach ($typeEvent as $event)
-                                            <option value="{{ $event->id }}">{{ $event->typeEvent }}</option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                            </div>
-                            <div class=" w-1/2">
-                                <div><label for="category_id">Categorie</label></div>
-                                <div>
-                                    <select name="categorie_id" id="categorie_id"
-                                        class="w-full h-10 rounded-md text-gray-600">
-                                        @foreach ($categories as $category)
-                                            <option value="{{ $category->id }}">{{ $category->categorie }}</option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                            </div>
-                        </div>
-
-
-
-                        <div class=" mb-5 mt-5">
-                            <div>
-                                <label for="contenue">Content</label>
-                            </div>
-                            <div class="text-gray-600">
-                                <textarea name="description" id="editor" class="w-full text-gray-600"></textarea>
-                            </div>
-
-                        </div>
-                    </div>
-                    <!-- Modal footer -->
-                    <div class="flex items-center p-4 md:p-5 border-t border-gray-200 rounded-b dark:border-gray-600">
-                        <button data-modal-hide="default-modal" type="submit"
-                            class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">I
-                            accept</button>
-                        <button data-modal-hide="default-modal" type="reset"
-                            class="py-2.5 px-5 ms-3 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">Decline</button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
+   
 
     @section('script')
         <script>
@@ -447,60 +342,40 @@
         <script src="https://cdn.datatables.net/2.0.8/js/dataTables.js"></script>
         <script>
             new DataTable('#table', {
-                // responsive: true,
-                // columnDefs: [{
-                //         responsivePriority: 1,
-                //         targets: 0
-                //     },
-                //     {
-                //         responsivePriority: 2,
-                //         targets: -1
-                //     }
-                // ],
-                // layout: {
-                //     topStart: {
-                //         pageLength: {
-                //             menu: [10, 25, 50, 100, 200]
-                //         }
-                //     },
-                //     topEnd: {
-                //         search: {
-                //             placeholder: 'Type search here'
-                //         }
-                //     },
-                //     bottomEnd: {
-                //         paging: {
-                //             numbers: 3
-                //         }
-                //     },
-
-                // }
-
-                scrollY: 600,
-                paging: false
-
-            });
-
-            document.addEventListener('DOMContentLoaded', function() {
-                var rows = document.querySelectorAll('#table tbody tr');
-
-                rows.forEach(function(row) {
-                    var startDateText = row.querySelector('#startdate').textContent.trim();
-                    var endDateText = row.querySelector('#endate').textContent.trim();
-
-                    var startDate = new Date(startDateText);
-                    var endDate = new Date(endDateText);
-
-                    if (!isNaN(startDate) && !isNaN(endDate)) {
-                        var differenceInTime = endDate - startDate;
-                        var differenceInDays = Math.ceil(differenceInTime / (1000 * 60 * 60 * 24));
-                        row.querySelector('#nbredays').textContent = differenceInDays + ' jours';
-                    } else {
-                        row.querySelector('#nbredays').textContent = 'Invalid dates';
+                responsive: true,
+                columnDefs: [{
+                        responsivePriority: 1,
+                        targets: 0
+                    },
+                    {
+                        responsivePriority: 2,
+                        targets: -1
                     }
-                });
+                ],
+                layout: {
+                    topStart: {
+                        pageLength: {
+                            menu: [10, 25, 50, 100, 200]
+                        }
+                    },
+                    topEnd: {
+                        search: {
+                            placeholder: 'Type search here'
+                        }
+                    },
+                    bottomEnd: {
+                        paging: {
+                            numbers: 3
+                        }
+                    },
+
+                }
+
+               
+
             });
 
+            
             document.querySelector('.dt-layout-row label').setAttribute('class', 'text-white text-sm font-bold');
             document.querySelector('.dt-length select').setAttribute('class', 'w-1/2 h-9 rounded-md text-gray-600');
             document.querySelector('.dt-search input').setAttribute('class', 'w-1/2 h-9 rounded-md text-gray-600');
