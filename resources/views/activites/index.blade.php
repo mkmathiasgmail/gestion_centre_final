@@ -16,8 +16,7 @@
 
     <div class=" mb-4 mt-4 text-white">
 
-        <a class=" cursor-pointer mt-5 bg-slate-600 p-2 rounded-sm font-bold" data-modal-target="default-modal1"
-            data-modal-toggle="default-modal1">Create Activites</a>
+        <a class=" cursor-pointer mt-5 bg-slate-600 p-2 rounded-sm font-bold">Create Activites</a>
 
 
     </div>
@@ -139,6 +138,34 @@
                     </tr>
                 @endforeach
             </tbody>
+            <tfoot thead class="text-xs text-gray-700 uppercase  dark:text-gray-400">
+                <tr>
+                    <th scope="col" class="px-6 py-3">
+                        Id
+                    </th>
+                    <th scope="col" class="px-6 py-3">
+                        Created At
+                    </th>
+                    <th scope="col" class="px-6 py-3">
+                        Title
+                    </th>
+                    <th scope="col" class="px-6 py-3">
+                        Lieu
+                    </th>
+                    <th scope="col" class="px-6 py-3">
+                        Categories
+                    </th>
+                    <th scope="col" class="px-6 py-3">
+                        Date_debut
+                    </th>
+                    <th scope="col" class="px-6 py-3">
+                        Date_fin
+                    </th>
+                    <th scope="col" class="px-6 py-3">
+                        Action
+                    </th>
+                </tr>
+            </tfoot>
         </table>
     </div>
 

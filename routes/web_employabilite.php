@@ -1,9 +1,9 @@
 <?php
 
-use App\Http\Controllers\EmplayabiliteController;
+use App\Http\Controllers\EmployabiliteController;
 use Illuminate\Support\Facades\Route;
 
 
 
-Route::resource('/employabilite', EmplayabiliteController::class);
+Route::resource('employabilites', EmployabiliteController::class);
 
