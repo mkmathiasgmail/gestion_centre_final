@@ -7,6 +7,7 @@ use App\Models\Hashtag;
 use App\Models\Odcuser;
 use App\Models\Activite;
 use App\Models\Candidat;
+use App\Models\Presence;
 use App\Models\Categorie;
 use App\Models\TypeEvent;
 use Illuminate\Http\Request;
@@ -89,7 +90,21 @@ class ActiviteController extends Controller
 
         // Récupérer les candidats liés à cette activité
         $candidats = Candidat::where('activite_id', $id)->get();
-        return view('activites.show', compact('activite', 'id', 'candidats', 'activite_Id', 'odcusers'));
+
+        //recuperer les presents  et la date 
+        
+        $presences = Presence::orderBy('id')->get();
+        $activite = Activite::findOrFail($id);
+        $dateDebut = Carbon::parse($activite->startDate);
+        $dateFin = Carbon::parse($activite->endDate);
+
+        $dates = [];
+        for ($date = $dateDebut; $date->lte($dateFin); $date->addDay()) {
+            if (!$date->isWeekend()) {
+                $dates[] = $date->format('d');
+            }
+        }
+        return view('activites.show', compact('activite', 'id', 'candidats', 'activite_Id', 'odcusers', 'dates', 'presences'));
     }
 
 
