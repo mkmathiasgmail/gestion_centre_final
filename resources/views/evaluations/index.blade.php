@@ -103,11 +103,6 @@
         </div>
 
         <!---Wenzory rapport---->
-        {{--select2 cdn--}}
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-        <script src=<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js" integrity="sha512-2ImtlRlf2VVmiGZsjm9bEyhjGW4dU7B6TNwh/hx/iSByxNENtj3WVE6o/9Lj4TJeVXPi4bnOIMXFIJJAeufa0A==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>>
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" integrity="sha512-nMNlpuaDPrqlEls3IX/Q56H36qvBASwb3ipuo3MxeWbsQB1881ox0cRv7UPTgBlriqoynt35KjEwgGUeUXIPnw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-        
         
         <div class="max-w-sm p-6 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
             <h5 class=" mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">Wenzory Rapport</h5>
@@ -145,16 +140,12 @@
                     <div class="p-5 md:p-5 space-y-4 text-white items-center">
                         
                         @csrf
-                        <div>
-                            <div><label for="lieu">Type</label></div>
-                            <div>
-                                <select name="lieu" id="lieu" class="tags w-full h-9 rounded-md text-gray-600"
-                                id="tags"
-                                name="tags[]"
-                                multiple="multiple"
-                                >
-                                </select>
-                            </div>
+                        <div> 
+                            <div><label for="lieu">Type</label>
+                        </div> 
+                        <div> <select name="lieu" id="lieu" class=" w-full h-9 rounded-md text-gray-600"> 
+                            </select> 
+                        </div> 
                         </div>
                         <div>
                             <div><label for="lieu">Categories</label></div>
@@ -236,34 +227,6 @@
             document.addEventListener('DOMContentLoaded', generateMonthOptions);
 
             //code de Manassé
-            $(document).ready(function(){
-                $('.tags').select2({
-                    placeholder:'select',
-                    allowClear:true,
-                });
-                $("#tags").select2({
-                    ajax:{
-                        url:"{{route('get-type') }}",
-                        type:"post",
-                        delay:250,
-                        dataType:'json',
-                        data:function(params){
-                            return{
-                                name:params.term,
-                            };
-                    }
-                    processResults:function(data){
-                        return{
-                            results: $.map(data, function(item){
-                                return{
-                                    id:item.id,
-                                    text:item.type_events
-                                }
-                            })
-                        }
-                    }
-                })
-            })
 
             
         </script>
