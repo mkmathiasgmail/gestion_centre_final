@@ -75,7 +75,7 @@ class ActiviteController extends Controller
 
         $activites->hashtag()->attach($request->tags);
         $activites->typEvent()->attach($request->typeEvent);
-        return redirect()->route('activites.index', compact('activites'));
+        return redirect()->route('activites.index', compact('activites'))->with('success', 'Activite created successfully.');
     }
 
 

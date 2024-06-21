@@ -22,6 +22,14 @@
 
     </div>
 
+    @if (Session('success'))
+        <div class="p-4 mb-4 text-sm text-green-800 rounded-lg bg-green-50 dark:bg-gray-800 dark:text-green-400"
+            role="alert">
+            <span class="font-medium">{{ session('success') }}</span>
+        </div>
+    
+    @endif
+
     <div class="relative overflow-x-auto mt-4">
         <table id="table" class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400 ">
             <thead class="text-xs text-white uppercase bg-gray-50 dark:bg-gray-700 dark:text-white">
@@ -180,7 +188,7 @@
     <x-delete :name="__('Are you sure you want to delete this product? ')" />
     <x-form :hash="$hashtag" :event="$typeEvent" :categories="$categories" />
 
-   
+
 
     @section('script')
         <script>
@@ -371,11 +379,11 @@
 
                 }
 
-               
+
 
             });
 
-            
+
             document.querySelector('.dt-layout-row label').setAttribute('class', 'text-white text-sm font-bold');
             document.querySelector('.dt-length select').setAttribute('class', 'w-1/2 h-9 rounded-md text-gray-600');
             document.querySelector('.dt-search input').setAttribute('class', 'w-1/2 h-9 rounded-md text-gray-600');
