@@ -89,7 +89,7 @@ class MonthlyPlanningExport
             "fill" => [
                 "fillType" => Fill::FILL_SOLID,
                 "startColor" => [
-                    "argb" => "ff4040ff"
+                    "argb" => "ff4472c4"
                 ]
             ]
             
@@ -102,7 +102,7 @@ class MonthlyPlanningExport
             "fill" => [
                 "fillType" => Fill::FILL_SOLID,
                 "startColor" => [
-                    "argb" => "ffffaa40"
+                    "argb" => "ffed7d31"
                 ]
             ]
         ]);
