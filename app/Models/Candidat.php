@@ -6,6 +6,7 @@ use App\Models\Odcuser;
 use App\Models\Activite;
 use App\Models\Presence;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
@@ -33,6 +34,11 @@ class Candidat extends Model
     public function presence(): HasMany
     {
         return $this->hasMany(Presence::class);
+    }
+
+    public function candidat_attribute(): HasMany
+    {
+        return $this->hasMany(CandidatAttribute::class);
     }
 
 }
