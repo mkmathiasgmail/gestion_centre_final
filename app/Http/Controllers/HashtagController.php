@@ -13,7 +13,8 @@ class HashtagController extends Controller
      */
     public function index()
     {
-        //
+        $hashtags = Hashtag::all();
+        return view('hashtags.index', compact('hashtags')) ;
     }
 
     /**
@@ -21,7 +22,7 @@ class HashtagController extends Controller
      */
     public function create()
     {
-        //
+        
     }
 
     /**
@@ -29,7 +30,13 @@ class HashtagController extends Controller
      */
     public function store(StoreHashtagRequest $request)
     {
-        //
+        $hashtag = Hashtag::create([
+            'code' => $request->code,
+            'hashtag' => $request->hashtag,
+        ]);
+
+        return redirect()->route('hashtags.index')
+            ->with('success', 'Hashtag created successfully.');
     }
 
     /**
@@ -37,7 +44,7 @@ class HashtagController extends Controller
      */
     public function show(Hashtag $hashtag)
     {
-        //
+        return view('hashtags.show', compact('hashtag'));
     }
 
     /**
@@ -45,7 +52,7 @@ class HashtagController extends Controller
      */
     public function edit(Hashtag $hashtag)
     {
-        //
+       
     }
 
     /**
@@ -53,7 +60,13 @@ class HashtagController extends Controller
      */
     public function update(UpdateHashtagRequest $request, Hashtag $hashtag)
     {
-        //
+        $hashtag->update([
+            'code' => $request->code,
+            'hashtag' => $request->hashtag,
+        ]);
+
+        return redirect()->route('hashtags.index')
+            ->with('success', 'Hashtag updated successfully.');
     }
 
     /**
@@ -61,6 +74,9 @@ class HashtagController extends Controller
      */
     public function destroy(Hashtag $hashtag)
     {
-        //
+        $hashtag->delete();
+
+        return redirect()->route('hashtags.index')
+            ->with('success', 'Hashtag deleted successfully.');
     }
 }
