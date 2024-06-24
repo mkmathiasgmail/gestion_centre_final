@@ -1,8 +1,9 @@
 <x-app-layout>
-    <form action="{{ route('activites.store') }}" method="post">
+    <form action="{{ route('activites.update',$activite) }}" method="post">
         <div class="p-5 md:p-5 space-y-4 text-white items-center">
 
             @csrf
+            @method('PUT')
             <div>
                 <div><label for="title">Title</label></div>
                 <div><input type="text" name="title" id="title" class="w-full h-10 rounded-md text-gray-600"
@@ -25,7 +26,7 @@
                 <div><label for="lieu">Location</label></div>
                 <div>
                     <select name="lieu" id="lieu" class="w-full h-9 rounded-md text-gray-600">
-                        <option value="">{{$activite->location}}</option>
+                        
                         <option value="kinshasa">Kinshasa</option>
                         <option value="lumubumbashi">Lubumbashi</option>
                     </select>
@@ -35,9 +36,9 @@
             <div>
                 <div><label for="tags">Hashtags</label></div>
                 <div>
-                    <select name="tags" id="tags" multiple class="w-full  rounded-md text-gray-600">
+                    <select name="tags[]" id="tags" multiple class="w-full  rounded-md text-gray-600">
                         @foreach ($hashtag as $item)
-                            <option value="{{ $item->id }}">{{ $item->hashtag }}</option>
+                            <option value="{{old('hashtag',implode(',', $activite->hashtag->pluck('hashtag')->toArray()))}}">{{ $item->hashtag }}</option>
                         @endforeach
 
                     </select>
@@ -48,9 +49,9 @@
                 <div class=" w-1/2">
                     <div><label for="category_id">Type Events</label></div>
                     <div>
-                        <select name="typeEvent" id="categorie_id" class="w-full  rounded-md text-gray-600" multiple>
+                        <select name="typeEvent[]" id="typeEvent" class="w-full  rounded-md text-gray-600" multiple>
                             @foreach ($typeEvent as $event)
-                                <option value="{{ $event->id }}">{{ $event->typeEvent }}</option>
+                                <option value="{{ $event->typeEvent }}">{{ $event->typeEvent }}</option>
                             @endforeach
                         </select>
                     </div>
@@ -61,7 +62,7 @@
                         <select name="categorie_id" id="categorie_id" class="w-full h-10 rounded-md text-gray-600">
                             <option value="{{ $activite->categorie->id}}">{{ $activite->categorie->categorie }}</option>
                             @foreach ($categories as $category)
-                                <option value="{{ $category->id }}">{{ $category->categorie }}</option>
+                                <option value="{{ $category->categorie }}">{{ $category->categorie }}</option>
                             @endforeach
                         </select>
                     </div>

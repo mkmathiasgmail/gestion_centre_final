@@ -129,7 +129,49 @@ class ActiviteController extends Controller
 
     public function update(Request $request, Activite $activite)
     {
-        $activite->update($request->all());
+        $category = Categorie::firstOrCreate(['categorie' => $request->categorie_id]);
+        
+
+        // Mise à jour de l'activité
+        $activite->update([
+            'title' => $request->title,
+            'categorie_id' => $category->id,
+            'content' => $request->description,
+            'startDate' => $request->date_debut,
+            'endDate' => $request->date_fin,
+            'publishStatus' => $request->publishStatus,
+            'showInSlider' => $request->showInSlider,
+            'send' => $request->send,
+            'form' => $request->form,
+            'miniatureColor' => $request->miniatureColor,
+            'showInCalendar' => $request->showInCalendar,
+            'liveStatus' => $request->liveStatus,
+            'bookASeat' => $request->bookASeat,
+            'isEvents' => $request->isEvents,
+            'creator' => $request->create,
+            'location' => $request->lieu,
+        ]);
+
+       
+        $hashtagIds = [];
+        if ($request->hashtags) {
+            foreach ($request->tags as $hashtagName) {
+                $hashtag = Hashtag::firstOrCreate(['hashtags' => $hashtagName]);
+                $hashtagIds[] = $hashtag->id;
+            }
+        }
+
+        if ($request->typeEvent) {
+            $typeventIds = [];
+            foreach ($request->typeEvent as $typeEventName) {
+                $typeEvent = TypeEvent::firstOrCreate(['typeEvent' => $typeEventName,'code'=>'']);
+                $typeventIds[] = $typeEvent->id;
+            }
+            $activite->typeEvent()->sync($typeventIds);
+        }
+
+        $activite->hashtag()->sync($hashtagIds);
+        $activite->typEvent()->sync($typeventIds);
         return redirect()->route('activites.index')
             ->with('success', 'Activite updated successfully.');
     }
