@@ -17,7 +17,8 @@
                     <a href="https://flowbite.com" class="flex ms-2 md:me-24">
                         <img src="{{ asset('img/orange.png') }}" class="h-8 me-3" alt="FlowBite Logo" />
                         <span
-                            class="self-center text-1xl font-semibold sm:text-1xl whitespace-nowrap dark:text-white">Orange Digital Center</span>
+                            class="self-center text-1xl font-semibold sm:text-1xl whitespace-nowrap dark:text-white">Orange
+                            Digital Center</span>
                     </a>
                 </div>
                 <div class="flex items-center">
@@ -91,7 +92,9 @@
                     </a>
                 </li>
                 <li>
-                    <div id="accordion-flush"  data-accordion="collapse" data-active-classes="bg-white dark:bg-gray-900 text-white dark:text-white" data-inactive-classes="text-white dark:text-white">
+                    <div id="accordion-flush" data-accordion="collapse"
+                        data-active-classes="bg-white dark:bg-gray-900 text-white dark:text-white"
+                        data-inactive-classes="text-white dark:text-white">
                         <h2 id="accordion-flush-heading-2">
                             <button type="button"
                                 class="flex items-center  w-full  font-medium p-2 text-white    dark:text-gray-400 gap-3 dark:hover:bg-gray-700 rounded-lg"
@@ -105,16 +108,21 @@
                                         d="M15 4h3a1 1 0 0 1 1 1v15a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1V5a1 1 0 0 1 1-1h3m0 3h6m-3 5h3m-6 0h.01M12 16h3m-6 0h.01M10 3v4h4V3h-4Z" />
                                 </svg>
                                 <span>Activite</span>
-                                
+
                             </button>
                         </h2>
                         <div id="accordion-flush-body-2" class="hidden" aria-labelledby="accordion-flush-heading-2">
                             <div class="p-4 border-b border-gray-200 dark:border-gray-700">
-                                <p class="mb-2 text-gray-500 hover:text-white dark:text-gray-400"><a href="{{route('activites.index')}}">Liste Actvites</a></p>
-                                <p class="text-gray-500 mb-2 hover:text-white dark:text-gray-400"><a href="{{route('encours')}}">Activites encours</a></p>
-                                <p class="text-gray-500 mb-2 hover:text-white dark:text-gray-400"><a href="#">Liste Categories</a></p>
-                                <p class="text-gray-500 mb-2 hover:text-white dark:text-gray-400"><a href="#">Liste Etiquettes</a></p>
-                                <p class="text-gray-500 mb-2 hover:text-white dark:text-gray-400"><a href="{{route('typevents.index')}}">Type Evenement</a></p>
+                                <p class="mb-2 text-gray-500 hover:text-white dark:text-gray-400"><a
+                                        href="{{ route('activites.index') }}">Actvites</a></p>
+                                <p class="text-gray-500 mb-2 hover:text-white dark:text-gray-400"><a
+                                        href="{{ route('encours') }}">Activites encours</a></p>
+                                <p class="text-gray-500 mb-2 hover:text-white dark:text-gray-400"><a
+                                        href="{{route('categories.index')}}">Liste Categories</a></p>
+                                <p class="text-gray-500 mb-2 hover:text-white dark:text-gray-400"><a
+                                        href="{{route('hashtags.index')}}">Hashtag</a></p>
+                                <p class="text-gray-500 mb-2 hover:text-white dark:text-gray-400"><a
+                                        href="{{ route('typevents.index') }}">Type Evenement</a></p>
                             </div>
                         </div>
                     </div>
@@ -162,7 +170,7 @@
                     </a>
                 </li>
 
-                    </a>
+                </a>
                 </li>
                 <li>
                     <a href="{{ route('import') }}"
@@ -196,9 +204,3 @@
         </div>
     </aside>
 </div>
-
-
-
-
-
-
