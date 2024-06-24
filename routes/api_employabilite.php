@@ -1,8 +1,11 @@
 <?php
 
-
+use App\Http\Controllers\Api\SearchController;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\EmployabiliteController;
 
 
-Route::get('autocomplet', [EmployabiliteController::class, 'getAutocompleteData'])->name('autocomplet');
+
+
+
+Route::get('/autocomplete', [SearchController::class,'searchQuery'])->name('autocomplete');
+Route::apiResource('employabilite', SearchController::class);

@@ -19,7 +19,7 @@ class EmployabiliteController extends Controller
     public function index()
 
     {
-            $employabilites = Employabilite::all();
+        $employabilites = Employabilite::all();
         return view('employabilites.index', compact('employabilites'));
     }
 
@@ -36,24 +36,17 @@ class EmployabiliteController extends Controller
      */
     public function store(StoreEmployabiliteRequest $request)
     {
-        $email = $request->email;
-        $employabilite = Odcuser::select(["id" , "email", "firstname"])->where("email", $email)->first();
-        if(!empty($employabilite)){
-            $name = $employabilite->firstname;
-            $id = $employabilite->id;
-            $employabilites = Employabilite::create([
-                'name' =>$name,
+
+
+             Employabilite::create([
+                'name' =>$request->firstName,
                 'type_contrat' => $request->type_contrat,
                 'nomboite' => $request->nomboite,
                 'periode' => $request->periode,
-                'odcuser_id' => $id,
+                'odcuser_id' =>$request->id_user,
             ]);
             return redirect()->route('employabilites.index')->with('success', 'Employé ajoutée avec succès');
-        }
-        else{
-            return back()->with('error', 'Utilisateur non trouvé');
 
-        }
     }
 
     /**
@@ -78,7 +71,6 @@ class EmployabiliteController extends Controller
      */
     public function update(UpdateEmployabiliteRequest $request, Employabilite $employabilite)
     {
-
     }
 
     /**
@@ -89,15 +81,15 @@ class EmployabiliteController extends Controller
         //
     }
 
-    public function getAutocompleteData(Request $request){
-       
-
-        if($request->has('term')){
+    public function getAutocompleteData(Request $request)
+    {
 
 
-            return Odcuser::where('email','like','%'.$request->input('term').'%')->get();
+        if ($request->has('term')) {
+
+
+            return Odcuser::where('email', 'like', '%' . $request->input('term') . '%')->get();
         }
-
     }
 
 

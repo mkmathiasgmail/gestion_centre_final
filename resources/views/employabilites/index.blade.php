@@ -10,7 +10,6 @@
 
 
     <div class=" mb-4 mt-4 text-white">
-        <h2 class=" text-4xl font-bold">Employabilites</h2>
         <p class=" w-1/2 dark:text-gray-400 mb-4 mt-4">La gestion des ressources humaines dans une entreprise passe
             inévitablement par la tenue d'une liste exhaustive des employés.!</p>
 
@@ -99,11 +98,14 @@
                 </tr>
             </thead>
             <tbody>
+                    @php
+                        $id_use = 1;
+                    @endphp
                 @foreach ($employabilites as $item)
                     <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
 
                         <td class="px-6 py-4">
-                            {{ $item->id }}
+                            {{ $id_use }}
                         </td>
                         <td class="px-6 py-4">
                             {{ $item->name }}
@@ -139,6 +141,9 @@
                             </a>
                         </td>
                     </tr>
+                    @php
+                        $id_use += 1;
+                    @endphp
                 @endforeach
             </tbody>
         </table>
@@ -147,32 +152,59 @@
     <x-formEmployabilite />
 
     @section('script')
-        <script src="{{ asset('vendor/jquery/dist/jquery.js') }}"></script>
-    <script>
-        $(function() {
-            $('#email').autocomplete({
-                source: function(request, response) {
-                    $.getJSON('/autocomplet', { term: request.term }, function(data) {
-                        var array = $.map(data, function(row) {
-                            return {
-                                value: row.id,
-                                label: row.name,
-                                name: row.name,
-                                nom: row.nom,
-                                prenom: row.prenom
-                            };
-                        });
-                        response($.ui.autocomplete.filter(array, request.term));
-                    });
-                },
-                minLength: 1,
-                select: function(event, ui) {
-                    $('#nom').val(ui.item.nom);
-                    $('#prenom').val(ui.item.prenom);
-                }
-            });
-        })();
-        </script>
+        <script src="https://code.jquery.com/ui/1.11.4/jquery-ui.min.js"></script>
 
+
+        <script>
+            $(function() {
+                $('#firstName').on('input', function() {
+                    var query = $(this).val();
+                    if (query != '') {
+                        var _token = $('input[name="_token"]').val();
+                        $.ajax({
+                            url: "{{ route('autocomplete') }}",
+                            method: "GET",
+                            data: {
+                                query: query,
+                                _token: _token
+                            },
+                            success: function(data) {
+                                $('#countryList').fadeIn();
+                                $('#countryList')
+                                    .empty(); // Vider la liste avant d'ajouter de nouveaux éléments
+                                let data_user = $.each(data, function(index, item) {
+                                    $('#countryList').append('<p id="id_odc" class="hidden">' +  item.id + '</p><ul class= "font-bold"><li class=" bg-gray-300 hover:bg-gray-400 pl-4">' + item.firstName +
+                                        '  ' + item.lastName + '</li></ul>');
+
+
+
+                                });
+
+
+                            }
+                        });
+                    } else {
+                        $('#countryList').fadeOut();
+                    }
+                });
+
+                delay:500,
+
+                $(document).on('click', 'li', function() {
+                    $('#firstName').val($(this).text());
+                 var go=   $("#id_odc").text()
+                 $("#id_user").attr("value", go)
+                    $('#countryList').fadeOut();
+                });
+                        //faire une reinitialisation de champ
+                    $('#resetButton').click(function() {
+                $('#firstName').val(''); // Vider le champ de saisie
+                $('#countryList').fadeOut(); // Cacher la liste des suggestions
+        });
+});
+
+
+
+        </script>
     @endsection
 </x-app-layout>
