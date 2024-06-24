@@ -25,7 +25,7 @@ class SuivieHebdomadaire
         $spreadsheet = new Spreadsheet();
         $spreadsheet->removeSheetByIndex(0); // Remove default sheet
 
-        $activities = Activite::all();
+        $activities = $this->data;;
 
         $groupedByMonth = $activities->groupBy(function ($item) {
             return Carbon::parse($item->startDate)->format('Y-m');
@@ -72,12 +72,26 @@ class SuivieHebdomadaire
         ]);
 
         $sheet->getStyle("A")->applyFromArray([
+            "font" => [
+                "bold" => true,
+                "size" => 11            
+            ],
             "alignment" => [
                 "horizontal" => Alignment::HORIZONTAL_CENTER,
                 "vertical" => Alignment::VERTICAL_CENTER,
                 ],
         ]);
 
+        $sheet->getStyle("B")->applyFromArray([
+            "font" => [
+                "bold" => true,
+                "size" => 11            
+            ],
+            "alignment" => [
+                "horizontal" => Alignment::HORIZONTAL_CENTER,
+                "vertical" => Alignment::VERTICAL_CENTER,
+                ],
+        ]);
 
         $sheet->fromArray(['Semaine', 'Lieu', 'Nom activité', 'Durée(jours)', 'Nobr d\'heure(hr)', 'Date de l\'activité', 'Nombre d\'inscription', 'Nombre de participants', 'Nombre des filles', 'Nombre de garçons', 'Vérification'], NULL, 'A2');
     }
@@ -105,6 +119,16 @@ class SuivieHebdomadaire
                 return $startDate->between($weekStart, $weekEnd);
             });
 
+            // Assigner les activités sans location à "Inconnu"
+            foreach ($weekActivities as $activity) {
+                if (is_null($activity->location) || $activity->location === '') {
+                    $activity->location = 'Inconnu';
+                }
+            }
+
+            // Initialisation du regroupement par location
+            $groupedByLocation = $weekActivities->groupBy('location');
+
             $cellNbr = $startRow + $weekActivities->count();
 
             if ($weekActivities->isEmpty()) {
@@ -121,44 +145,51 @@ class SuivieHebdomadaire
                 ]);
 
             } else {
-                $sheet->mergeCells('A'. $startRow .':A'. $cellNbr .'');
-                $sheet->setCellValue('A' . $startRow, $weekStart->format('d-M'));
+                $initialStartRow = $startRow; // Sauvegarder la position de départ de la semaine
+                foreach ($groupedByLocation as $location => $activities) {
+                    $locationStartRow = $startRow; // Sauvegarder la position de départ de la location
+                    $sheet->mergeCells('B' . $startRow . ':B' . ($startRow + $activities->count()));
+                    $sheet->setCellValue('B' . $startRow, $location);
 
-                $data = [];
-                foreach ($weekActivities as $item) {
-                    $differenceDay = $item->startDate && $item->endDate ? Carbon::parse($item->startDate)->diffInDays(Carbon::parse($item->endDate)) : 1;
-                    $data[] = [
-                        $item->title,
-                        $item->startDate ? Carbon::parse($item->startDate)->translatedFormat("d-M") . " - " . Carbon::parse($item->endDate)->translatedFormat("d-M") : Carbon::parse($item->startDate)->translatedFormat("d-M"),
-                        $differenceDay > 1 ? $differenceDay . " jours" : $differenceDay . " jour",
-                        null,
-                        null,
-                        $item->location,
-                        null,
-                        null,
-                        null,
-                    ];
+                    $data = [];
+                    foreach ($activities as $item) {
+                        $differenceDay = $item->startDate && $item->endDate ? Carbon::parse($item->startDate)->diffInDays(Carbon::parse($item->endDate)) + 1 : 1;
+                        $data[] = [
+                            $item->title,
+                            $differenceDay > 1 ? $differenceDay . " jours" : $differenceDay . " jour",
+                            null,
+                            $item->startDate != $item->endDate ? Carbon::parse($item->startDate)->translatedFormat("d M") . " - " . Carbon::parse($item->endDate)->translatedFormat("d M") : Carbon::parse($item->startDate)->translatedFormat("d M"),
+                            null,
+                            null,
+                            null,
+                            null,
+                        ];
+                    }
+
+                    $sheet->fromArray($data, NULL, 'C' . $startRow);
+                    $startRow += count($data) + 1;
                 }
-
-                $sheet->fromArray($data, NULL, 'B' . ($startRow));
-
-                $startRow += count($data) + 2; // Leave a space between weeks
-                $sheet->getStyle('A'. $startRow - 1 .':K'. $startRow - 1)->applyFromArray([
-                    "fill" => [
-                        "fillType" => Fill::FILL_SOLID,
-                        "startColor" => [
-                            "argb" => "ff000000"
-                        ]
-                    ]
-                ]);
-        
+                // Fusionner les cellules pour la date de la semaine
+                $sheet->mergeCells('A' . $initialStartRow . ':A' . ($startRow - 1));
+                $sheet->setCellValue('A' . $initialStartRow, $weekStart->format('d F'));
+                $startRow += 1;
+                        
             }
+
+            $sheet->getStyle('A'. $startRow - 1 .':K'. $startRow - 1)->applyFromArray([
+                "fill" => [
+                    "fillType" => Fill::FILL_SOLID,
+                    "startColor" => [
+                        "argb" => "ff000000"
+                    ]
+                ]
+            ]);
 
             $weekStart->addWeek();
             $weekEnd->addWeek();
         }
 
-        $sheet->mergeCells('A'. $startRow + 1 .':B'. $startRow + 1);
+        $sheet->mergeCells('A' . ($startRow + 1) . ':B' . ($startRow + 1));
         $sheet->fromArray(["Somme"], NULL, 'A' . ($startRow + 1));
 
         $cellRange = "A2:K" . ($sheet->getHighestRow());
@@ -175,9 +206,11 @@ class SuivieHebdomadaire
     protected function autoSizeColumns(Worksheet $sheet)
     {
         foreach (range('A', 'K') as $columnID) {
-            if ($columnID === 'B') {
-                $sheet->getColumnDimension($columnID)->setWidth(50);
-                $sheet->getStyle($columnID)->getAlignment()->setWrapText(true);
+            if ($columnID === 'B' || $columnID === 'C') {
+                $sheet->getColumnDimension('B')->setWidth(25);
+                $sheet->getStyle('B')->getAlignment()->setWrapText(true);
+                $sheet->getColumnDimension('C')->setWidth(50);
+                $sheet->getStyle('C')->getAlignment()->setWrapText(true);
             }
             else {
                 $sheet->getColumnDimension($columnID)->setAutoSize(true);

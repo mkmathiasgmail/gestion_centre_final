@@ -11,14 +11,11 @@ class SuivieHebdomadaireController extends Controller
 {
     public function suivieHebdomadaireExport(Request $request)
     {
-        $date = $request->input('month');
-        $carbonDate = Carbon::parse($date);
-        $month = $carbonDate->format("m");
-        $year = $carbonDate->format("Y");
-        $data = Activite::select("startDate")->whereMonth("startDate", $month)->whereYear("startDate", $year)->get();
+        $date = $request->input('year');
+        $data = Activite::whereYear("startDate", $date)->get();
         
         if ($data->isEmpty()) {
-            return back()->with("erreur", "Pas d'activité pour ce mois du " . $carbonDate->format("F Y"));
+            return back()->with("erreur", "Pas d'activité pour l'année " . $date);
         }
 
         $export = new SuivieHebdomadaire($data);
