@@ -13,9 +13,12 @@
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="https://cdn.datatables.net/2.0.8/css/dataTables.dataTables.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/responsive/3.0.2/css/responsive.dataTables.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/buttons/3.0.2/css/buttons.dataTables.css">
+    
 
     <!-- Scripts -->
-    @vite(['resources/css/app.css', 'resources/js/app.js', 'node_modules/jquery/dist/jquery.min.js', 'node_modules/datatables.net-dt/js/dataTables.dataTables.js'])
+    @vite(['resources/css/app.css', 'resources/js/app.js', 'node_modules/select2/dist/js/select2.full.min.js','node_modules/select2/dist/css/select2.min.css'])
 </head>
 
 <body class="font-sans antialiased">
@@ -41,7 +44,7 @@
         </div>
     </div>
     <script src="{{ Vite::asset('node_modules/jquery/dist/jquery.min.js') }}"></script>
-    <script src="{{ Vite::asset('resources/js/app.js') }}"></script>
+    <script src="{{ Vite::asset('node_modules/select2/dist/js/select2.full.min.js') }}"></script>
 
     @yield('script')
 

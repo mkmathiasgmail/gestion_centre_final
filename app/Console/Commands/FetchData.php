@@ -17,7 +17,7 @@ class FetchData extends Command
      *
      * @var string
      */
-    protected $signature = 'app:fetch-data';
+    protected $signature = 'app:fetch-events';
 
     /**
      * The console command description.
@@ -36,34 +36,38 @@ class FetchData extends Command
 
             $this->info('Fetch Events data from API and store in database........');
 
-            $response = Http::timeout("100000")->get($_ENV['API_EVENTS']);
+            $url = env('API_URL');
+
+            $response = Http::timeout("100000")->get("http://10.143.41.70:8000/2024/odc/public/api/events/active");
 
             if ($response->successful()) {
                 $workshops = $response->json()['data'];
 
-                $result=array_reverse($workshops);
-    
-                
-                $i = 1 ;
+                $result = array_reverse($workshops);
+
+
+                $i = 1;
                 foreach ($result as $workshopData) {
-                    $existingWorkshop = Activite::where('updated_At', $workshopData['updatedAt'])
-                        ->where('startDate', $workshopData['startDate'])
-                        ->first();
+                    $end = Carbon::parse($workshopData['endDate']);
+                    $start = Carbon::parse($workshopData['startDate']);
+                    $startD = Carbon::parse($workshopData['createdAt']);
+                    $upD = Carbon::parse($workshopData['updatedAt']);
 
-                    if ($existingWorkshop) {
+                    $existingEvent = Activite::where('updatedAt', $upD)->first();
+
+
+                    if ($existingEvent) {
+
+
                         $this->info("Workshop already exists: " . $workshopData['translations']['fr']['title']);
-
-
-                        continue;
                     } else {
                         $categoryName = isset($workshopData['categories'][0]) ? $workshopData['categories'][0] : "";
                         $category = Categorie::firstOrCreate(['categorie' => $categoryName]);
 
 
-                        $end = Carbon::parse($workshopData['endDate']);
-                        $start = Carbon::parse($workshopData['startDate']);
-                        $startD = Carbon::parse($workshopData['createdAt']);
-                        $upD = Carbon::parse($workshopData['updatedAt']);
+
+
+
 
                         $activites = Activite::firstOrCreate([
                             'title' => $workshopData['translations']['fr']['title'],
@@ -75,17 +79,17 @@ class FetchData extends Command
                             'publishStatus' => $workshopData['publishStatus'],
                             'showInSlider' => $workshopData['showInSlider'],
                             'send' => $workshopData['send'],
-                            'form' => isset($workshopData['form'])? $workshopData['form']:"",
-                            'miniatureColor' => isset($workshopData['miniatureColor'])? $workshopData['miniatureColor']:'' ,
+                            'form_id' => rand(1,23),
+                            'miniatureColor' => isset($workshopData['miniatureColor']) ? $workshopData['miniatureColor'] : '',
                             'showInCalendar' => $workshopData['showInCalendar'],
                             'liveStatus' => $workshopData['liveStatus'],
-                            'bookASeat' => isset($workshopData['bookASeat'])? $workshopData['bookASeat']:false ,
+                            'bookASeat' => isset($workshopData['bookASeat']) ? $workshopData['bookASeat'] : false,
                             'isEvents' => $workshopData['isEvents'],
                             'createdAt' => $startD,
                             'updatedAt' => $upD,
-                            'creator' => json_encode($workshopData['creator']) ,
+                            'creator' => json_encode($workshopData['creator']),
                             'endDate' => $end,
-                            'location' => $workshopData['location'],
+                            'location' => isset($workshopData['location']) ? $workshopData['location'] : '',
                         ]);
 
                         foreach ($workshopData['hashtags'] as $hashtagName) {
@@ -93,7 +97,7 @@ class FetchData extends Command
                             $activites->hashtag()->attach($hashtag->id);
                         }
                     }
-                    $this->info("Synchronisation {$i} ");
+                    $this->info("Synchronisation {$i} ".$workshopData['translations']['fr']['title']);
                     $i++;
                 }
                 $this->info('Event data fetched and stored successfully.');

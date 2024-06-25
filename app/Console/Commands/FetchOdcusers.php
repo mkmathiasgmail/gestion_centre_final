@@ -61,6 +61,7 @@ class FetchOdcusers extends Command
             // We browse all the odcusers
             foreach ($odcusers as $person) {
                 // Vérification si les données existent déjà dans la base de données
+                
                 $existingUser = Odcuser::where('email', $person->email)->first();
                 
                 $birthDay = Carbon::parse($person->birthDay);

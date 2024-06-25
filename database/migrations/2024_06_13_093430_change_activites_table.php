@@ -18,7 +18,7 @@ return new class extends Migration
             $table->boolean('showInSlider')->default(false)->nullable();
             $table->string('publishStatus')->default('public')->nullable();
             $table->boolean('send')->default(false)->nullable();
-            $table->string('form')->nullable();
+            $table->foreignId('form_id')->nullable()->constrained()->onDelete('no action')->onUpdate('no action');
             $table->string('miniatureColor')->nullable();
             $table->boolean('showInCalendar')->default(false)->nullable();
             $table->boolean('liveStatus')->default(false)->nullable();
