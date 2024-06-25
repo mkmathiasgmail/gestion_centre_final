@@ -114,15 +114,15 @@
                         <div id="accordion-flush-body-2" class="hidden" aria-labelledby="accordion-flush-heading-2">
                             <div class="p-4 border-b border-gray-200 dark:border-gray-700">
                                 <p class="mb-2 text-gray-500 hover:text-white dark:text-gray-400"><a
-                                        href="{{ route('activites.index') }}">Actvites</a></p>
+                                        href="{{ route('activites.index') }}">Actvités</a></p>
                                 <p class="text-gray-500 mb-2 hover:text-white dark:text-gray-400"><a
-                                        href="{{ route('encours') }}">Activites encours</a></p>
+                                        href="{{ route('encours') }}">Activités en cours</a></p>
                                 <p class="text-gray-500 mb-2 hover:text-white dark:text-gray-400"><a
-                                        href="{{route('categories.index')}}">Liste Categories</a></p>
+                                        href="{{route('categories.index')}}">Liste Catégories</a></p>
                                 <p class="text-gray-500 mb-2 hover:text-white dark:text-gray-400"><a
                                         href="{{route('hashtags.index')}}">Hashtag</a></p>
                                 <p class="text-gray-500 mb-2 hover:text-white dark:text-gray-400"><a
-                                        href="{{ route('typevents.index') }}">Type Evenement</a></p>
+                                        href="{{ route('typevents.index') }}">Event type</a></p>
                             </div>
                         </div>
                     </div>
@@ -137,21 +137,7 @@
                                 d="M12 4a4 4 0 1 0 0 8 4 4 0 0 0 0-8Zm-2 9a4 4 0 0 0-4 4v1a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2v-1a4 4 0 0 0-4-4h-4Z"
                                 clip-rule="evenodd" />
                         </svg>
-                        <span class="ms-3">ODC User</span>
-
-                    </a>
-                </li>
-                <li>
-                    <a href="{{ route('candidats.index') }}"
-                        class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
-                        <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true"
-                            xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none"
-                            viewBox="0 0 24 24">
-                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
-                                stroke-width="2"
-                                d="M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18Zm0 0a8.949 8.949 0 0 0 4.951-1.488A3.987 3.987 0 0 0 13 16h-2a3.987 3.987 0 0 0-3.951 3.512A8.948 8.948 0 0 0 12 21Zm3-11a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
-                        </svg>
-                        <span class="ms-3">Candidats</span>
+                        <span class="ms-3">Users</span>
 
                     </a>
                 </li>
