@@ -61,12 +61,10 @@ class FetchOdcusers extends Command
             // We browse all the odcusers
             foreach ($odcusers as $person) {
                 // Vérification si les données existent déjà dans la base de données
+                
                 $existingUser = Odcuser::where('email', $person->email)->first();
                 
-                $birthDay = Carbon::parse($person->birthDay);
-                $createdAt = Carbon::parse($person->createdAt);
-                $updatedAt = Carbon::parse($person->updatedAt);
-                $last_connection = Carbon::parse($person->last_connection);
+                
                 // Check if the 'detailProfession' property is set and not null
                 if (isset($person->detailProfession)) {
                     // If it's set, encode it using json_encode()

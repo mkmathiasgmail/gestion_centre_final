@@ -27,7 +27,6 @@
             role="alert">
             <span class="font-medium">{{ session('success') }}</span>
         </div>
-    
     @endif
 
     <div class="relative overflow-x-auto mt-4">
@@ -348,6 +347,16 @@
         </script>
 
         <script src="https://cdn.datatables.net/2.0.8/js/dataTables.js"></script>
+        <script src="https://cdn.datatables.net/buttons/3.0.2/js/buttons.dataTables.js"></script>
+        <script src="https://cdn.datatables.net/buttons/3.0.2/js/buttons.colVis.min.js"></script>
+        <script src="https://cdn.datatables.net/buttons/3.0.2/js/dataTables.buttons.js"></script>
+        <script src="https://cdn.datatables.net/responsive/3.0.2/js/dataTables.responsive.js"></script>
+        <script src="https://cdn.datatables.net/responsive/3.0.2/js/responsive.dataTables.js"></script>
+        <script src="https://cdn.datatables.net/buttons/3.0.2/js/buttons.print.min.js"></script>
+        <script src="https://cdn.datatables.net/buttons/3.0.2/js/buttons.html5.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/vfs_fonts.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/pdfmake.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
         <script>
             new DataTable('#table', {
                 responsive: true,
@@ -364,7 +373,28 @@
                     topStart: {
                         pageLength: {
                             menu: [10, 25, 50, 100, 200]
-                        }
+                        },
+                        buttons: [
+                            'copy',
+                            'print',
+                            
+                            {
+                                extend: 'spacer',
+                                style: 'bar',
+                                text: 'Export files:'
+                            },
+                            'csv',
+                            'excel',
+                            'spacer',
+                            'pdf',
+                             {
+                                extend: 'spacer',
+                                style: 'bar',
+                                text: ':'
+                            },
+                            
+                            'colvis'
+                        ]
                     },
                     topEnd: {
                         search: {
@@ -385,8 +415,8 @@
 
 
             document.querySelector('.dt-layout-row label').setAttribute('class', 'text-white text-sm font-bold');
-            document.querySelector('.dt-length select').setAttribute('class', 'w-1/2 h-9 rounded-md text-gray-600');
-            document.querySelector('.dt-search input').setAttribute('class', 'w-1/2 h-9 rounded-md text-gray-600');
+            document.querySelector('.dt-length select').setAttribute('class', ' rounded-md text-gray-600');
+            document.querySelector('.dt-search input').setAttribute('class', ' rounded-md text-gray-600');
             document.querySelector('.dt-search label').setAttribute('class', 'text-white text-sm font-bold');
         </script>
     @endsection

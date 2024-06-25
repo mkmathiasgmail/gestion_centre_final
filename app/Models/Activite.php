@@ -15,7 +15,7 @@ class Activite extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['title', 'content', 'location',  'status', 'typeEvent', 'startDate', 'endDate', 'categorie_id', '_id', 'showInSlider', 'publishStatus', 'send', 'form', 'miniatureColor', 'showInCalendar', 'liveStatus', 'bookASeat', 'isEvents', 'createdAt', 'updatedAt', 'creator'];
+    protected $fillable = ['title', 'content', 'location',  'status', 'typeEvent', 'startDate', 'endDate', 'categorie_id', '_id', 'showInSlider', 'publishStatus', 'send', 'form_id', 'miniatureColor', 'showInCalendar', 'liveStatus', 'bookASeat', 'isEvents', 'createdAt', 'updatedAt', 'creator'];
     protected $casts = [
         'categories' => 'array'
     ];
@@ -38,5 +38,10 @@ class Activite extends Model
     public function typEvent(): BelongsToMany
     {
         return $this->belongsToMany(TypeEvent::class);
+    }
+
+    public function form(): BelongsTo
+    {
+        return $this->belongsTo(Form::class);
     }
 }
