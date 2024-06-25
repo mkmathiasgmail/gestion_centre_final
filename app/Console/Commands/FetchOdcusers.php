@@ -50,7 +50,7 @@ class FetchOdcusers extends Command
             $this->info("Converting it into object...");
 
             $data = $queryCandidats->object() ;
-            if ($data->code && $data->code == 401) {
+            if (isset($data->code) && $data->code == 401) {
                 $this->error("Your token has expired, please reset it.");
                 exit ;
             }
@@ -109,7 +109,7 @@ class FetchOdcusers extends Command
                     'userCV' => isset($person->userCV) ? $person->userCV : "",
                 ];
 
-                if ($existingUser) {
+                if (isset($existingUser)) {
                     $this->info("User $i already saved, checking available update...");
                     // Update the existing user
                     $existingUser->update($userData);
