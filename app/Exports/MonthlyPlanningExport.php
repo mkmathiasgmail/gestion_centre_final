@@ -89,7 +89,7 @@ class MonthlyPlanningExport
             "fill" => [
                 "fillType" => Fill::FILL_SOLID,
                 "startColor" => [
-                    "argb" => "ff4040ff"
+                    "argb" => "ff4472c4"
                 ]
             ]
             
@@ -102,7 +102,7 @@ class MonthlyPlanningExport
             "fill" => [
                 "fillType" => Fill::FILL_SOLID,
                 "startColor" => [
-                    "argb" => "ffffaa40"
+                    "argb" => "ffed7d31"
                 ]
             ]
         ]);
@@ -131,10 +131,10 @@ class MonthlyPlanningExport
         $data[] = ["title" => "", "periode" => "", "duree" => "", "cible" => "", "nombre" => "", "lieu" => "", "intervenant" => "", "theme" => "", "observateur" => ""];
 
         foreach ($activities as $item) {
-            $differenceDay = $item->startDate && $item->endDate ? Carbon::parse($item->startDate)->diffInDays(Carbon::parse($item->endDate)) : 1;
+            $differenceDay = $item->startDate && $item->endDate ? Carbon::parse($item->startDate)->diffInDays(Carbon::parse($item->endDate)) + 1 : 1;
             $data[] = [
                 "title" => $item->title,
-                "periode" => $item->startDate ? Carbon::parse($item->startDate)->translatedFormat("d-M") . " - " . Carbon::parse($item->endDate)->translatedFormat("d-M") : Carbon::parse($item->startDate)->translatedFormat("d-M"),
+                "periode" => $item->startDate != $item->endDate ? Carbon::parse($item->startDate)->translatedFormat("d M") . " - " . Carbon::parse($item->endDate)->translatedFormat("d M") : Carbon::parse($item->startDate)->translatedFormat("d M"),
                 "duree" => $differenceDay > 1 ? $differenceDay . " jours" : $differenceDay . " jour",
                 "cible" => null,
                 "nombre" => null,
