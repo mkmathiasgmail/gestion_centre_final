@@ -2,9 +2,10 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Http\Controllers\Controller;
 use App\Models\Activite;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Http;
 
 class ActiviteController extends Controller
 {
@@ -13,7 +14,7 @@ class ActiviteController extends Controller
      */
     public function index()
     {
-        $activite= Activite::all();
+        $activite = Activite::all();
         return response()->json($activite);
     }
 
@@ -22,8 +23,42 @@ class ActiviteController extends Controller
      */
     public function store(Request $request)
     {
-        //
+
+
+        $activite = [
+            "title" => $request->title,
+            "categories" => $request->categories,
+            "hashtags" => $request->hashtags,
+            "content" => $request->contents,
+            "form" => $request->form,
+            "endDate" => $request->endDate,
+            "startDate" => $request->startDate,
+            "location" => $request->location,
+        ];
+
+        try {
+           
+            $requette = Http::timeout(100)
+                ->post('http://10.143.41.70:8000/2024/odc/public/api/events/create', $activite);
+
+            // Check if the request was successful
+            if ($requette->successful()) {
+                return response()->json(['success' => true, 'data' => $requette->json()], 201);
+            } else {
+                return response()->json(['success' => false, 'message' => 'Erreur lors de la création de l\'événement', 'error' => $requette->body()], $requette->status());
+            }
+        } catch (\Exception $e) {
+          
+            return response()->json(['success' => false, 'message' => 'Request failed', 'error' => $e->getMessage()], 500);
+        }
+
+
+        // Return the created event
+        
     }
+
+   
+    
 
     /**
      * Display the specified resource.

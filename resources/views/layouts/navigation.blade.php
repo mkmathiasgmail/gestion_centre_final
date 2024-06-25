@@ -98,7 +98,7 @@
                         <h2 id="accordion-flush-heading-2">
                             <button type="button"
                                 class="flex items-center  w-full  font-medium p-2 text-white    dark:text-gray-400 gap-3 dark:hover:bg-gray-700 rounded-lg"
-                                data-accordion-target="#accordion-flush-body-2" aria-expanded="true"
+                                data-accordion-target="#accordion-flush-body-2" aria-expanded="false"
                                 aria-controls="accordion-flush-body-2">
                                 <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true"
                                     xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none"

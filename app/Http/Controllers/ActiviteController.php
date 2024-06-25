@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Carbon\Carbon;
+use App\Models\Form;
 use App\Models\Hashtag;
 use App\Models\Odcuser;
 use App\Models\Activite;
@@ -21,34 +22,37 @@ class ActiviteController extends Controller
     public function index()
     {
 
-        
+
         $activites = Activite::all();
-        $typeEvent=TypeEvent::all();
-        $categories=Categorie::all();
-        $hashtag=Hashtag::all();
+        $typeEvent = TypeEvent::all();
+        $categories = Categorie::all();
+        $hashtag = Hashtag::all();
 
         foreach ($activites as $activite) {
             $startDate = Carbon::parse($activite->startDate);
             $endDate = Carbon::parse($activite->endDate);
 
-            
+
             $differenceInDays = $startDate->diffInDays($endDate);
 
-            if ($differenceInDays==0) {
+            if ($differenceInDays == 0) {
                 $activite->differenceInDays = 1;
-            }else {
+            } else {
                 $activite->differenceInDays = $differenceInDays;
             }
-
-           
-            
         }
-        return view('activites.index', compact('activites','typeEvent','categories','hashtag'));
+        return view('activites.index', compact('activites', 'typeEvent', 'categories', 'hashtag'));
     }
 
     public function create()
     {
-
+        $activites = Activite::all();
+        $typeEvent = TypeEvent::all();
+        $categories = Categorie::all();
+        $forms= Form::all();
+        $hashtag = Hashtag::all();
+        return view('activites.create', compact('activites', 'typeEvent', 'categories', 'hashtag','forms'));
+      
     }
 
     public function store(Request $request)
@@ -70,7 +74,7 @@ class ActiviteController extends Controller
             'isEvents' => $request->isEvents,
             'creator' => $request->create,
             'location' => $request->lieu,
-         
+
         ]);
 
         $activites->hashtag()->attach($request->tags);
@@ -98,14 +102,14 @@ class ActiviteController extends Controller
         $typeEvent = TypeEvent::has('activite')->get();
         $categories = Categorie::has('articles')->get();
         $hashtag = Hashtag::has('activite')->get();
-        return view('activites.edit',compact('activite','typeEvent','categories','hashtag'));
+        return view('activites.edit', compact('activite', 'typeEvent', 'categories', 'hashtag'));
     }
 
 
     public function update(Request $request, Activite $activite)
     {
         $category = Categorie::firstOrCreate(['categorie' => $request->categorie_id]);
-        
+
 
         // Mise à jour de l'activité
         $activite->update([
@@ -127,7 +131,7 @@ class ActiviteController extends Controller
             'location' => $request->lieu,
         ]);
 
-       
+
         $hashtagIds = [];
         if ($request->hashtags) {
             foreach ($request->tags as $hashtagName) {
@@ -139,7 +143,7 @@ class ActiviteController extends Controller
         if ($request->typeEvent) {
             $typeventIds = [];
             foreach ($request->typeEvent as $typeEventName) {
-                $typeEvent = TypeEvent::firstOrCreate(['typeEvent' => $typeEventName,'code'=>'']);
+                $typeEvent = TypeEvent::firstOrCreate(['typeEvent' => $typeEventName, 'code' => '']);
                 $typeventIds[] = $typeEvent->id;
             }
             $activite->typeEvent()->sync($typeventIds);

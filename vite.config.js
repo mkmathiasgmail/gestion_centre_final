@@ -9,6 +9,8 @@ export default defineConfig({
                 "resources/js/app.js",
                 "node_modules/jquery/dist/jquery.min.js",
                 "node_modules/datatables.net-dt/js/dataTables.dataTables.js",
+                "node_modules/select2/dist/js/select2.full.min.js",
+                "node_modules/select2/dist/css/select2.min.css",
             ],
             refresh: true,
         }),
