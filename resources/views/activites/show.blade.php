@@ -107,7 +107,7 @@
         <x-activitesShow :show="$activite" />
 
         {{-- Affichage des candidats sur l'activité affichée --}}
-        <div class="hidden p-4 rounded-lg bg-gray-50 dark:bg-gray-800" id="styled-dashboard" role="tabpanel"
+        <div class="p-4 rounded-lg bg-gray-50 dark:bg-gray-800" id="styled-dashboard" role="tabpanel"
             aria-labelledby="dashboard-tab">
 
             <a href="#" onclick="Reload()"
