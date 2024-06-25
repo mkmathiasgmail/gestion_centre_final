@@ -45,14 +45,16 @@ class ActiviteController extends Controller
             if ($differenceInDays == 0) {
             if ($differenceInDays == 0) {
                 $activite->differenceInDays = 1;
-            } else {
+            
             } else {
                 $activite->differenceInDays = $differenceInDays;
             }
         }
-        return view('activites.index', compact('activites', 'typeEvent', 'categories', 'hashtag'));
+        
         return view('activites.index', compact('activites', 'typeEvent', 'categories', 'hashtag'));
     }
+
+}
 
     public function create()
     {
@@ -141,7 +143,7 @@ class ActiviteController extends Controller
         $categories = Categorie::has('articles')->get();
         $hashtag = Hashtag::has('activite')->get();
         return view('activites.edit', compact('activite', 'typeEvent', 'categories', 'hashtag'));
-        return view('activites.edit', compact('activite', 'typeEvent', 'categories', 'hashtag'));
+       
     }
 
 
