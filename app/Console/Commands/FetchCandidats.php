@@ -71,7 +71,7 @@ class FetchCandidats extends Command
                     $activite = Activite::where('_id', $candidat->event->_id)->first();
                     
                     // if they exist
-                    if ($odcuser && $activite) {
+                    if (isset($odcuser) && isset($activite)) {
                         $this->info("The odcuser and the activity exist in the fetch response, making the request...");
                         
                         //! Creating and updating
