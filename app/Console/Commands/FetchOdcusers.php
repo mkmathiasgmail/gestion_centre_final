@@ -9,7 +9,7 @@ use Carbon\Carbon;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Http;
 
-class SyncDataFromApi extends Command
+class FetchOdcusers extends Command
 {
     /**
      * The name and signature of the console command.
@@ -32,7 +32,7 @@ class SyncDataFromApi extends Command
     {
         $this->info("Start syncing data from API to database");
         $url = env('API_URL');
-        $apiResponse = Http::timeout(10000)->get("$url/users/active") ;
+        $queryCandidats = Http::timeout(10000)->get("$url/users/active") ;
         
         // Chemin absolu vers le fichier JSON contenant les odcusers
         //$jsonOdcusers = base_path('odcusers_from_api.json');
@@ -45,11 +45,21 @@ class SyncDataFromApi extends Command
 
         // Vérification si la requête a réussi
         // if ($apiData !== null) {
-        if ($apiResponse->successful()) {
-            $apiData = $apiResponse->object() ;
-            $data = $apiData->data;
+        if ($queryCandidats->successful()) {
+            $this->info("The response has succeeded, trying to process it...");
+            $this->info("Converting it into object...");
+
+            $data = $queryCandidats->object() ;
+            if ($data->code && $data->code == 401) {
+                $this->error("Your token has expired, please reset it.");
+                exit ;
+            }
+            // We access the "data" object
+            $odcusers = $data->data;
+
             $i = 1 ;
-            foreach ($data as $person) {
+            // We browse all the odcusers
+            foreach ($odcusers as $person) {
                 // Vérification si les données existent déjà dans la base de données
                 
                 $existingUser = Odcuser::where('email', $person->email)->first();
@@ -96,16 +106,18 @@ class SyncDataFromApi extends Command
                 ];
 
                 if ($existingUser) {
+                    $this->info("User $i already saved, checking available update...");
                     // Update the existing user
                     $existingUser->update($userData);
-                    $this->info("User updated successfully: " . $person->email);
+                    $this->info("User $i updated successfully: " . $person->email);
                 } else {
+                    $this->info("User $i not found, creating him...");
                     // Insertion de nouvelles données
                     Odcuser::create($userData);
-                    $this->info("User created successfully: " . $person->email);
+                    $this->info("User $i created successfully: " . $person->email);
                 }
 
-                $this->info("Data synced successfully : " . $i . "");
+                $this->info("Data synced successfully, exit code : 0");
                 $i++;
             }
         } else {

@@ -8,6 +8,8 @@ use App\Models\Hashtag;
 use App\Models\Odcuser;
 use App\Models\Activite;
 use App\Models\Candidat;
+use App\Models\CandidatAttribute;
+use App\Models\Presence;
 use App\Models\Categorie;
 use App\Models\TypeEvent;
 use Illuminate\Http\Request;
@@ -23,7 +25,11 @@ class ActiviteController extends Controller
     {
 
 
+
         $activites = Activite::all();
+        $typeEvent = TypeEvent::all();
+        $categories = Categorie::all();
+        $hashtag = Hashtag::all();
         $typeEvent = TypeEvent::all();
         $categories = Categorie::all();
         $hashtag = Hashtag::all();
@@ -33,14 +39,18 @@ class ActiviteController extends Controller
             $endDate = Carbon::parse($activite->endDate);
 
 
+
             $differenceInDays = $startDate->diffInDays($endDate);
 
             if ($differenceInDays == 0) {
+            if ($differenceInDays == 0) {
                 $activite->differenceInDays = 1;
+            } else {
             } else {
                 $activite->differenceInDays = $differenceInDays;
             }
         }
+        return view('activites.index', compact('activites', 'typeEvent', 'categories', 'hashtag'));
         return view('activites.index', compact('activites', 'typeEvent', 'categories', 'hashtag'));
     }
 
@@ -75,6 +85,7 @@ class ActiviteController extends Controller
             'creator' => $request->create,
             'location' => $request->lieu,
 
+
         ]);
 
         $activites->hashtag()->attach($request->tags);
@@ -88,12 +99,39 @@ class ActiviteController extends Controller
         // Trouver l'Activite correspondant et récupérer le champ '_id'
         $id = $activite->id;
         $activite_Id = $activite->_id;
-        $url = env('API_URL');
+
         $odcusers = Odcuser::all(['id', '_id']);
 
         // Récupérer les candidats liés à cette activité
-        $candidats = Candidat::where('activite_id', $id)->get();
-        return view('activites.show', compact('activite', 'id', 'candidats', 'activite_Id', 'odcusers'));
+        $candidats = Candidat::where('activite_id', $id)->with(['odcuser', 'candidat_attribute'])->get();
+        $candidatsData = [];
+        $labels = [];
+        foreach ($candidats as $candidat) {
+            $candidatArray = $candidat->toArray();
+            if ($candidat->candidat_attribute) {
+                foreach ($candidat->candidat_attribute as $attribute) {
+                    $candidatArray[$attribute->label] = $attribute->value;
+                    if (!in_array($attribute->label, $labels)) {
+                        $labels[] = $attribute->label;
+                    }
+                }
+            }
+            $candidatsData[] = $candidatArray;
+        }
+        //recuperer les presents  et la date 
+
+        $presences = Presence::orderBy('id')->get();
+        $activite = Activite::findOrFail($id);
+        $dateDebut = Carbon::parse($activite->startDate);
+        $dateFin = Carbon::parse($activite->endDate);
+
+        $dates = [];
+        for ($date = $dateDebut; $date->lte($dateFin); $date->addDay()) {
+            if (!$date->isWeekend()) {
+                $dates[] = $date->format('d');
+            }
+        }
+        return view('activites.show', compact('candidatsData', 'labels', 'activite', 'id', 'candidats', 'activite_Id', 'odcusers', 'dates', 'presences'));
     }
 
 
@@ -102,6 +140,7 @@ class ActiviteController extends Controller
         $typeEvent = TypeEvent::has('activite')->get();
         $categories = Categorie::has('articles')->get();
         $hashtag = Hashtag::has('activite')->get();
+        return view('activites.edit', compact('activite', 'typeEvent', 'categories', 'hashtag'));
         return view('activites.edit', compact('activite', 'typeEvent', 'categories', 'hashtag'));
     }
 
