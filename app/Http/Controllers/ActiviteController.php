@@ -143,7 +143,7 @@ class ActiviteController extends Controller
         $categories = Categorie::has('articles')->get();
         $hashtag = Hashtag::has('activite')->get();
         return view('activites.edit', compact('activite', 'typeEvent', 'categories', 'hashtag'));
-        return view('activites.edit', compact('activite', 'typeEvent', 'categories', 'hashtag'));
+       
     }
 
 
