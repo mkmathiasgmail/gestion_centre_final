@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Odcuser;
+use App\Models\Candidat;
 use App\Http\Requests\StoreOdcuserRequest;
 use App\Http\Requests\UpdateOdcuserRequest;
 
@@ -43,9 +44,29 @@ class OdcuserController extends Controller
      */
     public function show(Odcuser $odcuser)
     {
-        $odcusers = Odcuser::all();
+        $nbrEvents = Candidat::where('odcuser_id', $odcuser->id)->count();
+        $candidats = Candidat::where('odcuser_id', $odcuser->id)->with('candidat_attribute')->get();
+        if (isset($candidats)) {
+            foreach ($candidats as $candidat) {
+                $datas = [] ;
+                $array = $candidat->toArray();
+                if (isset($candidat->candidat_attribute)) {
+                    $labels = [];
+                    foreach ($candidat->candidat_attribute as $attribute) {
+                        $array[$attribute->label] = $attribute->value ;
+                        if (!in_array($attribute->label, $labels)) {
+                            $labels[] = $attribute->label ;
+                        }
+                    }
+                    $datas[] = $array ;
+                }
+                
+            }
+        } else {
+            echo "Sorry the user does not exist.";
+        }
 
-        return view('odcusers.show', compact('odcuser', 'odcusers'));
+        return view('odcusers.show', compact('odcuser', 'candidats', 'nbrEvents', 'datas', 'labels'));
     }
 
     /**
