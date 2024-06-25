@@ -46,7 +46,7 @@ class FetchCandidats extends Command
         // Browsing amoung different _id events
         foreach ($activites as $key => $value) {
             $this->info("Fetching the api url for event $fetchCount");
-
+            
             // Sending the fetch request with the _id for each event
             $queryEvent = Http::timeout(10000)->get("$url/events/show/$value");
 
@@ -87,23 +87,27 @@ class FetchCandidats extends Command
                         $candidate = Candidat::firstOrCreate($candidatInfo);
                         $this->info("Candidate $e created successfully.");
                         
-                        foreach ($candidat->formRegistrationData->inputs as $key => $value) {
-                            $candidateAttributes = [
-                                '_id' => $candidat->formRegistrationData->inputs[$key]->_id,
-                                'label' => $candidat->formRegistrationData->inputs[$key]->translations->fr->input->label,
-                                
-                                'value' => (is_string($candidat->formRegistrationData->inputs[$key]->value)) ? ($candidat->formRegistrationData->inputs[$key]->value) : "",
-                                'candidat_id' => $candidate->id
-                            ];
-                            $this->info("Creating the candidate attribute...");
-
-                            try {
-                                CandidatAttribute::firstOrCreate($candidateAttributes);
-                            } catch (\Throwable $e) {
-                                print_r($e) ;
+                        if (isset($candidat->formRegistrationData)) {
+                            foreach ($candidat->formRegistrationData->inputs as $key => $value) {
+                                $candidateAttributes = [
+                                    '_id' => $candidat->formRegistrationData->inputs[$key]->_id,
+                                    'label' => $candidat->formRegistrationData->inputs[$key]->translations->fr->input->label,
+                                    
+                                    'value' => (is_string($candidat->formRegistrationData->inputs[$key]->value)) ? ($candidat->formRegistrationData->inputs[$key]->value) : "",
+                                    'candidat_id' => $candidate->id
+                                ];
+                                $this->info("Creating the candidate attribute...");
+    
+                                try {
+                                    CandidatAttribute::firstOrCreate($candidateAttributes);
+                                } catch (\Throwable $e) {
+                                    print_r($e) ;
+                                }
+    
+                                $this->info("Candidate attribute created successfully" . $candidateAttributes['label'] . "!");
                             }
-
-                            $this->info("Candidate attribute created successfully" . $candidateAttributes['label'] . "!");
+                        } else {
+                            $this->warn("");
                         }
                         
 
