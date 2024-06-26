@@ -23,7 +23,7 @@ class ActiviteController extends Controller
 
     public function index()
     {
-
+       
 
 
         $activites = Activite::all();
@@ -34,37 +34,40 @@ class ActiviteController extends Controller
         $categories = Categorie::all();
         $hashtag = Hashtag::all();
 
+        
         foreach ($activites as $activite) {
+            $message = Carbon::today();
             $startDate = Carbon::parse($activite->startDate);
             $endDate = Carbon::parse($activite->endDate);
+            if ($message>=$startDate && $message<=$endDate) {
+
+                $activite->message = 'En cours';
 
 
+            } elseif ($message< $startDate) {
+                
 
-            $differenceInDays = $startDate->diffInDays($endDate);
-
-            if ($differenceInDays == 0) {
-            if ($differenceInDays == 0) {
-                $activite->differenceInDays = 1;
-            
-            } else {
-                $activite->differenceInDays = $differenceInDays;
+                $differenceInDays = $startDate->diffInDays($message);
+                $activite->message = "Il y a une activité à venir $differenceInDays jours";
+            }else{
+                $activite->message = 'Terminée';
             }
-        }
-        
-        return view('activites.index', compact('activites', 'typeEvent', 'categories', 'hashtag'));
-    }
 
-}
+           
+        }
+
+        return view('activites.index', compact('activites', 'typeEvent', 'categories', 'hashtag',));
+        
+    }
 
     public function create()
     {
         $activites = Activite::all();
         $typeEvent = TypeEvent::all();
         $categories = Categorie::all();
-        $forms= Form::all();
+        $forms = Form::all();
         $hashtag = Hashtag::all();
-        return view('activites.create', compact('activites', 'typeEvent', 'categories', 'hashtag','forms'));
-      
+        return view('activites.create', compact('activites', 'typeEvent', 'categories', 'hashtag', 'forms'));
     }
 
     public function store(Request $request)
@@ -143,7 +146,6 @@ class ActiviteController extends Controller
         $categories = Categorie::has('articles')->get();
         $hashtag = Hashtag::has('activite')->get();
         return view('activites.edit', compact('activite', 'typeEvent', 'categories', 'hashtag'));
-       
     }
 
 
