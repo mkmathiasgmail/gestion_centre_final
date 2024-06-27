@@ -37,8 +37,8 @@ class ActiviteController extends Controller
         
         foreach ($activites as $activite) {
             $message = Carbon::today();
-            $startDate = Carbon::parse($activite->startDate);
-            $endDate = Carbon::parse($activite->endDate);
+            $startDate = Carbon::parse($activite->start_date);
+            $endDate = Carbon::parse($activite->end_date);
             if ($message>=$startDate && $message<=$endDate) {
 
                 $activite->message = 'En cours';
@@ -208,7 +208,7 @@ class ActiviteController extends Controller
     public function encours()
     {
         $today = Carbon::today();
-        $activites = Activite::where('startDate', '<=', $today)->where('endDate', '>=', $today)->get();
+        $activites = Activite::where('start_date', '<=', $today)->where('end_date', '>=', $today)->get();
         return view('encours', compact('activites'));
     }
 }

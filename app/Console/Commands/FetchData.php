@@ -24,7 +24,7 @@ class FetchData extends Command
      *
      * @var string
      */
-    protected $description = 'Command description';
+    protected $description = 'Command for fetching all active events from the API';
 
     /**
      * Execute the console command.
@@ -61,13 +61,13 @@ class FetchData extends Command
                         $this->info('Update Events from API ........');
 
                         $categoryName = isset($workshopData['categories'][0]) ? $workshopData['categories'][0] : "";
-                        $category = Categorie::firstOrCreate(['categorie' => $categoryName]);
+                        $category = Categorie::firstOrCreate(['name' => $categoryName]);
 
                         $activityData = [
                             'title' => $workshopData['translations']['fr']['title'],
                             'content' => json_encode($workshopData['translations']['fr']['content']),
                             'categorie_id' => $category->id,
-                            'startDate' => $start,
+                            'start_date' => $start,
                             'status' => $workshopData['status'],
                             '_id' => $workshopData['_id'],
                             'publish_status' => $workshopData['publishStatus'],
@@ -79,17 +79,18 @@ class FetchData extends Command
                             'live_status' => $workshopData['liveStatus'],
                             'book_a_seat' => isset($workshopData['bookASeat']) ? $workshopData['bookASeat'] : false,
                             'is_events' => $workshopData['isEvents'],
-                            'created_at' => $startD,
-                            'updated_at' => $upD,
+                            'createdAt' => $startD,
+                            'updatedAat' => $upD,
                             'creator' => json_encode($workshopData['creator']),
-                            'endDate' => $end,
+                            'end_date' => $end,
                             'location' => isset($workshopData['location']) ? $workshopData['location'] : '',
+                            'thumbnail_url'=> isset($workshopData['thumbnailURL']) ? $workshopData['thumbnailURL'] : '',
                         ];
 
                         $activites = Activite::firstOrCreate(['_id' => $workshopData['_id']], $activityData);
 
                         foreach ($workshopData['hashtags'] as $hashtagName) {
-                            $hashtag = Hashtag::firstOrCreate(['hashtag' => $hashtagName]);
+                            $hashtag = Hashtag::firstOrCreate(['name' => $hashtagName]);
                             $activites->hashtag()->attach($hashtag->id);
                         }
                     }
