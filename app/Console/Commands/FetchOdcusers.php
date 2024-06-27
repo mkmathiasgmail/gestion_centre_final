@@ -23,14 +23,14 @@ class FetchOdcusers extends Command
      *
      * @var string
      */
-    protected $description = 'Sync data from API to database';
+    protected $description = 'Sync odcusers from API and storing them into database';
 
     /**
      * Execute the console command.
      */
     public function handle()
     {
-        $this->info("Start syncing data from API to database");
+        $this->info("Syncing odcusers...");
         $url = env('API_URL');
         $queryCandidats = Http::timeout(10000)->get("$url/users/active") ;
         
@@ -64,7 +64,7 @@ class FetchOdcusers extends Command
                 
                 $existingUser = Odcuser::where('email', $person->email)->first();
                 
-                $birthDay = Carbon::parse($person->birthDay);
+                $birth_date = Carbon::parse($person->birthDay);
                 $createdAt = Carbon::parse($person->createdAt);
                 $updatedAt = Carbon::parse($person->updatedAt);
                 
@@ -80,33 +80,33 @@ class FetchOdcusers extends Command
 
                 // Collect the user data
                 $userData = [
-                    'firstName' => $person->firstName,
-                    'lastName' => $person->lastName,
+                    'first_name' => $person->firstName,
+                    'last_name' => $person->lastName,
                     'email' => $person->email,
                     'password' => $person->password,
                     'gender' => $person->gender,
-                    'birthDay' => $birthDay,
-                    'linkedIn' => isset($person->linkedIn) ? $person->linkedIn : "",
-                    'profession' => json_encode($person->profession),
-                    'odcCountry' => json_encode($person->odcCountry),
+                    'birth_date' => $birth_date,
+                    'linkedin' => isset($person->linkedIn) ? $person->linkedIn : "",
+                    'profession' => isset($person->profession) ? (json_encode($person->profession)) : "",
+                    'odc_country' => isset($person->odcCountry) ? (json_encode($person->odcCountry)) : "",
                     'role' => $person->role,
-                    'isActive' => $person->isActive,
-                    'hashtags' => json_encode($person->hashtags),
-                    'codingSchool' => $person->codingSchool,
-                    'fabLabSolidaire' => $person->fabLabSolidaire,
-                    'training' => $person->training,
-                    'internship' => $person->internship,
+                    'is_active' => $person->isActive,
+                    'hashtags' => isset($person->hashtags) ? (json_encode($person->hashtags)) : "",
+                    'coding_school' => isset($person->codingSchool) ? ($person->codingSchool) : "",
+                    'fablab_solidaire' => isset($person->fabLabSolidaire) ? ($person->fabLabSolidaire) : "",
+                    'training' => isset($person->training) ? ($person->training) : "",
+                    'internship' => isset($person->internship) ? ($person->internship) : "",
                     'event' => $person->event,
-                    'subscribe' => $person->subscribe,
-                    'newsletters' => json_encode($person->newsletters),
-                    'topics' => json_encode($person->topics), // Assuming 'topics' is an array
+                    'subscribe' => isset($person->subscribe) ? $person->subscribe : "",
+                    'newsletters' => isset($person->newsletters) ? json_encode($person->newsletters) : "",
+                    'topics' => isset($person->topics) ? (json_encode($person->topics)) : "",
                     'last_connection' => $last_connection,
                     '_id' => $person->_id,
-                    'detailProfession' => $detailProfessionValue,
-                    'createdAt' => $createdAt, // Assuming this is in the JSON data
-                    'updatedAt' => $updatedAt, // Assuming this is in the JSON data
-                    'picture' => isset($person->picture) ? $person->picture : "",
-                    'userCV' => isset($person->userCV) ? $person->userCV : "",
+                    'detail_profession' => isset($detailProfessionValue) ? ($detailProfessionValue) : "",
+                    'createdAt' => $createdAt, 
+                    'updatedAt' => $updatedAt,
+                    'picture' => isset($person->picture) ? ($person->picture) : "",
+                    'user_cv' => isset($person->userCV) ? ($person->userCV) : "",
                 ];
 
                 if (isset($existingUser)) {

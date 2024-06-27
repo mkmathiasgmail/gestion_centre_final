@@ -123,7 +123,7 @@
               
                             data-column="0">
                         <label for="civilie"
-                            class="w-full py-3 ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">Civilie
+                            class="w-full py-3 ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">Civilite
                         </label>
                     </div>
                 </li>
@@ -290,11 +290,7 @@
                                         class="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700 dark:divide-gray-600">
                                         <ul class="py-2 text-sm text-gray-700 dark:text-gray-200"
                                             aria-labelledby="dropdownMenuIconButton">
-                                            <li>
-                                                <a href="{{ route('candidats.show', $candidat['id']) }}"
-                                                    class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Voir
-                                                    plus de details</a>
-                                            </li>
+
                                             <li>
                                                 <a href="{{ route('candidats.edit', $candidat['id']) }}"
                                                     class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Editer</a>
