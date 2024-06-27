@@ -33,7 +33,7 @@
                     <select class="js-example-basic-multiple w-full h-10 rounded-md text-gray-600" name="hashtags[]"
                         multiple="multiple">
                         @foreach ($hashtag as $item)
-                            <option value="{{ $item->hashtag }}">{{ $item->hashtag }}</option>
+                            <option value="{{ $item->name }}">{{ $item->name }}</option>
                         @endforeach
                     </select>
                 </div>
@@ -54,7 +54,7 @@
                         class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Form</label>
                     <select class="w-full h-10 rounded-md text-gray-600" name="form">
                         @foreach ($forms as $item)
-                            <option value="{{ $item->odcCountry }}">{{ $item->name }}</option>
+                            <option value="{{ $item->_id }}">{{ $item->name }}</option>
                         @endforeach
                     </select>
                 </div>
@@ -74,7 +74,7 @@
 
                         <div class='preview' >
                             <img src="" id="img" width="100" height="100">
-                            <input type="text" name="thumbnailURL"  value="" class=" hidden" id="imgGet">
+                            <input type="text" name="thumbnailURL"  value="" class=" hidden" id="imgGet" required>
                         </div>
 
                     </div>

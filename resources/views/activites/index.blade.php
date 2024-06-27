@@ -102,16 +102,16 @@
                         </td>
 
                         <td scope="col" class="px-6 py-3">
-                            {{ $item->categorie->categorie }}
+                            {{ $item->categorie->name }}
                         </td>
                         <td scope="col" class="px-6 py-3">
                             @foreach ($item->hashtag as $hasthtag)
-                                <span>{{ $hasthtag->hashtag }}</span>
+                                <span>{{ $hasthtag->name }}</span>
                             @endforeach
                         </td>
                         <td scope="col" class="px-6 py-3">
                             @foreach ($item->typEvent as $event)
-                                <span>{{ $event->typeEvent }}</span>
+                                <span>{{ $event->title }}</span>
                             @endforeach
                         </td>
 
@@ -144,11 +144,11 @@
 
 
                         <td scope="col" class="px-6 py-3" id="startdate">
-                            {{ $item->startDate }}
+                            {{ $item->start_date }}
                         </td>
 
                         <td scope="col" class="px-6 py-3" id="endate">
-                            {{ $item->endDate }}
+                            {{ $item->end_date }}
                         </td>
 
 
