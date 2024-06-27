@@ -60,15 +60,16 @@ class EmployabiliteController extends Controller
         ->orderBy('endDate', 'desc')
         ->get();
         // Vérifications des dates
-        $dateEmployabilite = Carbon::parse($request->periode);
+        $dateEmployabilite =($request->periode);
 
-        $dernierActivite = $activites->first();
+        $dernierActivite = Activite::first();
         // Recherche de la dernière activité
-        $dateFinDerniereActivite = Carbon::parse($dernierActivite->endDate);
+        $dateFinDerniereActivite = $dernierActivite->endDate;
 
-        $dateEmployabilite = Carbon::parse($request->periode);
+
+        $dateEmployabilite =  $request->periode;
         //comparaison  de superiorités entre deux
-        if ($dateEmployabilite->gt($dateFinDerniereActivite)) {
+        if ($dateEmployabilite>$dateFinDerniereActivite) {
             // Création de l'employabilité
             Employabilite::create([
                 'name' =>$request->firstName,
@@ -97,7 +98,7 @@ class EmployabiliteController extends Controller
      */
     public function show(Employabilite $employabilite)
     {
-
+        
     }
 
     /**

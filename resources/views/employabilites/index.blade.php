@@ -119,7 +119,7 @@
                             {{ $id_use }}
                             </td>
                             <td class="px-6 py-4">
-                            {{ $item->name }}
+                          <a href="{{ route('odcusers.show', $item->odcuser->id) }}">  {{ $item->name }} </a>
                             </td>
                         <td class="px-6 py-4">
                             {{ $item->type_contrat }}
