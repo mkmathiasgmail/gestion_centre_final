@@ -275,7 +275,7 @@
                 const select = document.getElementById('year');
                 const currentDate = new Date().getFullYear();;
 
-                for (let i = 0; i <= 3; i++) {
+                for (let i = 0; i <= 2; i++) {
                     const option = document.createElement('option');
                     const year = currentDate - i;
 

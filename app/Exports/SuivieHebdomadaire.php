@@ -45,7 +45,7 @@ class SuivieHebdomadaire
         }
 
         $dateTime = Carbon::now()->format("Y-m-d_H-i-s");
-        $fileName = "monthly_planning_data_" . $dateTime . ".xlsx";
+        $fileName = "suivie_hebdomadiare_data_" . $dateTime . ".xlsx";
 
         $writer = new Xlsx($spreadsheet);
         $writer->save(storage_path("app/public/{$fileName}"));
@@ -159,9 +159,10 @@ class SuivieHebdomadaire
                             $differenceDay > 1 ? $differenceDay . " jours" : $differenceDay . " jour",
                             null,
                             $item->startDate != $item->endDate ? Carbon::parse($item->startDate)->translatedFormat("d M") . " - " . Carbon::parse($item->endDate)->translatedFormat("d M") : Carbon::parse($item->startDate)->translatedFormat("d M"),
+                            $item->cand_count != 0 ? $item->cand_count : null,
                             null,
-                            null,
-                            null,
+                            $item->cand_count != 0 ? $item->female_count : null,
+                            $item->cand_count != 0 ? $item->male_count : null,
                             null,
                         ];
                     }
