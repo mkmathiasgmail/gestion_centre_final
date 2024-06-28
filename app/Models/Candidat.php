@@ -6,6 +6,7 @@ use App\Models\Odcuser;
 use App\Models\Activite;
 use App\Models\Presence;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
