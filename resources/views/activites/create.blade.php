@@ -6,7 +6,7 @@
             <div>
                 <h2 class=" text-white text-3xl mb-5">Formulaire</h2>
             </div>
-            <div class="w-2/5 p-8">
+            <div class="w-2/5">
 
 
 
@@ -93,7 +93,7 @@
 
 
             </div>
-            <div class="w-3/5 px-8">
+            <div class="w-3/5">
                 <div class=" mb-4">
                     <label for="title"
                         class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Title</label>

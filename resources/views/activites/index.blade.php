@@ -98,7 +98,7 @@
                         </th>
 
                         <td scope="col" class="px-6 py-3">
-                            {{ $item->title }}
+                          <a href="{{route('activites.edit',$item->id)}}">{{ $item->title }}</a>  
                         </td>
 
                         <td scope="col" class="px-6 py-3">

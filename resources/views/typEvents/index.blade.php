@@ -91,11 +91,11 @@
                         </th>
 
                         <td scope="col" class="px-6 py-3">
-                            {{ $item->title}}
+                            {{ $item->code}}
                         </td>
 
                         <td scope="col" class="px-6 py-3">
-                            {{ $item->code }}
+                            {{ $item->title }}
                         </td>
                         <td scope="col" class="px-6 py-3">
                             {{ $item->created_at }}
@@ -122,11 +122,11 @@
                                 <ul class="py-2 text-sm text-gray-700 dark:text-gray-200"
                                     aria-labelledby="dropdownMenuIconButton">
                                     <li>
-                                        <a href="{{ route('activites.show', $item->id) }}"
+                                        <a href="{{ route('typevents.show', $item->id) }}"
                                             class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">View</a>
                                     </li>
                                     <li>
-                                        <a href="{{ route('activites.destroy', $item->id) }}"
+                                        <a href="{{ route('typevents.destroy', $item->id) }}"
                                             class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
                                             data-modal-target="delete" data-modal-toggle="delete"
                                             onclick="delete(event)">Delete</a>
