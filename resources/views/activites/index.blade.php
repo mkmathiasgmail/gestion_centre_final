@@ -110,7 +110,7 @@
                             @endforeach
                         </td>
                         <td scope="col" class="px-6 py-3">
-                            @foreach ($item->typEvent as $event)
+                            @foreach ($typeEvent as $event)
                                 <span>{{ $event->title }}</span>
                             @endforeach
                         </td>
@@ -480,7 +480,7 @@
                     [10, 25, 50, 'All']
                 ],
 
-               
+
 
 
 

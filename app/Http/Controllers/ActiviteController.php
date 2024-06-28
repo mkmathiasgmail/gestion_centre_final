@@ -23,7 +23,7 @@ class ActiviteController extends Controller
 
     public function index()
     {
-       
+
 
 
         $activites = Activite::all();
@@ -34,7 +34,7 @@ class ActiviteController extends Controller
         $categories = Categorie::all();
         $hashtag = Hashtag::all();
 
-        
+
         foreach ($activites as $activite) {
             $message = Carbon::today();
             $startDate = Carbon::parse($activite->start_date);
@@ -45,7 +45,7 @@ class ActiviteController extends Controller
 
 
             } elseif ($message< $startDate) {
-                
+
 
                 $differenceInDays = $startDate->diffInDays($message);
                 $activite->message = "Il y a une activité à venir $differenceInDays jours";
@@ -53,11 +53,11 @@ class ActiviteController extends Controller
                 $activite->message = 'Terminée';
             }
 
-           
+
         }
 
         return view('activites.index', compact('activites', 'typeEvent', 'categories', 'hashtag',));
-        
+
     }
 
     public function create()
@@ -105,10 +105,10 @@ class ActiviteController extends Controller
         $activite_Id = $activite->_id;
 
         $odcusers = Odcuser::all(['id', '_id']);
-        //recuperer les presents  et la date 
+        //recuperer les presents  et la date
         $presences= Presence::orderBy('id')->get();
         $test = Presence::all();
-       
+
 
 
         // Récupérer les candidats liés à cette activité
@@ -127,7 +127,7 @@ class ActiviteController extends Controller
             }
             $candidatsData[] = $candidatArray;
         }
-        //recuperer les presents  et la date 
+        //recuperer les presents  et la date
 
         $presences = Presence::orderBy('id')->get();
         $activite = Activite::findOrFail($id);
