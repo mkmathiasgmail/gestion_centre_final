@@ -66,7 +66,7 @@ class ImportXlsx extends Command
                 $activitecheck = Activite::where('_id', $activityId )->first();
 
                 if (!$activitecheck) {
-                    echo "Vérifiez _id de votre fichier Excel";
+                    echo "Vérifiez _id dans votre fichier Excel il semble qu'il est manquant";
                     continue;
                 }
 
@@ -80,19 +80,20 @@ class ImportXlsx extends Command
                     $université = $worksheet->getcell("G{$lineexcel}")->getvalue();
                     $status = $worksheet->getcell("H{$lineexcel}")->getvalue(); 
 
-                    //print_r($nom);
+                    //check for the existance email
                     for($idtest = 1; $idtest<=200; $idtest++){
                         if (empty($email)){
                             $email = "test{$idtest}@gmail.com";
+                            continue;
                         }
                     }
 
                     
                    // print_r($odcuserData);
-                    $odcuser = Odcuser::updateOrCreate(
-                        ['email' => $email],
+                    $odcuser = Odcuser::firstOrCreate(
+                        ['email' => $email, 'first_name' => $prenom],
                         [
-                            'first_name' => $prenom,
+                            //'first_name' => $prenom,
                             'last_name' => $nom,
                             'email' => $email ,
                             'password'=> "hfkfhijskd5djhf",
@@ -125,6 +126,11 @@ class ImportXlsx extends Command
 
                     if(empty($status)){
                         $status = 0;
+                        continue;
+                    }
+                    if(empty($date)){
+                        $date = "date_1970-01-01";
+                        continue;
                     }
 
                 $candidat = Candidat::create(
@@ -134,19 +140,13 @@ class ImportXlsx extends Command
                         'status' => $status
                     ]
                 );
+
+                //on remplie la table presence
                 $datemodif = explode('_', $date);
                 Presence::create([
                     'date' => $datemodif[1],
                     'candidat_id' => $candidat->id,
                 ]);
-
-
-               /* //on remplie la table presences
-                $presence = Presence::create([
-                    'date' => $date,
-                    'candidat_id' => $candidat->id,
-                ]);*/
-        
 
             } 
         }
