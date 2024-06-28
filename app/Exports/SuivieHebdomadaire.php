@@ -28,8 +28,12 @@ class SuivieHebdomadaire
 
         $activities = $this->data;;
 
-        $groupedByMonth = $activities->groupBy(function ($item) {
-            return Carbon::parse($item->startDate)->format('Y-m');
+        $sortedByMonth = $activities->sortBy(function ($item) {
+            return Carbon::parse($item->start_date);
+        });
+
+        $groupedByMonth = $sortedByMonth->groupBy(function ($item) {
+            return Carbon::parse($item->start_date)->format('Y-m');
         });
 
         foreach ($groupedByMonth as $month => $activitiesInMonth) {
@@ -94,7 +98,7 @@ class SuivieHebdomadaire
                 ],
         ]);
 
-        $sheet->fromArray(['Semaine', 'Lieu', 'Nom activité', 'Durée(jours)', 'Nobr d\'heure(hr)', 'Date de l\'activité', 'Nombre d\'inscription', 'Nombre de participants', 'Nombre des filles', 'Nombre de garçons', 'Vérification'], NULL, 'A2');
+        $sheet->fromArray(['Semaine', 'Categorie', 'Nom activité', 'Durée(jours)', 'Nobr d\'heure(hr)', 'Date de l\'activité', 'Nombre d\'inscription', 'Nombre de participants', 'Nombre des filles', 'Nombre de garçons', 'Vérification'], NULL, 'A2');
     }
 
     protected function populateData(Worksheet $sheet, $activitiesInMonth, $month)
@@ -124,19 +128,19 @@ class SuivieHebdomadaire
 
             // Filtrer les activités pour cette semaine spécifique
             $weekActivities = $activitiesInMonth->filter(function ($item) use ($weekStart, $weekEnd) {
-                $startDate = Carbon::parse($item->startDate);
-                return $startDate->between($weekStart, $weekEnd);
+                $start_date = Carbon::parse($item->start_date);
+                return $start_date->between($weekStart, $weekEnd);
             });
 
             // Assigner les activités sans location à "Inconnu"
-            foreach ($weekActivities as $activity) {
-                if (is_null($activity->location) || $activity->location === '') {
-                    $activity->location = 'Aucune information';
-                }
-            }
+            // foreach ($weekActivities as $activity) {
+            //     if (is_null($activity->location) || $activity->location === '') {
+            //         $activity->location = 'Aucune information';
+            //     }
+            // }
 
             // Initialisation du regroupement par location
-            $groupedByLocation = $weekActivities->groupBy('location');
+            $groupedByCategorie = $weekActivities->groupBy('name');
 
             $cellNbr = $startRow + $weekActivities->count();
 
@@ -155,19 +159,19 @@ class SuivieHebdomadaire
 
             } else {
                 $initialStartRow = $startRow; // Sauvegarder la position de départ de la semaine
-                foreach ($groupedByLocation as $location => $activities) {
+                foreach ($groupedByCategorie as $categorie => $activities) {
                     $locationStartRow = $startRow; // Sauvegarder la position de départ de la location
                     $sheet->mergeCells('B' . $startRow . ':B' . ($startRow + $activities->count()));
-                    $sheet->setCellValue('B' . $startRow, $location);
+                    $sheet->setCellValue('B' . $startRow, $categorie);
 
                     $data = [];
                     foreach ($activities as $item) {
-                        $differenceDay = $item->startDate && $item->endDate ? Carbon::parse($item->startDate)->diffInDays(Carbon::parse($item->endDate)) + 1 : 1;
+                        $differenceDay = $item->start_date && $item->end_date ? Carbon::parse($item->start_date)->diffInDays(Carbon::parse($item->end_date)) + 1 : 1;
                         $data[] = [
                             $item->title,
                             $differenceDay > 1 ? $differenceDay . " jours" : $differenceDay . " jour",
-                            null,
-                            $item->startDate != $item->endDate ? Carbon::parse($item->startDate)->translatedFormat("d M") . " - " . Carbon::parse($item->endDate)->translatedFormat("d M") : Carbon::parse($item->startDate)->translatedFormat("d M"),
+                            $item->number_hour ?? null,
+                            $item->start_date != $item->end_date ? Carbon::parse($item->start_date)->translatedFormat("d M") . " - " . Carbon::parse($item->end_date)->translatedFormat("d M") : Carbon::parse($item->start_date)->translatedFormat("d M"),
                             $item->cand_count != 0 ? $item->cand_count : null,
                             $item->cand_count != 0 && $item->pre_count != 0 ? $item->pre_count : null,
                             $item->cand_count != 0 ? $item->female_count : null,
@@ -177,7 +181,7 @@ class SuivieHebdomadaire
 
                         $totalTitle ++;
                         $totalDay += $differenceDay;
-                        // $totalHours += 0;
+                        $totalHours += $item->number_hour != 0 ? $item->number_hour : 0;
                         $totalInscris += $item->cand_count != 0 ? $item->cand_count : 0;
                         $totalPart += $item->pre_count != 0 ? $item->pre_count : 0;
                         $totalFille += $item->female_count != 0 ? $item->female_count : 0;

@@ -28,11 +28,11 @@ class MonthlyPlanningExport
         $spreadsheet->removeSheetByIndex(0); // Remove default sheet
         
         $months = $this->data->groupBy(function ($item) {
-            return Carbon::parse($item->startDate)->format("F");
+            return Carbon::parse($item->start_date)->format("F");
         });
 
         $years = $this->data->groupBy(function ($item) {
-            return Carbon::parse($item->startDate)->format("Y");
+            return Carbon::parse($item->start_date)->format("Y");
         });
 
         $month = $months->keys()->first();
@@ -70,7 +70,7 @@ class MonthlyPlanningExport
         $sheet->getCell("A2")->setValue($richText);
 
         $sheet->insertNewRowBefore(6, 6);
-        $sheet->mergeCells('A6:I6');
+        $sheet->mergeCells('A6:J6');
         $sheet->setCellValue("A6", $month);
 
         $sheet->getStyle("A")->applyFromArray([
@@ -107,7 +107,7 @@ class MonthlyPlanningExport
             
         ]);
 
-        $sheet->getStyle("A4:I4")->applyFromArray([
+        $sheet->getStyle("A4:J4")->applyFromArray([
             "font" => [
                 "bold" => true,
             ],
@@ -123,7 +123,7 @@ class MonthlyPlanningExport
 
         ]);
 
-        $sheet->getStyle("A5:I5")->applyFromArray([
+        $sheet->getStyle("A5:J5")->applyFromArray([
             "fill" => [
                 "fillType" => Fill::FILL_SOLID,
                 "startColor" => [
@@ -132,7 +132,7 @@ class MonthlyPlanningExport
             ]
         ]);
 
-        $sheet->fromArray(['Lieu', 'Activité', 'Période', 'Durée', 'Cible', 'Nombre', 'Intervenant', 'Thème de l\'activité', 'Observateur'], NULL, 'A4');
+        $sheet->fromArray(['Categorie', 'Activité', 'Période', 'Durée', 'Cible', 'Nombre', 'Lieu', 'Intervenant', 'Thème de l\'activité', 'Observateur'], NULL, 'A4');
     }
 
     protected function populateData(Worksheet $sheet, $month, $year)
@@ -141,41 +141,40 @@ class MonthlyPlanningExport
         $activities = DB::table('activites')
             ->leftjoin('activite_type_event as actyev', 'actyev.activite_id', '=', 'activites.id')
             ->leftjoin('type_events as tyev', 'tyev.id', '=', 'actyev.type_event_id')
-            ->whereMonth("startDate", $monthFormat)
-            ->whereYear("startDate", $year)
-            ->select("activites.title", "activites.location", "activites.startDate", "activites.endDate", "tyev.typeEvent")
+            ->leftjoin('categories as ca', 'ca.id', '=', 'activites.categorie_id')
+            ->whereMonth("start_date", $monthFormat)
+            ->whereYear("start_date", $year)
+            ->select("activites.title", "activites.location", "activites.start_date", "activites.end_date", "tyev.title as act_title", 'ca.name')
             ->get();
-
-        // $data = [];
-        // $data[] = ["title" => "", "periode" => "", "duree" => "", "cible" => "", "nombre" => "", "intervenant" => "", "theme" => "", "observateur" => ""];
         
-        foreach ($activities as $activity) {
-            if (is_null($activity->location) || $activity->location === '') {
-                $activity->location = 'Aucune information';
-            }
-        }
+        // foreach ($activities as $activity) {
+        //     if (is_null($activity->location) || $activity->location === '') {
+        //         $activity->location = 'Aucune information';
+        //     }
+        // }
 
         // Initialisation du regroupement par location
-        $groupedByLocation = $activities->groupBy('location');
+        $groupedByCategorie = $activities->groupBy('name');
 
         $startRow = 7;
 
-        foreach ($groupedByLocation as $location => $activitie) {
+        foreach ($groupedByCategorie as $categorie => $activitie) {
             $sheet->mergeCells('A' . $startRow . ':A' . ($startRow + $activitie->count()));
-            $sheet->setCellValue('A' . $startRow, $location);
+            $sheet->setCellValue('A' . $startRow, $categorie);
 
             $data = [];
 
             foreach ($activitie as $item){
-                $differenceDay = $item->startDate && $item->endDate ? Carbon::parse($item->startDate)->diffInDays(Carbon::parse($item->endDate)) + 1 : 1;
+                $differenceDay = $item->start_date && $item->end_date ? Carbon::parse($item->start_date)->diffInDays(Carbon::parse($item->end_date)) + 1 : 1;
                 $data[] = [
                     "title" => $item->title,
-                    "periode" => $item->startDate != $item->endDate ? Carbon::parse($item->startDate)->translatedFormat("d M") . " - " . Carbon::parse($item->endDate)->translatedFormat("d M") : Carbon::parse($item->startDate)->translatedFormat("d M"),
+                    "periode" => $item->start_date != $item->end_date ? Carbon::parse($item->start_date)->translatedFormat("d M") . " - " . Carbon::parse($item->end_date)->translatedFormat("d M") : Carbon::parse($item->start_date)->translatedFormat("d M"),
                     "duree" => $differenceDay > 1 ? $differenceDay . " jours" : $differenceDay . " jour",
                     "cible" => null,
                     "nombre" => null,
+                    "lieu" => $item->location,
                     "intervenant" => null,
-                    "theme" => $item->typeEvent ? $item->typeEvent : null,
+                    "theme" => $item->act_title ? $item->act_title : null,
                     "observateur" => null,
                 ];    
             }
@@ -184,7 +183,7 @@ class MonthlyPlanningExport
             $startRow += count($data) + 1;
         }
 
-        $cellRange = "A4:I" . ($sheet->getHighestRow() + 1);
+        $cellRange = "A4:J" . ($sheet->getHighestRow() + 1);
         $sheet->getStyle($cellRange)->applyFromArray([
             "borders" => [
                 "allBorders" => [
@@ -197,7 +196,7 @@ class MonthlyPlanningExport
 
     protected function autoSizeColumns(Worksheet $sheet)
     {
-        foreach (range('A', 'I') as $columnID) {
+        foreach (range('A', 'J') as $columnID) {
             if ($columnID === 'A' || $columnID === 'B') {
                 $sheet->getColumnDimension('A')->setWidth(30);
                 $sheet->getStyle($columnID)->getAlignment()->setWrapText(true);

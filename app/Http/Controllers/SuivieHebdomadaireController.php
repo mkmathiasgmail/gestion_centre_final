@@ -17,18 +17,22 @@ class SuivieHebdomadaireController extends Controller
             ->leftjoin('candidats as cand', 'cand.activite_id', '=', 'activites.id')
             ->leftjoin('odcusers as od', 'od.id', '=', 'cand.odcuser_id')
             ->leftjoin('presences as pre', 'pre.candidat_id', '=', 'cand.id')
-            ->whereYear("activites.startDate", $date)
+            ->leftjoin('categories as ca', 'ca.id', '=', 'activites.categorie_id')
+            ->whereYear("activites.start_date", $date)
             ->select(
                 'activites.title',
                 'activites.location', 
-                'activites.startDate', 
-                'activites.endDate', 
+                'activites.start_date', 
+                'activites.end_date', 
+                'activites.number_hour', 
+                'ca.name', 
                 DB::raw('COUNT(cand.status) as cand_count'),
-                DB::raw('SUM(CASE WHEN od.gender = "male" THEN 1 ELSE 0 END) as male_count'),
-                DB::raw('SUM(CASE WHEN od.gender = "female" THEN 1 ELSE 0 END) as female_count'),
-                DB::raw('SUM(CASE WHEN pre.candidat_id IS NOT NULL THEN 1 ELSE 0 END) as pre_count')
+                DB::raw('COUNT(DISTINCT CASE WHEN pre.candidat_id IS NOT NULL AND od.gender = "male" THEN pre.candidat_id ELSE NULL END) as male_count'),
+                DB::raw('COUNT(DISTINCT CASE WHEN pre.candidat_id IS NOT NULL AND od.gender = "female" THEN pre.candidat_id ELSE NULL END) as female_count'),
+                DB::raw('COUNT(DISTINCT pre.candidat_id) as pre_count')
             )
-            ->groupBy('activites.title', 'activites.location', 'activites.startDate', 'activites.endDate')
+            ->groupBy('activites.title', 'activites.location', 'activites.start_date', 'activites.end_date', 'ca.name', 'activites.number_hour')
+            ->distinct('ca.id')
             ->get();
         
         if ($data->isEmpty()) {
