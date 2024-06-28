@@ -15,24 +15,22 @@ return new class extends Migration
             $table->renameColumn('description', 'content');
             $table->renameColumn('lieu', 'location');
             $table->string('_id')->nullable();
-            $table->boolean('showInSlider')->default(false)->nullable();
-            $table->string('publishStatus')->default('public')->nullable();
+            $table->boolean('show_in_slider')->default(false)->nullable();
+            $table->string('publish_status')->default('public')->nullable();
             $table->boolean('send')->default(false)->nullable();
             $table->foreignId('form_id')->nullable()->constrained()->onDelete('no action')->onUpdate('no action');
-            $table->string('miniatureColor')->nullable();
-            $table->boolean('showInCalendar')->default(false)->nullable();
-            $table->boolean('liveStatus')->default(false)->nullable();
-            $table->boolean('bookASeat')->default(false)->nullable();
-            $table->boolean('isEvents')->default(false)->nullable();
+            $table->string('miniature_color')->nullable();
+            $table->boolean('show_in_calendar')->default(false)->nullable();
+            $table->boolean('live_status')->default(false)->nullable();
+            $table->boolean('book_a_seat')->default(false)->nullable();
+            $table->boolean('is_events')->default(false)->nullable();
             $table->date('createdAt')->nullable();
             $table->date('updatedAt')->nullable();
             $table->json('creator')->nullable();
-            $table->renameColumn('date_debut', 'startDate');
-            $table->renameColumn('date_fin', 'endDate');
+            $table->renameColumn('date_debut', 'start_date');
+            $table->renameColumn('date_fin', 'end_date');
             $table->dropColumn('image');
-            
-
-            
+            $table->string('thumbnail_url')->nullable();      
         });
     }
 
