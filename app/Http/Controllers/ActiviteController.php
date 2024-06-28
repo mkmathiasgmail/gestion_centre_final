@@ -131,34 +131,43 @@ class ActiviteController extends Controller
 
         $presences = Presence::orderBy('id')->get();
         $activite = Activite::findOrFail($id);
-        $dateDebut = Carbon::parse($activite->startDate);
-        $dateFin = Carbon::parse($activite->endDate);
+        $dateDebut = Carbon::parse($activite->start_date);
+        $dateFin = Carbon::parse($activite->end_date);
 
         $dates = [];
         $fullDates = [];
         for ($date = $dateDebut; $date->lte($dateFin); $date->addDay()) {
             if (!$date->isWeekend()) {
                 $dates[] = $date->format('d-m');
-                $fullDates[] = $date->format('d-m-Y');
-                //dd($fullDates);
+                $fullDates[] = $date->format('Y-m-d');
             }
         }
         // dd($dates);
         $countdate = count($dates);
 
-        $candidats = Candidat::where('activite_id', $id)->with(['presence', 'odcuser'
-        ])->get();
+        $candidats_on_activity = Candidat::where('activite_id', $id)->with('odcuser')->get();
         $data = [];
-        foreach ($candidats as $candidat) {
-            $pres = Presence::where('candidat_id', $candidat->id)->pluck('date');
-            $p = $pres->toArray();
-            $candidatsPresence = $candidat->toArray();
-            $candidatsPresence['date'] = $p;
-            $candidatsPresence['candidat_id'] = $candidat->id;
-
-            $data[] = $candidatsPresence;
+        $pres = Presence::all()->pluck('candidat_id');
+        foreach ($candidats_on_activity as $candidat) { 
+            $pres = Presence::where('candidat_id', $candidat->id)->get();
+            try {
+                $date = $pres->toArray();
+                $presence_date = [] ;
+                foreach ($pres->toArray() as $key => $date) {
+                    $presence_date[] = date('Y-m-d', strtotime($date['date'])) ;
+                }
+                $candidatsPresence = $candidat->toArray();
+                $candidatsPresence['date'] = $presence_date;
+                $candidatsPresence['candidat_id'] = $candidat->id;
+                $candidatsPresence['odcuser'] = $candidat->odcuser ;
+                
+                $data[] = $candidatsPresence;
+            } catch (\Throwable $th) {
+                //echo $th->getMessage();
+            }
         }
-        return view('activites.show', compact('candidatsData', 'test', 'p','labels', 'data', 'activite', 'id', 'candidats', 'activite_Id', 'odcusers', 'fullDates', 'dates', 'countdate', 'presences'));
+        return view('activites.show', compact('candidatsData', 'labels', 'data', 'activite', 'id', 'candidats', 'activite_Id', 'odcusers', 'fullDates', 'dates', 'countdate', 'presences'));
+
     }
 
 
