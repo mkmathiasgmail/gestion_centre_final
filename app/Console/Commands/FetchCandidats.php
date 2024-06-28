@@ -4,7 +4,9 @@ namespace App\Console\Commands;
 
 use App\Models\Activite;
 use App\Models\Candidat;
+use App\Models\CandidatAttribute;
 use App\Models\Odcuser;
+use Hamcrest\Type\IsString;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Http;
 
@@ -44,7 +46,7 @@ class FetchCandidats extends Command
         // Browsing amoung different _id events
         foreach ($activites as $key => $value) {
             $this->info("Fetching the api url for event $fetchCount");
-
+            
             // Sending the fetch request with the _id for each event
             $queryEvent = Http::timeout(10000)->get("$url/events/show/$value");
 
@@ -63,37 +65,53 @@ class FetchCandidats extends Command
 
                 // Browsing all the api result data 
                 foreach ($candidats as $candidat) {
-
+                    
                     // Checking if both a odcuser and an event are in the result from api
                     $odcuser = Odcuser::where('_id', $candidat->user->_id)->first();
                     $activite = Activite::where('_id', $candidat->event->_id)->first();
-
+                    
                     // if they exist
-                    if ($odcuser && $activite) {
+                    if (isset($odcuser) && isset($activite)) {
                         $this->info("The odcuser and the activity exist in the fetch response, making the request...");
+                        
+                        //! Creating and updating
                         $candidatInfo = [
                             'odcuser_id' => $odcuser->id,
                             'activite_id' => $activite->id,
                             'status' => 1
                         ];
 
-                        //! Creating and updating
-                        // First, we verify if the candidate already exists in the table
-                        $existingCandidat = Candidat::where('odcuser_id', $odcuser->id)->first();
+                        $this->info("Creating the candidate $e ...");
 
-                        if ($existingCandidat) {
-                            $this->info("The candidate $e already exists, trying to update...");
-                            
-                            // if the candidate already exists, we try to update it
-                            $existingCandidat->update($candidatInfo);
-                            $this->info("Update success ! ");
+                        // Else we create it
+                        $candidate = Candidat::firstOrCreate($candidatInfo);
+                        $this->info("Candidate $e created successfully.");
+                        
+                        if (isset($candidat->formRegistrationData)) {
+                            foreach ($candidat->formRegistrationData->inputs as $key => $value) {
+                                $candidateAttributes = [
+                                    '_id' => $candidat->formRegistrationData->inputs[$key]->_id,
+                                    'label' => $candidat->formRegistrationData->inputs[$key]->translations->fr->input->label,
+                                    
+                                    'value' => (is_string($candidat->formRegistrationData->inputs[$key]->value)) ? ($candidat->formRegistrationData->inputs[$key]->value) : "",
+                                    'candidat_id' => $candidate->id
+                                ];
+                                $this->info("Creating the candidate attribute...");
+    
+                                try {
+                                    CandidatAttribute::firstOrCreate($candidateAttributes);
+                                } catch (\Throwable $e) {
+                                    print_r($e) ;
+                                }
+    
+                                $this->info("Candidate attribute created successfully" . $candidateAttributes['label'] . "!");
+                            }
                         } else {
-                            $this->info("Creating the candidate $e ...");
-
-                            // Else we create it
-                            Candidat::create($candidatInfo);
-                            $this->info("Candidate $e created successfully.");
+                            $this->warn("");
                         }
+                        
+
+
                     }
                     $e++;
                 }

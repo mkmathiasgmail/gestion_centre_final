@@ -36,4 +36,9 @@ class Candidat extends Model
         return $this->hasMany(Presence::class);
     }
 
+    public function candidat_attribute(): HasMany
+    {
+        return $this->hasMany(CandidatAttribute::class);
+    }
+
 }

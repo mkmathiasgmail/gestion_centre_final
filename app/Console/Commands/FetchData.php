@@ -17,14 +17,14 @@ class FetchData extends Command
      *
      * @var string
      */
-    protected $signature = 'app:fetch-data';
+    protected $signature = 'app:fetch-events';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Command description';
+    protected $description = 'Command for fetching all active events from the API';
 
     /**
      * Execute the console command.
@@ -36,64 +36,65 @@ class FetchData extends Command
 
             $this->info('Fetch Events data from API and store in database........');
 
-            $response = Http::timeout("100000")->get($_ENV['API_EVENTS']);
+            $url = env('API_URL');
+
+            $response = Http::timeout("100000")->get("http://10.143.41.70:8000/2024/odc/public/api/events/active");
 
             if ($response->successful()) {
                 $workshops = $response->json()['data'];
 
-                $result=array_reverse($workshops);
-    
-                
-                $i = 1 ;
+                $result = array_reverse($workshops);
+
+
+                $i = 1;
                 foreach ($result as $workshopData) {
-                    $existingWorkshop = Activite::where('updated_At', $workshopData['updatedAt'])
-                        ->where('startDate', $workshopData['startDate'])
-                        ->first();
+                    $end = Carbon::parse($workshopData['endDate']);
+                    $start = Carbon::parse($workshopData['startDate']);
+                    $startD = Carbon::parse($workshopData['createdAt']);
+                    $upD = Carbon::parse($workshopData['updatedAt']);
 
-                    if ($existingWorkshop) {
+                    $existingActivity = Activite::where('updated_at', $upD)->first();
+                    if ($existingActivity) {
                         $this->info("Workshop already exists: " . $workshopData['translations']['fr']['title']);
-
-
                         continue;
                     } else {
+                        $this->info('Update Events from API ........');
+
                         $categoryName = isset($workshopData['categories'][0]) ? $workshopData['categories'][0] : "";
-                        $category = Categorie::firstOrCreate(['categorie' => $categoryName]);
+                        $category = Categorie::firstOrCreate(['name' => $categoryName]);
 
-
-                        $end = Carbon::parse($workshopData['endDate']);
-                        $start = Carbon::parse($workshopData['startDate']);
-                        $startD = Carbon::parse($workshopData['createdAt']);
-                        $upD = Carbon::parse($workshopData['updatedAt']);
-
-                        $activites = Activite::firstOrCreate([
+                        $activityData = [
                             'title' => $workshopData['translations']['fr']['title'],
                             'content' => json_encode($workshopData['translations']['fr']['content']),
                             'categorie_id' => $category->id,
-                            'startDate' => $start,
+                            'start_date' => $start,
                             'status' => $workshopData['status'],
                             '_id' => $workshopData['_id'],
-                            'publishStatus' => $workshopData['publishStatus'],
-                            'showInSlider' => $workshopData['showInSlider'],
+                            'publish_status' => $workshopData['publishStatus'],
+                            'show_in_slider' => $workshopData['showInSlider'],
                             'send' => $workshopData['send'],
-                            'form' => isset($workshopData['form'])? $workshopData['form']:"",
-                            'miniatureColor' => isset($workshopData['miniatureColor'])? $workshopData['miniatureColor']:'' ,
-                            'showInCalendar' => $workshopData['showInCalendar'],
-                            'liveStatus' => $workshopData['liveStatus'],
-                            'bookASeat' => isset($workshopData['bookASeat'])? $workshopData['bookASeat']:false ,
-                            'isEvents' => $workshopData['isEvents'],
+                            'form_id' => rand(1, 23),
+                            'miniature_color' => isset($workshopData['miniatureColor']) ? $workshopData['miniatureColor'] : '',
+                            'show_in_calendar' => $workshopData['showInCalendar'],
+                            'live_status' => $workshopData['liveStatus'],
+                            'book_a_seat' => isset($workshopData['bookASeat']) ? $workshopData['bookASeat'] : false,
+                            'is_events' => $workshopData['isEvents'],
                             'createdAt' => $startD,
-                            'updatedAt' => $upD,
-                            'creator' => json_encode($workshopData['creator']) ,
-                            'endDate' => $end,
-                            'location' => $workshopData['location'],
-                        ]);
+                            'updatedAat' => $upD,
+                            'creator' => json_encode($workshopData['creator']),
+                            'end_date' => $end,
+                            'location' => isset($workshopData['location']) ? $workshopData['location'] : '',
+                            'thumbnail_url'=> isset($workshopData['thumbnailURL']) ? $workshopData['thumbnailURL'] : '',
+                        ];
+
+                        $activites = Activite::firstOrCreate(['_id' => $workshopData['_id']], $activityData);
 
                         foreach ($workshopData['hashtags'] as $hashtagName) {
-                            $hashtag = Hashtag::firstOrCreate(['hashtag' => $hashtagName]);
+                            $hashtag = Hashtag::firstOrCreate(['name' => $hashtagName]);
                             $activites->hashtag()->attach($hashtag->id);
                         }
                     }
-                    $this->info("Synchronisation {$i} ");
+                    $this->info("Synchronisation {$i} " . $workshopData['translations']['fr']['title']);
                     $i++;
                 }
                 $this->info('Event data fetched and stored successfully.');
@@ -105,4 +106,7 @@ class FetchData extends Command
             $this->error('An error occurred: ' . $e->getMessage());
         }
     }
+
+
+    
 }

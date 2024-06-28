@@ -96,13 +96,10 @@
                         Gender
                     </th>
                     <th scope="col" class="px-6 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                        Phone
-                    </th>
-                    <th scope="col" class="px-6 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                         Profession
                     </th>
                     <th scope="col" class="px-6 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                        Country
+                        Formation
                     </th>
                     <th scope="col" class="px-6 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                         Actions
@@ -113,10 +110,10 @@
                 @foreach ($candidats as $candidat)
                     <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
                         <td class="px-6 py-4">
-                            {{ $candidat->odcuser->firstname }}
+                            {{ $candidat->odcuser->firstName }}
                         </td>
                         <td class="px-6 py-4">
-                            {{ $candidat->odcuser->lastname }}
+                            {{ $candidat->odcuser->lastName }}
                         </td>
                         <td class="px-6 py-4">
                             {{ $candidat->odcuser->email }}
@@ -125,16 +122,13 @@
                             {{ $candidat->odcuser->gender }}
                         </td>
                         <td class="px-6 py-4">
-                            {{ $candidat->odcuser->phone }}
-                        </td>
-                        <td class="px-6 py-4">
                             @php
                                 $profession = json_decode($candidat->odcuser->profession, true)
                             @endphp
                             {{ $profession['translations']['fr']['profession'] ?? '' }}
                         </td>
                         <td class="px-6 py-4">
-                            {{ $candidat->odcuser->country }}
+                            {{ $candidat->activite->title }}
                         </td>
                         <td class="px-6 py-4 flex">
                             {{-- Show --}}

@@ -16,15 +16,22 @@
 
     <div class=" mb-4 mt-4 text-white">
 
-        <a class=" cursor-pointer mt-5 bg-slate-600 p-2 rounded-sm font-bold" data-modal-target="create"
-            data-modal-toggle="create">Create Activites</a>
+        <a class=" cursor-pointer mt-5 bg-slate-600 p-2 rounded-sm font-bold" href="{{route('activites.create')}}">Create Activites</a>
 
 
     </div>
 
+    @if (Session('success'))
+        <div class="p-4 mb-4 text-sm text-green-800 rounded-lg bg-green-50 dark:bg-gray-800 dark:text-green-400"
+            role="alert">
+            <span class="font-medium">{{ session('success') }}</span>
+        </div>
+    @endif
+
     <div class="relative overflow-x-auto mt-4">
-        <table id="table" class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400 ">
-            <thead class="text-xs text-white uppercase bg-gray-50 dark:bg-gray-700 dark:text-white">
+        <table id="table"
+            class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400 cell-border">
+            <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                 <tr>
                     <th scope="col" class="px-6 py-3">
                         Id
@@ -41,9 +48,35 @@
                     <td scope="col" class="px-6 py-3">
                         type event
                     </td>
+
                     <td scope="col" class="px-6 py-3">
                         Lieu
                     </td>
+
+                    <td scope="col" class="px-6 py-3">
+                        Teming
+                    </td>
+
+                    <td scope="col" class="px-6 py-3">
+                        Status
+                    </td>
+
+                    <td scope="col" class="px-6 py-3">
+                        Show in Slider
+                    </td>
+
+                    <td scope="col" class="px-6 py-3">
+                        Send
+                    </td>
+
+                    <td scope="col" class="px-6 py-3">
+                        Live Status
+                    </td>
+
+                    <td scope="col" class="px-6 py-3">
+                        Book a Seat
+                    </td>
+
 
                     <td scope="col" class="px-6 py-3">
                         Date_debut
@@ -51,9 +84,7 @@
                     <td scope="col" class="px-6 py-3">
                         Date_fin
                     </td>
-                    <td scope="col" class="px-6 py-3">
-                        Duree
-                    </td>
+
                     <td scope="col" class="px-6 py-3">
                         Action
                     </td>
@@ -61,7 +92,7 @@
             </thead>
             <tbody>
                 @foreach ($activites as $i => $item)
-                    <tr id="rowAll">
+                    <tr id="rowAll" class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
                         <th scope="col" class="px-6 py-3">
                             {{ $i + 1 }}
                         </th>
@@ -71,33 +102,56 @@
                         </td>
 
                         <td scope="col" class="px-6 py-3">
-                            {{ $item->categorie->categorie }}
+                            {{ $item->categorie->name }}
                         </td>
                         <td scope="col" class="px-6 py-3">
                             @foreach ($item->hashtag as $hasthtag)
-                                <span>{{ $hasthtag->hashtag }}</span>
+                                <span>{{ $hasthtag->name }}</span>
                             @endforeach
                         </td>
                         <td scope="col" class="px-6 py-3">
                             @foreach ($item->typEvent as $event)
-                                <span>{{ $event->typeEvent }}</span>
+                                <span>{{ $event->title }}</span>
                             @endforeach
                         </td>
+
                         <td scope="col" class="px-6 py-3">
                             {{ $item->location }}
                         </td>
 
+                        <td id="nbredays">
+                            {{ $item->message }}
+                        </td>
+
+                        <td scope="col" class="px-6 py-3">
+                            {{ $item->status ? '✔️' : '⭕️' }}
+                        </td>
+
+                        <td scope="col" class="px-6 py-3">
+                            {{ $item->showInSlider ? '✔️' : '⭕️' }}
+                        </td>
+
+                        <td scope="col" class="px-6 py-3">
+                            {{ $item->send ? '✔️' : '⭕️' }}
+                        </td>
+
+                        <td scope="col" class="px-6 py-3">
+                            {{ $item->liveStatus ? '✔️' : '⭕️' }}
+                        </td>
+                        <td scope="col" class="px-6 py-3">
+                            {{ $item->bookSeat ? '✔️' : '⭕️' }}
+                        </td>
+
+
                         <td scope="col" class="px-6 py-3" id="startdate">
-                            {{ $item->startDate }}
+                            {{ $item->start_date }}
                         </td>
 
                         <td scope="col" class="px-6 py-3" id="endate">
-                            {{ $item->endDate }}
+                            {{ $item->end_date }}
                         </td>
 
-                        <td id="nbredays">
-                            {{ $item->differenceInDays }} Jours
-                        </td>
+
 
                         <td>
                             <button id="dropdownMenuIconButton" data-dropdown-toggle="dropdownDots{{ $i }}"
@@ -156,9 +210,31 @@
                     <td scope="col" class="px-6 py-3">
                         type event
                     </td>
+
                     <td scope="col" class="px-6 py-3">
                         Lieu
                     </td>
+
+                    <td scope="col" class="px-6 py-3">
+                        Teming
+                    </td>
+
+                    <td scope="col" class="px-6 py-3">
+                        Status
+                    </td>
+
+                    <td scope="col" class="px-6 py-3">
+                        Show in Slider
+                    </td>
+
+                    <td scope="col" class="px-6 py-3">
+                        Live Status
+                    </td>
+
+                    <td scope="col" class="px-6 py-3">
+                        Book a Seat
+                    </td>
+
 
                     <td scope="col" class="px-6 py-3">
                         Date_debut
@@ -166,9 +242,7 @@
                     <td scope="col" class="px-6 py-3">
                         Date_fin
                     </td>
-                    <td scope="col" class="px-6 py-3">
-                        Duree
-                    </td>
+
                     <td scope="col" class="px-6 py-3">
                         Action
                     </td>
@@ -178,9 +252,8 @@
     </div>
 
     <x-delete :name="__('Are you sure you want to delete this product? ')" />
-    <x-form :hash="$hashtag" :event="$typeEvent" :categories="$categories" />
 
-   
+
 
     @section('script')
         <script>
@@ -340,6 +413,16 @@
         </script>
 
         <script src="https://cdn.datatables.net/2.0.8/js/dataTables.js"></script>
+        <script src="https://cdn.datatables.net/buttons/3.0.2/js/buttons.dataTables.js"></script>
+        <script src="https://cdn.datatables.net/buttons/3.0.2/js/buttons.colVis.min.js"></script>
+        <script src="https://cdn.datatables.net/buttons/3.0.2/js/dataTables.buttons.js"></script>
+        <script src="https://cdn.datatables.net/responsive/3.0.2/js/dataTables.responsive.js"></script>
+        <script src="https://cdn.datatables.net/responsive/3.0.2/js/responsive.dataTables.js"></script>
+        <script src="https://cdn.datatables.net/buttons/3.0.2/js/buttons.print.min.js"></script>
+        <script src="https://cdn.datatables.net/buttons/3.0.2/js/buttons.html5.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/vfs_fonts.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/pdfmake.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
         <script>
             new DataTable('#table', {
                 responsive: true,
@@ -356,7 +439,28 @@
                     topStart: {
                         pageLength: {
                             menu: [10, 25, 50, 100, 200]
-                        }
+                        },
+                        buttons: [
+                            'copy',
+                            'print',
+
+                            {
+                                extend: 'spacer',
+                                style: 'bar',
+                                text: 'Export files:'
+                            },
+                            'csv',
+                            'excel',
+                            'spacer',
+                            'pdf',
+                            {
+                                extend: 'spacer',
+                                style: 'bar',
+                                text: ':'
+                            },
+
+                            'colvis'
+                        ]
                     },
                     topEnd: {
                         search: {
@@ -369,17 +473,18 @@
                         }
                     },
 
-                }
+                },
+
+                lengthMenu: [
+                    [10, 25, 50, -1],
+                    [10, 25, 50, 'All']
+                ],
 
                
 
-            });
 
-            
-            document.querySelector('.dt-layout-row label').setAttribute('class', 'text-white text-sm font-bold');
-            document.querySelector('.dt-length select').setAttribute('class', 'w-1/2 h-9 rounded-md text-gray-600');
-            document.querySelector('.dt-search input').setAttribute('class', 'w-1/2 h-9 rounded-md text-gray-600');
-            document.querySelector('.dt-search label').setAttribute('class', 'text-white text-sm font-bold');
+
+            });
         </script>
     @endsection
 

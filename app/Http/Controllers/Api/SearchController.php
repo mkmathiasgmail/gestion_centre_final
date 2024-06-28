@@ -3,16 +3,18 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Models\Odcuser;
 use Illuminate\Http\Request;
 
-class CarloController extends Controller
+class SearchController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        //
+        $data = Odcuser::all();
+        return response()->json($data);
     }
 
     /**
@@ -45,5 +47,17 @@ class CarloController extends Controller
     public function destroy(string $id)
     {
         //
+    }
+    public function searchQuery(Request $request)
+    {
+
+        $data = Odcuser::select("firstName",  "lastName", "id")
+            ->where("firstName", "LIKE", "%{$request->get('query')}%")
+            ->limit(6)
+            ->get();
+
+
+
+        return response()->json($data);
     }
 }

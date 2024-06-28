@@ -23,6 +23,7 @@
         "datatables.net-dt": "^2.0.8",
         "flowbite": "^2.3.0",
         "jquery": "^3.7.1",
-        "quill": "^2.0.2"
+        "quill": "^2.0.2",
+        "select2": "^4.1.0-rc.0"
     }
 }

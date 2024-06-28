@@ -3,10 +3,12 @@
 namespace App\Http\Controllers;
 
 use Carbon\Carbon;
+use App\Models\Form;
 use App\Models\Hashtag;
 use App\Models\Odcuser;
 use App\Models\Activite;
 use App\Models\Candidat;
+use App\Models\CandidatAttribute;
 use App\Models\Presence;
 use App\Models\Categorie;
 use App\Models\TypeEvent;
@@ -21,31 +23,51 @@ class ActiviteController extends Controller
 
     public function index()
     {
+       
 
 
         $activites = Activite::all();
         $typeEvent = TypeEvent::all();
         $categories = Categorie::all();
         $hashtag = Hashtag::all();
+        $typeEvent = TypeEvent::all();
+        $categories = Categorie::all();
+        $hashtag = Hashtag::all();
 
+        
         foreach ($activites as $activite) {
-            $startDate = Carbon::parse($activite->startDate);
-            $endDate = Carbon::parse($activite->endDate);
+            $message = Carbon::today();
+            $startDate = Carbon::parse($activite->start_date);
+            $endDate = Carbon::parse($activite->end_date);
+            if ($message>=$startDate && $message<=$endDate) {
+
+                $activite->message = 'En cours';
 
 
-            $differenceInDays = $startDate->diffInDays($endDate);
+            } elseif ($message< $startDate) {
+                
 
-            if ($differenceInDays == 0) {
-                $activite->differenceInDays = 1;
-            } else {
-                $activite->differenceInDays = $differenceInDays;
+                $differenceInDays = $startDate->diffInDays($message);
+                $activite->message = "Il y a une activité à venir $differenceInDays jours";
+            }else{
+                $activite->message = 'Terminée';
             }
+
+           
         }
-        return view('activites.index', compact('activites', 'typeEvent', 'categories', 'hashtag'));
+
+        return view('activites.index', compact('activites', 'typeEvent', 'categories', 'hashtag',));
+        
     }
 
     public function create()
     {
+        $activites = Activite::all();
+        $typeEvent = TypeEvent::all();
+        $categories = Categorie::all();
+        $forms = Form::all();
+        $hashtag = Hashtag::all();
+        return view('activites.create', compact('activites', 'typeEvent', 'categories', 'hashtag', 'forms'));
     }
 
     public function store(Request $request)
@@ -68,11 +90,12 @@ class ActiviteController extends Controller
             'creator' => $request->create,
             'location' => $request->lieu,
 
+
         ]);
 
         $activites->hashtag()->attach($request->tags);
         $activites->typEvent()->attach($request->typeEvent);
-        return redirect()->route('activites.index', compact('activites'));
+        return redirect()->route('activites.index', compact('activites'))->with('success', 'Activite created successfully.');
     }
 
 
@@ -81,13 +104,33 @@ class ActiviteController extends Controller
         // Trouver l'Activite correspondant et récupérer le champ '_id'
         $id = $activite->id;
         $activite_Id = $activite->_id;
-        $url = env('API_URL');
+
         $odcusers = Odcuser::all(['id', '_id']);
         //recuperer les presents  et la date 
         $presences= Presence::orderBy('id')->get();
         $test = Presence::all();
        
 
+
+        // Récupérer les candidats liés à cette activité
+        $candidats = Candidat::where('activite_id', $id)->with(['odcuser', 'candidat_attribute'])->get();
+        $candidatsData = [];
+        $labels = [];
+        foreach ($candidats as $candidat) {
+            $candidatArray = $candidat->toArray();
+            if ($candidat->candidat_attribute) {
+                foreach ($candidat->candidat_attribute as $attribute) {
+                    $candidatArray[$attribute->label] = $attribute->value;
+                    if (!in_array($attribute->label, $labels)) {
+                        $labels[] = $attribute->label;
+                    }
+                }
+            }
+            $candidatsData[] = $candidatArray;
+        }
+        //recuperer les presents  et la date 
+
+        $presences = Presence::orderBy('id')->get();
         $activite = Activite::findOrFail($id);
         $dateDebut = Carbon::parse($activite->startDate);
         $dateFin = Carbon::parse($activite->endDate);
@@ -117,6 +160,7 @@ class ActiviteController extends Controller
             $data[] = $candidatsPresence;
         }
         return view('activites.show', compact('test', 'p', 'data', 'activite', 'id', 'candidats', 'activite_Id', 'odcusers', 'fullDates', 'dates', 'presences', 'countdate'));
+        return view('activites.show', compact('candidatsData', 'labels', 'activite', 'id', 'candidats', 'activite_Id', 'odcusers', 'dates', 'presences'));
     }
 
 
@@ -131,7 +175,49 @@ class ActiviteController extends Controller
 
     public function update(Request $request, Activite $activite)
     {
-        $activite->update($request->all());
+        $category = Categorie::firstOrCreate(['categorie' => $request->categorie_id]);
+
+
+        // Mise à jour de l'activité
+        $activite->update([
+            'title' => $request->title,
+            'categorie_id' => $category->id,
+            'content' => $request->description,
+            'startDate' => $request->date_debut,
+            'endDate' => $request->date_fin,
+            'publishStatus' => $request->publishStatus,
+            'showInSlider' => $request->showInSlider,
+            'send' => $request->send,
+            'form' => $request->form,
+            'miniatureColor' => $request->miniatureColor,
+            'showInCalendar' => $request->showInCalendar,
+            'liveStatus' => $request->liveStatus,
+            'bookASeat' => $request->bookASeat,
+            'isEvents' => $request->isEvents,
+            'creator' => $request->create,
+            'location' => $request->lieu,
+        ]);
+
+
+        $hashtagIds = [];
+        if ($request->hashtags) {
+            foreach ($request->tags as $hashtagName) {
+                $hashtag = Hashtag::firstOrCreate(['hashtags' => $hashtagName]);
+                $hashtagIds[] = $hashtag->id;
+            }
+        }
+
+        if ($request->typeEvent) {
+            $typeventIds = [];
+            foreach ($request->typeEvent as $typeEventName) {
+                $typeEvent = TypeEvent::firstOrCreate(['typeEvent' => $typeEventName, 'code' => '']);
+                $typeventIds[] = $typeEvent->id;
+            }
+            $activite->typeEvent()->sync($typeventIds);
+        }
+
+        $activite->hashtag()->sync($hashtagIds);
+        $activite->typEvent()->sync($typeventIds);
         return redirect()->route('activites.index')
             ->with('success', 'Activite updated successfully.');
     }
@@ -146,7 +232,7 @@ class ActiviteController extends Controller
     public function encours()
     {
         $today = Carbon::today();
-        $activites = Activite::where('startDate', '<=', $today)->where('endDate', '>=', $today)->get();
+        $activites = Activite::where('start_date', '<=', $today)->where('end_date', '>=', $today)->get();
         return view('encours', compact('activites'));
     }
 }

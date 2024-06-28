@@ -12,17 +12,17 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('odcusers', function (Blueprint $table) {
-            $table->renameColumn('firstname', 'firstName');
-            $table->renameColumn('lastname', 'lastName');
-            $table->renameColumn('birthdate', 'birthDay');
-            $table->renameColumn('linkedin', 'linkedIn');
-            $table->json('odcCountry');
-            $table->string('role');
-            $table->boolean('isActive');
+            $table->renameColumn('firstname', 'first_name');
+            $table->renameColumn('lastname', 'last_name');
+            $table->dateTime('birthdate')->nullable()->change();
+            $table->renameColumn('linkedin', 'linkedin');
+            $table->json('odc_country')->nullable();
+            $table->string('role')->nullable();
+            $table->boolean('is_active')->nullable();
             $table->json('hashtags')->nullable();
             $table->json('profession')->change();
-            $table->boolean('codingSchool')->default(false);
-            $table->boolean('fabLabSolidaire')->default(false);
+            $table->boolean('coding_school')->default(false);
+            $table->boolean('fablab_solidaire')->default(false);
             $table->boolean('training')->default(false);
             $table->boolean('internship')->default(false);
             $table->boolean('event')->default(false);
@@ -30,13 +30,13 @@ return new class extends Migration
             $table->json('newsletters')->nullable();
             $table->json('topics')->nullable();
             $table->dateTime('last_connection')->nullable();
-            $table->string('_id');
-            $table->json('detailProfession')->nullable();
-            $table->dateTime('createdAt');
-            $table->dateTime('updatedAt');
+            $table->string('_id')->nullable();
+            $table->json('detail_profession')->nullable();
+            $table->dateTime('createdAt')->nullable();
+            $table->dateTime('updatedAt')->nullable();
             $table->integer('__v')->default(0);
             $table->string('picture')->nullable();
-            $table->string('userCV')->nullable();
+            $table->string('user_cv')->nullable();
             $table->dropColumn('phone');
             $table->dropColumn('company');
             $table->dropColumn('university');
@@ -44,9 +44,16 @@ return new class extends Migration
             $table->dropColumn('country');
             $table->dropColumn('cv');
             $table->dropColumn('photo');
-            $table->dateTime('birthDate')->change();
+        }) ;
 
-        });
+        Schema::table('odcusers', function (Blueprint $table){
+            $table->renameColumn('birthdate', 'birth_date');
+            $table->string('first_name')->nullable()->change();
+            $table->string('last_name')->nullable()->change();
+            $table->string('email')->nullable()->change();
+            $table->string('password')->nullable()->change();
+            $table->string('gender')->nullable()->change();
+        }) ;
     }
 
     /**
