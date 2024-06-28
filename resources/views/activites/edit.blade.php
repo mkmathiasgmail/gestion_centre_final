@@ -40,7 +40,13 @@
                         class="w-full  rounded-md text-gray-600 js-example-basic-multiple">
                         @foreach ($activite->hashtag as $item)
                             <option
-                                value="{{ old('hashtag', implode(',', $activite->hashtag->pluck('hashtag')->toArray())) }}">
+                                value="{{ old('hashtag', implode(',', $activite->hashtag->pluck('id')->toArray())) }}">
+                                {{ $item->name }}</option>
+                        @endforeach
+
+                        @foreach ($hashtag as $item)
+                            <option
+                                value="{{ $item->id }}">
                                 {{ $item->name }}</option>
                         @endforeach
 
@@ -55,7 +61,7 @@
                         <select name="typeEvent[]" id="typeEvent"
                             class="w-full  rounded-md text-gray-600 js-example-basic-multiple" multiple="multiple">
                             @foreach ($typeEvent as $event)
-                                <option value="{{ $event->id }}">{{ $event->name }}</option>
+                                <option value="{{ $event->id }}">{{ $event->title }}</option>
                             @endforeach
                         </select>
                     </div>
@@ -63,11 +69,11 @@
                 <div class=" w-1/2">
                     <div><label for="category_id">Categorie</label></div>
                     <div>
-                        <select name="categorie_id[]" id="categorie_id"
-                            class="w-full h-10 rounded-md text-gray-600 js-example-basic-multiple" multiple="multiple">
+                        <select name="categorie" id="categorie_id"
+                            class="w-full h-10 rounded-md text-gray-600 " >
                             <option value="{{ $activite->categorie->id }}">{{ $activite->categorie->name }}</option>
                             @foreach ($categories as $category)
-                                <option value="{{ $category->categorie }}">{{ $category->name }}</option>
+                                <option value="{{ $category->id }}">{{ $category->name }}</option>
                             @endforeach
                         </select>
                     </div>

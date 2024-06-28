@@ -23,7 +23,7 @@ class ActiviteController extends Controller
 
     public function index()
     {
-       
+
 
 
         $activites = Activite::all();
@@ -34,30 +34,25 @@ class ActiviteController extends Controller
         $categories = Categorie::all();
         $hashtag = Hashtag::all();
 
-        
+
         foreach ($activites as $activite) {
             $message = Carbon::today();
             $startDate = Carbon::parse($activite->start_date);
             $endDate = Carbon::parse($activite->end_date);
-            if ($message>=$startDate && $message<=$endDate) {
+            if ($message >= $startDate && $message <= $endDate) {
 
                 $activite->message = 'En cours';
+            } elseif ($message < $startDate) {
 
-
-            } elseif ($message< $startDate) {
-                
 
                 $differenceInDays = $startDate->diffInDays($message);
                 $activite->message = "Il y a une activité à venir $differenceInDays jours";
-            }else{
+            } else {
                 $activite->message = 'Terminée';
             }
-
-           
         }
 
         return view('activites.index', compact('activites', 'typeEvent', 'categories', 'hashtag',));
-        
     }
 
     public function create()
@@ -106,9 +101,9 @@ class ActiviteController extends Controller
 
         $odcusers = Odcuser::all(['id', '_id']);
         //recuperer les presents  et la date 
-        $presences= Presence::orderBy('id')->get();
+        $presences = Presence::orderBy('id')->get();
         $test = Presence::all();
-       
+
 
 
         // Récupérer les candidats liés à cette activité
@@ -182,13 +177,11 @@ class ActiviteController extends Controller
 
     public function update(Request $request, Activite $activite)
     {
-        $category = Categorie::firstOrCreate(['categorie' => $request->categorie_id]);
-
 
         // Mise à jour de l'activité
         $activite->update([
             'title' => $request->title,
-            'categorie_id' => $category->id,
+            'categorie_id' => $request->categorie,
             'content' => $request->description,
             'startDate' => $request->date_debut,
             'endDate' => $request->date_fin,
@@ -204,27 +197,16 @@ class ActiviteController extends Controller
             'creator' => $request->create,
             'location' => $request->lieu,
         ]);
+  
 
 
-        $hashtagIds = [];
-        if ($request->hashtags) {
-            foreach ($request->tags as $hashtagName) {
-                $hashtag = Hashtag::firstOrCreate(['hashtags' => $hashtagName]);
-                $hashtagIds[] = $hashtag->id;
-            }
-        }
 
-        if ($request->typeEvent) {
-            $typeventIds = [];
-            foreach ($request->typeEvent as $typeEventName) {
-                $typeEvent = TypeEvent::firstOrCreate(['typeEvent' => $typeEventName, 'code' => '']);
-                $typeventIds[] = $typeEvent->id;
-            }
-            $activite->typeEvent()->sync($typeventIds);
-        }
 
-        $activite->hashtag()->sync($hashtagIds);
-        $activite->typEvent()->sync($typeventIds);
+
+        $activite->hashtag()->attach($request->tags);
+        $activite->typEvent()->attach($request->typeEvent);
+
+
         return redirect()->route('activites.index')
             ->with('success', 'Activite updated successfully.');
     }

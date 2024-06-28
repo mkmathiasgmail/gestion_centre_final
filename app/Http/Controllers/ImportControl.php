@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Odcuser;
 use App\Models\Activite;
 use App\Models\Candidat;
+use App\Models\Presence;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use PhpOffice\PhpSpreadsheet\IOFactory;
@@ -50,16 +51,16 @@ class ImportControl extends Controller
                 $validatedData['birthDay'] = '1970-02-05';
                 $validatedData['password'] = 'kdjksjfkndjskjd5555';
                 $validatedData['profession'] = 'etudiant';
-                $validatedData['odcCountry'] = "{'country':'congo'}";
+                $validatedData['odc_country'] = "{'country':'congo'}";
                 $validatedData['role'] = 'user';
-                $validatedData['isActive'] = '1';
-                $validatedData['_id'] = '4';
+                $validatedData['is_active'] = '1';
+                $validatedData['_id'] = 'test';
                 $validatedData['createdAt'] = date("Y-m-d h:i:s ");
                 $validatedData['updatedAt'] = date("Y-m-d h:i:s ");
-                //$validatedData['status']= 1;
+                $validatedData['status']= 0;
 
                 if ($odcuser) {
-                    // Si l'utilisateur existe déjà, on recupere simplement son id00000.
+                    // Si l'utilisateur existe déjà, on recupere simplement son id.
                     $odcuser->update($validatedData);
                 } else {
                     // Sinon, créez un nouvel utilisateur
@@ -71,12 +72,19 @@ class ImportControl extends Controller
                 //$odcuser = Odcuser::firstOrCreate($validatedData);
 
                 // Ajouter l'utilisateur à la table 'candidat'
-                Candidat::create([
+                $candidat=Candidat::create([
                     'odcuser_id' => $odcuser->id,
                     'activite_id' => $activiteId,
                     'status' => $validatedData['status']
                 ]);
-                dump($validatedData['statut']);
+
+                //on remplie la table presence
+                $datemodif = explode('_', $date);
+                Presence::create([
+                    'date' => $datemodif[1],
+                    'candidat_id' => $candidat->id,
+                ]);
+                //dump($validatedData['statut']);
             } catch (\Illuminate\Validation\ValidationException $e) {
                 Log::error('Validation failed for row: ', ['row' => $rowData, 'errors' => $e->errors()]);
                 continue; // Skip invalid rows
@@ -139,5 +147,21 @@ class ImportControl extends Controller
         // Faire quelque chose avec les données (par exemple, les stocker dans une base de données)
 
         return redirect()->back()->with('success', 'Importation exécutée avec succès');
+    }
+
+
+
+    //function pour import dans activite
+    public function importInActivity(Request $request, Activite $activite){
+                // Valider le fichier uploadé
+                $request->validate([
+                    'file' => 'required|file|mimes:csv,xlsx,xls',
+                ]);
+        
+                // Lire le fichier
+                $file = $request->file('file');
+                $fileContents = file($file->getPathname());
+                // Supposons que le fichier CSV contient des en-têtes
+                $header = str_getcsv(array_shift($fileContents));
     }
 }

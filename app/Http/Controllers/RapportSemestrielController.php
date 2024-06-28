@@ -22,9 +22,9 @@ class RapportSemestrielController extends Controller
     public function exportToExcel(Request $request){
 
         //recuprer les valeurs selectionnée dans le select du rapport semestrielle
-        $selectYear = $request->input('year');
+        $selectYear = $request->input('yearselec');
         $selectSemestre = $request->input('semestre');
-
+        
         // on calclue  les dates de début et de fin du semestre
         if ($selectSemestre =='1'){
             $startDate = date('Y-m-d', strtotime($selectYear . '-01-01'));
@@ -33,6 +33,7 @@ class RapportSemestrielController extends Controller
             $startDate = date('Y-m-d', strtotime($selectYear. '-07-01'));
             $endDate = date('Y-m-d', strtotime($selectYear. '-12-31'));
         }
+        
 
         DB::enableQueryLog();
 
@@ -45,24 +46,27 @@ class RapportSemestrielController extends Controller
         ->leftJoin('activite_type_event as acty', 'acty.activite_id', '=', 'ac.id')
         ->leftJoin('type_events as typ', 'typ.id','=', 'acty.type_event_id')
         ->whereNotNull('ac.title')
-        ->whereBetween('ac.startDate', [$startDate, $endDate])
-        ->orderBy('ac.startDate', 'asc')
+        ->whereBetween('ac.start_date', [$startDate, $endDate])
+        ->orderBy('ac.start_date', 'asc')
+        ->orderBy('ac.title', 'asc')
         ->select([
             'presences.candidat_id',
-            'us.firstName',
-            'us.lastName',
+            'us.first_name',
+            'us.last_name',
             'us.email',
             'us.gender',
-            'us.birthDay',
-            'us.linkedIn',
-            'ac.endDate',
+            'us.birth_date',
+            'us.linkedin',
+            'ac.end_date',
             'ac.title',
-            DB::raw('(ac.startDate) as startYear'),
-            'cat.categorie',
-            'typ.typeEvent',
+            DB::raw('(ac.start_date) as startYear'),
+            'cat.name as namecat',
+            'typ.title as titletype',
+            'typ.code'
             
-        ])
+        ])->distinct()
         ->get();
+        //dd($candidats);
         
         //on cree un nouveau classeur PhpSpreadsheet
         $spreadsheet = new Spreadsheet();
@@ -93,29 +97,27 @@ class RapportSemestrielController extends Controller
 
 
 // fonction pour les couleurs des colonnes
-function applyColorToColumn(Worksheet $worksheet, int $startRow, int $maxRows, string $columnLetter, string $color)
-{ //la couleur aux lignes spécifiques
+function applyColorToColumn(Worksheet $worksheet, int $startRow, string $columnLetter, string $color)
+{
+    // Récupérer le numéro de la dernière ligne du tableur
+    $lastRow = $worksheet->getHighestRow();
 
-    for ($row = $startRow; $row<= $startRow + $maxRows -1; $row++){
-        $worksheet->getStyle($columnLetter . $row)->getFill()
+    // Créer un range pour la colonne spécifiée
+    $range = $columnLetter . $startRow . ':' . $columnLetter . $lastRow;
+
+    // Appliquer la couleur au range
+    $worksheet->getStyle($range)->getFill()
         ->setFillType(Fill::FILL_SOLID)
         ->getStartColor()->setARGB($color);
-    }
-
-    //couleur pour les lignes suivante
-
-    $lastRow =$worksheet->getHighestRow();
-    for($row = $startRow +$maxRows; $row <= $lastRow; $row++){
-        $worksheet->getStyle($columnLetter . $row)->getFill()->setFillType(Fill::FILL_SOLID)->getStartColor()->setARGB($color);
-    }
 }
+
 // --------------------- definitions des bordures du tableaux
-$worksheet->getStyle('A1:J50')->getBorders()->getAllBorders()->setBorderStyle(Border::BORDER_THIN);
-$worksheet->getStyle('L1:O50')->getBorders()->getAllBorders()->setBorderStyle(Border::BORDER_THIN);
-$worksheet->getStyle('Q1:V50')->getBorders()->getAllBorders()->setBorderStyle(Border::BORDER_THIN);
-$worksheet->getStyle('X1:AA50')->getBorders()->getAllBorders()->setBorderStyle(Border::BORDER_THIN);
-$worksheet->getStyle('AC1:AE50')->getBorders()->getAllBorders()->setBorderStyle(Border::BORDER_THIN);
-$worksheet->getStyle('AF3:AF50')->getBorders()->getAllBorders()->setBorderStyle(Border::BORDER_THIN);
+$worksheet->getStyle('A1:J3500')->getBorders()->getAllBorders()->setBorderStyle(Border::BORDER_THIN);
+$worksheet->getStyle('L1:O3500')->getBorders()->getAllBorders()->setBorderStyle(Border::BORDER_THIN);
+$worksheet->getStyle('Q1:V3500')->getBorders()->getAllBorders()->setBorderStyle(Border::BORDER_THIN);
+$worksheet->getStyle('X1:AA3500')->getBorders()->getAllBorders()->setBorderStyle(Border::BORDER_THIN);
+$worksheet->getStyle('AC1:AE3500')->getBorders()->getAllBorders()->setBorderStyle(Border::BORDER_THIN);
+$worksheet->getStyle('AF3:AF3500')->getBorders()->getAllBorders()->setBorderStyle(Border::BORDER_THIN);
 
 //-------------------------ajoute des filtres pour chaque lignes 
 
@@ -142,52 +144,54 @@ for ($row = 5; $row <= $worksheet->getHighestRow(); $row++) {
         ->setAllowBlank(false)
         ->setFormula1('"' . implode(',', $options) . '"');
 }
+
+
 $worksheet->setSelectedCell('C1');
 
 
 
-//Colonne colorer
+//Colonne a colorer
 $worksheet=$spreadsheet->getActiveSheet();
-applyColorToColumn($worksheet, 4, 50, 'C', 'fff2cc');
+applyColorToColumn($worksheet, 4, 'C', 'fff2cc');
 
 $worksheet=$spreadsheet->getActiveSheet();
-applyColorToColumn($worksheet, 4, 50, 'D', 'fff2cc');
+applyColorToColumn($worksheet, 4, 'D', 'fff2cc');
 
 $worksheet=$spreadsheet->getActiveSheet();
-applyColorToColumn($worksheet, 4, 50, 'E', 'fff2cc');
+applyColorToColumn($worksheet, 4, 'E', 'fff2cc');
 
 $worksheet=$spreadsheet->getActiveSheet();
-applyColorToColumn($worksheet, 4, 50, 'L', 'fff2cc' );
+applyColorToColumn($worksheet, 4,'L', 'fff2cc' );
 
 $worksheet=$spreadsheet->getActiveSheet();
-applyColorToColumn($worksheet, 4, 50, 'M', 'fff2cc');
+applyColorToColumn($worksheet, 4, 'M', 'fff2cc');
 
 $worksheet=$spreadsheet->getActiveSheet();
-applyColorToColumn($worksheet, 4, 50, 'Q', 'fff2cc');
+applyColorToColumn($worksheet, 4, 'Q', 'fff2cc');
 
 $worksheet=$spreadsheet->getActiveSheet();
-applyColorToColumn($worksheet, 4, 50, 'X', 'fff2cc');
+applyColorToColumn($worksheet, 4, 'X', 'fff2cc');
 
 $worksheet=$spreadsheet->getActiveSheet();
-applyColorToColumn($worksheet, 4, 50, 'Y', 'fff2cc');
+applyColorToColumn($worksheet, 4, 'Y', 'fff2cc');
 
 $worksheet=$spreadsheet->getActiveSheet();
-applyColorToColumn($worksheet, 4, 50, 'AD', 'fff2cc');
+applyColorToColumn($worksheet, 4, 'AD', 'fff2cc');
 
 
 //colonne separateur de section
 
 $worksheet=$spreadsheet->getActiveSheet();
-applyColorToColumn($worksheet, 1, 50, 'K', 'aeaaaa');
+applyColorToColumn($worksheet, 1, 'K', 'aeaaaa');
 
 $worksheet=$spreadsheet->getActiveSheet();
-applyColorToColumn($worksheet, 1, 50, 'P', 'aeaaaa');
+applyColorToColumn($worksheet, 1, 'P', 'aeaaaa');
 
 $worksheet=$spreadsheet->getActiveSheet(); 
-applyColorToColumn($worksheet, 1, 50, 'W', 'aeaaaa');
+applyColorToColumn($worksheet, 1, 'W', 'aeaaaa');
 
 $worksheet=$spreadsheet->getActiveSheet();
-applyColorToColumn($worksheet, 1, 50, 'AB', 'aeaaaa');
+applyColorToColumn($worksheet, 1, 'AB', 'aeaaaa');
 
     
         //on  defini les en-têtes de colonne        
@@ -298,11 +302,19 @@ $worksheet->getColumnDimension($columnLetter)->setWidth($newColumnWidth);
 
 //Remplissage de données du rapport semestriel selon les choix selectionné dans le select
         $row = 4;
+        $typeform=env('TYPE_FORMATION');
+        $typeform=explode(',', $typeform);
 
+        $typeconf=env('TYPE_CONFERENCE');
+        $typeconf=explode(',', $typeconf);
+
+        $typeparc=env('TYPE_PARCOURS');
+        $typeparc=explode(',', $typeparc);
+        
         foreach($candidats as $candidat){
 
             $today = new DateTime(); // Date d'aujourd'hui
-            $birthDay = new DateTime($candidat->birthDay); // Date de naissance du candidat
+            $birthDay = new DateTime($candidat->birth_date); // Date de naissance du candidat
             $interval = $today->diff($birthDay);
             $ages = $interval->y; // Âge en années
 
@@ -314,11 +326,11 @@ $worksheet->getColumnDimension($columnLetter)->setWidth($newColumnWidth);
                 $tranche = "35 > years";
             }
 
-            $worksheet->setCellValue('A'.$row, $candidat->firstName)
+            $worksheet->setCellValue('A'.$row, $candidat->first_name)
                         ->getStyle('A'.$row)
                         ->getAlignment()
-                        ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
-            $worksheet->setCellValue('B'.$row, $candidat->lastName)
+                        ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_LEFT);
+            $worksheet->setCellValue('B'.$row, $candidat->last_name)
                         ->getStyle('B'.$row)
                         ->getAlignment()
                         ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
@@ -350,13 +362,13 @@ $worksheet->getColumnDimension($columnLetter)->setWidth($newColumnWidth);
                         ->getStyle('I'.$row)
                         ->getAlignment()
                         ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
-            $worksheet->setCellValue('J'.$row, $candidat->linkedIn)
+            $worksheet->setCellValue('J'.$row, $candidat->linkedin)
                         ->getStyle('J'.$row)
                         ->getAlignment()
                         ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
 
-            if ($candidat->typeEvent == "formation") {
-            $worksheet->setCellValue('Q' . $row, $candidat->categorie)
+        if(in_array($candidat->code, $typeform)) {
+            $worksheet->setCellValue('Q' . $row, $candidat->namecat)
                         ->getStyle('Q' . $row)
                         ->getAlignment()
                         ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
@@ -364,7 +376,7 @@ $worksheet->getColumnDimension($columnLetter)->setWidth($newColumnWidth);
                         ->getStyle('R' . $row)
                         ->getAlignment()
                         ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
-            $worksheet->setCellValue('S' . $row, $candidat->endDate)
+            $worksheet->setCellValue('S' . $row, $candidat->end_date)
                         ->getStyle('S' . $row)
                         ->getAlignment()
                         ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
@@ -373,8 +385,8 @@ $worksheet->getColumnDimension($columnLetter)->setWidth($newColumnWidth);
                         ->getAlignment()
                         ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
 
-            } elseif ($candidat->typeEvent == "parcours") {
-            $worksheet->setCellValue('L' . $row, $candidat->categorie)
+            } elseif (in_array($candidat->code, $typeparc)) {
+            $worksheet->setCellValue('L' . $row, $candidat->namecat)
                         ->getStyle('L' . $row)
                         ->getAlignment()
                         ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
@@ -387,8 +399,8 @@ $worksheet->getColumnDimension($columnLetter)->setWidth($newColumnWidth);
                         ->getAlignment()
                         ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
 
-            }elseif($candidat->typeEvent =="conference" && $candidat->ty){
-            $worksheet->setCellValue('X' .$row, $candidat->categorie)
+            }elseif(in_array($candidat->code, $typeconf)){
+            $worksheet->setCellValue('X' .$row, $candidat->namecat)
                         ->getStyle('X' .$row)
                         ->getAlignment()
                         ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
