@@ -4,13 +4,15 @@ namespace App\Exports;
 
 use Carbon\Carbon;
 use App\Models\Activite;
+use Illuminate\Support\Facades\DB;
+use PhpOffice\PhpSpreadsheet\Style\Fill;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
-use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
-use PhpOffice\PhpSpreadsheet\Style\Fill;
-use PhpOffice\PhpSpreadsheet\Style\Alignment;
 use PhpOffice\PhpSpreadsheet\Style\Border;
+use PhpOffice\PhpSpreadsheet\Style\Alignment;
 use PhpOffice\PhpSpreadsheet\RichText\RichText;
+use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
+
 class MonthlyPlanningExport
 {
     protected $data;
@@ -71,6 +73,16 @@ class MonthlyPlanningExport
         $sheet->mergeCells('A6:I6');
         $sheet->setCellValue("A6", $month);
 
+        $sheet->getStyle("A")->applyFromArray([
+            "font" => [
+                "bold" => true
+            ],
+            "alignment" => [
+                "horizontal" => Alignment::HORIZONTAL_CENTER,
+                "vertical" => Alignment::VERTICAL_CENTER,
+            ],            
+        ]);
+
         $sheet->getStyle("A2")->applyFromArray([
             "alignment" => [
                 "horizontal" => Alignment::HORIZONTAL_CENTER,
@@ -104,7 +116,11 @@ class MonthlyPlanningExport
                 "startColor" => [
                     "argb" => "ffed7d31"
                 ]
-            ]
+            ],
+            "alignment" => [
+                "horizontal" => Alignment::HORIZONTAL_LEFT,
+            ],
+
         ]);
 
         $sheet->getStyle("A5:I5")->applyFromArray([
@@ -116,38 +132,59 @@ class MonthlyPlanningExport
             ]
         ]);
 
-        $sheet->fromArray(['Activité', 'Période', 'Durée', 'Cible', 'Nombre', 'Lieu', 'Intervenant', 'Thème de l\'activité', 'Observateur'], NULL, 'A4');
+        $sheet->fromArray(['Lieu', 'Activité', 'Période', 'Durée', 'Cible', 'Nombre', 'Intervenant', 'Thème de l\'activité', 'Observateur'], NULL, 'A4');
     }
 
     protected function populateData(Worksheet $sheet, $month, $year)
     {
         $monthFormat = Carbon::parse($month)->format("m");
-        $activities = Activite::select("title", "location", "startDate", "endDate")
+        $activities = DB::table('activites')
+            ->leftjoin('activite_type_event as actyev', 'actyev.activite_id', '=', 'activites.id')
+            ->leftjoin('type_events as tyev', 'tyev.id', '=', 'actyev.type_event_id')
             ->whereMonth("startDate", $monthFormat)
             ->whereYear("startDate", $year)
+            ->select("activites.title", "activites.location", "activites.startDate", "activites.endDate", "tyev.typeEvent")
             ->get();
 
-        $data = [];
-        $data[] = ["title" => "", "periode" => "", "duree" => "", "cible" => "", "nombre" => "", "lieu" => "", "intervenant" => "", "theme" => "", "observateur" => ""];
-
-        foreach ($activities as $item) {
-            $differenceDay = $item->startDate && $item->endDate ? Carbon::parse($item->startDate)->diffInDays(Carbon::parse($item->endDate)) + 1 : 1;
-            $data[] = [
-                "title" => $item->title,
-                "periode" => $item->startDate != $item->endDate ? Carbon::parse($item->startDate)->translatedFormat("d M") . " - " . Carbon::parse($item->endDate)->translatedFormat("d M") : Carbon::parse($item->startDate)->translatedFormat("d M"),
-                "duree" => $differenceDay > 1 ? $differenceDay . " jours" : $differenceDay . " jour",
-                "cible" => null,
-                "nombre" => null,
-                "lieu" => $item->location,
-                "intervenant" => null,
-                "theme" => null,
-                "observateur" => null,
-            ];
+        // $data = [];
+        // $data[] = ["title" => "", "periode" => "", "duree" => "", "cible" => "", "nombre" => "", "intervenant" => "", "theme" => "", "observateur" => ""];
+        
+        foreach ($activities as $activity) {
+            if (is_null($activity->location) || $activity->location === '') {
+                $activity->location = 'Aucune information';
+            }
         }
 
-        $sheet->fromArray($data, NULL, 'A6');
+        // Initialisation du regroupement par location
+        $groupedByLocation = $activities->groupBy('location');
 
-        $cellRange = "A4:I" . ($sheet->getHighestRow());
+        $startRow = 7;
+
+        foreach ($groupedByLocation as $location => $activitie) {
+            $sheet->mergeCells('A' . $startRow . ':A' . ($startRow + $activitie->count()));
+            $sheet->setCellValue('A' . $startRow, $location);
+
+            $data = [];
+
+            foreach ($activitie as $item){
+                $differenceDay = $item->startDate && $item->endDate ? Carbon::parse($item->startDate)->diffInDays(Carbon::parse($item->endDate)) + 1 : 1;
+                $data[] = [
+                    "title" => $item->title,
+                    "periode" => $item->startDate != $item->endDate ? Carbon::parse($item->startDate)->translatedFormat("d M") . " - " . Carbon::parse($item->endDate)->translatedFormat("d M") : Carbon::parse($item->startDate)->translatedFormat("d M"),
+                    "duree" => $differenceDay > 1 ? $differenceDay . " jours" : $differenceDay . " jour",
+                    "cible" => null,
+                    "nombre" => null,
+                    "intervenant" => null,
+                    "theme" => $item->typeEvent ? $item->typeEvent : null,
+                    "observateur" => null,
+                ];    
+            }
+
+            $sheet->fromArray($data, NULL, 'B' . $startRow);
+            $startRow += count($data) + 1;
+        }
+
+        $cellRange = "A4:I" . ($sheet->getHighestRow() + 1);
         $sheet->getStyle($cellRange)->applyFromArray([
             "borders" => [
                 "allBorders" => [
@@ -161,8 +198,10 @@ class MonthlyPlanningExport
     protected function autoSizeColumns(Worksheet $sheet)
     {
         foreach (range('A', 'I') as $columnID) {
-            if ($columnID === 'A') {
-                $sheet->getColumnDimension($columnID)->setWidth(50);
+            if ($columnID === 'A' || $columnID === 'B') {
+                $sheet->getColumnDimension('A')->setWidth(30);
+                $sheet->getStyle($columnID)->getAlignment()->setWrapText(true);
+                $sheet->getColumnDimension('B')->setWidth(50);
                 $sheet->getStyle($columnID)->getAlignment()->setWrapText(true);
                 $sheet->getRowDimension("2")->setRowHeight(30);
                 $sheet->getRowDimension("6")->setRowHeight(25);

@@ -4,6 +4,7 @@ namespace App\Exports;
 
 use Carbon\Carbon;
 use App\Models\Activite;
+use App\Models\Candidat;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
@@ -105,6 +106,14 @@ class SuivieHebdomadaire
         $weekEnd = $weekStart->copy()->endOfWeek();
 
         $startRow = 4;
+        $totalTitle = 0;
+        $totalDay = 0;
+        $totalHours = 0;
+        $totalInscris = 0;
+        $totalPart = 0;
+        $totalFille = 0;
+        $totalGarc = 0;
+
         while ($weekStart->lessThanOrEqualTo($lastDayOfMonth)) {
             if ($weekStart->month != $firstDayOfMonth->month) {
                 // Passer à la semaine suivante si le début de la semaine est dans le mois précédent
@@ -122,7 +131,7 @@ class SuivieHebdomadaire
             // Assigner les activités sans location à "Inconnu"
             foreach ($weekActivities as $activity) {
                 if (is_null($activity->location) || $activity->location === '') {
-                    $activity->location = 'Inconnu';
+                    $activity->location = 'Aucune information';
                 }
             }
 
@@ -160,16 +169,25 @@ class SuivieHebdomadaire
                             null,
                             $item->startDate != $item->endDate ? Carbon::parse($item->startDate)->translatedFormat("d M") . " - " . Carbon::parse($item->endDate)->translatedFormat("d M") : Carbon::parse($item->startDate)->translatedFormat("d M"),
                             $item->cand_count != 0 ? $item->cand_count : null,
-                            null,
+                            $item->cand_count != 0 && $item->pre_count != 0 ? $item->pre_count : null,
                             $item->cand_count != 0 ? $item->female_count : null,
                             $item->cand_count != 0 ? $item->male_count : null,
                             null,
                         ];
+
+                        $totalTitle ++;
+                        $totalDay += $differenceDay;
+                        // $totalHours += 0;
+                        $totalInscris += $item->cand_count != 0 ? $item->cand_count : 0;
+                        $totalPart += $item->pre_count != 0 ? $item->pre_count : 0;
+                        $totalFille += $item->female_count != 0 ? $item->female_count : 0;
+                        $totalGarc += $item->male_count != 0 ? $item->male_count : 0;
                     }
 
                     $sheet->fromArray($data, NULL, 'C' . $startRow);
                     $startRow += count($data) + 1;
                 }
+
                 // Fusionner les cellules pour la date de la semaine
                 $sheet->mergeCells('A' . $initialStartRow . ':A' . ($startRow - 1));
                 $sheet->setCellValue('A' . $initialStartRow, $weekStart->format('d F'));
@@ -189,9 +207,9 @@ class SuivieHebdomadaire
             $weekStart->addWeek();
             $weekEnd->addWeek();
         }
-
+        
         $sheet->mergeCells('A' . ($startRow + 1) . ':B' . ($startRow + 1));
-        $sheet->fromArray(["Somme"], NULL, 'A' . ($startRow + 1));
+        $sheet->fromArray(['Somme mensuelle', null, (string)$totalTitle, (string)$totalDay, (string)$totalHours, null, (string)$totalInscris, (string)$totalPart, (string)$totalFille, (string)$totalGarc, null], NULL, 'A' . ($startRow + 1));
 
         $cellRange = "A2:K" . ($sheet->getHighestRow());
         $sheet->getStyle($cellRange)->applyFromArray([

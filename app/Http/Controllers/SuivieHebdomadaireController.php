@@ -12,10 +12,11 @@ class SuivieHebdomadaireController extends Controller
 {
     public function suivieHebdomadaireExport(Request $request)
     {
-        $date = $request->input('year');
+        $date = $request->input('years');
         $data = DB::table('activites')
             ->leftjoin('candidats as cand', 'cand.activite_id', '=', 'activites.id')
             ->leftjoin('odcusers as od', 'od.id', '=', 'cand.odcuser_id')
+            ->leftjoin('presences as pre', 'pre.candidat_id', '=', 'cand.id')
             ->whereYear("activites.startDate", $date)
             ->select(
                 'activites.title',
@@ -24,7 +25,8 @@ class SuivieHebdomadaireController extends Controller
                 'activites.endDate', 
                 DB::raw('COUNT(cand.status) as cand_count'),
                 DB::raw('SUM(CASE WHEN od.gender = "male" THEN 1 ELSE 0 END) as male_count'),
-                DB::raw('SUM(CASE WHEN od.gender = "female" THEN 1 ELSE 0 END) as female_count')
+                DB::raw('SUM(CASE WHEN od.gender = "female" THEN 1 ELSE 0 END) as female_count'),
+                DB::raw('SUM(CASE WHEN pre.candidat_id IS NOT NULL THEN 1 ELSE 0 END) as pre_count')
             )
             ->groupBy('activites.title', 'activites.location', 'activites.startDate', 'activites.endDate')
             ->get();

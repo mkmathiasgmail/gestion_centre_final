@@ -110,8 +110,8 @@
                         @method("GET")
                         <div class="flex justify-center">
                             <div class="col-span-2 sm:col-span-1">
-                                <label for="year" class="flex justify-center mb-2 text-sm font-medium text-gray-900 dark:text-white">Year</label>
-                                <select id="year" name="year" class="justify-center bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
+                                <label for="years" class="flex justify-center mb-2 text-sm font-medium text-gray-900 dark:text-white">Year</label>
+                                <select id="years" name="years" class="justify-center bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
 
                                 </select>
                             </div>
@@ -348,8 +348,8 @@
             }
             document.addEventListener('DOMContentLoaded', generateMonthOptions);
 
-            function generateYearOptions() {
-                const select = document.getElementById('year');
+            function generateYearOption() {
+                const select = document.getElementById('years');
                 const currentDate = new Date().getFullYear();;
 
                 for (let i = 0; i <= 2; i++) {
@@ -361,7 +361,7 @@
                     select.appendChild(option);
                 }
             }
-            document.addEventListener('DOMContentLoaded', generateYearOptions);
+            document.addEventListener('DOMContentLoaded', generateYearOption);
 
             //code de Manassé
     //         document.getElementById('date').addEventListener('change', function() {
