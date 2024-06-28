@@ -39,7 +39,6 @@ class FetchCandidats extends Command
 
         // Set the API URL from the environment variable
         $url = env('API_URL');
-        dd($url);
         // Fetch all the _id values for each event from the Activite model
         $activites = Activite::pluck('_id')->toArray();
 
@@ -102,23 +101,26 @@ class FetchCandidats extends Command
                         if (isset($candidat->formRegistrationData)) {
                             foreach ($candidat->formRegistrationData->inputs as $key => $input) {
                                 // Get the options for the input field
+                                $value = isset($input->value) ? $input->value : "";
+
                                 if (isset($input->translations->fr->input->options)) {
                                     $options = $input->translations->fr->input->options;
                                     if (isset($input->value)) {
                                         // Get the selected option value
                                         $v = $input->value - 1;
-                                        $str = isset($options) ? ($options[$v]->label) : ($input->value ? $input->value : "null");
-                                        $val = is_string($str) || is_int($str);
-                                        $value = ($val) ? $str : "";
+                                        $value = $options[$v]->label;
+
+                                    }else{
+                                        $value = "";
                                     }
+
                                 }
-                                dump($value) ;
 
                                 // Create an array of candidate attribute information
                                 $candidateAttributes = [
                                     '_id' => $input->_id,
                                     'label' => $input->translations->fr->input->label,
-                                    'value' => isset($value) ? ($value) : ($input->value ? $input->value : "null"),
+                                    'value' => isset($value) ? $value : "",
                                     'candidat_id' => $candidate->id
                                 ];
 
@@ -129,7 +131,7 @@ class FetchCandidats extends Command
                                     // Create or update the candidate attribute
                                     CandidatAttribute::firstOrCreate($candidateAttributes);
                                 } catch (\Throwable $v) {
-                                    dd($v->getMessage());
+                                    echo $v->getMessage();
                                 }
 
                                 // Display a message indicating that the candidate attribute was created successfully
