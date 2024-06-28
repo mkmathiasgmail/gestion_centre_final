@@ -24,7 +24,7 @@ class FetchData extends Command
      *
      * @var string
      */
-    protected $description = 'Command description';
+    protected $description = 'Command for fetching all active events from the API';
 
     /**
      * Execute the console command.
@@ -53,51 +53,48 @@ class FetchData extends Command
                     $startD = Carbon::parse($workshopData['createdAt']);
                     $upD = Carbon::parse($workshopData['updatedAt']);
 
-                    $existingEvent = Activite::where('updatedAt', $upD)->first();
-
-
-                    if ($existingEvent) {
-
-
+                    $existingActivity = Activite::where('updated_at', $upD)->first();
+                    if ($existingActivity) {
                         $this->info("Workshop already exists: " . $workshopData['translations']['fr']['title']);
+                        continue;
                     } else {
+                        $this->info('Update Events from API ........');
+
                         $categoryName = isset($workshopData['categories'][0]) ? $workshopData['categories'][0] : "";
-                        $category = Categorie::firstOrCreate(['categorie' => $categoryName]);
+                        $category = Categorie::firstOrCreate(['name' => $categoryName]);
 
-
-
-
-
-
-                        $activites = Activite::firstOrCreate([
+                        $activityData = [
                             'title' => $workshopData['translations']['fr']['title'],
                             'content' => json_encode($workshopData['translations']['fr']['content']),
                             'categorie_id' => $category->id,
-                            'startDate' => $start,
+                            'start_date' => $start,
                             'status' => $workshopData['status'],
                             '_id' => $workshopData['_id'],
-                            'publishStatus' => $workshopData['publishStatus'],
-                            'showInSlider' => $workshopData['showInSlider'],
+                            'publish_status' => $workshopData['publishStatus'],
+                            'show_in_slider' => $workshopData['showInSlider'],
                             'send' => $workshopData['send'],
-                            'form_id' => rand(1,23),
-                            'miniatureColor' => isset($workshopData['miniatureColor']) ? $workshopData['miniatureColor'] : '',
-                            'showInCalendar' => $workshopData['showInCalendar'],
-                            'liveStatus' => $workshopData['liveStatus'],
-                            'bookASeat' => isset($workshopData['bookASeat']) ? $workshopData['bookASeat'] : false,
-                            'isEvents' => $workshopData['isEvents'],
+                            'form_id' => rand(1, 23),
+                            'miniature_color' => isset($workshopData['miniatureColor']) ? $workshopData['miniatureColor'] : '',
+                            'show_in_calendar' => $workshopData['showInCalendar'],
+                            'live_status' => $workshopData['liveStatus'],
+                            'book_a_seat' => isset($workshopData['bookASeat']) ? $workshopData['bookASeat'] : false,
+                            'is_events' => $workshopData['isEvents'],
                             'createdAt' => $startD,
-                            'updatedAt' => $upD,
+                            'updatedAat' => $upD,
                             'creator' => json_encode($workshopData['creator']),
-                            'endDate' => $end,
+                            'end_date' => $end,
                             'location' => isset($workshopData['location']) ? $workshopData['location'] : '',
-                        ]);
+                            'thumbnail_url'=> isset($workshopData['thumbnailURL']) ? $workshopData['thumbnailURL'] : '',
+                        ];
+
+                        $activites = Activite::firstOrCreate(['_id' => $workshopData['_id']], $activityData);
 
                         foreach ($workshopData['hashtags'] as $hashtagName) {
-                            $hashtag = Hashtag::firstOrCreate(['hashtag' => $hashtagName]);
+                            $hashtag = Hashtag::firstOrCreate(['name' => $hashtagName]);
                             $activites->hashtag()->attach($hashtag->id);
                         }
                     }
-                    $this->info("Synchronisation {$i} ".$workshopData['translations']['fr']['title']);
+                    $this->info("Synchronisation {$i} " . $workshopData['translations']['fr']['title']);
                     $i++;
                 }
                 $this->info('Event data fetched and stored successfully.');
@@ -109,4 +106,7 @@ class FetchData extends Command
             $this->error('An error occurred: ' . $e->getMessage());
         }
     }
+
+
+    
 }

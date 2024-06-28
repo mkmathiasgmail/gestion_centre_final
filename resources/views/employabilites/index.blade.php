@@ -90,7 +90,20 @@
                         </th>
 
                         <th scope="col" class="px-6 py-3">
-                            periode
+                            periode d'employabilite
+                        </th>
+
+
+                        <th scope="col" class="px-6 py-3">
+                            Derniere Activite
+                        </th>
+
+                        <th scope="col" class="px-6 py-3">
+                            Derniere Service
+                        </th>
+
+                        <th scope="col" class="px-6 py-3">
+                            Date participation
                         </th>
 
                 </tr>
@@ -106,7 +119,7 @@
                             {{ $id_use }}
                             </td>
                             <td class="px-6 py-4">
-                            {{ $item->name }}
+                          <a href="{{ route('odcusers.show', $item->odcuser->id) }}">  {{ $item->name }} </a>
                             </td>
                         <td class="px-6 py-4">
                             {{ $item->type_contrat }}
@@ -117,7 +130,19 @@
 
                             <td class="px-6 py-4">
                                 {{ $item->periode }}
-                                </td>
+                            </td>
+
+                            <td class="px-6 py-4">
+                                {{ $item->derniere_activite }}
+                            </td>
+
+                            <td class="px-6 py-4">
+                                {{ $item->derniere_service }}
+                            </td>
+
+                            <td class="px-6 py-4">
+                                {{ $item->date_participation }}
+                            </td>
                     </tr>
                     @php
                         $id_use += 1;
@@ -136,7 +161,7 @@
 
 
         <script>
-
+                //scrpit pour l'autocomplete
             $(function() {
                 $('#firstName').on('input', function() {
                     var query = $(this).val();
@@ -153,7 +178,7 @@
                                 $('#countryList').fadeIn();
                                 $('#countryList').empty(); // Vider la liste avant d'ajouter de nouveaux éléments
                                 let data_user = $.each(data, function(index, item) {
-                                    $('#countryList').append('<p id="id_odc" class="hidden">' +  item.id + '</p><ul class= "font-bold"><li class=" bg-gray-300 hover:bg-gray-400 pl-4">' + item.firstName +
+                                    $('#countryList').append('<p id="id_odc" class="hidden">' +  item.id + '</p><ul class= "font-bold"><li class=" bg-gray-300 hover:bg-gray-400 pl-4 ">' + item.firstName +
                                         '  ' + item.lastName + '</li></ul>');
 
 

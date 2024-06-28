@@ -13,7 +13,11 @@ class Employabilite extends Model
         'type_contrat',
         'nomboite',
         'periode',
-        'odcuser_id'
+        'odcuser_id',
+        'derniere_activite',
+        'derniere_service',
+        'date_participation'
+
 
     ];
 
