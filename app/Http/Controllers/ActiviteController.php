@@ -90,7 +90,6 @@ class ActiviteController extends Controller
             'creator' => $request->create,
             'location' => $request->lieu,
 
-
         ]);
 
         $activites->hashtag()->attach($request->tags);
@@ -159,8 +158,7 @@ class ActiviteController extends Controller
 
             $data[] = $candidatsPresence;
         }
-        return view('activites.show', compact('test', 'p', 'data', 'activite', 'id', 'candidats', 'activite_Id', 'odcusers', 'fullDates', 'dates', 'presences', 'countdate'));
-        return view('activites.show', compact('candidatsData', 'labels', 'activite', 'id', 'candidats', 'activite_Id', 'odcusers', 'dates', 'presences'));
+        return view('activites.show', compact('candidatsData', 'test', 'p','labels', 'data', 'activite', 'id', 'candidats', 'activite_Id', 'odcusers', 'fullDates', 'dates', 'countdate', 'presences'));
     }
 
 
