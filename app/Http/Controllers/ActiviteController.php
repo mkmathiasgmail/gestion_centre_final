@@ -170,8 +170,38 @@ class ActiviteController extends Controller
     public function update(Request $request, Activite $activite)
     {
 
+        // $request->validate([
+        //     'title' => [
+        //         'required',
+        //         'string',
+        //         'max:255'
+                
+        //     ],
+        //     'categorie' => 'required|integer',
+        //     'description' => 'required|string',
+        //     'date_debut' => 'required|date',
+        //     'date_fin' => 'required|date|after_or_equal:date_debut',
+        //     'publishStatus' => 'required|boolean',
+        //     'showInSlider' => 'required|boolean',
+        //     'send' => 'required|boolean',
+        //     'form' => 'required|string',
+        //     'miniatureColor' => 'required|string',
+        //     'showInCalendar' => 'required|boolean',
+        //     'liveStatus' => 'required|boolean',
+        //     'bookASeat' => 'required|boolean',
+        //     'isEvents' => 'required|boolean',
+        //     'create' => 'required|string',
+        //     'lieu' => 'required|string',
+        //     'tags' => 'required|array',
+        //     'tags.*' => 'integer',
+        //     'typeEvent' => 'required|array',
+        //     'typeEvent.*' => 'integer',
+        // ]);
+
+        
+        $activites = Activite::findOrFail($activite->id);
         // Mise à jour de l'activité
-        $activite->update([
+        $activites->update([
             'title' => $request->title,
             'categorie_id' => $request->categorie,
             'content' => $request->description,
@@ -195,8 +225,8 @@ class ActiviteController extends Controller
 
 
 
-        $activite->hashtag()->attach($request->tags);
-        $activite->typEvent()->attach($request->typeEvent);
+        $activites->hashtag()->sync($request->tags);
+        $activites->typEvent()->sync($request->typeEvent);
 
 
         return redirect()->route('activites.index')
