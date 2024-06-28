@@ -44,27 +44,36 @@ class EmployabiliteController extends Controller
     {
 
 
-        $name = $request->input('firstName');
+        $name = $request->input('first_name');
         $names = explode(' ', $name);
+
         $firstName = $names[0];
 
+        if (isset($names[3])){
+            $lastName = $names[2] +' '+ $names[3];
+        }
         $lastName = $names[2];
+
+
+
+
+
 
         $activites = DB::table("activites")
         ->join('categories as ca' , 'ca.id' , '=' , 'activites.categorie_id')
         ->join('candidats as cnd' , 'cnd.activite_id' , '=' , 'activites.id')
         ->join('odcusers as od' , 'od.id' , '=' , 'cnd.odcuser_id')
-        ->select('activites.title', 'ca.categorie', 'activites.startDate','activites.endDate')
-        ->where('od.firstName', '=', $firstName)
-        ->where('od.lastName', '=', $lastName)
-        ->orderBy('endDate', 'desc')
+        ->select('activites.title', 'ca.name', 'activites.start_date','activites.end_date')
+        ->where('od.first_name', '=', $firstName)
+        ->where('od.last_name', '=', $lastName)
+        ->orderBy('end_date', 'desc')
         ->get();
         // Vérifications des dates
         $dateEmployabilite =($request->periode);
 
         $dernierActivite = Activite::first();
         // Recherche de la dernière activité
-        $dateFinDerniereActivite = $dernierActivite->endDate;
+        $dateFinDerniereActivite = $dernierActivite->end_date;
 
 
         $dateEmployabilite =  $request->periode;
@@ -72,13 +81,13 @@ class EmployabiliteController extends Controller
         if ($dateEmployabilite>$dateFinDerniereActivite) {
             // Création de l'employabilité
             Employabilite::create([
-                'name' =>$request->firstName,
+                'name' =>$request->first_name,
                 'type_contrat' => $request->type_contrat,
                 'nomboite' => $request->nomboite,
                 'periode' => $request->periode,
                 'derniere_activite'=> $activites->first()->title,
-                'derniere_service'=> $activites->first()->categorie,
-                'date_participation'=> $activites->first()->startDate,
+                'derniere_service'=> $activites->first()->name,
+                'date_participation'=> $activites->first()->start_date,
                 'odcuser_id' =>$request->id_user,
 
             ]);
@@ -98,7 +107,7 @@ class EmployabiliteController extends Controller
      */
     public function show(Employabilite $employabilite)
     {
-        
+
     }
 
     /**

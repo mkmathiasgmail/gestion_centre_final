@@ -163,7 +163,7 @@
         <script>
                 //scrpit pour l'autocomplete
             $(function() {
-                $('#firstName').on('input', function() {
+                $('#first_name').on('input', function() {
                     var query = $(this).val();
                     if (query != '') {
                         var _token = $('input[name="_token"]').val();
@@ -178,8 +178,8 @@
                                 $('#countryList').fadeIn();
                                 $('#countryList').empty(); // Vider la liste avant d'ajouter de nouveaux éléments
                                 let data_user = $.each(data, function(index, item) {
-                                    $('#countryList').append('<p id="id_odc" class="hidden">' +  item.id + '</p><ul class= "font-bold"><li class=" bg-gray-300 hover:bg-gray-400 pl-4 ">' + item.firstName +
-                                        '  ' + item.lastName + '</li></ul>');
+                                    $('#countryList').append('<p id="id_odc" class="hidden">' +  item.id + '</p><ul class= "font-bold"><li class=" bg-gray-300 hover:bg-gray-400 pl-4 ">' + item.first_name +
+                                        '  ' + item.last_name + '</li></ul>');
 
 
 
@@ -196,14 +196,14 @@
                 delay:500,
 
                 $(document).on('click', 'li', function() {
-                    $('#firstName').val($(this).text());
+                    $('#first_name').val($(this).text());
                  var go=   $("#id_odc").text()
                  $("#id_user").attr("value", go)
                     $('#countryList').fadeOut();
                 });
                         //faire une reinitialisation de champ
                     $('#resetButton').click(function() {
-                $('#firstName').val(''); // Vider le champ de saisie
+                $('#first_name').val(''); // Vider le champ de saisie
                 $('#countryList').fadeOut(); // Cacher la liste des suggestions
         });
 
