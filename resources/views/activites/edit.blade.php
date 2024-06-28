@@ -1,5 +1,5 @@
 <x-app-layout>
-    <form action="{{ route('activites.update',$activite) }}" method="post">
+    <form action="{{ route('activites.update', $activite) }}" method="post">
         <div class="p-5 md:p-5 space-y-4 text-white items-center">
 
             @csrf
@@ -7,26 +7,26 @@
             <div>
                 <div><label for="title">Title</label></div>
                 <div><input type="text" name="title" id="title" class="w-full h-10 rounded-md text-gray-600"
-                        placeholder="Donne un titre a votre Article" required value="{{$activite->title}}"></div>
+                        placeholder="Donne un titre a votre Article" required value="{{ $activite->title }}"></div>
             </div>
 
             <div>
                 <div><label for="date_debut">Star Date</label></div>
                 <div><input type="date" name="date_debut" id="date_debut"
                         class="w-full h-10 rounded-md text-gray-600" placeholder="Donne un titre a votre Article"
-                        required value="{{$activite->startDate}}"></div>
+                        required value="{{ $activite->start_date }}"></div>
             </div>
             <div>
                 <div><label for="date_fin">end Date</label></div>
                 <div><input type="date" name="date_fin" id="date_fin" class="w-full h-10 rounded-md text-gray-600"
-                        placeholder="Donne un titre a votre Article" required value="{{$activite->endDate}}"></div>
+                        placeholder="Donne un titre a votre Article" required value="{{ $activite->end_date }}"></div>
             </div>
 
             <div>
                 <div><label for="lieu">Location</label></div>
                 <div>
                     <select name="lieu" id="lieu" class="w-full h-9 rounded-md text-gray-600">
-                        
+                        <option value="{{ $activite->location }}">{{ $activite->location }}</option>
                         <option value="kinshasa">Kinshasa</option>
                         <option value="lumubumbashi">Lubumbashi</option>
                     </select>
@@ -36,9 +36,12 @@
             <div>
                 <div><label for="tags">Hashtags</label></div>
                 <div>
-                    <select name="tags[]" id="tags" multiple class="w-full  rounded-md text-gray-600">
-                        @foreach ($hashtag as $item)
-                            <option value="{{old('hashtag',implode(',', $activite->hashtag->pluck('hashtag')->toArray()))}}">{{ $item->hashtag }}</option>
+                    <select name="tags[]" id="tags" multiple="multiple"
+                        class="w-full  rounded-md text-gray-600 js-example-basic-multiple">
+                        @foreach ($activite->hashtag as $item)
+                            <option
+                                value="{{ old('hashtag', implode(',', $activite->hashtag->pluck('hashtag')->toArray())) }}">
+                                {{ $item->name }}</option>
                         @endforeach
 
                     </select>
@@ -49,9 +52,10 @@
                 <div class=" w-1/2">
                     <div><label for="category_id">Type Events</label></div>
                     <div>
-                        <select name="typeEvent[]" id="typeEvent" class="w-full  rounded-md text-gray-600" multiple>
+                        <select name="typeEvent[]" id="typeEvent"
+                            class="w-full  rounded-md text-gray-600 js-example-basic-multiple" multiple="multiple">
                             @foreach ($typeEvent as $event)
-                                <option value="{{ $event->typeEvent }}">{{ $event->typeEvent }}</option>
+                                <option value="{{ $event->id }}">{{ $event->name }}</option>
                             @endforeach
                         </select>
                     </div>
@@ -59,10 +63,11 @@
                 <div class=" w-1/2">
                     <div><label for="category_id">Categorie</label></div>
                     <div>
-                        <select name="categorie_id" id="categorie_id" class="w-full h-10 rounded-md text-gray-600">
-                            <option value="{{ $activite->categorie->id}}">{{ $activite->categorie->categorie }}</option>
+                        <select name="categorie_id[]" id="categorie_id"
+                            class="w-full h-10 rounded-md text-gray-600 js-example-basic-multiple" multiple="multiple">
+                            <option value="{{ $activite->categorie->id }}">{{ $activite->categorie->name }}</option>
                             @foreach ($categories as $category)
-                                <option value="{{ $category->categorie }}">{{ $category->categorie }}</option>
+                                <option value="{{ $category->categorie }}">{{ $category->name }}</option>
                             @endforeach
                         </select>
                     </div>
@@ -76,7 +81,7 @@
                     <label for="contenue">Content</label>
                 </div>
                 <div class="text-gray-600">
-                    <textarea name="description" id="editor" class="w-full text-gray-600">{{$activite->content}}</textarea>
+                    <textarea name="description" id="editor" class="w-full text-gray-600">{{ $activite->content }}</textarea>
                 </div>
 
             </div>
@@ -92,6 +97,11 @@
     </form>
 
     @section('script')
+        <script type="module">
+            $(document).ready(function() {
+                $('.js-example-basic-multiple').select2();
+            });
+        </script>
         <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4="
             crossorigin="anonymous"></script>
         <script src="https://cdn.ckeditor.com/ckeditor5/41.4.2/classic/ckeditor.js"></script>
@@ -242,7 +252,6 @@
                     console.error(error);
                 });
         </script>
-
     @endsection
 
 </x-app-layout>

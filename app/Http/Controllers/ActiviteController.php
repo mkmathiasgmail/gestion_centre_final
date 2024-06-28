@@ -90,7 +90,6 @@ class ActiviteController extends Controller
             'creator' => $request->create,
             'location' => $request->lieu,
 
-
         ]);
 
         $activites->hashtag()->attach($request->tags);
@@ -106,6 +105,11 @@ class ActiviteController extends Controller
         $activite_Id = $activite->_id;
 
         $odcusers = Odcuser::all(['id', '_id']);
+        //recuperer les presents  et la date 
+        $presences= Presence::orderBy('id')->get();
+        $test = Presence::all();
+       
+
 
         // Récupérer les candidats liés à cette activité
         $candidats = Candidat::where('activite_id', $id)->with(['odcuser', 'candidat_attribute'])->get();
@@ -131,12 +135,30 @@ class ActiviteController extends Controller
         $dateFin = Carbon::parse($activite->endDate);
 
         $dates = [];
+        $fullDates = [];
         for ($date = $dateDebut; $date->lte($dateFin); $date->addDay()) {
             if (!$date->isWeekend()) {
-                $dates[] = $date->format('d');
+                $dates[] = $date->format('d-m');
+                $fullDates[] = $date->format('d-m-Y');
+                //dd($fullDates);
             }
         }
-        return view('activites.show', compact('candidatsData', 'labels', 'activite', 'id', 'candidats', 'activite_Id', 'odcusers', 'dates', 'presences'));
+        // dd($dates);
+        $countdate = count($dates);
+
+        $candidats = Candidat::where('activite_id', $id)->with(['presence', 'odcuser'
+        ])->get();
+        $data = [];
+        foreach ($candidats as $candidat) {
+            $pres = Presence::where('candidat_id', $candidat->id)->pluck('date');
+            $p = $pres->toArray();
+            $candidatsPresence = $candidat->toArray();
+            $candidatsPresence['date'] = $p;
+            $candidatsPresence['candidat_id'] = $candidat->id;
+
+            $data[] = $candidatsPresence;
+        }
+        return view('activites.show', compact('candidatsData', 'test', 'p','labels', 'data', 'activite', 'id', 'candidats', 'activite_Id', 'odcusers', 'fullDates', 'dates', 'countdate', 'presences'));
     }
 
 

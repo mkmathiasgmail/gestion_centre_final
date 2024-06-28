@@ -90,6 +90,12 @@
             <li class="me-2" role="presentation">
                 <button
                     class="inline-block p-4 border-b-2 rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300"
+                    id="presence-styled-tab" data-tabs-target="#content-presence" type="button" role="tab"
+                    aria-controls="presence" aria-selected="false">Presence</button>
+            </li>
+            <li class="me-2" role="presentation">
+                <button
+                    class="inline-block p-4 border-b-2 rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300"
                     id="settings-styled-tab" data-tabs-target="#styled-settings" type="button" role="tab"
                     aria-controls="settings" aria-selected="false">Settings</button>
             </li>
@@ -314,6 +320,11 @@
                     class="font-medium text-gray-800 dark:text-white">Settings tab's associated content</strong>.
                 Clicking another tab will toggle the visibility of this one for the next. The tab JavaScript swaps
                 classes to control the content visibility and styling.</p>
+        </div>
+        <div class="hidden p-4 rounded-lg bg-gray-50 dark:bg-gray-800" id="content-presence" role="tabpanel"
+            aria-labelledby="settings-tab">
+            <x-activite-presence-component :p="$p" :fullDates="$fullDates" :dates="$dates" :data="$data" :presences="$presences" :test="$test" :countdate="$countdate" :activite="$activite" 
+                :candidats="$candidats" />
         </div>
 
         <div class="hidden p-4 ro unded-lg bg-gray-50 dark:bg-gray-800" id="styled-contacts" role="tabpanel"
