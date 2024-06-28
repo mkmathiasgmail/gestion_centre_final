@@ -232,7 +232,7 @@
                                 <label for="yearselec"
                                     class="flex justify-center mb-2 text-sm font-medium text-gray-900 dark:text-white">Select
                                     Year</label>
-                                <select id="yearselec" name="year"
+                                <select id="yearselec" name="yearselec"
                                     class="justify-center bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
 
                                 </select>
@@ -444,7 +444,7 @@
                 const select = document.getElementById('yearselec'); // Ensure ID is 'year'
 
                 if (!select) {
-                    console.error("Year select element with ID 'year' not found.");
+                    console.error("yearselec select element with ID 'yearselec' not found.");
                     return; // Prevent errors if element is missing
                 }
 
