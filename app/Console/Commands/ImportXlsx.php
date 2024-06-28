@@ -128,6 +128,10 @@ class ImportXlsx extends Command
                         $status = 0;
                         continue;
                     }
+                    if(empty($date)){
+                        $date = "date_1970-01-01";
+                        continue;
+                    }
 
                 $candidat = Candidat::create(
                     [
