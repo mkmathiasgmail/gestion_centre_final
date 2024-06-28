@@ -14,9 +14,9 @@ class TypeEventController extends Controller
      */
     public function index()
     {
-       $typEvent= TypeEvent::all();
-       return view('typEvents.index',compact("typEvent"));
-      
+    $typEvent= TypeEvent::all();
+    return view('typEvents.index',compact("typEvent"));
+    
     }
 
     /**
