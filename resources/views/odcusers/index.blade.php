@@ -179,5 +179,11 @@
         <script>
             new DataTable('#usersTable');
         </script>
+        <script>
+            $("#dt-length-0").addClass('text-gray-700 dark:text-gray-200 w-24 bg-white');
+            $("label[for='dt-length-0']").addClass('text-gray-700 dark:text-gray-200').text(' Records per page');
+            $("label[for='dt-search-0']").addClass('text-gray-700 dark:text-gray-200');
+            $('.dt-input').addClass('text-gray-700 dark:text-gray-200');
+        </script>
     @endsection
 </x-app-layout>

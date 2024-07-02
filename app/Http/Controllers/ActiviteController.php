@@ -153,7 +153,9 @@ class ActiviteController extends Controller
         $activite_Id = $activite->_id;
 
         $odcusers = Odcuser::all(['id', '_id']);
-        //recuperer les presents  et la date 
+        //recuperer les presents  et la date
+        $presences= Presence::orderBy('id')->get();
+        //recuperer les presents  et la date
         $presences = Presence::orderBy('id')->get();
         $test = Presence::all();
 
@@ -175,7 +177,7 @@ class ActiviteController extends Controller
             }
             $candidatsData[] = $candidatArray;
         }
-        //recuperer les presents  et la date 
+        //recuperer les presents  et la date
 
         $presences = Presence::orderBy('id')->get();
         $activite = Activite::findOrFail($id);
@@ -196,7 +198,7 @@ class ActiviteController extends Controller
         $candidats_on_activity = Candidat::where('activite_id', $id)->with('odcuser')->get();
         $data = [];
         $pres = Presence::all()->pluck('candidat_id');
-        foreach ($candidats_on_activity as $candidat) { 
+        foreach ($candidats_on_activity as $candidat) {
             $pres = Presence::where('candidat_id', $candidat->id)->get();
             try {
                 $date = $pres->toArray();
@@ -208,7 +210,7 @@ class ActiviteController extends Controller
                 $candidatsPresence['date'] = $presence_date;
                 $candidatsPresence['candidat_id'] = $candidat->id;
                 $candidatsPresence['odcuser'] = $candidat->odcuser ;
-                
+
                 $data[] = $candidatsPresence;
             } catch (\Throwable $th) {
                 //echo $th->getMessage();
