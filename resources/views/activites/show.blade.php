@@ -334,8 +334,8 @@
         </div>
         <div class="hidden p-4 rounded-lg bg-gray-50 dark:bg-gray-800" id="content-presence" role="tabpanel"
             aria-labelledby="settings-tab">
-            <x-activite-presence-component :p="$p" :fullDates="$fullDates" :dates="$dates" :data="$data"
-                :presences="$presences" :test="$test" :countdate="$countdate" :activite="$activite" :candidats="$candidats" />
+            <x-activite-presence-component :fullDates="$fullDates" :dates="$dates" :data="$data" :presences="$presences"  :countdate="$countdate" :activite="$activite" 
+                :candidats="$candidats" />
         </div>
 
         <div class="hidden p-4 ro unded-lg bg-gray-50 dark:bg-gray-800" id="styled-contacts" role="tabpanel"

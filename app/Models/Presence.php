@@ -10,7 +10,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 class Presence extends Model
 {
     use HasFactory;
-    protected $fillable=['date,candidat_id'];
+    protected $fillable=['date', 'candidat_id'];
    
     public function candidat():BelongsTo
     {
