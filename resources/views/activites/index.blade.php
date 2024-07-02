@@ -1,5 +1,16 @@
 <x-app-layout>
 
+     @if ($errors->any())
+        @foreach ($errors->all() as $error)
+            <div class="p-4 mb-4 text-sm text-red-800 rounded-lg bg-green-50 dark:bg-gray-800 dark:text-red-400"
+                role="alert">
+
+                <span class="font-medium">{{ $error }}</span>
+
+            </div>
+        @endforeach
+    @endif
+
     <x-slot name="header">
         <div class="flex justify-between items-center">
             <div>
@@ -16,7 +27,8 @@
 
     <div class=" mb-4 mt-4 text-white">
 
-        <a class=" cursor-pointer mt-5 bg-slate-600 p-2 rounded-sm font-bold" href="{{route('activites.create')}}">Create Activites</a>
+        <a class=" cursor-pointer mt-5 bg-slate-600 p-2 rounded-sm font-bold"
+            href="{{ route('activites.create') }}">Create Activites</a>
 
 
     </div>
@@ -62,19 +74,7 @@
                     </td>
 
                     <td scope="col" class="px-6 py-3">
-                        Show in Slider
-                    </td>
-
-                    <td scope="col" class="px-6 py-3">
-                        Send
-                    </td>
-
-                    <td scope="col" class="px-6 py-3">
-                        Live Status
-                    </td>
-
-                    <td scope="col" class="px-6 py-3">
-                        Book a Seat
+                        number hours
                     </td>
 
 
@@ -99,6 +99,7 @@
 
                         <td scope="col" class="px-6 py-3">
                           <a href="{{route('activites.edit',$item->id)}}">{{ $item->title }}</a>
+                            <a href="{{ route('activites.show', $item->id) }}">{{ $item->title }}</a>
                         </td>
 
                         <td scope="col" class="px-6 py-3">
@@ -127,21 +128,10 @@
                             {{ $item->status ? '✔️' : '⭕️' }}
                         </td>
 
-                        <td scope="col" class="px-6 py-3">
-                            {{ $item->showInSlider ? '✔️' : '⭕️' }}
-                        </td>
 
-                        <td scope="col" class="px-6 py-3">
-                            {{ $item->send ? '✔️' : '⭕️' }}
+                        <td scope="col" class="px-6 py-3" id="startdate">
+                            {{ $item->number_hours }}
                         </td>
-
-                        <td scope="col" class="px-6 py-3">
-                            {{ $item->liveStatus ? '✔️' : '⭕️' }}
-                        </td>
-                        <td scope="col" class="px-6 py-3">
-                            {{ $item->bookSeat ? '✔️' : '⭕️' }}
-                        </td>
-
 
                         <td scope="col" class="px-6 py-3" id="startdate">
                             {{ $item->start_date }}
@@ -260,7 +250,7 @@
             function destroy(event) {
                 event.preventDefault();
                 let link = event.target.getAttribute('href');
-                document.querySelector('#delete').setAttribute('action', link);
+                document.querySelector('.delete').setAttribute('action', link);
             }
         </script>
         <script src="https://cdn.ckeditor.com/ckeditor5/41.4.2/classic/ckeditor.js"></script>
@@ -460,7 +450,7 @@
                             },
 
                             'colvis'
-                        ] 
+                        ]
                     },
                     topEnd: {
                         search: {
