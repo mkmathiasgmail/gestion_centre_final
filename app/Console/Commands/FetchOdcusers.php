@@ -45,11 +45,20 @@ class FetchOdcusers extends Command
 
             // Convert the API response to an object
             $data = $queryCandidats->object();
-
             // Check if the API returned an error code (401: Unauthorized)
-            if (isset($data->code) && $data->code == 401) {
-                $this->error("Your token has expired, please reset it.");
-                exit;
+            if (isset($data->code) && $data->code === 401) {
+                $this->error("Token expired, refreshing...");
+
+                // Refresh the token and retry the request
+                $this->refreshToken();
+                // Retry the API request with the refreshed token
+                $queryCandidats = Http::timeout(10000)->get("$url/users/active");
+                if ($queryCandidats->successful()) {
+                    $data = $queryCandidats->object();
+                } else {
+                    $this->error('Failed to retrieve data from API after token refresh.');
+                    exit;
+                }
             }
 
             // Get the list of odcusers from the API response
@@ -133,5 +142,12 @@ class FetchOdcusers extends Command
             // Inform the user that the API request failed
             $this->error('Failed to retrieve data from API.');
         }
+    }
+
+    private function refreshToken()
+    {
+        $url = env('API_URL');
+        // Implement your token refresh logic here
+        $response = Http::timeout(10000)->post("$url/generer/token");
     }
 }
