@@ -46,7 +46,7 @@ class ImportXlsx extends Command
         $odcusers = Odcuser::all();
 
         // le chemin du fichier Excel
-        $filePath = base_path('storage/importxlsx/Presences1.xlsx');
+        $filePath = base_path('storage/importxlsx/Presences2.xlsx');
         // Charger le fichier Excel
         $spreadsheet = IOFactory::load($filePath);
 
@@ -63,6 +63,8 @@ class ImportXlsx extends Command
                 $activityId = $worksheet->getcell("B{$rowid}")->getvalue();
                 $rowdate = 5;
                 $date = $worksheet->getcell("H{$rowdate}")->getvalue();
+                $date = $worksheet->getcell("I{$rowdate}")->getvalue();
+                $date = $worksheet->getcell("J{$rowdate}")->getvalue();
                 $activitecheck = Activite::where('_id', $activityId )->first();
 
                 if (!$activitecheck) {
@@ -81,19 +83,19 @@ class ImportXlsx extends Command
                     $status = $worksheet->getcell("H{$lineexcel}")->getvalue(); 
 
                     //check for the existance email
-                    for($idtest = 1; $idtest<=200; $idtest++){
+                    //for($idtest = 1; $idtest<=200; $idtest++){
                         if (empty($email)){
-                            $email = "test{$idtest}@gmail.com";
+                            $email = null;
                             continue;
                         }
-                    }
+                    //}
 
                     
                    // print_r($odcuserData);
                     $odcuser = Odcuser::firstOrCreate(
-                        ['email' => $email, 'first_name' => $prenom],
+                        ['email' => $email],
                         [
-                            //'first_name' => $prenom,
+                            'first_name' => $prenom,
                             'last_name' => $nom,
                             'email' => $email ,
                             'password'=> "hfkfhijskd5djhf",
@@ -101,7 +103,7 @@ class ImportXlsx extends Command
                             'birth_date' => date("Y-m-d"),
                             'linkedin' => null,
                             'profession' => "{'profession':'etudiant'}",
-                            'odc_country' => "{'country':'rdc', 'country':'bresil'}",
+                            'odc_country' => null,
                             'role' => 'user',
                             'is_active' => 1,
                             'hashtags' => null,
@@ -133,9 +135,9 @@ class ImportXlsx extends Command
                         continue;
                     }
 
-                $candidat = Candidat::create(
+                $candidat = Candidat::firstOrCreate(['odcuser_id' => $odcuser->id],
                     [
-                        'odcuser_id' => $odcuser->id,
+                        //'odcuser_id' => $odcuser->id,
                         'activite_id' => $activitecheck->id,
                         'status' => $status
                     ]

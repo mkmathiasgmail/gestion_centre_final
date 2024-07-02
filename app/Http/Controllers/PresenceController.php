@@ -36,14 +36,14 @@ class PresenceController extends Controller
     public function filtrer(Request $request)
     {
         $request->validate([
-            'email' => 'require|max:50|min:6',
+            'email' => 'required|max:50|min:6',
         ]);
         $email = $request->input('email');
         $filtre = Odcuser::where('email', $email)->first();
         if ($filtre) {
             $candidat = $filtre->candidat()->where('status', 1)->first();
             if ($candidat) {
-
+                
                 return view('presences.confirInfo', ['prenom' => $filtre->first_name, 'nom' => $filtre->last_name]);
             } else {
                 return back()->with('error', 'Compte innactif!');
@@ -118,7 +118,7 @@ class PresenceController extends Controller
     public function encours()
     {
         $today = Carbon::today();
-        $activites = Activite::where('date_debut', '<=', $today)->where('date_fin', '>=', $today)->get();
+        $activites = Activite::where('start_date', '<=', $today)->where('end_date', '>=', $today)->get();
         return view('presences.activiteEncours', compact('activites'));
     }
    
