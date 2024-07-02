@@ -24,42 +24,35 @@ class ActiviteController extends Controller
     public function index()
     {
 
-
-
-        $activites = Activite::all();
-        $typeEvent = TypeEvent::all();
-        $categories = Categorie::all();
-        $hashtag = Hashtag::all();
+        $activites = Activite::latest()->get();
         $typeEvent = TypeEvent::all();
         $categories = Categorie::all();
         $hashtag = Hashtag::all();
 
 
-        foreach ($activites as $activite) {
-            $message = Carbon::today();
-            $startDate = Carbon::parse($activite->start_date);
-            $endDate = Carbon::parse($activite->end_date);
-            if ($message >= $startDate && $message <= $endDate) {
+        try {
 
-                $activite->message = 'En cours';
+            foreach ($activites as $activite) {
+                $message = Carbon::today();
+                $startDate = Carbon::parse($activite->start_date);
+                $endDate = Carbon::parse($activite->end_date);
+                if ($message >= $startDate && $message <= $endDate) {
 
-
-            } elseif ($message< $startDate) {
-
-            } elseif ($message < $startDate) {
+                    $activite->message = 'En cours';
+                } elseif ($message < $startDate) {
 
 
-                $differenceInDays = $startDate->diffInDays($message);
-                $activite->message = "Il y a une activité à venir $differenceInDays jours";
-            } else {
-                $activite->message = 'Terminée';
+                    $differenceInDays = $startDate->diffInDays($message);
+                    $activite->message = "Il y a une activité à venir $differenceInDays jours";
+                } else {
+                    $activite->message = 'Terminée';
+                }
             }
 
-
+            return view('activites.index', compact('activites', 'typeEvent', 'categories', 'hashtag',));
+        } catch (\Exception $th) {
+            return back()->withErrors(['error' => "An error occurred while creating the activity. $th"])->withInput();
         }
-
-        return view('activites.index', compact('activites', 'typeEvent', 'categories', 'hashtag',));
-
     }
 
     public function create()
@@ -69,34 +62,87 @@ class ActiviteController extends Controller
         $categories = Categorie::all();
         $forms = Form::all();
         $hashtag = Hashtag::all();
+        
         return view('activites.create', compact('activites', 'typeEvent', 'categories', 'hashtag', 'forms'));
     }
 
     public function store(Request $request)
     {
-        $activites = Activite::create([
-            'title' => $request->title,
-            'categorie_id' => $request->categorie_id,
-            'content' => $request->description,
-            'startDate' => $request->date_debut,
-            'endDate' => $request->date_fin,
-            'publishStatus' => $request->publishStatus,
-            'showInSlider' => $request->showInSlider,
-            'send' => $request->send,
-            'form' => $request->form,
-            'miniatureColor' => $request->miniatureColor,
-            'showInCalendar' => $request->showInCalendar,
-            'liveStatus' => $request->liveStatus,
-            'bookASeat' => $request->bookASeat,
-            'isEvents' => $request->isEvents,
-            'creator' => $request->create,
-            'location' => $request->lieu,
 
-        ]);
+        $validatedData = $request->validate(
+            [
+                'title' => 'required|string|max:255',
+                'categories' => 'required|exists:categories,id',
+                'contents' => 'required|string',
+                'startDate' => 'required|date',
+                'endDate' => 'required|date|after_or_equal:startDate',
+                'form_id' => 'nullable|exists:forms,id',
+                'location' => 'nullable|string|max:255',
+                'hashtags' => 'nullable|array',
+                'hashtags.*' => 'exists:hashtags,id',
+                'typeEvent' => 'nullable|array',
+                'thumbnailURL' => 'nullable|array',
+                'typeEvent.*' => 'exists:type_events,id',
+            ],
 
-        $activites->hashtag()->attach($request->tags);
-        $activites->typEvent()->attach($request->typeEvent);
-        return redirect()->route('activites.index', compact('activites'))->with('success', 'Activite created successfully.');
+            [
+                'title.required' => 'The title is required.',
+                'title.string' => 'The title must be a string.',
+                'title.max' => 'The title may not be greater than 255 characters.',
+                'categories.required' => 'The category is required.',
+                'categories.exists' => 'The selected category is invalid.',
+                'contents.required' => 'The content is required.',
+                'contents.string' => 'The content must be a string.',
+                'startDate.required' => 'The start date is required.',
+                'startDate.date' => 'The start date must be a valid date.',
+                'endDate.required' => 'The end date is required.',
+                'endDate.date' => 'The end date must be a valid date.',
+                'endDate.after_or_equal' => 'The end date must be a date after or equal to the start date.',
+                'form_id.exists' => 'The selected form is invalid.',
+                'creator.max' => 'The creator may not be greater than 255 characters.',
+                'location.string' => 'The location must be a string.',
+                'location.max' => 'The location may not be greater than 255 characters.',
+                'hashtags.array' => 'The hashtags must be an array.',
+                'hashtags.*.exists' => 'The selected hashtag is invalid.',
+                'typeEvent.array' => 'The type events must be an array.',
+                'typeEvent.*.exists' => 'The selected type event is invalid.',
+            ]
+        );
+
+        try {
+            $activites = Activite::create([
+                'title' => $validatedData['title'],
+                'categorie_id' => $validatedData['categories'],
+                'content' => $validatedData['contents'],
+                'start_date' => $validatedData['startDate'],
+                'end_date' => $validatedData['endDate'],
+                'publishStatus' => false,
+                'showInSlider' => false,
+                'send' => false,
+                'form' => false,
+                'miniatureColor' => false,
+                'showInCalendar' => false,
+                'liveStatus' => false,
+                'bookASeat' => false,
+                'isEvents' => false,
+                'creator' => false,
+                'location' => $validatedData['location'],
+            ]);
+
+
+
+            if ($request->has('hashtags')) {
+                $activites->hashtag()->attach($validatedData['hashtags']);
+            }
+
+            if ($request->has('typeEvent')) {
+                $activites->typEvent()->attach($validatedData['typeEvent']);
+            }
+
+            return redirect()->route('activites.index')->with('success', 'Activite created successfully.');
+        } catch (\Exception $e) {
+            return back()->withErrors(['error' => "An error occurred while creating the activity."])->withInput();
+        }
     }
 
 
@@ -177,84 +223,91 @@ class ActiviteController extends Controller
 
     public function edit(Activite $activite)
     {
-        $typeEvent = TypeEvent::has('activite')->get();
+        $typeEvent = TypeEvent::all();
         $categories = Categorie::has('articles')->get();
         $hashtag = Hashtag::has('activite')->get();
         return view('activites.edit', compact('activite', 'typeEvent', 'categories', 'hashtag'));
     }
 
-
     public function update(Request $request, Activite $activite)
     {
+        $validatedData = $request->validate(
+            [
+                'title' => 'required|string|max:255',
+                'categories' => 'required|exists:categories,id',
+                'contents' => 'required|string',
+                'startDate' => 'required|date',
+                'endDate' => 'required|date|after_or_equal:startDate',
+                'form_id' => 'nullable|exists:forms,id',
+                'location' => 'nullable|string|max:255',
+                'hashtags' => 'nullable|array',
+                'hashtags.*' => 'exists:hashtags,id',
+                'typeEvent' => 'nullable|array',
+                'typeEvent.*' => 'exists:type_events,id',
+            ],
 
-        // $request->validate([
-        //     'title' => [
-        //         'required',
-        //         'string',
-        //         'max:255'
+            [
+                'title.required' => 'The title is required.',
+                'title.string' => 'The title must be a string.',
+                'title.max' => 'The title may not be greater than 255 characters.',
+                'categories.required' => 'The category is required.',
+                'categories.exists' => 'The selected category is invalid.',
+                'contents.required' => 'The content is required.',
+                'contents.string' => 'The content must be a string.',
+                'startDate.required' => 'The start date is required.',
+                'startDate.date' => 'The start date must be a valid date.',
+                'endDate.required' => 'The end date is required.',
+                'endDate.date' => 'The end date must be a valid date.',
+                'endDate.after_or_equal' => 'The end date must be a date after or equal to the start date.',
+                'form_id.exists' => 'The selected form is invalid.',
+                'creator.max' => 'The creator may not be greater than 255 characters.',
+                'location.string' => 'The location must be a string.',
+                'location.max' => 'The location may not be greater than 255 characters.',
+                'hashtags.array' => 'The hashtags must be an array.',
+                'hashtags.*.exists' => 'The selected hashtag is invalid.',
+                'typeEvent.array' => 'The type events must be an array.',
+                'typeEvent.*.exists' => 'The selected type event is invalid.',
+            ]
+        );
 
-        //     ],
-        //     'categorie' => 'required|integer',
-        //     'description' => 'required|string',
-        //     'date_debut' => 'required|date',
-        //     'date_fin' => 'required|date|after_or_equal:date_debut',
-        //     'publishStatus' => 'required|boolean',
-        //     'showInSlider' => 'required|boolean',
-        //     'send' => 'required|boolean',
-        //     'form' => 'required|string',
-        //     'miniatureColor' => 'required|string',
-        //     'showInCalendar' => 'required|boolean',
-        //     'liveStatus' => 'required|boolean',
-        //     'bookASeat' => 'required|boolean',
-        //     'isEvents' => 'required|boolean',
-        //     'create' => 'required|string',
-        //     'lieu' => 'required|string',
-        //     'tags' => 'required|array',
-        //     'tags.*' => 'integer',
-        //     'typeEvent' => 'required|array',
-        //     'typeEvent.*' => 'integer',
-        // ]);
+        try {
+            $activite->update([
+                'title' => $validatedData['title'],
+                'categorie_id' => $validatedData['categories'],
+                'content' => $validatedData['contents'],
+                'start_date' => $validatedData['startDate'],
+                'end_date' => $validatedData['endDate'],
+                'location' => $validatedData['location'],
+            ]);
 
+            if ($request->has('hashtags')) {
+                $activite->hashtag()->sync($validatedData['hashtags']);
+            }
 
-        $activites = Activite::findOrFail($activite->id);
-        // Mise à jour de l'activité
-        $activites->update([
-            'title' => $request->title,
-            'categorie_id' => $request->categorie,
-            'content' => $request->description,
-            'startDate' => $request->date_debut,
-            'endDate' => $request->date_fin,
-            'publishStatus' => $request->publishStatus,
-            'showInSlider' => $request->showInSlider,
-            'send' => $request->send,
-            'form' => $request->form,
-            'miniatureColor' => $request->miniatureColor,
-            'showInCalendar' => $request->showInCalendar,
-            'liveStatus' => $request->liveStatus,
-            'bookASeat' => $request->bookASeat,
-            'isEvents' => $request->isEvents,
-            'creator' => $request->create,
-            'location' => $request->lieu,
-        ]);
-
-
-
-
-
-
-        $activites->hashtag()->sync($request->tags);
-        $activites->typEvent()->sync($request->typeEvent);
+            if ($request->has('typeEvent')) {
+                $activite->typEvent()->sync($validatedData['typeEvent']);
+            }
 
 
-        return redirect()->route('activites.index')
-            ->with('success', 'Activite updated successfully.');
+
+
+            return redirect()->route('activites.index')
+                ->with('success', 'Activite updated successfully.');
+        } catch (\Exception $th) {
+            return back()->withErrors(['error' => "An error occurred while creating the activity. $th"])->withInput();
+        }
     }
 
     public function destroy(Activite $activite)
     {
-        $activite->delete();
-        return redirect()->route('activites.index')
-            ->with('success', 'Activite deleted successfully.');
+
+        try {
+            $activite->delete();
+            return redirect()->route('activites.index')
+                ->with('success', 'Activite deleted successfully.');
+        } catch (\Exception $th) {
+            return back()->withErrors(['error' => "An error occurred while creating the activity. $th"])->withInput();
+        }
     }
 
     public function encours()

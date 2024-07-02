@@ -1,23 +1,31 @@
 <x-app-layout>
-    <form action="{{ route('activite.store') }}" method="post">
+    @if ($errors->any())
+        @foreach ($errors->all() as $error)
+            <div class="p-4 mb-4 text-sm text-red-800 rounded-lg bg-green-50 dark:bg-gray-800 dark:text-red-400"
+                role="alert">
+
+                <span class="font-medium">{{ $error }}</span>
+
+            </div>
+        @endforeach
+    @endif
+    <form action="{{ route('activites.store') }}" method="post">
         @csrf
 
+        <div>
+            <h2 class=" text-white text-3xl mb-5">Formulaire</h2>
+        </div>
+
         <div class=" flex justify-between w-full gap-4 p-5">
-            <div>
-                <h2 class=" text-white text-3xl mb-5">Formulaire</h2>
-            </div>
+
             <div class="w-2/5">
-
-
-
 
                 <div class=" mb-4">
                     <label for="categories"
                         class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Categories</label>
-                    <select class="js-example-basic-multiple w-full h-10 rounded-md text-gray-600" name="categories[]"
-                        multiple="multiple">
+                    <select class=" w-full h-10 rounded-md text-gray-600" name="categories">
                         @foreach ($categories as $item)
-                            <option value="{{ $item->categorie }}">{{ $item->categorie }}</option>
+                            <option value="{{ $item->id }}">{{ $item->name }}</option>
                         @endforeach
                     </select>
                 </div>
@@ -28,7 +36,7 @@
                     <select class="js-example-basic-multiple w-full h-10 rounded-md text-gray-600" name="hashtags[]"
                         multiple="multiple">
                         @foreach ($hashtag as $item)
-                            <option value="{{ $item->name }}">{{ $item->name }}</option>
+                            <option value="{{ $item->id }}">{{ $item->name }}</option>
                         @endforeach
                     </select>
                 </div>
@@ -63,9 +71,21 @@
                         class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Form</label>
                     <select class="w-full h-10 rounded-md text-gray-600" name="form">
                         @foreach ($forms as $item)
-                            <option value="{{ $item->_id }}">{{ $item->name }}</option>
+                            <option value="{{ $item->id }}">{{ $item->name }}</option>
                         @endforeach
                     </select>
+                </div>
+
+                <div class=" mb-4">
+                    <div><label for="category_id">Type Events</label></div>
+                    <div>
+                        <select name="typeEvent[]" id="typeEvent"
+                            class="w-full  rounded-md text-gray-600 js-example-basic-multiple" multiple="multiple">
+                            @foreach ($typeEvent as $event)
+                                <option value="{{ $event->id }}">{{ $event->title }}</option>
+                            @endforeach
+                        </select>
+                    </div>
                 </div>
 
                 <div class=" mb-4">
@@ -83,8 +103,7 @@
 
                         <div class='preview'>
                             <img src="" id="img" width="100" height="100">
-                            <input type="text" name="thumbnailURL" value="" class=" hidden" id="imgGet"
-                                required>
+                            <input type="text" name="thumbnailURL" value="" class=" hidden" id="imgGet">
                         </div>
 
                     </div>
@@ -114,17 +133,21 @@
             </div>
         </div>
 
+        <div class=" flex gap-5 mb-10">
+            <button
+                class="py-2.5 px-5 me-2 mb-2 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700" type="button">ajouter
+                un paragraphe</button>
+            <button
+                class="py-2.5 px-5 me-2 mb-2 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700" type="button">aaaa</button>
+            <button
+                class="py-2.5 px-5 me-2 mb-2 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700" type="button">zzzz</button>
+            <button
+                class="py-2.5 px-5 me-2 mb-2 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700" type="button">eeeee</button>
+        </div>
+
         <div>
-            <div class=" flex gap-5">
-                <button>ajouter un paragraphe</button>
-                <button>aaaa</button>
-                <button>zzzz</button>
-                <button>eeeee</button>
-            </div>
-            <div>
-                <button type="submit"
-                    class="py-2.5 px-5 me-2 mb-2 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">send</button>
-            </div>
+            <button type="submit"
+                class="py-2.5 px-5 me-2 mb-2 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">send</button>
         </div>
 
     </form>
