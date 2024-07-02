@@ -19,7 +19,7 @@ class CalendrierController extends Controller
 {
     public function export()
 {
-
+        
         // Récupérer les données à exporter depuis le modèle
         $activites=Activite::all();
         $categorieId = 2;
