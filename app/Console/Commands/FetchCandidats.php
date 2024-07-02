@@ -98,16 +98,14 @@ class FetchCandidats extends Command
                             'activite_id' => $activite->id,
                             'status' => 1
                         ];
-
-                        // Display a message indicating that the candidate is being created
-                        $this->info("Creating the candidate $e...");
-
+                        
                         // Create or update the candidate
                         $candidate = Candidat::firstOrCreate($candidatInfo);
                         $this->info("Candidate $e created successfully.");
 
                         // If the candidate has form registration data, loop through it
                         if (isset($candidat->formRegistrationData)) {
+                            $att = 0 ;
                             foreach ($candidat->formRegistrationData->inputs as $key => $input) {
                                 // Get the options for the input field
                                 $value = isset($input->value) ? $input->value : "";
@@ -116,7 +114,13 @@ class FetchCandidats extends Command
                                     $options = $input->translations->fr->input->options;
                                     if (isset($input->value)) {
                                         // Get the selected option value
-                                        $v = $input->value - 1;
+                                        if (is_array($input->value)) {
+                                            // Handle the array case
+                                            dump($input->value);
+                                        } else {
+                                            $v = (int)$input->value - 1;
+                                        }
+                                        $v = (int)$input->value - 1;
                                         $value = $options[$v]->label;
                                     } else {
                                         $value = "";
@@ -131,8 +135,6 @@ class FetchCandidats extends Command
                                     'candidat_id' => $candidate->id
                                 ];
 
-                                // Display a message indicating that the candidate attribute is being created
-                                $this->info("Creating the candidate attribute...");
 
                                 try {
                                     // Create or update the candidate attribute
@@ -142,7 +144,8 @@ class FetchCandidats extends Command
                                 }
 
                                 // Display a message indicating that the candidate attribute was created successfully
-                                $this->info("Candidate attribute created successfully!");
+                                $this->info("Candidate attribute $att created successfully!");
+                                $att++;
                             }
                         }
                         $e++;
