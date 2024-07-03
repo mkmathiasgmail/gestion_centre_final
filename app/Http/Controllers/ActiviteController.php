@@ -62,7 +62,7 @@ class ActiviteController extends Controller
         $categories = Categorie::all();
         $forms = Form::all();
         $hashtag = Hashtag::all();
-        
+
         return view('activites.create', compact('activites', 'typeEvent', 'categories', 'hashtag', 'forms'));
     }
 

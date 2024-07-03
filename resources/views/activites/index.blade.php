@@ -449,7 +449,7 @@
                             },
 
                             'colvis'
-                        ] 
+                        ]
                     },
                     topEnd: {
                         search: {

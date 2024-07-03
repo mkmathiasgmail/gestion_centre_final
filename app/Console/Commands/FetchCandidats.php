@@ -98,7 +98,7 @@ class FetchCandidats extends Command
                             'activite_id' => $activite->id,
                             'status' => 1
                         ];
-                        
+
                         // Create or update the candidate
                         $candidate = Candidat::firstOrCreate($candidatInfo);
                         $this->info("Candidate $e created successfully.");
@@ -116,12 +116,16 @@ class FetchCandidats extends Command
                                         // Get the selected option value
                                         if (is_array($input->value)) {
                                             // Handle the array case
-                                            dump($input->value);
+                                            $values = [];
+                                            foreach ($input->value as $v) {
+                                                $inputValue = (int)$v - 1 ;
+                                                $values[] = $options[$inputValue]->label;
+                                            }
+                                            $value = implode(', ', $values);
                                         } else {
                                             $v = (int)$input->value - 1;
+                                            $value = $options[$v]->label;
                                         }
-                                        $v = (int)$input->value - 1;
-                                        $value = $options[$v]->label;
                                     } else {
                                         $value = "";
                                     }

@@ -9,7 +9,7 @@
             </div>
         @endforeach
     @endif
-    
+
     <x-slot name="header">
         <div class="flex justify-between items-center">
             <div>
@@ -334,7 +334,7 @@
         </div>
         <div class="hidden p-4 rounded-lg bg-gray-50 dark:bg-gray-800" id="content-presence" role="tabpanel"
             aria-labelledby="settings-tab">
-            <x-activite-presence-component :fullDates="$fullDates" :dates="$dates" :data="$data" :presences="$presences"  :countdate="$countdate" :activite="$activite" 
+            <x-activite-presence-component :fullDates="$fullDates" :dates="$dates" :data="$data" :presences="$presences"  :countdate="$countdate" :activite="$activite"
                 :candidats="$candidats" />
         </div>
 
