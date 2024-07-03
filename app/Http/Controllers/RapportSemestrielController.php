@@ -39,12 +39,13 @@ class RapportSemestrielController extends Controller
 
         //On recuper les données depuis le model
         $activites=Activite::all();
-        $candidats= Presence::leftJoin('candidats as ca', 'ca.id', '=', 'presences.candidat_id')
-        ->leftJoin('odcusers as us', 'us.id', '=', 'ca.odcuser_id')
-        ->leftJoin('activites as ac', 'ac.id', '=', 'ca.activite_id')
-        ->leftJoin('categories  as cat', 'cat.id', '=', 'ac.categorie_id')
-        ->leftJoin('activite_type_event as acty', 'acty.activite_id', '=', 'ac.id')
-        ->leftJoin('type_events as typ', 'typ.id','=', 'acty.type_event_id')
+        $candidats= Presence::
+        leftJoin('candidats as ca', 'presences.candidat_id', '=','ca.id')
+        ->leftJoin('odcusers as us', 'ca.odcuser_id', '=', 'us.id')
+        ->leftJoin('activites as ac',  'ca.activite_id', '=','ac.id')
+        ->leftJoin('categories  as cat', 'ac.categorie_id' , '=', 'cat.id')
+        ->leftJoin('activite_type_event as acty', 'ac.id', '=', 'acty.activite_id')
+        ->leftJoin('type_events as typ','acty.type_event_id','=','typ.id' )
         ->whereNotNull('ac.title')
         ->whereBetween('ac.start_date', [$startDate, $endDate])
         ->orderBy('ac.start_date', 'asc')
@@ -66,7 +67,6 @@ class RapportSemestrielController extends Controller
             
         ])->distinct()
         ->get();
-        //dd($candidats);
         
         //on cree un nouveau classeur PhpSpreadsheet
         $spreadsheet = new Spreadsheet();
@@ -367,25 +367,26 @@ $worksheet->getColumnDimension($columnLetter)->setWidth($newColumnWidth);
                         ->getAlignment()
                         ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
 
-        if(in_array($candidat->code, $typeform)) {
-            $worksheet->setCellValue('Q' . $row, $candidat->namecat)
-                        ->getStyle('Q' . $row)
-                        ->getAlignment()
-                        ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
-            $worksheet->setCellValue('R' . $row, $candidat->startYear)
-                        ->getStyle('R' . $row)
-                        ->getAlignment()
-                        ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
-            $worksheet->setCellValue('S' . $row, $candidat->end_date)
-                        ->getStyle('S' . $row)
-                        ->getAlignment()
-                        ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
-            $worksheet->setCellValue('U' . $row, $candidat->title)
-                        ->getStyle('U' . $row)
-                        ->getAlignment()
-                        ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
+            if(in_array($candidat->code, $typeform)) {
+                $worksheet->setCellValue('Q' . $row, $candidat->namecat)
+                            ->getStyle('Q' . $row)
+                            ->getAlignment()
+                            ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
+                $worksheet->setCellValue('R' . $row, $candidat->startYear)
+                            ->getStyle('R' . $row)
+                            ->getAlignment()
+                            ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
+                $worksheet->setCellValue('S' . $row, $candidat->end_date)
+                            ->getStyle('S' . $row)
+                            ->getAlignment()
+                            ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
+                $worksheet->setCellValue('U' . $row, $candidat->title)
+                            ->getStyle('U' . $row)
+                            ->getAlignment()
+                            ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
 
-            } elseif (in_array($candidat->code, $typeparc)) {
+            }elseif (in_array($candidat->code, $typeparc)) {
+                
             $worksheet->setCellValue('L' . $row, $candidat->namecat)
                         ->getStyle('L' . $row)
                         ->getAlignment()
@@ -400,19 +401,20 @@ $worksheet->getColumnDimension($columnLetter)->setWidth($newColumnWidth);
                         ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
 
             }elseif(in_array($candidat->code, $typeconf)){
-            $worksheet->setCellValue('X' .$row, $candidat->namecat)
-                        ->getStyle('X' .$row)
-                        ->getAlignment()
-                        ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
-            $worksheet->setCellValue('Y' .$row, $candidat->startYear)
-                        ->getStyle('Y' .$row)
-                        ->getAlignment()
-                        ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
-            $worksheet->setCellValue('AA' .$row, $candidat->title)
-                        ->getStyle('AA' .$row)
-                        ->getAlignment()
-                        ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
-                        }
+                $worksheet->setCellValue('X' .$row, $candidat->namecat)
+                            ->getStyle('X' .$row)
+                            ->getAlignment()
+                            ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
+                $worksheet->setCellValue('Y' .$row, $candidat->startYear)
+                            ->getStyle('Y' .$row)
+                            ->getAlignment()
+                            ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
+                $worksheet->setCellValue('AA' .$row, $candidat->title)
+                            ->getStyle('AA' .$row)
+                            ->getAlignment()
+                            ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
+            }
+            
 
             $row++;
         }

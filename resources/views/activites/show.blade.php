@@ -367,8 +367,6 @@
                     }]
                 });
 
-                $('input.toggle-all').on('change', function (e) {
-
                 $('input.toggle-all').on('change', function(e) {
 
                 })

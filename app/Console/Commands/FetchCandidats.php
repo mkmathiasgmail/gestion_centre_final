@@ -112,7 +112,7 @@ class FetchCandidats extends Command
 
                                 if (isset($input->translations->fr->input->options)) {
                                     $options = $input->translations->fr->input->options;
-                                    if (isset($input->value)) {
+                                    if (isset($input->value) && is_integer($input->value)) {
                                         // Get the selected option value
                                         if (is_array($input->value)) {
                                             // Handle the array case
