@@ -449,7 +449,7 @@
                 const currentYear = new Date().getFullYear();
 
                 // Define range with 7 past and 8 future years (inclusive)
-                const startYear = currentYear - 7;
+                const startYear = currentYear ;
                 const endYear = currentYear + 8;
 
                 for (let yearselec = startYear; yearselec <= endYear; yearselec++) {

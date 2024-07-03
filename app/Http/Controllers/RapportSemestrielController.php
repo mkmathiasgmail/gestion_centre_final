@@ -357,7 +357,7 @@ $worksheet->getColumnDimension($columnLetter)->setWidth($newColumnWidth);
             $worksheet->setCellValue('H'.$row, $candidat->email)
                         ->getStyle('H'.$row)
                         ->getAlignment()
-                        ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
+                        ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_LEFT);
             $worksheet->setCellValue('I'.$row, $candidat->phone_number)
                         ->getStyle('I'.$row)
                         ->getAlignment()
