@@ -57,22 +57,23 @@ class PresenceController extends Controller
         // Valider les données entrantes
 
         $validatedData = $request->validate([
-            'first_name' => 'required|string',
-            'last_name' => 'required|string',
+            'firstname' => 'required|string',
+            'lastname' => 'required|string',
         ]);
 
-        $prenom = $validatedData['first_name'];
-        $nom = $validatedData['last_name'];
+        $prenom = $validatedData['firstname'];
+        $nom = $validatedData['lastname'];
 
         // Rechercher l'ID du candidat correspondant
         $candidatId = DB::table('candidats')
-            ->join('odcusers', 'candidats.odcuser_id', '=', 'odcusers.id')
-            ->join('activites', 'candidats.activite_id', '=', 'activites.id')
-            ->where('odcusers.first_name', $prenom)
-            ->where('odcusers.last_name', $nom)
-            ->whereRaw('CURRENT_DATE() BETWEEN activites.date_debut AND activites.date_fin')
-            ->select('candidats.id')
-            ->first();
+        ->join('odcusers', 'candidats.odcuser_id', '=', 'odcusers.id')
+        ->join('activites', 'candidats.activite_id', '=', 'activites.id')
+        ->where('odcusers.first_name', $prenom)
+        ->where('odcusers.last_name', $nom)
+        ->whereRaw('CURRENT_DATE() BETWEEN activites.start_date AND activites.end_date')
+        ->select('candidats.id')
+        ->first();
+
         if ($candidatId) {
             $presence = new Presence;
             $presence->candidat_id = $candidatId->id;
