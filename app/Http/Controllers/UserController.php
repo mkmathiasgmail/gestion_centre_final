@@ -47,7 +47,6 @@ class UserController extends Controller
             foreach ($user_roles as $role) {
                 $user_role[] = $role;
             }
-           
             return view('user.detail',compact('roles','user','user_role'));
 
     }
