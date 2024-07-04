@@ -18,7 +18,7 @@ class OdcuserController extends Controller
         if (request()->expectsJson()) {
             return response()->json($odcusers);
         }
-    
+
 
         return view('odcusers.index', compact('odcusers'));
     }
@@ -47,11 +47,11 @@ class OdcuserController extends Controller
         $nbrEvents = Candidat::where('odcuser_id', $odcuser->id)->count();
         $candidats = Candidat::where('odcuser_id', $odcuser->id)->with('candidat_attribute')->get();
         if (isset($candidats)) {
+            $datas = [] ;
+            $labels = [];
             foreach ($candidats as $candidat) {
-                $datas = [] ;
                 $array = $candidat->toArray();
                 if (isset($candidat->candidat_attribute)) {
-                    $labels = [];
                     foreach ($candidat->candidat_attribute as $attribute) {
                         $array[$attribute->label] = $attribute->value ;
                         if (!in_array($attribute->label, $labels)) {
@@ -60,7 +60,7 @@ class OdcuserController extends Controller
                     }
                     $datas[] = $array ;
                 }
-                
+
             }
         } else {
             echo "Sorry the user does not exist.";

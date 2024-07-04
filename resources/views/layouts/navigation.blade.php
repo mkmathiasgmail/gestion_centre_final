@@ -97,7 +97,7 @@
                         data-inactive-classes="text-white dark:text-white">
                         <h2 id="accordion-flush-heading-2">
                             <button type="button"
-                                class="flex items-center  w-full  font-medium p-2 text-black    dark:text-gray-400 gap-3 dark:hover:bg-gray-700 rounded-lg"
+                                class="flex items-center  w-full  font-medium p-2 text-gray-400    dark:text-white gap-3 dark:hover:bg-gray-700 rounded-lg"
                                 data-accordion-target="#accordion-flush-body-2" aria-expanded="false"
                                 aria-controls="accordion-flush-body-2">
                                 <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true"
@@ -118,9 +118,9 @@
                                 <p class="text-black mb-2 hover:text-white dark:text-gray-400"><a
                                         href="{{ route('encours') }}">Activités en cours</a></p>
                                 <p class="text-black mb-2 hover:text-white dark:text-gray-400"><a
-                                        href="{{route('categories.index')}}">Liste Catégories</a></p>
+                                        href="{{route('categories.index')}}">Catégories</a></p>
                                 <p class="text-black mb-2 hover:text-white dark:text-gray-400"><a
-                                        href="{{route('hashtags.index')}}">Hashtag</a></p>
+                                        href="{{ route('hashtags.index') }}">Hashtag</a></p>
                                 <p class="text-black mb-2 hover:text-white dark:text-gray-400"><a
                                         href="{{ route('typevents.index') }}">Event type</a></p>
                             </div>
@@ -141,6 +141,7 @@
 
                     </a>
                 </li>
+                
                 <li>
                     <a href="{{ route('employabilites.index') }}"
                         class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">

@@ -7,21 +7,26 @@
                     {{ __('Gestion Activites') }}
                 </h2>
             </div>
+
+
+
         </div>
+
     </x-slot>
+
+
     @if ($activites->isEmpty())
         <div class="p-4 mb-4 mt-4 text-sm text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400"
             role="alert">
             <span class="font-medium">Oups desole!</span> Change a few things up and try submitting again.
         </div>
     @else
-  
         <div class="relative overflow-x-auto mt-4">
-            <table id="table"  class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+            <table id="table" class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
                 <thead class="text-xs text-white uppercase bg-gray-50 dark:bg-gray-700 dark:text-white">
                     <tr>
                         <th scope="col" class="px-6 py-3">
-                           Id
+                            Id
                         </th>
                         <th scope="col" class="px-6 py-3">
                             Title
@@ -44,7 +49,8 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach ($activites as $i=> $item)
+                    @foreach ($activites as $i => $item)
+                    <button> <a href="{{ route('presences.create', $item->id) }}" class=" p-2 bg-blue-600">
                         <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
                             <td class="px-6 py-4">
                                 {{ $item->id }}
@@ -60,10 +66,10 @@
                                 {{ $item->location }}
                             </td>
                             <td class="px-6 py-4">
-                                {{ $item->startDate }}
+                                {{ $item->date_debut }}
                             </td>
                             <td class="px-6 py-4">
-                                {{ $item->endDate }}
+                                {{ $item->date_fin }}
                             </td>
                             <td class="px-6 py-4 flex gap-4">
                                 <a href="{{ route('presences.create', $item->id) }}"
@@ -71,9 +77,9 @@
 
 
                             </td>
-                         
-                        </tr>
 
+                        </tr>
+                          </a></button>
                     @endforeach
                 </tbody>
             </table>
@@ -81,6 +87,7 @@
 
     @endif
 
+  
 
 
     @section('script')
@@ -91,4 +98,6 @@
             new DataTable('#table');
         </script>
     @endsection
+
+
 </x-app-layout>
