@@ -78,8 +78,9 @@ class ImportControl extends Controller
                     'status' => $validatedData['status']
                 ]);
 
+                $date =$rowData['date'];
                 //on remplie la table presence
-                $datemodif = explode('_', $date);
+                $datemodif = explode('_', $date);+
                 Presence::create([
                     'date' => $datemodif[1],
                     'candidat_id' => $candidat->id,
@@ -152,6 +153,12 @@ class ImportControl extends Controller
 
 
     //function pour import dans activite
+
+    public function indexacti()
+    {
+        $activites = Activite::all();
+        return view('components.activite-import', ['activites' => $activites]);
+    }
     public function importInActivity(Request $request, Activite $activite){
                 // Valider le fichier uploadé
                 $request->validate([
@@ -163,5 +170,6 @@ class ImportControl extends Controller
                 $fileContents = file($file->getPathname());
                 // Supposons que le fichier CSV contient des en-têtes
                 $header = str_getcsv(array_shift($fileContents));
+
     }
 }
