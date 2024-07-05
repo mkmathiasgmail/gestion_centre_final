@@ -6,6 +6,7 @@ use App\Models\Activite;
 use App\Models\Candidat;
 use App\Models\CandidatAttribute;
 use App\Models\Odcuser;
+use Hamcrest\Type\IsInteger;
 use Hamcrest\Type\IsString;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Http;
@@ -18,7 +19,7 @@ class FetchCandidats extends Command
      * @var string
      */
 
-     // What to type in the line-command for running the command
+    // What to type in the line-command for running the command
     protected $signature = 'sync:candidats';
 
     /**
@@ -33,95 +34,143 @@ class FetchCandidats extends Command
      */
     public function handle()
     {
-        $this->info('Syncing candidates from api ...');
-        // $jsonCandidatsAWS = base_path('aws.json') ;
-        // $candidatsData = json_decode(file_get_contents($jsonCandidatsAWS));
-        $url = env('API_URL');
+        // Display a message indicating that the syncing process has started
+        $this->info('Syncing candidates from api...');
 
-        // Fetching all the _id for each event
+        // Set the API URL from the environment variable
+        $url = env('API_URL');
+        // Fetch all the _id values for each event from the Activite model
         $activites = Activite::pluck('_id')->toArray();
 
+        // Initialize a counter for the number of fetch operations
         $fetchCount = 1;
 
-        // Browsing amoung different _id events
+        // Loop through each event _id
         foreach ($activites as $key => $value) {
+            // Display a message indicating which event is being fetched
             $this->info("Fetching the api url for event $fetchCount");
-            
-            // Sending the fetch request with the _id for each event
+
+            // Send a GET request to the API with the current event _id
             $queryEvent = Http::timeout(10000)->get("$url/events/show/$value");
 
-            // Checking if the request succeeded
+            // Check if the request was successful
             if ($queryEvent->successful()) {
+                // Display a message indicating that the fetch was successful
                 $this->info("Finished fetch $fetchCount");
 
-                // If request succeeded, we store the result in json format
+                // Get the response data from the API
                 $data = $queryEvent->object();
 
-                // We access the "data" property
+                // Get the "data" property from the API response
                 $candidats = $data->data;
 
-                // variable for counting each candidate saving
+                if (isset($data->code) && $data->code === 401) {
+                    $this->error("Token expired, refreshing...");
+
+                    // Refresh the token and retry the request
+                    $this->refreshToken();
+                    // Retry the API request with the refreshed token
+                    $queryEvent = Http::timeout(10000)->get("$url/users/active");
+                    if ($queryEvent->successful()) {
+                        $data = $queryEvent->object();
+                    } else {
+                        $this->error('Failed to retrieve data from API after token refresh.');
+                        exit;
+                    }
+                }
+
+                // Initialize a counter for the number of candidates being saved
                 $e = 1;
 
-                // Browsing all the api result data 
+                // Loop through each candidate in the API response
                 foreach ($candidats as $candidat) {
-                    
-                    // Checking if both a odcuser and an event are in the result from api
+                    // Check if both the odcuser and event exist in the API response
                     $odcuser = Odcuser::where('_id', $candidat->user->_id)->first();
                     $activite = Activite::where('_id', $candidat->event->_id)->first();
-                    
-                    // if they exist
+
+                    // If both exist, create or update the candidate
                     if (isset($odcuser) && isset($activite)) {
                         $this->info("The odcuser and the activity exist in the fetch response, making the request...");
-                        
-                        //! Creating and updating
+
+                        // Create an array of candidate information
                         $candidatInfo = [
                             'odcuser_id' => $odcuser->id,
                             'activite_id' => $activite->id,
                             'status' => 1
                         ];
 
-                        $this->info("Creating the candidate $e ...");
-
-                        // Else we create it
+                        // Create or update the candidate
                         $candidate = Candidat::firstOrCreate($candidatInfo);
                         $this->info("Candidate $e created successfully.");
-                        
+
+                        // If the candidate has form registration data, loop through it
                         if (isset($candidat->formRegistrationData)) {
-                            foreach ($candidat->formRegistrationData->inputs as $key => $value) {
+                            $att = 0 ;
+                            foreach ($candidat->formRegistrationData->inputs as $key => $input) {
+                                // Get the options for the input field
+                                $value = isset($input->value) ? $input->value : "";
+
+                                if (isset($input->translations->fr->input->options)) {
+                                    $options = $input->translations->fr->input->options;
+                                    if (isset($input->value) && is_integer($input->value)) {
+                                        // Get the selected option value
+                                        if (is_array($input->value)) {
+                                            // Handle the array case
+                                            $values = [];
+                                            foreach ($input->value as $v) {
+                                                $inputValue = (int)$v - 1 ;
+                                                $values[] = $options[$inputValue]->label;
+                                            }
+                                            $value = implode(', ', $values);
+                                        } else {
+                                            $v = (int)$input->value - 1;
+                                            $value = $options[$v]->label;
+                                        }
+                                    } else {
+                                        $value = "";
+                                    }
+                                }
+
+                                // Create an array of candidate attribute information
                                 $candidateAttributes = [
-                                    '_id' => $candidat->formRegistrationData->inputs[$key]->_id,
-                                    'label' => $candidat->formRegistrationData->inputs[$key]->translations->fr->input->label,
-                                    
-                                    'value' => (is_string($candidat->formRegistrationData->inputs[$key]->value)) ? ($candidat->formRegistrationData->inputs[$key]->value) : "",
+                                    '_id' => $input->_id,
+                                    'label' => $input->translations->fr->input->label,
+                                    'value' => isset($value) ? $value : "",
                                     'candidat_id' => $candidate->id
                                 ];
-                                $this->info("Creating the candidate attribute...");
-    
+
+
                                 try {
+                                    // Create or update the candidate attribute
                                     CandidatAttribute::firstOrCreate($candidateAttributes);
-                                } catch (\Throwable $e) {
-                                    print_r($e) ;
+                                } catch (\Throwable $v) {
+                                    echo $v->getMessage();
                                 }
-    
-                                $this->info("Candidate attribute created successfully" . $candidateAttributes['label'] . "!");
+
+                                // Display a message indicating that the candidate attribute was created successfully
+                                $this->info("Candidate attribute $att created successfully!");
+                                $att++;
                             }
-                        } else {
-                            $this->warn("");
                         }
-                        
-
-
+                        $e++;
                     }
-                    $e++;
                 }
                 $this->info("Data synced successfully");
             } else {
-                $this->info("Failed to retrieve candidates data ! Please retry !");
+                // If the retry fails, log an error and exit
+                $this->info("Failed to retrieve candidates data! Please retry!");
+                exit;
             }
-            // Increasing the variable for counting the fetch operations
+            // Increment the fetch count
             $fetchCount++;
         }
         $this->info("Operation succeded with error code 0.");
+    }
+
+    private function refreshToken()
+    {
+        $url = env('API_URL');
+        // Implement your token refresh logic here
+        $response = Http::timeout(10000)->post("$url/generer/token");
     }
 }

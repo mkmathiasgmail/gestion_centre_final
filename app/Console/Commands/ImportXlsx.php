@@ -15,6 +15,7 @@ use PhpOffice\PhpSpreadsheet\IOFactory;
 use Illuminate\Support\Facades\Validator;
 use PhpOffice\PhpSpreadsheet\Reader\Xlsx;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpParser\Node\Stmt\TryCatch;
 
 class ImportXlsx extends Command
 {
@@ -71,9 +72,15 @@ class ImportXlsx extends Command
             $rowid = 3;
             $id = $worksheet->getcell("B{$rowid}")->getvalue();
             $rowdate = 5;
+<<<<<<< HEAD
             //$date = $worksheet->getcell("H{$rowdate}")->getvalue();
             //$date = $worksheet->getcell("I{$rowdate}")->getvalue();
             //$date = $worksheet->getcell("J{$rowdate}")->getvalue();
+=======
+            $date = $worksheet->getcell("H{$rowdate}")->getvalue();
+            $date = $worksheet->getcell("I{$rowdate}")->getvalue();
+            $date = $worksheet->getcell("J{$rowdate}")->getvalue();
+>>>>>>> 03360cbbd4006de2704fd44990b6cfcd5217be27
             $id = trim($id);
 
             try {
@@ -92,7 +99,11 @@ class ImportXlsx extends Command
                 $prenom = $worksheet->getcell("B{$lineexcel}")->getvalue();
                 $nom = $worksheet->getcell("C{$lineexcel}")->getvalue();
                 $genre = $worksheet->getcell("D{$lineexcel}")->getvalue();
+<<<<<<< HEAD
                 //$numero = $worksheet->getcell("E{$lineexcel}")->getvalue();
+=======
+                $numero = $worksheet->getcell("E{$lineexcel}")->getvalue();
+>>>>>>> 03360cbbd4006de2704fd44990b6cfcd5217be27
                 $email = $worksheet->getcell("F{$lineexcel}")->getvalue();
                 $université = $worksheet->getcell("G{$lineexcel}")->getvalue(); 
               
@@ -102,7 +113,10 @@ class ImportXlsx extends Command
                 $candidat = $this->createCandidat($odcuser, $currentActivity);
 
                 $this->setPresences($worksheet, $candidat, $lineexcel);
+<<<<<<< HEAD
                 $this->saveNumber($candidat, $odcuser, $worksheet, $lineexcel);
+=======
+>>>>>>> 03360cbbd4006de2704fd44990b6cfcd5217be27
             } 
         }
         $this->info('Importation exécutée avec succès');
@@ -162,6 +176,7 @@ class ImportXlsx extends Command
     }
 
     function setPresences($worksheet, $candidat, $lineexcel){
+<<<<<<< HEAD
         $col = 'H';
         //$cols = ['H','I','J','K','L','M','N','O','P','Q'];
         $rowdate = 5;
@@ -208,6 +223,21 @@ class ImportXlsx extends Command
                 break;
             }
             
+=======
+        $cols = ['H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y'];
+        $cols = ['H','I','J','K','L','M','N','O','P','Q'];
+        $rowdate = 5;
+        foreach ($cols as $key => $col) {
+            $cell = "{$col}{$rowdate}";
+            $date = $worksheet->getcell($cell)->getvalue();
+            $status = $worksheet->getcell("{$col}{$lineexcel}")->getvalue();
+            if(empty($date)){
+                $date = "date_1970-01-01";
+                $this->error('STOP!');
+                break;
+            }
+            
+>>>>>>> 03360cbbd4006de2704fd44990b6cfcd5217be27
             list($prx, $date) = explode('_', $date);
             //insertion
             if($status == '1'){
@@ -218,7 +248,11 @@ class ImportXlsx extends Command
                     ]
                 );
             }
+<<<<<<< HEAD
         }*/
+=======
+        }
+>>>>>>> 03360cbbd4006de2704fd44990b6cfcd5217be27
     }
 
     function saveNumber($candidat, $odcuser, $worksheet, $lineexcel){
