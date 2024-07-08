@@ -51,7 +51,7 @@ class RapportSemestrielController extends Controller
             ->leftJoin('categories  as cat', 'cat.id', '=', 'ac.categorie_id')
             ->leftJoin('activite_type_event as acty', 'acty.activite_id', '=', 'ac.id')
             ->leftJoin('type_events as typ', 'typ.id', '=', 'acty.type_event_id')
-            ->leftJoin('employabilites as empl', 'empl.id', '=', 'ca.employabilite_id')
+            ->leftJoin('employabilites as empl', 'empl.odcuser_id', '=', 'us.id')
             ->whereNotNull('ac.title')
             ->whereBetween('ac.start_date', [$startDate, $endDate])
             ->orderBy('ac.start_date', 'asc')
