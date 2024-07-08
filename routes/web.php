@@ -5,7 +5,7 @@ use App\Http\Controllers\ProfileController;
 
 Route::get('/', function () {
     return view('welcome');
-});
+})->middleware('permissions');
 
 Route::get('/dashboard', function () {
     return view('dashboard');
