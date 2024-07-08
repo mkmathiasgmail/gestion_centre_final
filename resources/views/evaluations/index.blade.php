@@ -255,7 +255,7 @@
 
         <!---Wenzory rapport---->
 
-        <div
+        {{-- <div
             class="max-w-sm p-6 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
             <h5 class=" mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">Wenzory Rapport</h5>
             <p class="mb-3 font-normal text-gray-700 dark:text-gray-400">{{ env('MONTHLY_PLANNING_REPORT') }}</p>
@@ -357,7 +357,7 @@
                     </form>
 
                 </div>
-            </div>
+            </div> --}}
         </div>
 
     </div>
@@ -449,7 +449,7 @@
                 const currentYear = new Date().getFullYear();
 
                 // Define range with 7 past and 8 future years (inclusive)
-                const startYear = currentYear - 7;
+                const startYear = currentYear ;
                 const endYear = currentYear + 8;
 
                 for (let yearselec = startYear; yearselec <= endYear; yearselec++) {
