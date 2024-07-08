@@ -19,6 +19,6 @@
         <img src="{{ $show->thumbnail_url }}" alt="" class=" rounded-md mt-5 mb-5">
         <span
             class="rounded-full mt-5 mb-5 bg-slate-600 pr-4 pl-4 pt-1 pb-1 text-3xl font-bold">{{ $show->categorie->categorie }}</span>
-        <p class="mt-5 mb-5">{{ $show->content }}</p>
+        <p class="mt-5 mb-5">{{ $show->content}}</p>
     </div>
 </div>
