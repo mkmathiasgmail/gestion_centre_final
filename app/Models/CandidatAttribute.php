@@ -14,8 +14,11 @@ class CandidatAttribute extends Model
         '_id',
         'label',
         'value',
-        'candidat_id'
+        'candidat_id',
     ] ;
+    protected $casts = [
+        'candidat_id' => 'bigint',
+    ];
 
     public function candidat() : BelongsTo {
         return $this->belongsTo(Candidat::class);
