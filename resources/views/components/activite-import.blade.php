@@ -1,8 +1,11 @@
+
+@props(['activite'])
 <div class="inline-flex">
-    <!-- The only way to do great work is to love what you do. - Steve Jobs -->
-    <form action="{{ route('import.activite', $activite->id) }}" method="POST" enctype="multipart/form-data" class="max-w-sm mx-auto mt-4" >
+    <form action="{{ route('import.activite') }}" method="POST" enctype="multipart/form-data" class="max-w-sm mx-auto mt-4" >
         @csrf
-        <input type="hidden" name="activite_id" value="{{ $activite->id }}">
+        <input type="hidden" name="activite" value="{{ $activite }}">
+        <p>{{ $activite->title }}</p>
+
         <div class="mb-5">
             <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white" for="file">Importer Fichier</label>
             <input class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400" aria-describedby="user_avatar_help" id="file" type="file" accept=".csv" name="file" placeholder="*CSV file">
