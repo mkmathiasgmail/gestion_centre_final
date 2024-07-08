@@ -17,7 +17,7 @@
                     <a href="https://flowbite.com" class="flex ms-2 md:me-24">
                         <img src="{{ asset('img/orange.png') }}" class="h-8 me-3" alt="FlowBite Logo" />
                         <span
-                            class="self-center text-1xl font-semibold sm:text-1xl whitespace-nowrap dark:text-white">Orange
+                            class="self-center font-semibold text-1xl sm:text-1xl whitespace-nowrap dark:text-white">Orange
                             Digital Center</span>
                     </a>
                 </div>
@@ -36,10 +36,10 @@
                             id="dropdown-user">
                             <div class="px-4 py-3" role="none">
                                 <p class="text-sm text-gray-900 dark:text-white" role="none">
-                                    {{ Auth::user()->name }}
+                                    {{-- {{ Auth::user()->name }} --}}
                                 </p>
                                 <p class="text-sm font-medium text-gray-900 truncate dark:text-gray-300" role="none">
-                                    {{ Auth::user()->email }}
+                                    {{-- {{ Auth::user()->email }} --}}
                                 </p>
                             </div>
                             <ul class="py-1" role="none">
@@ -97,7 +97,7 @@
                         data-inactive-classes="text-white dark:text-white">
                         <h2 id="accordion-flush-heading-2">
                             <button type="button"
-                                class="flex items-center  w-full  font-medium p-2 text-gray-400    dark:text-white gap-3 dark:hover:bg-gray-700 rounded-lg"
+                                class="flex items-center w-full gap-3 p-2 font-medium text-gray-400 rounded-lg dark:text-white dark:hover:bg-gray-700"
                                 data-accordion-target="#accordion-flush-body-2" aria-expanded="false"
                                 aria-controls="accordion-flush-body-2">
                                 <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true"
@@ -115,13 +115,13 @@
                             <div class="p-4 border-b border-gray-200 dark:border-gray-700">
                                 <p class="mb-2 text-black hover:text-white dark:text-gray-400"><a
                                         href="{{ route('activites.index') }}">Actvités</a></p>
-                                <p class="text-black mb-2 hover:text-white dark:text-gray-400"><a
+                                <p class="mb-2 text-black hover:text-white dark:text-gray-400"><a
                                         href="{{ route('encours') }}">Activités en cours</a></p>
-                                <p class="text-black mb-2 hover:text-white dark:text-gray-400"><a
+                                <p class="mb-2 text-black hover:text-white dark:text-gray-400"><a
                                         href="{{route('categories.index')}}">Catégories</a></p>
-                                <p class="text-black mb-2 hover:text-white dark:text-gray-400"><a
+                                <p class="mb-2 text-black hover:text-white dark:text-gray-400"><a
                                         href="{{ route('hashtags.index') }}">Hashtag</a></p>
-                                <p class="text-black mb-2 hover:text-white dark:text-gray-400"><a
+                                <p class="mb-2 text-black hover:text-white dark:text-gray-400"><a
                                         href="{{ route('typevents.index') }}">Event type</a></p>
                             </div>
                         </div>
@@ -141,22 +141,7 @@
 
                     </a>
                 </li>
-                <li>
-                    <a href="{{ route('codeqr') }}"
-                        class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
-                        <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true"
-                            xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none"
-                            viewBox="0 0 24 24">
-                            <path stroke="currentColor" stroke-linejoin="round" stroke-width="2"
-                                d="M4 4h6v6H4V4Zm10 10h6v6h-6v-6Zm0-10h6v6h-6V4Zm-4 10h.01v.01H10V14Zm0 4h.01v.01H10V18Zm-3 2h.01v.01H7V20Zm0-4h.01v.01H7V16Zm-3 2h.01v.01H4V18Zm0-4h.01v.01H4V14Z" />
-                            <path stroke="currentColor" stroke-linejoin="round" stroke-width="2"
-                                d="M7 7h.01v.01H7V7Zm10 10h.01v.01H17V17Z" />
-                        </svg>
 
-                        <span class="ms-3">Qrcode</span>
-
-                    </a>
-                </li>
                 <li>
                     <a href="{{ route('employabilites.index') }}"
                         class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
@@ -168,6 +153,21 @@
                                 d="M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18Zm0 0a8.949 8.949 0 0 0 4.951-1.488A3.987 3.987 0 0 0 13 16h-2a3.987 3.987 0 0 0-3.951 3.512A8.948 8.948 0 0 0 12 21Zm3-11a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
                         </svg>
                         <span class="ms-3">Employabilité</span>
+
+                    </a>
+                </li>
+
+                <li>
+                    <a href="{{ route('user_role.index') }}"
+                        class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
+                        <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true"
+                            xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none"
+                            viewBox="0 0 24 24">
+                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                stroke-width="2"
+                                d="M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18Zm0 0a8.949 8.949 0 0 0 4.951-1.488A3.987 3.987 0 0 0 13 16h-2a3.987 3.987 0 0 0-3.951 3.512A8.948 8.948 0 0 0 12 21Zm3-11a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
+                        </svg>
+                        <span class="ms-3">Role</span>
 
                     </a>
                 </li>

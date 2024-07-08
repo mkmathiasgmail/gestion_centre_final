@@ -35,7 +35,7 @@
             <div>
                 <label for="lieu">Location</label>
                 <select name="location" id="lieu" class="w-full h-9 rounded-md text-gray-600">
-                    <option value="{{ $activite->id }}">{{ $activite->location }}</option>
+                    <option value="{{ $activite->location }}">{{ $activite->location }}</option>
                     <option value="ODC Kinshasa">ODC Kinshasa</option>
                     <option value="ODC Lubumbashi">ODC Lubumbashi</option>
                     <option value="ODC Matadi">ODC Matadi</option>
@@ -44,12 +44,14 @@
 
             <div>
                 <label for="tags">Hashtags</label>
-                <select name="tags[]" id="tags" multiple
+                <select name="hashtags[]" id="tags" multiple
                     class="w-full rounded-md text-gray-600 js-example-basic-multiple">
                     @foreach ($hashtag as $item)
                         <option value="{{ $item->id }}"
                             {{ collect(old('tags', $activite->hashtag->pluck('id')->toArray()))->contains($item->id) ? 'selected' : '' }}>
-                            {{ $item->name }}</option>
+                            {{ $item->name }}
+
+                        </option>
                     @endforeach
                 </select>
             </div>

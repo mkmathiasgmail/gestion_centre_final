@@ -62,7 +62,7 @@ class ActiviteController extends Controller
         $categories = Categorie::all();
         $forms = Form::all();
         $hashtag = Hashtag::all();
-        
+
         return view('activites.create', compact('activites', 'typeEvent', 'categories', 'hashtag', 'forms'));
     }
 
@@ -148,6 +148,7 @@ class ActiviteController extends Controller
 
     public function show(Activite $activite)
     {
+        
         // Trouver l'Activite correspondant et récupérer le champ '_id'
         $id = $activite->id;
         $activite_Id = $activite->_id;
