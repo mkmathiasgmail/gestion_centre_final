@@ -73,7 +73,6 @@ class ImportXlsx extends Command
             $rowdate = 5;
             //$date = $worksheet->getcell("H{$rowdate}")->getvalue();
             //$date = $worksheet->getcell("I{$rowdate}")->getvalue();
-            //$date = $worksheet->getcell("J{$rowdate}")->getvalue();
             $id = trim($id);
 
             try {
