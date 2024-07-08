@@ -10,7 +10,7 @@
                         d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z" />
                 </svg>
                 <span class="sr-only">Info</span>
-                <div class="ms-3 text-sm font-medium">
+                <div class="text-sm font-medium ms-3">
                     {{ session('status') }}
                 </div>
                 <button type="button"
@@ -25,11 +25,12 @@
                 </button>
             </div>
         @endif
-        <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+        <table class="w-full text-sm text-left text-gray-500 rtl:text-right dark:text-gray-400">
             <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                 <tr>
                     <th scope="col" class="px-6 py-3">
                         Nom
+                        d'utilisateur
                     </th>
                     @foreach ($roles as $item)
                         <th scope="col" class="px-6 py-3">
@@ -40,7 +41,7 @@
             </thead>
             <tbody>
                 <tr
-                    class="odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700">
+                    class="border-b odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 dark:border-gray-700">
                     <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                         {{ $user->name }}
                     </th>
@@ -53,7 +54,7 @@
                                             <input id="checkbox-all-search" onclick="D2(event)"
                                                 data-modal-target="des-role" @checked(true)
                                                 data-modal-toggle="des-role" type="checkbox"
-                                                class="w-4 h-4 text-yellow-500 bg-gray-100 border-gray-300 rounded  focus:ring-yellow-500 dark:focus:ring-teal-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+                                                class="w-4 h-4 text-yellow-500 bg-gray-100 border-gray-300 rounded focus:ring-yellow-500 dark:focus:ring-teal-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
                                             <label for="checkbox-all-search" class="sr-only">checkbox</label>
                                             <a id="d-{{ $role->name }}"
                                                 href="{{ route('desactiver_role', ['role' => $role->name, 'user' => $user->id]) }}"></a>
@@ -90,6 +91,12 @@
                         </td>
                     @endforeach
                 </tr>
-                <x-checkboxAddRole />
-                <x-checkboxDesRole />
+            </tbody>
+        </table>
+        <div class="flex justify-end mt-4 mb-4 text-white " >
+            <a href="{{ route('user_role.index') }}"
+                class="px-4 py-2 font-bold text-white bg-blue-500 rounded hover:bg-blue-700">Back</a>
+        </div>
+<x-checkboxAddRole />
+<x-checkboxDesRole />
 </x-app-layout>

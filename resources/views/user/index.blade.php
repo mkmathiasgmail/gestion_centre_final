@@ -1,13 +1,20 @@
 <x-app-layout>
+    <div class="p-6 bg-white border-b border-gray-200 sm:px-20 dark:bg-gray-900 dark:border-gray-700">
+        <x-slot name="header">
+        <h2 class="text-xl font-semibold leading-tight text-gray-800 dark:text-gray-200">
+            {{ __('Role') }}
+            </h2>
+            </x-slot>
+    </div>
     <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
-        <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+        <table class="w-full text-sm text-left text-gray-500 rtl:text-right dark:text-gray-400">
             <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                 <tr>
                     <th scope="col" class="px-6 py-3">
-                        Numero
+                        N°
                     </th>
                     <th scope="col" class="px-6 py-3">
-                        Nom
+                        Nom  d'utilisateur
                     </th>
                     <th scope="col" class="px-6 py-3">
                         Actions
@@ -16,7 +23,7 @@
             </thead>
             <tbody>
                 @foreach ($users as $i=>$item)
-                <tr class="odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700">
+                <tr class="border-b odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 dark:border-gray-700">
                     <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                        {{$i+1}}
                     </th>
