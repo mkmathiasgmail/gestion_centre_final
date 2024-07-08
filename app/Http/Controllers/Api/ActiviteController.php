@@ -35,7 +35,9 @@ class ActiviteController extends Controller
             "endDate" => $request->endDate,
             "startDate" => $request->startDate,
             "location" => $request->location,
+            "contents" => $request->content,
         ];
+        dd($activite);
 
         try {
            
@@ -45,6 +47,8 @@ class ActiviteController extends Controller
             // Check if the request was successful
             if ($requette->successful()) {
                 return response()->json(['success' => true, 'data' => $requette->json()], 201);
+
+                
             } else {
                 return response()->json(['success' => false, 'message' => 'Erreur lors de la création de l\'événement', 'error' => $requette->body()], $requette->status());
             }
