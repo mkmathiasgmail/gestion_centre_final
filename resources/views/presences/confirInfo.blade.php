@@ -3,6 +3,10 @@
 
     <form class="max-w-sm mx-auto" action="{{ route('presences.store') }}" method="post">
         @csrf
+<<<<<<< HEAD
+        
+=======
+>>>>>>> 03360cbbd4006de2704fd44990b6cfcd5217be27
         @if (isset($nom) && isset($prenom))
             <div id="userInfo">
                 <div class="mb-5">

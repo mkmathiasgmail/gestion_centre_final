@@ -8,12 +8,13 @@ use App\Models\Candidat;
 use App\Models\Presence;
 use Illuminate\Http\Request;
 use Illuminate\Console\Command;
+use App\Models\CandidatAttribute;
+use PhpParser\Node\Stmt\TryCatch;
 use Illuminate\Support\Facades\Log;
 use PhpOffice\PhpSpreadsheet\IOFactory;
 use Illuminate\Support\Facades\Validator;
 use PhpOffice\PhpSpreadsheet\Reader\Xlsx;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
-use PhpParser\Node\Stmt\TryCatch;
 
 class ImportXlsx extends Command
 {
@@ -70,9 +71,9 @@ class ImportXlsx extends Command
             $rowid = 3;
             $id = $worksheet->getcell("B{$rowid}")->getvalue();
             $rowdate = 5;
-            $date = $worksheet->getcell("H{$rowdate}")->getvalue();
-            $date = $worksheet->getcell("I{$rowdate}")->getvalue();
-            $date = $worksheet->getcell("J{$rowdate}")->getvalue();
+            //$date = $worksheet->getcell("H{$rowdate}")->getvalue();
+            //$date = $worksheet->getcell("I{$rowdate}")->getvalue();
+            //$date = $worksheet->getcell("J{$rowdate}")->getvalue();
             $id = trim($id);
 
             try {
@@ -91,7 +92,7 @@ class ImportXlsx extends Command
                 $prenom = $worksheet->getcell("B{$lineexcel}")->getvalue();
                 $nom = $worksheet->getcell("C{$lineexcel}")->getvalue();
                 $genre = $worksheet->getcell("D{$lineexcel}")->getvalue();
-                $numero = $worksheet->getcell("E{$lineexcel}")->getvalue();
+                //$numero = $worksheet->getcell("E{$lineexcel}")->getvalue();
                 $email = $worksheet->getcell("F{$lineexcel}")->getvalue();
                 $université = $worksheet->getcell("G{$lineexcel}")->getvalue(); 
               
@@ -101,6 +102,7 @@ class ImportXlsx extends Command
                 $candidat = $this->createCandidat($odcuser, $currentActivity);
 
                 $this->setPresences($worksheet, $candidat, $lineexcel);
+                $this->saveNumber($candidat, $odcuser, $worksheet, $lineexcel);
             } 
         }
         $this->info('Importation exécutée avec succès');
@@ -160,10 +162,43 @@ class ImportXlsx extends Command
     }
 
     function setPresences($worksheet, $candidat, $lineexcel){
-        $cols = ['H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y'];
-        $cols = ['H','I','J','K','L','M','N','O','P','Q'];
+        $col = 'H';
+        //$cols = ['H','I','J','K','L','M','N','O','P','Q'];
         $rowdate = 5;
-        foreach ($cols as $key => $col) {
+        //$dates =[];
+
+        while ($worksheet->getCell($col . $rowdate)->getValue() !== null) {
+            $date = $worksheet->getCell($col . $rowdate)->getValue();
+            $status = $worksheet->getcell($col.$lineexcel)->getvalue();
+            
+            if (!empty($date)) {
+                $datemodif = explode('_', $date);
+                if (isset($datemodif[1])) {
+                    $dates = $datemodif[1]; // on garde seulement la partie "2024-01-29"
+                }
+            }
+            //dump($status);
+            //dump( $dates);
+            //dump($col);
+            if ($status == '1') {
+                $presence = Presence::firstOrCreate(
+                    ['date' => $dates, 'candidat_id' => $candidat->id],
+                    [
+                        'date' => $dates,
+                        'candidat_id' => $candidat->id,
+                    ]
+                );
+            }
+
+            $col++;
+            
+        }
+
+
+
+
+        //code  coach alain
+        /*foreach ($cols as $key => $col) {
             $cell = "{$col}{$rowdate}";
             $date = $worksheet->getcell($cell)->getvalue();
             $status = $worksheet->getcell("{$col}{$lineexcel}")->getvalue();
@@ -183,6 +218,37 @@ class ImportXlsx extends Command
                     ]
                 );
             }
+        }*/
+    }
+
+    function saveNumber($candidat, $odcuser, $worksheet, $lineexcel){
+        $numero = $worksheet->getcell("E{$lineexcel}")->getvalue();
+        $université = $worksheet->getcell("G{$lineexcel}")->getvalue();
+        
+        //verification phone number
+        if(empty($numero)){
+            $numero = "non defini";
         }
+
+        //verification université
+        if(empty($université)){
+            $université = "non defini";
+        }
+        //dd($numero);
+        //sauvegarde numero
+        $savenumber = CandidatAttribute::firstOrCreate(['candidat_id' => $candidat->id],
+        ['_id' => $odcuser->_id,
+        'label' => 'numero',
+        'value' => $numero,
+        ]
+        );
+
+        //sauvegarde université
+        $saveEtablissement = CandidatAttribute::firstOrCreate(['candidat_id' => $candidat->id],
+        ['_id' => $odcuser->_id,
+        'label' => 'Etablissement/Université',
+        'value' => $université,
+        ]
+    );
     }
 }
