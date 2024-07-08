@@ -326,10 +326,6 @@ class RapportSemestrielController extends Controller
         $typeparc = env('TYPE_PARCOURS');
         $typeparc = explode(',', $typeparc);
 
-        // $phonenum = explode(',', env('PHONE'));
-
-        // $universite = explode(',', env('UNIVERSITE'));
-
         //recuperatioon des données du participants et les activitées
 
         foreach ($candidats as $candidat) {
