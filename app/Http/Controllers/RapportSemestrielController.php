@@ -7,6 +7,7 @@ use App\Models\Activite;
 use App\Models\Candidat;
 use App\Models\Presence;
 use Illuminate\Http\Request;
+use App\Models\CandidatAttribute;
 use Illuminate\Support\Facades\DB;
 use PhpOffice\PhpSpreadsheet\Style\Fill;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
@@ -66,7 +67,11 @@ class RapportSemestrielController extends Controller
             
         ])->distinct()
         ->get();
-        //dd($candidats);
+
+        $querry=DB::getQueryLog();
+        dd($querry); 
+
+        
         
         //on cree un nouveau classeur PhpSpreadsheet
         $spreadsheet = new Spreadsheet();
@@ -310,8 +315,20 @@ $worksheet->getColumnDimension($columnLetter)->setWidth($newColumnWidth);
 
         $typeparc=env('TYPE_PARCOURS');
         $typeparc=explode(',', $typeparc);
+
+        $phonenumber= CandidatAttribute::select(
+            'candidat_id', 'value' 
+        )->where('value', 'LIKE', '%85%')
+        ->orWhere('value', 'LIKE', '%89%')
+        ->orWhere('value', 'LIKE', '%81%')
+        ->orWhere('value', 'LIKE', '%82%')
+        ->orWhere('value', 'LIKE','%84%');
+
+        dd($phonenumber);
         
         foreach($candidats as $candidat){
+            
+
 
             $today = new DateTime(); // Date d'aujourd'hui
             $birthDay = new DateTime($candidat->birth_date); // Date de naissance du candidat
