@@ -15,7 +15,7 @@ class MonthlyPlanningController extends Controller
         $carbonDate = Carbon::parse($date);
         $month = $carbonDate->format("m");
         $year = $carbonDate->format("Y");
-        $data = Activite::select("start_date")->whereMonth("start_date", $month)->whereYear("start_date", $year)->get();
+        $data = Activite::select("startDate")->whereMonth("startDate", $month)->whereYear("startDate", $year)->get();
         
         if ($data->isEmpty()) {
             return back()->with("erreur", "Pas d'activité pour ce mois du " . $carbonDate->format("F Y"));

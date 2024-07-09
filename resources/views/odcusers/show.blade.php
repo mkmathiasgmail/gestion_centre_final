@@ -3,7 +3,7 @@
         <div class="flex justify-between items-center">
             <div class="w-1/2">
                 <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-100 leading-tight text-left">
-                    {{ __('Informations du compte de l\'utilisateur : ' . $odcuser->first_name . ' ' . $odcuser->last_name) }}
+                    {{ __('Informations du compte de l\'utilisateur : ' . $odcuser->firstName . ' ' . $odcuser->lastName) }}
                 </h2>
             </div>
             <div class="w-1/3">
@@ -53,7 +53,7 @@
                 <img class="w-24 h-24 mb-3 rounded-full shadow-lg" src="{{ $odcuser->picture }}"
                     alt="Profile Picture" />
                 <h5 class="mb-1 text-xl font-medium text-gray-900 dark:text-white">
-                    {{ '' . $odcuser->first_name . ' ' . $odcuser->last_name }} </h5>
+                    {{ '' . $odcuser->firstName . ' ' . $odcuser->lastName }} </h5>
                 <span class="text-base text-gray-500 dark:text-gray-400">
                     @php
                         $profession = json_decode($odcuser->profession);
@@ -70,13 +70,13 @@
                             </label>
 
                             <p class="block mb-2 text-base font-medium text-gray-900 dark:text-white">
-                                {{ $odcuser->first_name }}</p>
+                                {{ $odcuser->firstName }}</p>
                         </div>
                         <div class="flex items-center mb-3 gap-3">
                             <label for="website-admin"
-                                class="block mb-2 text-base font-black text-gray-900 dark:text-white">last_name :</label>
+                                class="block mb-2 text-base font-black text-gray-900 dark:text-white">Lastname :</label>
                             <p class="block mb-2 text-base font-medium text-gray-900 dark:text-white">
-                                {{ $odcuser->last_name }}</p>
+                                {{ $odcuser->lastName }}</p>
 
                         </div>
                         <div class="flex items-center mb-3 gap-3">
@@ -104,10 +104,10 @@
                                 class="block mb-2 text-base font-black text-gray-900 dark:text-white">Birthdate :
                             </label>
                             <p class="block mb-2 text-base font-medium text-gray-900 dark:text-white">
-                                {{ $odcuser->birth_date }}</p>
+                                {{ $odcuser->birthDay }}</p>
 
                         </div>
-
+                        
                         <div class="flex items-center mb-3 gap-3">
                             <label for="website-admin"
                                 class="block mb-2 text-base font-black text-gray-900 dark:text-white">Phone number :
@@ -135,7 +135,7 @@
                                 class="block mb-2 text-base font-black text-gray-900 dark:text-white">Nombre de participations
                                 :</label>
                             <p class="block mb-2 text-base font-medium text-gray-900 dark:text-white">
-                                {{ ($nbrEvents > 0) ? ($nbrEvents) : "Aucune participation" }}
+                                {{ $nbrEvents }}
                             </p>
                         </div>
                     </div>

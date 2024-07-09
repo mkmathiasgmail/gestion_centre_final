@@ -19,7 +19,7 @@ class CalendrierController extends Controller
 {
     public function export()
 {
-
+        
         // Récupérer les données à exporter depuis le modèle
         $activites=Activite::all();
         $categorieId = 2;
@@ -77,7 +77,7 @@ class CalendrierController extends Controller
     
       // Remplir les cellules avec les données
       $row = 8;
-      foreach($activites as $activite){
+      foreach($activites as $activite){ 
         if (stripos($activite->title, 'OpenLab') !==false || stripos($activite->title, 'Open Lab') !== false) {
           
           $sheet->setCellValue('D'. $row, $activite->title)

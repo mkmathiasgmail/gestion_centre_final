@@ -10,7 +10,7 @@ class TypeEvent extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['code', 'title'];
+    protected $fillable = ['code', 'typeEvent'];
 
     public function activite(): BelongsToMany
     {

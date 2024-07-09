@@ -10,7 +10,7 @@ class Hashtag extends Model
 {
     use HasFactory;
 
-    protected $fillable=['name'];
+    protected $fillable=['hashtag'];
 
     public function activite():BelongsToMany
     {

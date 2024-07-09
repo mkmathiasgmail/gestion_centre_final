@@ -51,8 +51,8 @@ class SearchController extends Controller
     public function searchQuery(Request $request)
     {
 
-        $data = Odcuser::select("first_name",  "last_name", "id")
-            ->where("first_name", "LIKE", "%{$request->get('query')}%")
+        $data = Odcuser::select("firstName",  "lastName", "id")
+            ->where("firstName", "LIKE", "%{$request->get('query')}%")
             ->limit(6)
             ->get();
 

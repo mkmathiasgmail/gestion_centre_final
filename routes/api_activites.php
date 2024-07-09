@@ -5,4 +5,4 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\ActiviteController;
 
-Route::apiResource('activite',ActiviteController::class)->middleware('permissions');
+Route::apiResource('activite',ActiviteController::class);

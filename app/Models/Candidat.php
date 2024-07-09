@@ -18,8 +18,8 @@ class Candidat extends Model
         'odcuser_id',
         'activite_id',
         'status'
-    ];
-    protected $table = "candidats";
+    ] ;
+    protected $table = "candidats" ;
 
     public function odcuser(): BelongsTo
     {
@@ -40,4 +40,5 @@ class Candidat extends Model
     {
         return $this->hasMany(CandidatAttribute::class);
     }
+
 }
