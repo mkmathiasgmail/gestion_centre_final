@@ -46,7 +46,7 @@ class PresenceController extends Controller
                 
                 return view('presences.confirInfo', ['prenom' => $filtre->first_name, 'nom' => $filtre->last_name]);
             } else {
-                return back()->with('error', 'Compte innactif!');
+                return back()->with('errorinactif', 'Compte innactif!');
             }
         } else {
             return back()->with('error', 'Utilisateur n\'existe pas!');
@@ -63,6 +63,8 @@ class PresenceController extends Controller
 
         $prenom = $validatedData['firstname'];
         $nom = $validatedData['lastname'];
+       
+        
 
         // Rechercher l'ID du candidat correspondant
         $candidatId = DB::table('candidats')
@@ -70,16 +72,16 @@ class PresenceController extends Controller
         ->join('activites', 'candidats.activite_id', '=', 'activites.id')
         ->where('odcusers.first_name', $prenom)
         ->where('odcusers.last_name', $nom)
-        ->whereRaw('CURRENT_DATE() BETWEEN activites.start_date AND activites.end_date')
         ->select('candidats.id')
         ->first();
+        
 
         if ($candidatId) {
             $presence = new Presence;
             $presence->candidat_id = $candidatId->id;
             $presence->date = now();
             $presence->save();
-            return redirect()->route('confirmation')->with('success', 'Présence enregistrée avec succès.');
+            return view('presences.confirmation');
         } else {
             return redirect()->back()->with('error', 'Aucun candidat trouvé pour cet utilisateur.');
         }
@@ -121,10 +123,6 @@ class PresenceController extends Controller
         $today = Carbon::today();
         $activites = Activite::where('start_date', '<=', $today)->where('end_date', '>=', $today)->get();
         return view('presences.activiteEncours', compact('activites'));
-    }
-
-    public function confirmation(){
-        return view('presences.confirmation');
     }
    
        
