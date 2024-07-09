@@ -20,30 +20,29 @@ class CalendrierController extends Controller
     public function export()
 {
         
-        // Récupérer les données à exporter depuis le modèle
-        $activites=Activite::all();
-        $categorieId = 2;
-        $categorId = 1;
-        $categorieActivites = Activite::where('categorie_id', $categorieId)->get();
-        $categorActivites = Activite::where('categorie_id', $categorId)->get();
-        $mergedActivites = $activites->merge($categorieActivites);
-        $candidats= Presence::leftJoin('candidats as ca', 'ca.id', '=', 'presences.candidat_id')
+    $activites = Activite::all();
+    $categorieId = 2;
+    $categorId = 1;
+    $categorieActivites = Activite::where('categorie_id', $categorieId)->get();
+    $categorActivites = Activite::where('categorie_id', $categorId)->get();
+    $mergedActivites = $activites->merge($categorieActivites);
+    
+    $candidats = Presence::leftJoin('candidats as ca', 'ca.id', '=', 'presences.candidat_id')
         ->leftJoin('odcusers as us', 'us.id', '=', 'ca.odcuser_id')
         ->leftJoin('activites as ac', 'ac.id', '=', 'ca.activite_id')
         ->leftJoin('categories  as cat', 'cat.id', '=', 'ac.categorie_id')
         ->whereNotNull('ac.title')
-        ->orderBy('ac.startDate', 'asc')
+        ->orderBy('ac.start_date', 'asc')
         ->select([
             'presences.candidat_id',
             'us.gender',
-            'ac.endDate',
+            'ac.end_date',
             'ac.title',
-            'ac.startDate',
-            'cat.categorie'
-            
+            'ac.start_date',
+            'cat.name'
         ])
         ->get();
-
+    
     $spreadsheet = new Spreadsheet();
     $sheet = $spreadsheet->getActiveSheet();
     $sheet->setCellValue('B1', 'STAGES');
@@ -51,18 +50,16 @@ class CalendrierController extends Controller
     $sheet->setCellValue('B3', 'Stage en Reconversion Profesionnelle');
     $sheet->setCellValue('B4', "Stage PFE (Projet de Fin d'Etudes)");
     $sheet->setCellValue('B5', "AWS re/Start");
-    ///////////////////////////////////////
     $sheet->setCellValue('F1', 'FABLAB SOLIDAIRE');
     $sheet->setCellValue('F2', 'OpenLab');
     $sheet->setCellValue('F3', "Atelier RoboKID (Ecole Numérique))");
     $sheet->setCellValue('F4', "Workshop FabLab");
-    //////////////////////////////////////
     $sheet->setCellValue('I1', 'CIBLE : EXTERNE ODC (GRAND PUBLIC)');
     $sheet->setCellValue('I2', "Formations en ligne/ODC/Univérsités");
     $sheet->setCellValue('I3', "ODC talks");
     $sheet->setCellValue('I4', "Evénement");
     $sheet->setCellValue('I5', "SuperCodeurs");
-    ///////////////////////////////////////
+    
     $sheet->setCellValue('A7', "S1 2024");
     $sheet->setCellValue('D7', "Nom activité");
     $sheet->setCellValue('E7', "Durée de la formation (jours)");
@@ -75,35 +72,122 @@ class CalendrierController extends Controller
     $sheet->setCellValue('L7', "Emplois créés");
     $sheet->setCellValue('M7', "Startups accompagnées");
     
-      // Remplir les cellules avec les données
-      $row = 8;
-      foreach($activites as $activite){ 
-        if (stripos($activite->title, 'OpenLab') !==false || stripos($activite->title, 'Open Lab') !== false) {
-          
-          $sheet->setCellValue('D'. $row, $activite->title)
-                      ->getStyle('D'.$row)
-                      ->getAlignment()
-                      ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
-          $sheet->setCellValue('E'. $row, $activite->startDate)
-                      ->getStyle('E'.$row)
-                      ->getAlignment()
-                      ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
-          $row++;
-        }
-      }
-///////////////////////////////////
+    $row = 62;
+    $categoryRow = 62;
 
-$row = 66;
-foreach ($categorieActivites as $activity) {
-    $sheet->setCellValue('D' . $row, $activity->title);
-    $row++;
-    
-}
-$row = 66;
-foreach ($categorActivites as $activite) {
-    $sheet->setCellValue('R' . $row, $activite->title);
-    $row++;
-     
+foreach ($activites as $activite) {
+    $currentYear = date('Y');
+    if (substr($activite->start_date, 0, 4) == $currentYear)  {
+        $month = date('F', strtotime($activite->start_date));
+        switch ($month) {
+            case 'January':
+                if ($activite->category == 1) {
+                    $sheet->setCellValue('C' . $row, $activite->title)
+                        ->getStyle('C' . $row)
+                        ->getAlignment()
+                        ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
+                    $sheet->setCellValue('D' . $row, $activite->start_date)
+                        ->getStyle('D' . $row)
+                        ->getAlignment()
+                        ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
+                    $row++;
+                } else {
+                    $sheet->setCellValue('G' . $categoryRow, $activite->title)
+                        ->getStyle('G' . $categoryRow)
+                        ->getAlignment()
+                        ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
+                    $sheet->setCellValue('H' . $categoryRow, $activite->start_date)
+                        ->getStyle('H' . $categoryRow)
+                        ->getAlignment()
+                        ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
+                    $categoryRow++;
+                }
+                 // Fusionner les cellules 
+                 $sheet->mergeCells('A60:J60');
+                 $sheet->mergeCells('A61:B61');
+                 
+                 // Définir le texte du mois dans la cellule A60
+                 $sheet->setCellValue('A60', 'Janvier');
+                 
+                 // Définir le style de la cellule A60:J60
+                 $sheet->getStyle('A60:J60')
+                     ->getFill()
+                     ->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)
+                     ->getStartColor()
+                     ->setARGB('FF000000');
+                 $sheet->getStyle('A60:J60')
+                     ->getFont()
+                     ->getColor()
+                     ->setARGB('FFFFFFFF');
+                 $sheet->getStyle('A60:J60')
+                     ->getAlignment()
+                     ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER)
+                     ->setVertical(\PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER);
+                 
+                 // Définir le style de la cellule A61:B61
+                 $sheet->getStyle('A61:B61')
+                     ->getFill()
+                     ->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)
+                     ->getStartColor()
+                     ->setARGB('FF000000');
+                 $sheet->getStyle('A61:B61')
+                     ->getFont()
+                     ->getColor()
+                     ->setARGB('FFFFFFFF');
+                 $sheet->getStyle('A61:B61')
+                     ->getAlignment()
+                     ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER)
+                     ->setVertical(\PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER);
+                break;
+            case 'February':
+                if ($activite->category == 1) {
+                    $sheet->setCellValue('N' . $row, $activite->title)
+                        ->getStyle('N' . $row)
+                        ->getAlignment()
+                        ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
+                    $sheet->setCellValue('O' . $row, $activite->start_date)
+                        ->getStyle('O' . $row)
+                        ->getAlignment()
+                        ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
+                    $row++;
+                } else {
+                    $sheet->setCellValue('R' . $categoryRow, $activite->title)
+                        ->getStyle('R' . $categoryRow)
+                        ->getAlignment()
+                        ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
+                    $sheet->setCellValue('S' . $categoryRow, $activite->start_date)
+                        ->getStyle('S' . $categoryRow)
+                        ->getAlignment()
+                        ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
+                    $categoryRow++;
+                }
+                break;
+            case 'March':
+                if ($activite->category == 1) {
+                    $sheet->setCellValue('Y' . $row, $activite->title)
+                        ->getStyle('Y' . $row)
+                        ->getAlignment()
+                        ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
+                    $sheet->setCellValue('Z' . $row, $activite->start_date)
+                        ->getStyle('Z' . $row)
+                        ->getAlignment()
+                        ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
+                    $row++;
+                } else {
+                    $sheet->setCellValue('AD' . $categoryRow, $activite->title)
+                        ->getStyle('AD' . $categoryRow)
+                        ->getAlignment()
+                        ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
+                    $sheet->setCellValue('AE' . $categoryRow, $activite->start_date)
+                        ->getStyle('AE' . $categoryRow)
+                        ->getAlignment()
+                        ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
+                    $categoryRow++;
+                }
+                break;
+            // Add more cases for other months as needed
+        }
+    }
 }
    
    // Définir les styles titre
