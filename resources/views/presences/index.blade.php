@@ -5,9 +5,7 @@
     <link rel="stylesheet" href="asset(css/style.css)">
     <div class="text-center flex justify-center m-20 text-white">
         <div class="">
-            <p>
-            <h1>Parcours code</h1>
-            </p>
+        
             {{ $code }}
         </div>
     </div>
