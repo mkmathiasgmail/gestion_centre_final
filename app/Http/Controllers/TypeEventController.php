@@ -34,7 +34,7 @@ class TypeEventController extends Controller
     {
         $typeEvent = TypeEvent::create([
             'code' => $request->code,
-            'typeEvent' => $request->type,
+            'title' => $request->type,
            
         ]);
 

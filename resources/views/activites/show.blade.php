@@ -1,4 +1,14 @@
 <x-app-layout>
+    @if ($errors->any())
+        @foreach ($errors->all() as $error)
+            <div class="p-4 mb-4 text-sm text-red-800 rounded-lg bg-green-50 dark:bg-gray-800 dark:text-red-400"
+                role="alert">
+
+                <span class="font-medium">{{ $error }}</span>
+
+            </div>
+        @endforeach
+    @endif
 
     <x-slot name="header">
         <div class="flex justify-between items-center">
@@ -90,6 +100,12 @@
             <li class="me-2" role="presentation">
                 <button
                     class="inline-block p-4 border-b-2 rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300"
+                    id="presence-styled-tab" data-tabs-target="#content-presence" type="button" role="tab"
+                    aria-controls="presence" aria-selected="false">Presence</button>
+            </li>
+            <li class="me-2" role="presentation">
+                <button
+                    class="inline-block p-4 border-b-2 rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300"
                     id="settings-styled-tab" data-tabs-target="#styled-settings" type="button" role="tab"
                     aria-controls="settings" aria-selected="false">Settings</button>
             </li>
@@ -98,6 +114,12 @@
                     class="inline-block p-4 border-b-2 rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300"
                     id="contacts-styled-tab" data-tabs-target="#styled-contacts" type="button" role="tab"
                     aria-controls="contacts" aria-selected="false">Contacts</button>
+            </li>
+            <li role="presentation">
+                <button
+                    class="inline-block p-4 border-b-2 rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300"
+                    id="import-styled-tab" data-tabs-target="#import" type="button" role="tab"
+                    aria-controls="Importation" aria-selected="false">Import</button>
             </li>
         </ul>
     </div>
@@ -120,10 +142,9 @@
                     <div class="flex items-center ps-3">
                         <input id="civilie" type="checkbox"
                             class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500 toggle-vis"
-              
                             data-column="0">
                         <label for="civilie"
-                            class="w-full py-3 ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">Civilie
+                            class="w-full py-3 ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">Civilite
                         </label>
                     </div>
                 </li>
@@ -263,7 +284,9 @@
                         @foreach ($candidatsData as $key => $candidat)
                             <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
                                 @foreach ($labels as $label)
-                                    <td class="px-6 py-4">{{ (isset($candidat[$label]) && $candidat[$label] !== "") ? ($candidat[$label]) : 'N/A' }}</td>
+                                    <td class="px-6 py-4">
+                                        {{ isset($candidat[$label]) && $candidat[$label] !== '' ? $candidat[$label] : 'N/A' }}
+                                    </td>
                                 @endforeach
                                 <td class="px-6 py-4">{{ $candidat['odcuser']['gender'] }}</td>
                                 <td class="px-6 py-4">
@@ -290,11 +313,7 @@
                                         class="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700 dark:divide-gray-600">
                                         <ul class="py-2 text-sm text-gray-700 dark:text-gray-200"
                                             aria-labelledby="dropdownMenuIconButton">
-                                            <li>
-                                                <a href="{{ route('candidats.show', $candidat['id']) }}"
-                                                    class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Voir
-                                                    plus de details</a>
-                                            </li>
+
                                             <li>
                                                 <a href="{{ route('candidats.edit', $candidat['id']) }}"
                                                     class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Editer</a>
@@ -312,6 +331,7 @@
                 </table>
             </div>
         </div>
+        
         <div class="hidden p-4 rounded-lg bg-gray-50 dark:bg-gray-800" id="styled-settings" role="tabpanel"
             aria-labelledby="settings-tab">
             <p class="text-sm text-gray-500 dark:text-gray-400">This is some placeholder content the <strong
@@ -319,13 +339,21 @@
                 Clicking another tab will toggle the visibility of this one for the next. The tab JavaScript swaps
                 classes to control the content visibility and styling.</p>
         </div>
+        <div class="hidden p-4 rounded-lg bg-gray-50 dark:bg-gray-800" id="content-presence" role="tabpanel"
+            aria-labelledby="settings-tab">
+            <x-activite-presence-component :fullDates="$fullDates" :dates="$dates" :data="$data" :presences="$presences"  :countdate="$countdate" :activite="$activite"
+                :candidats="$candidats" />
+        </div>
 
         <div class="hidden p-4 ro unded-lg bg-gray-50 dark:bg-gray-800" id="styled-contacts" role="tabpanel"
             aria-labelledby="contacts-tab">
-            <p class="text-sm text-gray-500 dark:text-gray-400">This is some placeholder content the <strong
-                    class="font-medium text-gray-800 dark:text-white">Contacts tab's associated content</strong>.
+            <p class="text-sm text-gray-500 dark:text-gray-400">Settings tab's associated content</strong>.
                 Clicking another tab will toggle the visibility of this one for the next. The tab JavaScript swaps
-                classes to control the content visibility and styling.</p>
+                classes to control the content visibility and styling</p>
+        </div>
+        <div class="hidden p-4 ro unded-lg bg-gray-50 dark:bg-gray-800" id="import" role="tabpanel"
+        aria-labelledby="contacts-tab">
+        <p class="text-sm text-gray-500 dark:text-gray-400"><x-activite-import/></p>
         </div>
     </div>
 
@@ -349,7 +377,7 @@
                     }]
                 });
 
-                $('input.toggle-all').on('change', function (e) {
+                $('input.toggle-all').on('change', function(e) {
                     
                 })
 
