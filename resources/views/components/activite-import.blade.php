@@ -1,7 +1,7 @@
 
 @props(['activite'])
 <div class="inline-flex">
-    <form action="{{ route('import.activite') }}" method="POST" enctype="multipart/form-data" class="max-w-sm mx-auto mt-4" >
+    <form action="{{ route('import') }}" method="POST" enctype="multipart/form-data" class="max-w-sm mx-auto mt-4" >
         @csrf
         <input type="hidden" name="activite" value="{{ $activite }}">
         <p>{{ $activite->title }}</p>
