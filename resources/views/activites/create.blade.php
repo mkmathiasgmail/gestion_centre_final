@@ -12,9 +12,9 @@
     <form action="{{ route('activite.store') }}" method="post">
         @csrf
 
-        <div>
-            <h2 class=" text-white text-3xl mb-5">Formulaire</h2>
-        </div>
+                <div>
+                    <h2 class=" text-white text-3xl mb-5">Formulaire</h2>
+                </div>
 
 
         <div class="p-5 md:p-5 space-y-4 text-white items-center">
@@ -25,7 +25,7 @@
                 <input type="text" name="title" id="title"
                     class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                     placeholder="Donne un titre à votre Article" required value="">
-            </div>
+                </div>
 
             <div>
                 <label for="date_debut">Start Date</label>
@@ -76,11 +76,11 @@
                 <label for="lieu">Location</label>
                 <select name="location" id="lieu"
                     class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-                    <option value="ODC Kinshasa">ODC Kinshasa</option>
-                    <option value="ODC Lubumbashi">ODC Lubumbashi</option>
-                    <option value="ODC Matadi">ODC Matadi</option>
-                </select>
-            </div>
+                        <option value="ODC Kinshasa">ODC Kinshasa</option>
+                        <option value="ODC Lubumbashi">ODC Lubumbashi</option>
+                        <option value="ODC Matadi">ODC Matadi</option>
+                    </select>
+                </div>
 
             <div>
                 <label for="tags">Hashtags</label>
@@ -146,7 +146,7 @@
         </div>
 
         <div class="flex items-center p-4 md:p-5 border-t border-gray-200 rounded-b dark:border-gray-600">
-            <button type="submit"
+        <button type="submit"
                 class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5">I
                 accept</button>
             <button type="reset"

@@ -135,7 +135,7 @@
             <a href="#" onclick="Reload()"
                 class="text-white bg-blue-700 hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 font-medium rounded-full text-sm px-5 py-2.5 text-center me-2 mb-5 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Actualiser</a>
             <h3 class="my-4 font-semibold text-gray-500 dark:text-gray-400">Choose columns you want to visualize</h3>
-
+            
             <ul
                 class="items-center w-full text-sm font-medium text-gray-900 bg-white border border-gray-200 sm:flex dark:bg-gray-700 dark:border-gray-600 dark:text-white">
                 <li class="w-full border-b border-gray-200 sm:border-b-0 sm:border-r dark:border-gray-600">
@@ -354,7 +354,7 @@
         <div class="hidden p-4 ro unded-lg bg-gray-50 dark:bg-gray-800" id="import" role="tabpanel"
         aria-labelledby="contacts-tab">
         <p class="text-sm text-gray-500 dark:text-gray-400"><x-activite-import/></p>
-    </div>
+        </div>
     </div>
 
 
@@ -378,7 +378,7 @@
                 });
 
                 $('input.toggle-all').on('change', function(e) {
-
+                    
                 })
 
                 // Ajouter les options pour sélectionner les colonnes à afficher/masquer

@@ -107,7 +107,7 @@
                                 {{ $odcuser->birth_date }}</p>
 
                         </div>
-
+                        
                         <div class="flex items-center mb-3 gap-3">
                             <label for="website-admin"
                                 class="block mb-2 text-base font-black text-gray-900 dark:text-white">Phone number :

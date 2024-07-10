@@ -19,14 +19,14 @@ class CalendrierController extends Controller
 {
     public function export()
 {
-
+        
         // Récupérer les données à exporter depuis le modèle
         $activites=Activite::all();
-        $categorieId = 2;
-        $categorId = 1;
-        $categorieActivites = Activite::where('categorie_id', $categorieId)->get();
-        $categorActivites = Activite::where('categorie_id', $categorId)->get();
-        $mergedActivites = $activites->merge($categorieActivites);
+    $categorieId = 2;
+    $categorId = 1;
+    $categorieActivites = Activite::where('categorie_id', $categorieId)->get();
+    $categorActivites = Activite::where('categorie_id', $categorId)->get();
+    $mergedActivites = $activites->merge($categorieActivites);
         $candidats= Presence::leftJoin('candidats as ca', 'ca.id', '=', 'presences.candidat_id')
         ->leftJoin('odcusers as us', 'us.id', '=', 'ca.odcuser_id')
         ->leftJoin('activites as ac', 'ac.id', '=', 'ca.activite_id')
@@ -43,7 +43,7 @@ class CalendrierController extends Controller
             
         ])
         ->get();
-
+    
     $spreadsheet = new Spreadsheet();
     $sheet = $spreadsheet->getActiveSheet();
     $sheet->setCellValue('B1', 'STAGES');
@@ -82,13 +82,13 @@ class CalendrierController extends Controller
           
           $sheet->setCellValue('D'. $row, $activite->title)
                       ->getStyle('D'.$row)
-                      ->getAlignment()
-                      ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
+                        ->getAlignment()
+                        ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
           $sheet->setCellValue('E'. $row, $activite->startDate)
                       ->getStyle('E'.$row)
-                      ->getAlignment()
-                      ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
-          $row++;
+                        ->getAlignment()
+                        ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
+                    $row++;
         }
       }
 ///////////////////////////////////
