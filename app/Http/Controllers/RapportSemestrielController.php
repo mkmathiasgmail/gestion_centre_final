@@ -2,84 +2,33 @@
 
 namespace App\Http\Controllers;
 
-use DateTime;
-use App\Models\Activite;
 use App\Models\Candidat;
-use App\Models\Presence;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 use PhpOffice\PhpSpreadsheet\Style\Fill;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Style\Color;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
-use PhpOffice\PhpSpreadsheet\Style\Border;
 use PhpOffice\PhpSpreadsheet\Style\Alignment;
 use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 
 
 class RapportSemestrielController extends Controller
 {
-    public function exportToExcel(Request $request){
-
-        //recuprer les valeurs selectionnée dans le select du rapport semestrielle
-        $selectYear = $request->input('yearselec');
-        $selectSemestre = $request->input('semestre');
-        
-        // on calclue  les dates de début et de fin du semestre
-        if ($selectSemestre =='1'){
-            $startDate = date('Y-m-d', strtotime($selectYear . '-01-01'));
-            $endDate = date('Y-m-d', strtotime($selectYear. '-06-30'));
-        }else{
-            $startDate = date('Y-m-d', strtotime($selectYear. '-07-01'));
-            $endDate = date('Y-m-d', strtotime($selectYear. '-12-31'));
-        }
-        
-
-        DB::enableQueryLog();
-
+    public function exportToExcel(){
         //On recuper les données depuis le model
-        $activites=Activite::all();
-        $candidats= Presence::
-        leftJoin('candidats as ca', 'presences.candidat_id', '=','ca.id')
-        ->leftJoin('odcusers as us', 'ca.odcuser_id', '=', 'us.id')
-        ->leftJoin('activites as ac',  'ca.activite_id', '=','ac.id')
-        ->leftJoin('categories  as cat', 'ac.categorie_id' , '=', 'cat.id')
-        ->leftJoin('activite_type_event as acty', 'ac.id', '=', 'acty.activite_id')
-        ->leftJoin('type_events as typ','acty.type_event_id','=','typ.id' )
-        ->whereNotNull('ac.title')
-        ->whereBetween('ac.start_date', [$startDate, $endDate])
-        ->orderBy('ac.start_date', 'asc')
-        ->orderBy('ac.title', 'asc')
-        ->select([
-            'presences.candidat_id',
-            'us.first_name',
-            'us.last_name',
-            'us.email',
-            'us.gender',
-            'us.birth_date',
-            'us.linkedin',
-            'ac.end_date',
-            'ac.title',
-            DB::raw('(ac.start_date) as startYear'),
-            'cat.name as namecat',
-            'typ.title as titletype',
-            'typ.code'
-            
-        ])->distinct()
-        ->get();
-        
+        $candidats= Candidat::with('activite')->get();
         //on cree un nouveau classeur PhpSpreadsheet
         $spreadsheet = new Spreadsheet();
         $worksheet = $spreadsheet->getActiveSheet();
 
         //premiere section du tableau
-        $worksheet->mergeCells('A1:J1');
+        $worksheet->mergeCells('A1:K1');
         $worksheet->setCellValue('A1', 'Data');
         $worksheet->getStyle('A1')
         ->getFill()
         ->setFillType(Fill::FILL_SOLID)
         ->setStartColor(new Color('ffd966'));
-    //pour l'allignement 
+    //pour l'allignement
     $worksheet->getStyle('A1')
         ->getAlignment()
         ->setHorizontal(Alignment::HORIZONTAL_CENTER);
@@ -97,101 +46,65 @@ class RapportSemestrielController extends Controller
 
 
 // fonction pour les couleurs des colonnes
-function applyColorToColumn(Worksheet $worksheet, int $startRow, string $columnLetter, string $color)
-{
-    // Récupérer le numéro de la dernière ligne du tableur
-    $lastRow = $worksheet->getHighestRow();
+function applyColorToColumn(Worksheet $worksheet, int $startRow, int $maxRows, string $columnLetter, string $color)
+{ //la couleur aux lignes spécifiques
 
-    // Créer un range pour la colonne spécifiée
-    $range = $columnLetter . $startRow . ':' . $columnLetter . $lastRow;
-
-    // Appliquer la couleur au range
-    $worksheet->getStyle($range)->getFill()
+    for ($row = $startRow; $row<= $startRow + $maxRows -1; $row++){
+        $worksheet->getStyle($columnLetter . $row)->getFill()
         ->setFillType(Fill::FILL_SOLID)
         ->getStartColor()->setARGB($color);
+    }
+
+    //couleur pour les lignes suivante
+
+    $lastRow =$worksheet->getHighestRow();
+    for($row = $startRow +$maxRows; $row <= $lastRow; $row++){
+        $worksheet->getStyle($columnLetter . $row)->getFill()->setFillType(Fill::FILL_SOLID)->getStartColor()->setARGB($color);
+    }
 }
 
-// --------------------- definitions des bordures du tableaux
-$worksheet->getStyle('A1:J3500')->getBorders()->getAllBorders()->setBorderStyle(Border::BORDER_THIN);
-$worksheet->getStyle('L1:O3500')->getBorders()->getAllBorders()->setBorderStyle(Border::BORDER_THIN);
-$worksheet->getStyle('Q1:V3500')->getBorders()->getAllBorders()->setBorderStyle(Border::BORDER_THIN);
-$worksheet->getStyle('X1:AA3500')->getBorders()->getAllBorders()->setBorderStyle(Border::BORDER_THIN);
-$worksheet->getStyle('AC1:AE3500')->getBorders()->getAllBorders()->setBorderStyle(Border::BORDER_THIN);
-$worksheet->getStyle('AF3:AF3500')->getBorders()->getAllBorders()->setBorderStyle(Border::BORDER_THIN);
-
-//-------------------------ajoute des filtres pour chaque lignes 
-
-// Récupérer la feuille de travail
-$worksheet = $spreadsheet->getActiveSheet();
-
-// Définir les options du menu déroulant
-$options = ['H', 'F'];
-
-// Créer le menu déroulant dans la cellule 'C1'
-$cell = $worksheet->getCell('C4');
-$validation = $cell->getDataValidation();
-$validation->setType(\PhpOffice\PhpSpreadsheet\Cell\DataValidation::TYPE_LIST)
-    ->setErrorStyle(\PhpOffice\PhpSpreadsheet\Cell\DataValidation::STYLE_STOP)
-    ->setAllowBlank(false)
-    ->setFormula1('"' . implode(',', $options) . '"');
-
-// Copier le menu déroulant à toute la colonne 'C'
-for ($row = 5; $row <= $worksheet->getHighestRow(); $row++) {
-    $worksheet->getCell('C' . $row)
-        ->getDataValidation()
-        ->setType(\PhpOffice\PhpSpreadsheet\Cell\DataValidation::TYPE_LIST)
-        ->setErrorStyle(\PhpOffice\PhpSpreadsheet\Cell\DataValidation::STYLE_STOP)
-        ->setAllowBlank(false)
-        ->setFormula1('"' . implode(',', $options) . '"');
-}
-
-
-$worksheet->setSelectedCell('C1');
-
-
-
-//Colonne a colorer
+//Colonne colorer
 $worksheet=$spreadsheet->getActiveSheet();
-applyColorToColumn($worksheet, 4, 'C', 'fff2cc');
+applyColorToColumn($worksheet, 4, 50, 'C', 'fff2cc');
 
 $worksheet=$spreadsheet->getActiveSheet();
-applyColorToColumn($worksheet, 4, 'D', 'fff2cc');
+applyColorToColumn($worksheet, 4, 50, 'D', 'fff2cc');
 
 $worksheet=$spreadsheet->getActiveSheet();
-applyColorToColumn($worksheet, 4, 'E', 'fff2cc');
+applyColorToColumn($worksheet, 4, 50, 'E', 'fff2cc');
 
 $worksheet=$spreadsheet->getActiveSheet();
-applyColorToColumn($worksheet, 4,'L', 'fff2cc' );
+applyColorToColumn($worksheet, 4, 50, 'L', 'fff2cc' );
 
 $worksheet=$spreadsheet->getActiveSheet();
-applyColorToColumn($worksheet, 4, 'M', 'fff2cc');
+applyColorToColumn($worksheet, 4, 50, 'M', 'fff2cc');
 
 $worksheet=$spreadsheet->getActiveSheet();
-applyColorToColumn($worksheet, 4, 'Q', 'fff2cc');
+applyColorToColumn($worksheet, 4, 50, 'Q', 'fff2cc');
 
 $worksheet=$spreadsheet->getActiveSheet();
-applyColorToColumn($worksheet, 4, 'X', 'fff2cc');
+applyColorToColumn($worksheet, 4, 50, 'X', 'fff2cc');
 
 $worksheet=$spreadsheet->getActiveSheet();
-applyColorToColumn($worksheet, 4, 'Y', 'fff2cc');
+applyColorToColumn($worksheet, 4, 50, 'Y', 'fff2cc');
 
 $worksheet=$spreadsheet->getActiveSheet();
-applyColorToColumn($worksheet, 4, 'AD', 'fff2cc');
+applyColorToColumn($worksheet, 4, 50, 'AD', 'fff2cc');
 
 
 //colonne separateur de section
 
 $worksheet=$spreadsheet->getActiveSheet();
-applyColorToColumn($worksheet, 1, 'K', 'aeaaaa');
+applyColorToColumn($worksheet, 1, 50, 'K', 'aeaaaa');
 
 $worksheet=$spreadsheet->getActiveSheet();
-applyColorToColumn($worksheet, 1, 'P', 'aeaaaa');
+applyColorToColumn($worksheet, 1, 50, 'P', 'aeaaaa');
 
 $worksheet=$spreadsheet->getActiveSheet(); 
-applyColorToColumn($worksheet, 1, 'W', 'aeaaaa');
+applyColorToColumn($worksheet, 1, 50, 'W', 'aeaaaa');
 
 $worksheet=$spreadsheet->getActiveSheet();
-applyColorToColumn($worksheet, 1, 'AB', 'aeaaaa');
+applyColorToColumn($worksheet, 1, 50, 'AB', 'aeaaaa');
 
     
         //on  defini les en-têtes de colonne        
@@ -300,36 +213,14 @@ $newColumnWidth = 3;
 $worksheet->getColumnDimension($columnLetter)->setWidth($newColumnWidth);   
 
 
-//Remplissage de données du rapport semestriel selon les choix selectionné dans le select
+//Remplissage de données 
         $row = 4;
-        $typeform=env('TYPE_FORMATION');
-        $typeform=explode(',', $typeform);
 
-        $typeconf=env('TYPE_CONFERENCE');
-        $typeconf=explode(',', $typeconf);
-
-        $typeparc=env('TYPE_PARCOURS');
-        $typeparc=explode(',', $typeparc);
-        
         foreach($candidats as $candidat){
-
-            $today = new DateTime(); // Date d'aujourd'hui
-            $birthDay = new DateTime($candidat->birth_date); // Date de naissance du candidat
-            $interval = $today->diff($birthDay);
-            $ages = $interval->y; // Âge en années
-
-            if($ages >= 15 && $ages <= 24){
-                $tranche= "15 - 24 years";
-            }elseif($ages >= 25 && $ages <=34){
-                $tranche = "25 - 34 years";
-            }elseif($ages >= 35 ){
-                $tranche = "35 > years";
-            }
-
-            $worksheet->setCellValue('A'.$row, $candidat->first_name)
+            $worksheet->setCellValue('A'.$row, $candidat->name)
                         ->getStyle('A'.$row)
                         ->getAlignment()
-                        ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_LEFT);
+                        ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
             $worksheet->setCellValue('B'.$row, $candidat->last_name)
                         ->getStyle('B'.$row)
                         ->getAlignment()
@@ -338,11 +229,11 @@ $worksheet->getColumnDimension($columnLetter)->setWidth($newColumnWidth);
                         ->getStyle('C'.$row)
                         ->getAlignment()
                         ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
-            $worksheet->setCellValue('D'.$row, $tranche)
+            $worksheet->setCellValue('D'.$row, $candidat->years)
                         ->getStyle('D'.$row)
                         ->getAlignment()
                         ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
-            $worksheet->setCellValue('E'.$row, $candidat->profession)
+            $worksheet->setCellValue('E'.$row, $candidat->socio_professional)
                         ->getStyle('E'.$row)
                         ->getAlignment()
                         ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
@@ -354,7 +245,7 @@ $worksheet->getColumnDimension($columnLetter)->setWidth($newColumnWidth);
                         ->getStyle('G'.$row)
                         ->getAlignment()
                         ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
-            $worksheet->setCellValue('H'.$row, $candidat->email)
+            $worksheet->setCellValue('H'.$row, $candidat->e_mail)
                         ->getStyle('H'.$row)
                         ->getAlignment()
                         ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
@@ -366,64 +257,17 @@ $worksheet->getColumnDimension($columnLetter)->setWidth($newColumnWidth);
                         ->getStyle('J'.$row)
                         ->getAlignment()
                         ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
+            //$worksheet->setCellValue('L'.$row, $candidat->activite->name);
 
-            if(in_array($candidat->code, $typeform)) {
-                $worksheet->setCellValue('Q' . $row, $candidat->namecat)
-                            ->getStyle('Q' . $row)
-                            ->getAlignment()
-                            ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
-                $worksheet->setCellValue('R' . $row, $candidat->startYear)
-                            ->getStyle('R' . $row)
-                            ->getAlignment()
-                            ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
-                $worksheet->setCellValue('S' . $row, $candidat->end_date)
-                            ->getStyle('S' . $row)
-                            ->getAlignment()
-                            ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
-                $worksheet->setCellValue('U' . $row, $candidat->title)
-                            ->getStyle('U' . $row)
-                            ->getAlignment()
-                            ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
-
-            }elseif (in_array($candidat->code, $typeparc)) {
-                
-            $worksheet->setCellValue('L' . $row, $candidat->namecat)
-                        ->getStyle('L' . $row)
-                        ->getAlignment()
-                        ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
-            $worksheet->setCellValue('M' . $row, $candidat->startYear)
-                        ->getStyle('M' . $row)
-                        ->getAlignment()
-                        ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
-            $worksheet->setCellValue('O' . $row, $candidat->title)
-                        ->getStyle('O' . $row)
-                        ->getAlignment()
-                        ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
-
-            }elseif(in_array($candidat->code, $typeconf)){
-                $worksheet->setCellValue('X' .$row, $candidat->namecat)
-                            ->getStyle('X' .$row)
-                            ->getAlignment()
-                            ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
-                $worksheet->setCellValue('Y' .$row, $candidat->startYear)
-                            ->getStyle('Y' .$row)
-                            ->getAlignment()
-                            ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
-                $worksheet->setCellValue('AA' .$row, $candidat->title)
-                            ->getStyle('AA' .$row)
-                            ->getAlignment()
-                            ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
-            }
-            
-
+                        //$worksheet->getRowDimension($row)->setRowHeight(-1);
             $row++;
-        }
+        } 
 
 
         //Deuxieme section du tableau
 
         $worksheet->mergeCells('L1:AB1');
-        $worksheet->setCellValue('L1', 'Participation in : Training / Internship / Event ');
+        $worksheet->setCellValue('N1', 'Participation in : Training/Internship/Event');
         $worksheet->getStyle('L1')
                     ->getFill()
                     ->setFillType(FILL::FILL_SOLID)
@@ -468,37 +312,8 @@ $worksheet->getColumnDimension($columnLetter)->setWidth($newColumnWidth);
                     ->setSize(10)
                     ->setBold(true);
 
-
-
-        //Code formule pour avoir le nombre de jours de durée d'une activité
-
-      // Récupérer la feuille de travail
-// Récupérer la feuille de travail
-$worksheet = $spreadsheet->getActiveSheet();
-
-// // Parcourir les lignes
-// for ($row = 1; $row <= $worksheet->getHighestRow(); $row++) {
-//     // Récupérer les valeurs des cellules R et S
-//     $dateStart = $worksheet->getCell('R' . $row)->getValue();
-//     $dateEnd = $worksheet->getCell('S' . $row)->getValue();
-    
-//     // Vérifier si les cellules contiennent des dates valides
-//     if ($dateStart && $dateEnd) {
-//         // Créer des objets DateTime à partir des valeurs des cellules
-//         $dateStartObj = new \DateTime($dateStart);
-//         $dateEndObj = new \DateTime($dateEnd);
-        
-//         // Calculer le nombre de jours entre les deux dates
-//         $interval = $dateStartObj->diff($dateEndObj);
-//         $days = $interval->days;
-        
-//         // Écrire le résultat dans la cellule correspondante de la colonne T
-//         $worksheet->getCell('T' . $row)->setValue($days+1);
-//     } else {
-//         // Si les cellules ne contiennent pas de dates valides, laisser la cellule vide
-//         $worksheet->getCell('T' . $row)->setValue('');
-//     }
-// }
+    // remplissage des données 
+        //.....
 
 
           //3ème section du tableau
@@ -509,7 +324,7 @@ $worksheet = $spreadsheet->getActiveSheet();
                     ->getFill()
                     ->setFillType(FILL::FILL_SOLID)
                     ->setStartColor(new Color('bdd7ee'));
-                    
+  
         $worksheet->getStyle('Q2')
                     ->getAlignment()
                     ->setHorizontal(Alignment::HORIZONTAL_CENTER);
@@ -650,6 +465,7 @@ $worksheet = $spreadsheet->getActiveSheet();
         ->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)
         ->getStartColor()->setARGB('0070C0');*/
         
+  
 
         //on cree le fichier Excel
         $writer = new Xlsx($spreadsheet); 

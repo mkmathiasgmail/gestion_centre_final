@@ -35,9 +35,7 @@ class ActiviteController extends Controller
             "endDate" => $request->endDate,
             "startDate" => $request->startDate,
             "location" => $request->location,
-            "contents" => $request->content,
         ];
-        dd($activite);
 
         try {
 

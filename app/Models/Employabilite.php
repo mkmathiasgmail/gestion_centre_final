@@ -12,7 +12,6 @@ class Employabilite extends Model
         'name',
         'type_contrat',
         'nomboite',
-        'poste',
         'periode',
         'odcuser_id',
         'derniere_activite',

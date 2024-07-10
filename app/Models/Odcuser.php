@@ -15,20 +15,20 @@ class Odcuser extends Model
 
     protected $table = "odcusers" ;
     protected $fillable = [
-        'first_name',
-        'last_name',
+        'firstName',
+        'lastName',
         'email',
         'password',
         'gender',
-        'birth_date',
-        'linkedin',
+        'birthDay',
+        'linkedIn',
         'profession',
-        'odc_country',
+        'odcCountry',
         'role',
-        'is_active',
+        'isActive',
         'hashtags',
-        'coding_school',
-        'fablab_solidaire',
+        'codingSchool',
+        'fabLabSolidaire',
         'training',
         'internship',
         'event',
@@ -37,17 +37,17 @@ class Odcuser extends Model
         'topics',
         'last_connection',
         '_id',
-        'detail_profession',
+        'detailProfession',
         'createdAt',
         'updatedAt',
         '__v',
         'picture',
-        'user_cv'
+        'userCV'
     ] ;
 
     protected $casts = [
         'profession' => 'array',
-        'detail_profession' => 'array'
+        'detailProfession' => 'array'
     ];
 
     public function activite(): BelongsToMany

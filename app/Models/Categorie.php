@@ -2,15 +2,13 @@
 
 namespace App\Models;
 
-use App\Models\Presence;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
 
 class Categorie extends Model
 {
     use HasFactory;
-    protected $fillable= ['name'];
+    protected $fillable= ['categorie'];
 
     public function articles()
     {
