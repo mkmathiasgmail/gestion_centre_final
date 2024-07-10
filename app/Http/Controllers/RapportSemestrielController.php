@@ -41,7 +41,7 @@ class RapportSemestrielController extends Controller
         }
 
 
-        //DB::enableQueryLog();
+        DB::enableQueryLog();
 
         //On recuper les données depuis le model
         $activites = Activite::all();
@@ -79,8 +79,8 @@ class RapportSemestrielController extends Controller
             ])->distinct()
             ->get();
 
-        //$queries = DB::getQueryLog();
-        //dd($queries);
+        $queries = DB::getQueryLog();
+        dd($queries);
         //dd($candidats);
 
         //on cree un nouveau classeur PhpSpreadsheet
