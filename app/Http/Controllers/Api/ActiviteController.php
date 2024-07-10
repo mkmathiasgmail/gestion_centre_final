@@ -40,7 +40,7 @@ class ActiviteController extends Controller
         dd($activite);
 
         try {
-           
+
             $requette = Http::timeout(100)
                 ->post('http://10.143.41.70:8000/2024/odc/public/api/events/create', $activite);
 
@@ -48,22 +48,22 @@ class ActiviteController extends Controller
             if ($requette->successful()) {
                 return response()->json(['success' => true, 'data' => $requette->json()], 201);
 
-                
+
             } else {
                 return response()->json(['success' => false, 'message' => 'Erreur lors de la création de l\'événement', 'error' => $requette->body()], $requette->status());
             }
         } catch (\Exception $e) {
-          
+
             return response()->json(['success' => false, 'message' => 'Request failed', 'error' => $e->getMessage()], 500);
         }
 
 
         // Return the created event
-        
+
     }
 
-   
-    
+
+
 
     /**
      * Display the specified resource.
@@ -87,5 +87,11 @@ class ActiviteController extends Controller
     public function destroy(Activite $activite)
     {
         //
+    }
+
+    public function getActiviteRecent()
+    {
+        $activite =  Activite::select('id','title', 'content')->latest()->paginate(5);
+        return response()->json($activite);
     }
 }
