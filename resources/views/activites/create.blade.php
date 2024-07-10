@@ -47,7 +47,7 @@
                     class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                     name="form">
                     @foreach ($forms as $item)
-                        <option value="{{ $item->id }}">{{ $item->name }}</option>
+                        <option value="{{ $item->_id }}">{{ $item->name }}</option>
                     @endforeach
                 </select>
             </div>
@@ -120,6 +120,12 @@
                 </div>
             </div>
 
+            <div>
+                <textarea id="message" rows="4"
+                    class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                    placeholder="Write your thoughts here..." id="paragraph" name="contents"></textarea>
+            </div>
+
 
 
             <div id="paraphe"></div>
@@ -172,12 +178,12 @@
 
 
 
-                    }).click(function(){
+                    }).click(function() {
                         $(this).remove();
-                       
+
                     });
 
-                   
+
 
                     $(".active img").css({
 
@@ -190,7 +196,7 @@
 
                 })
 
-             
+
             })
         </script>
         <script src="https://cdn.ckeditor.com/ckeditor5/41.4.2/classic/ckeditor.js"></script>
@@ -427,8 +433,8 @@
                                     </svg>
                                 </button>
                     </div>        
-                    <input type="hidden" name="bloc[${contentIndex}][type]" value="paragraph">
-                    <textarea id="paragraph" name="bloc[${contentIndex}][item]" required class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"></textarea>
+                    <input type="hidden" name="content[${contentIndex}][type]" value="paragraph">
+                    <textarea id="paragraph" name="content[${contentIndex}][item]" required class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"></textarea>
 
                 </div>
             `;
