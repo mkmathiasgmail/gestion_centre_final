@@ -134,8 +134,6 @@
                                 $detail_profession = json_decode($odcuser->detail_profession, true);
                             @endphp
                             {{ $detail_profession['speciality'] ?? '' }}
-                            @php
-                            @endphp
                         </td>
                         <td>
                             <button id="dropdownMenuIconButton" data-dropdown-toggle="dropdownDots{{ $key }}"

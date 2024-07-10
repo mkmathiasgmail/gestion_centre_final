@@ -68,8 +68,8 @@
                             <td class="px-6 py-4 flex gap-4">
                                 <a href="{{ route('presences.create', $item->id) }}"
                                     class=" p-2 bg-blue-600">Selectionner</a>
-
-
+                                    
+                                
                             </td>
                          
                         </tr>

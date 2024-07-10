@@ -51,7 +51,7 @@ class PresenceController extends Controller
         } else {
             return back()->with('error', 'Utilisateur n\'existe pas!');
         }
-    }
+    } 
     public function store(Request $request)
     {
         // Valider les données entrantes
@@ -132,5 +132,5 @@ class PresenceController extends Controller
  
 
 
-
+ 
 
