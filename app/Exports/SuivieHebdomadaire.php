@@ -211,7 +211,7 @@ class SuivieHebdomadaire
             $weekStart->addWeek();
             $weekEnd->addWeek();
         }
-        
+
         $sheet->mergeCells('A' . ($startRow + 1) . ':B' . ($startRow + 1));
         $sheet->fromArray(['Somme mensuelle', null, (string)$totalTitle, (string)$totalDay, (string)$totalHours, null, (string)$totalInscris, (string)$totalPart, (string)$totalFille, (string)$totalGarc, null], NULL, 'A' . ($startRow + 1));
 

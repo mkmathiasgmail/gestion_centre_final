@@ -38,7 +38,7 @@ class FetchOdcusers extends Command
 
         // Send a GET request to the API to retrieve active users
         $queryCandidats = Http::timeout(10000)->get("$url/users/active");
-
+        
         // Check if the API request was successful
         if ($queryCandidats->successful()) {
             $this->info("The response has succeeded, trying to process it...");
@@ -58,7 +58,7 @@ class FetchOdcusers extends Command
                 } else {
                     $this->error('Failed to retrieve data from API after token refresh.');
                     exit;
-                }
+            }
             }
 
             // Get the list of odcusers from the API response
@@ -71,12 +71,12 @@ class FetchOdcusers extends Command
             foreach ($odcusers as $person) {
                 // Check if the user already exists in the database
                 $existingUser = Odcuser::where('email', $person->email)->first();
-
+                
                 // Parse the birth date, creation date, and update date from the API response
                 $birth_date = Carbon::parse($person->birthDay);
                 $createdAt = Carbon::parse($person->createdAt);
                 $updatedAt = Carbon::parse($person->updatedAt);
-
+                
                 // Parse the last connection date from the API response
                 $last_connection = Carbon::parse($person->last_connection);
 
@@ -143,7 +143,7 @@ class FetchOdcusers extends Command
             $this->error('Failed to retrieve data from API.');
         }
     }
-
+        
     private function refreshToken()
     {
         $url = env('API_URL');

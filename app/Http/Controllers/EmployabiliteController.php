@@ -84,6 +84,7 @@ class EmployabiliteController extends Controller
                 'name' =>$request->first_name,
                 'type_contrat' => $request->type_contrat,
                 'nomboite' => $request->nomboite,
+                'poste' => $request->poste,
                 'periode' => $request->periode,
                 'derniere_activite'=> $activites->first()->title,
                 'derniere_service'=> $activites->first()->name,

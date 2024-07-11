@@ -115,6 +115,12 @@
                     id="contacts-styled-tab" data-tabs-target="#styled-contacts" type="button" role="tab"
                     aria-controls="contacts" aria-selected="false">Contacts</button>
             </li>
+            <li role="presentation">
+                <button
+                    class="inline-block p-4 border-b-2 rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300"
+                    id="import-styled-tab" data-tabs-target="#import" type="button" role="tab"
+                    aria-controls="Importation" aria-selected="false">Import</button>
+            </li>
         </ul>
     </div>
 
@@ -140,10 +146,13 @@
 
         <div class="hidden p-4 ro unded-lg bg-gray-50 dark:bg-gray-800" id="styled-contacts" role="tabpanel"
             aria-labelledby="contacts-tab">
-            <p class="text-sm text-gray-500 dark:text-gray-400">This is some placeholder content the <strong
-                    class="font-medium text-gray-800 dark:text-white">Contacts tab's associated content</strong>.
+            <p class="text-sm text-gray-500 dark:text-gray-400">Settings tab's associated content</strong>.
                 Clicking another tab will toggle the visibility of this one for the next. The tab JavaScript swaps
-                classes to control the content visibility and styling.</p>
+                classes to control the content visibility and styling</p>
+        </div>
+        <div class="hidden p-4 ro unded-lg bg-gray-50 dark:bg-gray-800" id="import" role="tabpanel"
+        aria-labelledby="contacts-tab">
+        <p class="text-sm text-gray-500 dark:text-gray-400"><x-activite-import/></p>
         </div>
     </div>
 
@@ -155,7 +164,7 @@
 
     @section('script')
         <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
-    
+
 
         <script>
             let url = "{!! $url !!}"

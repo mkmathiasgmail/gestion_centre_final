@@ -1,22 +1,21 @@
 <?php
-
 namespace App\Http\Controllers;
-
-use App\Models\TypeEvent;
-use App\Http\Requests\StoreTypeEventRequest;
-use App\Http\Requests\UpdateTypeEventRequest;
+use App\Models\User;
 use Illuminate\Http\Request;
-
-class TypeEventController extends Controller
+use Spatie\Permission\Models\Role;
+use Illuminate\Support\Facades\Session;
+class UserController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-       $typEvent= TypeEvent::all();
-       return view('typEvents.index',compact("typEvent"));
-      
+        //
+
+            $users = User::all();
+            return view('user.index',compact('users'));
+
     }
 
     /**
@@ -26,50 +25,51 @@ class TypeEventController extends Controller
     {
         //
     }
-
     /**
      * Store a newly created resource in storage.
      */
     public function store(Request $request)
     {
-        $typeEvent = TypeEvent::create([
-            'code' => $request->code,
-            'title' => $request->type,
-           
-        ]);
-
-        return redirect()->route('typevents.index', compact('typeEvent'));
+        //
     }
-
     /**
      * Display the specified resource.
      */
-    public function show(TypeEvent $typeEvent)
+    public function show(string $id)
     {
         //
-    }
 
+            $roles = Role::all();
+            $user = User::find($id);
+
+            $user_roles = $user->getRoleNames();
+            $user_role = [];
+            foreach ($user_roles as $role) {
+                $user_role[] = $role;
+            }
+            return view('user.detail',compact('roles','user','user_role'));
+
+    }
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(TypeEvent $typeEvent)
+    public function edit(string $id)
     {
         //
     }
-
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateTypeEventRequest $request, TypeEvent $typeEvent)
+    public function update(Request $request, string $id)
     {
         //
     }
-
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(TypeEvent $typeEvent)
+    public function destroy(string $id)
     {
         //
     }
 }
+

@@ -79,7 +79,7 @@ class RapportSemestrielController extends Controller
         ->getFill()
         ->setFillType(Fill::FILL_SOLID)
         ->setStartColor(new Color('ffd966'));
-    //pour l'allignement 
+    //pour l'allignement
     $worksheet->getStyle('A1')
         ->getAlignment()
         ->setHorizontal(Alignment::HORIZONTAL_CENTER);
@@ -109,7 +109,7 @@ function applyColorToColumn(Worksheet $worksheet, int $startRow, string $columnL
     $worksheet->getStyle($range)->getFill()
         ->setFillType(Fill::FILL_SOLID)
         ->getStartColor()->setARGB($color);
-}
+    }
 
 // --------------------- definitions des bordures du tableaux
 $worksheet->getStyle('A1:J3500')->getBorders()->getAllBorders()->setBorderStyle(Border::BORDER_THIN);
@@ -310,7 +310,7 @@ $worksheet->getColumnDimension($columnLetter)->setWidth($newColumnWidth);
 
         $typeparc=env('TYPE_PARCOURS');
         $typeparc=explode(',', $typeparc);
-        
+
         foreach($candidats as $candidat){
 
             $today = new DateTime(); // Date d'aujourd'hui
@@ -417,7 +417,7 @@ $worksheet->getColumnDimension($columnLetter)->setWidth($newColumnWidth);
             
 
             $row++;
-        }
+        } 
 
 
         //Deuxieme section du tableau
@@ -509,7 +509,7 @@ $worksheet = $spreadsheet->getActiveSheet();
                     ->getFill()
                     ->setFillType(FILL::FILL_SOLID)
                     ->setStartColor(new Color('bdd7ee'));
-                    
+  
         $worksheet->getStyle('Q2')
                     ->getAlignment()
                     ->setHorizontal(Alignment::HORIZONTAL_CENTER);
@@ -650,7 +650,7 @@ $worksheet = $spreadsheet->getActiveSheet();
         ->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)
         ->getStartColor()->setARGB('0070C0');*/
         
-
+  
         //on cree le fichier Excel
         $writer = new Xlsx($spreadsheet); 
         $fileName ='candidats.Xlsx';
