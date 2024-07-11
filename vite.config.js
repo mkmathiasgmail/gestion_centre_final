@@ -11,9 +11,9 @@ export default defineConfig({
                 "node_modules/datatables.net-dt/js/dataTables.dataTables.js",
                 "node_modules/select2/dist/js/select2.full.min.js",
                 "node_modules/select2/dist/css/select2.min.css",
+                "node_modules/jquery-circle-progress/dist/circle-progress.min.js",
             ],
             refresh: true,
         }),
     ],
-
 });

@@ -320,7 +320,8 @@ class ActiviteController extends Controller
     public function chartActivity()
     {
         $data = Activite::selectRaw("date_format(createdAt,'%Y-%m-%d') as date , count(*) as aggregate")->whereDate('createdAt', '>=', now()->subDays(30))->groupBy('date')->get();
+        $activites=Activite::all();
 
-        return view('dashboard',compact('data'));
+        return view('dashboard',compact('data','activites',));
     }
 }
