@@ -1,6 +1,33 @@
-<x-app-layout>
+<!DOCTYPE html>
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Laravel</title>
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.bunny.net">
+    <link href="https://fonts.bunny.net/css?family=figtree:400,600&display=swap" rel="stylesheet" />
+    @vite(['resources/css/app.css', 'resources/js/app.js', 'node_modules/select2/dist/js/select2.full.min.js', 'node_modules/select2/dist/css/select2.min.css'])
+</head>
 
+<body class="font-sans antialiased dark:bg-black dark:text-white/50">
+    <nav class="bg-white border-gray-200 dark:bg-gray-900">
+        <div class="flex flex-wrap justify-between items-center mx-auto max-w-screen-xl p-4">
+            <a href="#" class="flex items-center space-x-3 rtl:space-x-reverse">
+                <img src="{{ asset('img/orange.png') }}" class="h-8" alt="Flowbite Logo" />
+                <span class="self-center text-1xl font-semibold whitespace-nowrap dark:text-white">Orange Digital
+                    Center</span>
+            </a>
+            <div class="flex items-center space-x-6 rtl:space-x-reverse">
+            </div>
+        </div>
+    </nav>
+    <div class=" p-5">
+        <h1
+            class ="mb-4 text-4xl font-extrabold tracking-tight leading-none text-gray-900 md:text-5xl lg:text-6xl dark:text-white">
+            Check</h1>
+    </div>
     <form class="max-w-sm mx-auto" action="{{ route('presences.store') }}" method="post">
         @csrf
 <<<<<<< HEAD
@@ -31,7 +58,7 @@
                         readonly />
                 </div> --}}
                 <button type="submit"
-                    class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Valider</button>
+                    class="py-2.5 px-5 me-2 mb-2 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">Valider</button>
             </div>
         @endif
         @if ($errors->any())
@@ -44,6 +71,4 @@
             </div>
         @endif
     </form>
-
-
-</x-app-layout>
+</body>

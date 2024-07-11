@@ -23,7 +23,7 @@ class ActiviteController extends Controller
 
     public function index()
     {
-
+       
         $activites = Activite::latest()->get();
         $typeEvent = TypeEvent::all();
         $categories = Categorie::all();
@@ -31,21 +31,21 @@ class ActiviteController extends Controller
 
 
         try {
-
-            foreach ($activites as $activite) {
-                $message = Carbon::today();
+        
+        foreach ($activites as $activite) {
+            $message = Carbon::today();
                 $startDate = Carbon::parse($activite->start_date);
                 $endDate = Carbon::parse($activite->end_date);
                 if ($message >= $startDate && $message <= $endDate) {
 
-                    $activite->message = 'En cours';
+                $activite->message = 'En cours';
                 } elseif ($message < $startDate) {
+                
 
-
-                    $differenceInDays = $startDate->diffInDays($message);
-                    $activite->message = "Il y a une activité à venir $differenceInDays jours";
+                $differenceInDays = $startDate->diffInDays($message);
+                $activite->message = "Il y a une activité à venir $differenceInDays jours";
                 } else {
-                    $activite->message = 'Terminée';
+                $activite->message = 'Terminée';
                 }
             }
 
@@ -110,7 +110,7 @@ class ActiviteController extends Controller
         );
 
         try {
-            $activites = Activite::create([
+        $activites = Activite::create([
                 'title' => $validatedData['title'],
                 'categorie_id' => $validatedData['categories'],
                 'content' => $validatedData['contents'],
@@ -148,13 +148,14 @@ class ActiviteController extends Controller
 
     public function show(Activite $activite)
     {
+
         // Trouver l'Activite correspondant et récupérer le champ '_id'
         $id = $activite->id;
         $activite_Id = $activite->_id;
 
         $odcusers = Odcuser::all(['id', '_id']);
         //recuperer les presents  et la date
-        $presences= Presence::orderBy('id')->get();
+        $presences = Presence::orderBy('id')->get();
         //recuperer les presents  et la date
         $presences = Presence::orderBy('id')->get();
         $test = Presence::all();
@@ -177,7 +178,7 @@ class ActiviteController extends Controller
             }
             $candidatsData[] = $candidatArray;
         }
-        //recuperer les presents  et la date
+        //recuperer les presents  et la date 
 
         $presences = Presence::orderBy('id')->get();
         $activite = Activite::findOrFail($id);
@@ -202,14 +203,14 @@ class ActiviteController extends Controller
             $pres = Presence::where('candidat_id', $candidat->id)->get();
             try {
                 $date = $pres->toArray();
-                $presence_date = [] ;
+                $presence_date = [];
                 foreach ($pres->toArray() as $key => $date) {
-                    $presence_date[] = date('Y-m-d', strtotime($date['date'])) ;
+                    $presence_date[] = date('Y-m-d', strtotime($date['date']));
                 }
                 $candidatsPresence = $candidat->toArray();
                 $candidatsPresence['date'] = $presence_date;
                 $candidatsPresence['candidat_id'] = $candidat->id;
-                $candidatsPresence['odcuser'] = $candidat->odcuser ;
+                $candidatsPresence['odcuser'] = $candidat->odcuser;
 
                 $data[] = $candidatsPresence;
             } catch (\Throwable $th) {
@@ -217,7 +218,6 @@ class ActiviteController extends Controller
             }
         }
         return view('activites.show', compact('candidatsData', 'labels', 'data', 'activite', 'id', 'candidats', 'activite_Id', 'odcusers', 'fullDates', 'dates', 'countdate', 'presences'));
-
     }
 
 
@@ -271,14 +271,14 @@ class ActiviteController extends Controller
         );
 
         try {
-            $activite->update([
+        $activite->update([
                 'title' => $validatedData['title'],
                 'categorie_id' => $validatedData['categories'],
                 'content' => $validatedData['contents'],
                 'start_date' => $validatedData['startDate'],
                 'end_date' => $validatedData['endDate'],
                 'location' => $validatedData['location'],
-            ]);
+        ]);
 
             if ($request->has('hashtags')) {
                 $activite->hashtag()->sync($validatedData['hashtags']);
@@ -292,7 +292,7 @@ class ActiviteController extends Controller
 
 
             return redirect()->route('activites.index')
-                ->with('success', 'Activite updated successfully.');
+            ->with('success', 'Activite updated successfully.');
         } catch (\Exception $th) {
             return back()->withErrors(['error' => "An error occurred while creating the activity. $th"])->withInput();
         }
@@ -302,9 +302,9 @@ class ActiviteController extends Controller
     {
 
         try {
-            $activite->delete();
-            return redirect()->route('activites.index')
-                ->with('success', 'Activite deleted successfully.');
+        $activite->delete();
+        return redirect()->route('activites.index')
+            ->with('success', 'Activite deleted successfully.');
         } catch (\Exception $th) {
             return back()->withErrors(['error' => "An error occurred while creating the activity. $th"])->withInput();
         }
@@ -315,5 +315,12 @@ class ActiviteController extends Controller
         $today = Carbon::today();
         $activites = Activite::where('start_date', '<=', $today)->where('end_date', '>=', $today)->get();
         return view('encours', compact('activites'));
+    }
+
+    public function chartActivity()
+    {
+        $data = Activite::selectRaw("date_format(createdAt,'%Y-%m-%d') as date , count(*) as aggregate")->whereDate('createdAt', '>=', now()->subDays(30))->groupBy('date')->get();
+
+        return view('dashboard',compact('data'));
     }
 }

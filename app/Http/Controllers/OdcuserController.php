@@ -18,7 +18,7 @@ class OdcuserController extends Controller
         if (request()->expectsJson()) {
             return response()->json($odcusers);
         }
-
+    
 
         return view('odcusers.index', compact('odcusers'));
     }
@@ -60,7 +60,7 @@ class OdcuserController extends Controller
                     }
                     $datas[] = $array ;
                 }
-
+                
             }
         } else {
             echo "Sorry the user does not exist.";

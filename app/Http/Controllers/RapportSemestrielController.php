@@ -36,38 +36,48 @@ class RapportSemestrielController extends Controller
         
 
         DB::enableQueryLog();
+        DB::enableQueryLog();
 
         //On recuper les données depuis le model
-        $activites=Activite::all();
-        $candidats= Presence::
-        leftJoin('candidats as ca', 'presences.candidat_id', '=','ca.id')
-        ->leftJoin('odcusers as us', 'ca.odcuser_id', '=', 'us.id')
-        ->leftJoin('activites as ac',  'ca.activite_id', '=','ac.id')
-        ->leftJoin('categories  as cat', 'ac.categorie_id' , '=', 'cat.id')
-        ->leftJoin('activite_type_event as acty', 'ac.id', '=', 'acty.activite_id')
-        ->leftJoin('type_events as typ','acty.type_event_id','=','typ.id' )
-        ->whereNotNull('ac.title')
-        ->whereBetween('ac.start_date', [$startDate, $endDate])
-        ->orderBy('ac.start_date', 'asc')
-        ->orderBy('ac.title', 'asc')
-        ->select([
-            'presences.candidat_id',
-            'us.first_name',
-            'us.last_name',
-            'us.email',
-            'us.gender',
-            'us.birth_date',
-            'us.linkedin',
-            'ac.end_date',
-            'ac.title',
-            DB::raw('(ac.start_date) as startYear'),
-            'cat.name as namecat',
-            'typ.title as titletype',
-            'typ.code'
-            
-        ])->distinct()
-        ->get();
-        
+        $activites = Activite::all();
+        $candidats = Presence::leftJoin('candidats as ca', 'ca.id', '=', 'presences.candidat_id')
+            ->leftJoin('odcusers as us', 'us.id', '=', 'ca.odcuser_id')
+            ->leftJoin('activites as ac', 'ac.id', '=', 'ca.activite_id')
+            ->leftJoin('categories  as cat', 'cat.id', '=', 'ac.categorie_id')
+            ->leftJoin('activite_type_event as acty', 'acty.activite_id', '=', 'ac.id')
+            ->leftJoin('type_events as typ', 'typ.id', '=', 'acty.type_event_id')
+            ->leftJoin('employabilites as empl', 'empl.odcuser_id', '=', 'us.id')
+            ->whereNotNull('ac.title')
+            ->whereBetween('ac.start_date', [$startDate, $endDate])
+            ->orderBy('ac.start_date', 'asc')
+            ->orderBy('ac.title', 'asc')
+            ->select([
+                'presences.candidat_id',
+                'us.first_name',
+                'us.last_name',
+                'us.email',
+                'us.gender',
+                'us.birth_date',
+                'us.linkedin',
+                'ca.odcuser_id',
+                'ac.end_date',
+                'ac.title',
+                'empl.type_contrat',
+                'empl.nomboite',
+                'empl.poste',
+                DB::raw('(ac.start_date) as startYear'),
+                'cat.name as namecat',
+                'typ.title as titletype',
+                'typ.code',
+                'ca.id',
+
+            ])->distinct()
+            ->get();
+
+        $queries = DB::getQueryLog();
+        dd($queries);
+        //dd($candidats);
+
         //on cree un nouveau classeur PhpSpreadsheet
         $spreadsheet = new Spreadsheet();
         $worksheet = $spreadsheet->getActiveSheet();
@@ -79,7 +89,7 @@ class RapportSemestrielController extends Controller
         ->getFill()
         ->setFillType(Fill::FILL_SOLID)
         ->setStartColor(new Color('ffd966'));
-    //pour l'allignement 
+    //pour l'allignement
     $worksheet->getStyle('A1')
         ->getAlignment()
         ->setHorizontal(Alignment::HORIZONTAL_CENTER);
@@ -109,7 +119,7 @@ function applyColorToColumn(Worksheet $worksheet, int $startRow, string $columnL
     $worksheet->getStyle($range)->getFill()
         ->setFillType(Fill::FILL_SOLID)
         ->getStartColor()->setARGB($color);
-}
+    }
 
 // --------------------- definitions des bordures du tableaux
 $worksheet->getStyle('A1:J3500')->getBorders()->getAllBorders()->setBorderStyle(Border::BORDER_THIN);
@@ -310,7 +320,7 @@ $worksheet->getColumnDimension($columnLetter)->setWidth($newColumnWidth);
 
         $typeparc=env('TYPE_PARCOURS');
         $typeparc=explode(',', $typeparc);
-        
+
         foreach($candidats as $candidat){
 
             $today = new DateTime(); // Date d'aujourd'hui
@@ -417,7 +427,7 @@ $worksheet->getColumnDimension($columnLetter)->setWidth($newColumnWidth);
             
 
             $row++;
-        }
+        } 
 
 
         //Deuxieme section du tableau
@@ -509,7 +519,7 @@ $worksheet = $spreadsheet->getActiveSheet();
                     ->getFill()
                     ->setFillType(FILL::FILL_SOLID)
                     ->setStartColor(new Color('bdd7ee'));
-                    
+  
         $worksheet->getStyle('Q2')
                     ->getAlignment()
                     ->setHorizontal(Alignment::HORIZONTAL_CENTER);
@@ -650,7 +660,7 @@ $worksheet = $spreadsheet->getActiveSheet();
         ->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)
         ->getStartColor()->setARGB('0070C0');*/
         
-
+  
         //on cree le fichier Excel
         $writer = new Xlsx($spreadsheet); 
         $fileName ='candidats.Xlsx';

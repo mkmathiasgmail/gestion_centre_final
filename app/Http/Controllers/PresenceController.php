@@ -51,7 +51,7 @@ class PresenceController extends Controller
         } else {
             return back()->with('error', 'Utilisateur n\'existe pas!');
         }
-    }
+    } 
     public function store(Request $request)
     {
         // Valider les données entrantes
@@ -79,7 +79,7 @@ class PresenceController extends Controller
             $presence->candidat_id = $candidatId->id;
             $presence->date = now();
             $presence->save();
-            return redirect()->route('presences.index')->with('success', 'Présence enregistrée avec succès.');
+            return redirect()->route('confirmation')->with('success', 'Présence enregistrée avec succès.');
         } else {
             return redirect()->back()->with('error', 'Aucun candidat trouvé pour cet utilisateur.');
         }
@@ -122,11 +122,15 @@ class PresenceController extends Controller
         $activites = Activite::where('start_date', '<=', $today)->where('end_date', '>=', $today)->get();
         return view('presences.activiteEncours', compact('activites'));
     }
+
+    public function confirmation(){
+        return view('presences.confirmation');
+    }
    
        
 }
  
 
 
-
+ 
 
