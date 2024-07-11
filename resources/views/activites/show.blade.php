@@ -127,212 +127,10 @@
     <div id="default-styled-tab-content">
 
         <x-activitesShow :show="$activite" />
-        <x-activite-import :activite="$activite" />
 
         {{-- Affichage des candidats sur l'activité affichée --}}
-        <div class="p-4 rounded-lg bg-gray-50 dark:bg-gray-800" id="styled-dashboard" role="tabpanel"
-            aria-labelledby="dashboard-tab">
+        <x-show-candidates-event :labels="$labels" :candidatsData="$candidatsData" />
 
-            <a href="#" onclick="Reload()"
-                class="text-white bg-blue-700 hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 font-medium rounded-full text-sm px-5 py-2.5 text-center me-2 mb-5 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Actualiser</a>
-            <h3 class="my-4 font-semibold text-gray-500 dark:text-gray-400">Choose columns you want to visualize</h3>
-            
-            <ul
-                class="items-center w-full text-sm font-medium text-gray-900 bg-white border border-gray-200 sm:flex dark:bg-gray-700 dark:border-gray-600 dark:text-white">
-                <li class="w-full border-b border-gray-200 sm:border-b-0 sm:border-r dark:border-gray-600">
-                    <div class="flex items-center ps-3">
-                        <input id="civilie" type="checkbox"
-                            class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500 toggle-vis"
-                            data-column="0">
-                        <label for="civilie"
-                            class="w-full py-3 ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">Civilite
-                        </label>
-                    </div>
-                </li>
-                <li class="w-full border-b border-gray-200 sm:border-b-0 sm:border-r dark:border-gray-600">
-                    <div class="flex items-center ps-3">
-                        <input id="firstName" type="checkbox"
-                            class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500 toggle-vis"
-                            data-column="1" checked>
-                        <label for="firstName"
-                            class="w-full py-3 ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">Prenom</label>
-                    </div>
-                </li>
-                <li class="w-full border-b border-gray-200 sm:border-b-0 sm:border-r dark:border-gray-600">
-                    <div class="flex items-center ps-3">
-                        <input id="lastName" type="checkbox"
-                            class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500 toggle-vis"
-                            data-column="2" checked>
-                        <label for="lastName"
-                            class="w-full py-3 ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">Nom</label>
-                    </div>
-                </li>
-                <li class="w-full dark:border-gray-600">
-                    <div class="flex items-center ps-3">
-                        <input id="email" type="checkbox"
-                            class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500 toggle-vis"
-                            data-column="3">
-                        <label for="email"
-                            class="w-full py-3 ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">Email</label>
-                    </div>
-                </li>
-
-                <li class="w-full dark:border-gray-600">
-                    <div class="flex items-center ps-3">
-                        <input id="phone" type="checkbox"
-                            class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500 toggle-vis"
-                            data-column="4">
-                        <label for="phone"
-                            class="w-full py-3 ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">Telephone</label>
-                    </div>
-                </li>
-                <li class="w-full dark:border-gray-600">
-                    <div class="flex items-center ps-3">
-                        <input id="birthYear" type="checkbox"
-                            class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500 toggle-vis"
-                            data-column="5">
-                        <label for="birthYear"
-                            class="w-full py-3 ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">Annee</label>
-                    </div>
-                </li>
-            </ul>
-            <ul
-                class="items-center w-full text-sm font-medium text-gray-900 bg-white border border-gray-200 sm:flex dark:bg-gray-700 dark:border-gray-600 dark:text-white">
-                <li class="w-full dark:border-gray-600">
-                    <div class="flex items-center ps-3">
-                        <input id="studiesLevel" type="checkbox"
-                            class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500 toggle-vis"
-                            data-column="6" checked>
-                        <label for="studiesLevel"
-                            class="w-full py-3 ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">Niveau
-                            d'etudes
-                        </label>
-                    </div>
-                </li>
-                <li class="w-full dark:border-gray-600">
-                    <div class="flex items-center ps-3">
-                        <input id="establishment" type="checkbox"
-                            class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500 toggle-vis"
-                            data-column="7">
-                        <label for="establishment"
-                            class="w-full py-3 ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">Etablissement
-                        </label>
-                    </div>
-                </li>
-                <li class="w-full dark:border-gray-600">
-                    <div class="flex items-center ps-3">
-                        <input id="cv" type="checkbox"
-                            class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500 toggle-vis"
-                            data-column="8">
-                        <label for="cv"
-                            class="w-full py-3 ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">CV</label>
-                    </div>
-                </li>
-                <li class="w-full dark:border-gray-600">
-                    <div class="flex items-center ps-3">
-                        <input id="participation" type="checkbox"
-                            class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500 toggle-vis"
-                            data-column="9">
-                        <label for="participation"
-                            class="w-full py-3 ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">Participation</label>
-                    </div>
-                </li>
-                <li class="w-full dark:border-gray-600">
-                    <div class="flex items-center ps-3">
-                        <input id="genre" type="checkbox"
-                            class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500 toggle-vis"
-                            data-column="10" checked>
-                        <label for="genre"
-                            class="w-full py-3 ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">Genre</label>
-                    </div>
-                </li>
-                <li class="w-full dark:border-gray-600">
-                    <div class="flex items-center ps-3">
-                        <input id="profession" type="checkbox"
-                            class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500 toggle-vis"
-                            data-column="11" checked>
-                        <label for="profession"
-                            class="w-full py-3 ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">Profession</label>
-                    </div>
-                </li>
-            </ul>
-            <div class="py-6 relative overflow-x-auto">
-                <table id="candidatTable"
-                    class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
-                    <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
-                        <tr>
-                            @foreach ($labels as $label)
-                                <th scope="col"
-                                    class="px-6 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                    {{ $label }}</th>
-                            @endforeach
-
-                            <th scope="col"
-                                class="px-6 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                Gender
-                            </th>
-                            <th scope="col"
-                                class="px-6 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                Profession
-                            </th>
-                            <th scope="col"
-                                class="px-6 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                Actions
-                            </th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach ($candidatsData as $key => $candidat)
-                            <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
-                                @foreach ($labels as $label)
-                                    <td class="px-6 py-4">
-                                        {{ isset($candidat[$label]) && $candidat[$label] !== '' ? $candidat[$label] : 'N/A' }}
-                                    </td>
-                                @endforeach
-                                <td class="px-6 py-4">{{ $candidat['odcuser']['gender'] }}</td>
-                                <td class="px-6 py-4">
-                                    @php
-                                        $profession = json_decode($candidat['odcuser']['profession'], true);
-
-                                    @endphp
-                                    {{ $profession['translations']['fr']['profession'] ?? '' }}
-                                </td>
-                                <td>
-                                    <button id="dropdownMenuIconButton"
-                                        data-dropdown-toggle="dropdownDots{{ $key }}"
-                                        class="inline-flex items-center p-2 text-sm font-medium text-center text-gray-900 bg-white rounded-lg hover:bg-gray-100 focus:ring-4 focus:outline-none dark:text-white focus:ring-gray-50 dark:bg-gray-800 dark:hover:bg-gray-700 dark:focus:ring-gray-600"
-                                        type="button">
-                                        <svg class="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
-                                            fill="currentColor" viewBox="0 0 4 15">
-                                            <path
-                                                d="M3.5 1.5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0Zm0 6.041a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0Zm0 5.959a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0Z" />
-                                        </svg>
-                                    </button>
-
-                                    <!-- Dropdown menu -->
-                                    <div id="dropdownDots{{ $key }}"
-                                        class="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700 dark:divide-gray-600">
-                                        <ul class="py-2 text-sm text-gray-700 dark:text-gray-200"
-                                            aria-labelledby="dropdownMenuIconButton">
-
-                                            <li>
-                                                <a href="{{ route('candidats.edit', $candidat['id']) }}"
-                                                    class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Editer</a>
-                                            </li>
-                                            <li>
-                                                <a href="#"
-                                                    class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Desactiver</a>
-                                            </li>
-                                        </ul>
-                                    </div>
-                                </td>
-                            </tr>
-                        @endforeach
-                    </tbody>
-                </table>
-            </div>
-        </div>
-        
         <div class="hidden p-4 rounded-lg bg-gray-50 dark:bg-gray-800" id="styled-settings" role="tabpanel"
             aria-labelledby="settings-tab">
             <p class="text-sm text-gray-500 dark:text-gray-400">This is some placeholder content the <strong
@@ -342,8 +140,8 @@
         </div>
         <div class="hidden p-4 rounded-lg bg-gray-50 dark:bg-gray-800" id="content-presence" role="tabpanel"
             aria-labelledby="settings-tab">
-            <x-activite-presence-component :fullDates="$fullDates" :dates="$dates" :data="$data" :presences="$presences"  :countdate="$countdate" :activite="$activite"
-                :candidats="$candidats" />
+            <x-activite-presence-component :fullDates="$fullDates" :dates="$dates" :data="$data" :presences="$presences"
+                :countdate="$countdate" :activite="$activite" :candidats="$candidats" />
         </div>
 
         <div class="hidden p-4 ro unded-lg bg-gray-50 dark:bg-gray-800" id="styled-contacts" role="tabpanel"
@@ -354,8 +152,8 @@
         </div>
         <div class="hidden p-4 ro unded-lg bg-gray-50 dark:bg-gray-800" id="import" role="tabpanel"
         aria-labelledby="contacts-tab">
-        <p class="text-sm text-gray-500 dark:text-gray-400"><x-activite-import :activite="$activite"/></p>
-    </div>
+        <p class="text-sm text-gray-500 dark:text-gray-400"><x-activite-import/></p>
+        </div>
     </div>
 
 
@@ -366,32 +164,6 @@
 
     @section('script')
         <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
-        <script src="https://cdn.datatables.net/2.0.8/js/dataTables.js"></script>
-
-        <script>
-            $(document).ready(function() {
-                var table = new DataTable('#candidatTable', {
-                    "columnDefs": [{
-                        "targets": [0, 3, 4, 5, 7, 8, 9],
-                        "visible": false,
-                        "searchable": false
-                    }]
-                });
-
-                $('input.toggle-all').on('change', function(e) {
-                    
-                })
-
-                // Ajouter les options pour sélectionner les colonnes à afficher/masquer
-                $('input.toggle-vis').on('change', function(e) {
-                    // Récupérer l'index de la colonne
-                    var column = table.column($(this).attr('data-column'));
-
-                    // Basculer la visibilité de la colonne
-                    column.visible(!column.visible());
-                });
-            });
-        </script>
 
 
         <script>
