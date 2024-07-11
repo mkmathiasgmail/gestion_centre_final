@@ -161,18 +161,8 @@
                                 placeholder: 'Type search here'
                             }
                         },
-                        bottomEnd: {
-                            paging: {
-                                numbers: 3
-                            }
-                        },
 
                     },
-
-                    lengthMenu: [
-                        [10, 25, 50, -1],
-                        [10, 25, 50, 'All']
-                    ],
                 });
             });
         </script>

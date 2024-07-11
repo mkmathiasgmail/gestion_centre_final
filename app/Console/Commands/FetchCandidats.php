@@ -60,7 +60,7 @@ class FetchCandidats extends Command
 
                 // Get the response data from the API
                 $data = $queryEvent->object();
-                
+
                 if (isset($data->code) && $data->code === 401) {
                     $this->error("Token expired, refreshing...");
 
@@ -95,7 +95,7 @@ class FetchCandidats extends Command
                         $candidatInfo = [
                             'odcuser_id' => $odcuser->id,
                             'activite_id' => $activite->id,
-                            'status' => 1
+                            'status' => 'new'
                         ];
 
                         // Create or update the candidate

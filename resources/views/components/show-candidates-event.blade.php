@@ -23,6 +23,9 @@
                         Profession
                     </th>
                     <th scope="col" class="px-6 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                        Status
+                    </th>
+                    <th scope="col" class="px-6 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                         Actions
                     </th>
                 </tr>
@@ -43,6 +46,15 @@
                             @endphp
                             {{ $profession['translations']['fr']['profession'] ?? '' }}
                         </td>
+                        <td class="px-6 py-4">
+                            <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true"
+                                xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none"
+                                viewBox="0 0 24 24">
+                                <path stroke="currentColor" stroke-linecap="round" stroke-width="2"
+                                    d="m6 6 12 12m3-6a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                            </svg>
+
+                        </td>
                         <td>
                             <button id="dropdownMenuIconButton" data-dropdown-toggle="dropdownDots{{ $key }}"
                                 class="inline-flex items-center p-2 text-sm font-medium text-center text-gray-900 bg-white rounded-lg hover:bg-gray-100 focus:ring-4 focus:outline-none dark:text-white focus:ring-gray-50 dark:bg-gray-800 dark:hover:bg-gray-700 dark:focus:ring-gray-600"
@@ -62,7 +74,7 @@
 
                                     <li>
                                         <a href="{{ route('candidats.edit', $candidat['id']) }}"
-                                            class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Editer</a>
+                                            class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Valider</a>
                                     </li>
                                     <li>
                                         <a href="#"
@@ -77,3 +89,46 @@
         </table>
     </div>
 </div>
+
+@section('script')
+    <script>
+        $(document).ready(function() {
+            if ($.fn.DataTable.isDataTable('#candidatTable')) {
+                $('#candidatTable').DataTable().destroy();
+            }
+            $('#candidatTable').DataTable({
+                responsive: true,
+
+                columnDefs: [{
+                        visible: false,
+                        targets: [0, 3, 4, 5, 7, 8, 9]
+                    }, // hide columns 1 and 3 by default
+                    {
+                        responsivePriority: 1,
+                        targets: 0
+                    },
+                    {
+                        responsivePriority: 2,
+                        targets: -1
+                    }
+                ],
+                layout: {
+                    topStart: {
+                        pageLength: {
+                            menu: [10, 25, 50, 100, 200]
+                        },
+                        buttons: [
+                            'colvis'
+                        ]
+                    },
+                    topEnd: {
+                        search: {
+                            placeholder: 'Type search here'
+                        }
+                    },
+
+                },
+            });
+        });
+    </script>
+@endsection

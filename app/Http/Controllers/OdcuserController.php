@@ -60,6 +60,7 @@ class OdcuserController extends Controller
                     }
                     $datas[] = $array ;
                 }
+
             }
         } else {
             echo "Sorry the user does not exist.";
