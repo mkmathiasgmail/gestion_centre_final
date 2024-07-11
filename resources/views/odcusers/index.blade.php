@@ -89,15 +89,6 @@
     </x-slot>
 
     <div class="py-6 relative overflow-x-auto">
-        @if (isset($session['success']))
-            <div class="absolute top-0 right-0 mt-4 mr-4">
-                <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative"
-                    role="alert">
-                    <strong class="font-bold">Success!</strong>
-                    <span class="block sm:inline">{{ session('success') }}</span>
-                </div>
-            </div>
-        @endif
         <table id="usersTable" class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
             <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                 <tr>
@@ -127,8 +118,8 @@
             <tbody>
                 @foreach ($odcusers as $key => $odcuser)
                     <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
-                        <td class="px-6 py-4">{{ $odcuser->firstName }}</td>
-                        <td class="px-6 py-4">{{ $odcuser->lastName }}</td>
+                        <td class="px-6 py-4">{{ $odcuser->first_name }}</td>
+                        <td class="px-6 py-4">{{ $odcuser->last_name }}</td>
                         <td class="px-6 py-4">{{ $odcuser->email }}</td>
                         <td class="px-6 py-4">{{ $odcuser->gender }}</td>
                         <td class="px-6 py-4">
@@ -140,9 +131,9 @@
                         </td>
                         <td class="px-6 py-4">
                             @php
-                                $detailProfession = json_decode($odcuser->detailProfession, true);
+                                $detail_profession = json_decode($odcuser->detail_profession, true);
                             @endphp
-                            {{ $detailProfession['speciality'] ?? '' }}
+                            {{ $detail_profession['speciality'] ?? '' }}
                         </td>
                         <td>
                             <button id="dropdownMenuIconButton" data-dropdown-toggle="dropdownDots{{ $key }}"
@@ -187,6 +178,12 @@
         <script src="https://cdn.datatables.net/2.0.8/js/dataTables.js"></script>
         <script>
             new DataTable('#usersTable');
+        </script>
+        <script>
+            $("#dt-length-0").addClass('text-gray-700 dark:text-gray-200 w-24 bg-white');
+            $("label[for='dt-length-0']").addClass('text-gray-700 dark:text-gray-200').text(' Records per page');
+            $("label[for='dt-search-0']").addClass('text-gray-700 dark:text-gray-200');
+            $('.dt-input').addClass('text-gray-700 dark:text-gray-200');
         </script>
     @endsection
 </x-app-layout>

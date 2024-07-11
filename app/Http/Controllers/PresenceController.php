@@ -13,7 +13,6 @@ use App\Models\Candidat;
 use App\Models\Presence;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use App\Http\Requests\StorePresenceRequest;
 use App\Http\Requests\UpdatePresenceRequest;
 
 class PresenceController extends Controller
@@ -23,7 +22,8 @@ class PresenceController extends Controller
      */
     public function index()
     {
-    
+        $presence = Presence::orderBy('id')->get();
+        return view('presences.presence', compact('presence'));
     }
 
     /**
@@ -31,7 +31,7 @@ class PresenceController extends Controller
      */
     public function create()
     {
-       
+        return view('presences.selection');
     }
     public function filtrer(Request $request)
     {
