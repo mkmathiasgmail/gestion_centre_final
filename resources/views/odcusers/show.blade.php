@@ -6,14 +6,7 @@
                     {{ __('Informations du compte de l\'utilisateur : ' . $odcuser->first_name . ' ' . $odcuser->last_name) }}
                 </h2>
             </div>
-            <div class="w-1/3">
-                <form class="max-w-lg mx-auto">
-                    <div class="flex w-full">
-                        <label for="search-dropdown"
-                            class="mb-2 text-base font-medium text-gray-900 sr-only dark:text-white">Your Email</label>
-                        </h2>
-                    </div>
-            </div>
+
     </x-slot>
 
     <div class="py-6 relative overflow-x-auto">
@@ -61,109 +54,128 @@
                     {{ $profession->translations->fr->profession }}
                 </span>
             </div>
-            <div>
-                <div class="flex gap-9 justify-center">
-                    <div class="justify-center items-center gap-8 py-6">
-                        <div class="flex mb-3 gap-3 items-center">
-                            <label for="website-admin"
-                                class="block mb-2 text-base font-black text-gray-900 dark:text-white">Firstname :
-                            </label>
-
-                            <p class="block mb-2 text-base font-medium text-gray-900 dark:text-white">
-                                {{ $odcuser->first_name }}</p>
-                        </div>
-                        <div class="flex items-center mb-3 gap-3">
-                            <label for="website-admin"
-                                class="block mb-2 text-base font-black text-gray-900 dark:text-white">last_name :</label>
-                            <p class="block mb-2 text-base font-medium text-gray-900 dark:text-white">
-                                {{ $odcuser->last_name }}</p>
-
-                        </div>
-                        <div class="flex items-center mb-3 gap-3">
-                            <label for="website-admin"
-                                class="block mb-2 text-base font-black text-gray-900 dark:text-white">Email :</label>
-                            <p class="block mb-2 text-base font-medium text-gray-900 dark:text-white">
-                                @foreach ($datas as $item)
-                                    {{ (isset($item['E-mail'])) ? ($item['E-mail']) : ($odcuser->email) }}
-                                @endforeach
-                            </p>
-
-                        </div>
-                        <div class="flex items-center mb-3 gap-3">
-                            <label for="website-admin"
-                                class="block mb-2 text-base font-black text-gray-900 dark:text-white">Gender :</label>
-                            <p class="block mb-2 text-base font-medium text-gray-900 dark:text-white">
-                                {{ $odcuser->gender }}</p>
-
-                        </div>
-
-                    </div>
-                    <div class="justify-center items-center gap-8 py-6">
-                        <div class="flex items-center mb-3 gap-3">
-                            <label for="website-admin"
-                                class="block mb-2 text-base font-black text-gray-900 dark:text-white">Birthdate :
-                            </label>
-                            <p class="block mb-2 text-base font-medium text-gray-900 dark:text-white">
-                                {{ $odcuser->birth_date }}</p>
-
-                        </div>
-                        
-                        <div class="flex items-center mb-3 gap-3">
-                            <label for="website-admin"
-                                class="block mb-2 text-base font-black text-gray-900 dark:text-white">Phone number :
-                            </label>
-                            <p class="block mb-2 text-base font-medium text-gray-900 dark:text-white">
-                                @foreach ($datas as $data)
-                                    {{ (isset($data['Téléphone'])) ? ($data['Téléphone']) : "Not defined" }}
-                                @endforeach
-                            </p>
-
-                        </div>
-                        <div class="flex items-center mb-3 gap-3">
-                            <label for="website-admin"
-                                class="block mb-2 text-base font-black text-gray-900 dark:text-white">Profession
-                                :</label>
-                            <p class="block mb-2 text-base font-medium text-gray-900 dark:text-white">
+            <div class="py-6 relative overflow-x-auto">
+                <table id="userTable" class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+                    <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                        <tr>
+                            <th scope="col"
+                                class="px-6 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                Fistname
+                            </th>
+                            <th scope="col"
+                                class="px-6 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                Lastname
+                            </th>
+                            <th scope="col"
+                                class="px-6 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                Email
+                            </th>
+                            <th scope="col"
+                                class="px-6 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                Phone number
+                            </th>
+                            <th scope="col"
+                                class="px-6 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                Profession
+                            </th>
+                            <th scope="col"
+                                class="px-6 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                Education
+                            </th>
+                            <th scope="col"
+                                class="px-6 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                Candidature
+                            </th>
+                            <th scope="col"
+                                class="px-6 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                Actions
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                            <td class="px-6 py-4">{{ $odcuser->first_name }}</td>
+                            <td class="px-6 py-4">{{ $odcuser->last_name }}</td>
+                            <td class="px-6 py-4">
                                 @php
-                                    $profession = json_decode($odcuser->profession);
+                                    $email = collect($datas)->pluck('E-mail')->unique()->first();
                                 @endphp
-                                {{ $profession->translations->fr->profession }}
-                            </p>
-                        </div>
-                        <div class="flex items-center mb-3 gap-3">
-                            <label for="website-admin"
-                                class="block mb-2 text-base font-black text-gray-900 dark:text-white">Nombre de participations
-                                :</label>
-                            <p class="block mb-2 text-base font-medium text-gray-900 dark:text-white">
-                                {{ ($nbrEvents > 0) ? ($nbrEvents) : "Aucune participation" }}
-                            </p>
-                        </div>
-                    </div>
-                    <div class="justify-center items-center gap-8 py-6 mb-9">
-                        <div class="flex items-center mb-3 gap-3">
-                            <label for="website-admin"
-                                class="block mb-2 text-base font-black text-gray-900 dark:text-white">University
-                                :</label>
-                            <p class="block mb-2 text-base font-medium text-gray-900 dark:text-white">
-                                @foreach ($datas as $data)
-                                    {{ (isset($data["Nom de l'Etablissement / Université"])) ? ($data["Nom de l'Etablissement / Université"]) : "Not stored"  }}
-                                @endforeach
-                            </p>
-                        </div>
-                        <div class="items-center mb-3 gap-3 flex-col">
-                            <label for="website-admin"
-                                class="block mb-2 text-base font-black text-gray-900 dark:text-white">Liste des formations suivies
-                                :</label>
-                            <p class="block mb-2 text-base font-medium text-gray-900 dark:text-white">
+                                {{ $email }}
+                            </td>
+                            <td>
+                                @php
+                                    $phone = collect($datas)->pluck('Téléphone')->unique()->first();
+                                @endphp
+                                {{ $phone }}
+                            </td>
+                            <td class="px-6 py-4">{{ $odcuser->birth_date }}</td>
+                            <td class="px-6 py-4">
+                                @php
+                                    $university = collect($datas)
+                                        ->pluck("Nom de l'Etablissement / Université")
+                                        ->unique()
+                                        ->first();
+                                @endphp
+                                {{ $university }}
+                            </td>
+                            <td>
                                 @foreach ($candidats as $candidat)
-                                    <li class="mb-2 text-base font-medium text-gray-900 dark:text-white"">{{ (isset($candidat->activite_id)) ? ($candidat->activite->title) : "Not stored"  }}</li>
+                                    @if ($candidat->activite)
+                                        {{ $candidat->activite->title }}<br>
+                                    @endif
                                 @endforeach
-                            </p>
-                        </div>
-                    </div>
-                </div>
+                            </td>
+                            <td></td>
+                        </tr>
+                    </tbody>
+                </table>
             </div>
         </div>
     </div>
+
+    @section('script')
+        <script>
+            $(document).ready(function() {
+                $('#userTable').DataTable({
+                    responsive: true,
+                    columnDefs: [{
+                            responsivePriority: 1,
+                            targets: 0
+                        },
+                        {
+                            responsivePriority: 2,
+                            targets: -1
+                        }
+                    ],
+                    layout: {
+                        topStart: {
+                            pageLength: {
+                                menu: [10, 25, 50, 100, 200]
+                            },
+                            buttons: [
+                                'colvis'
+                            ]
+                        },
+                        topEnd: {
+                            search: {
+                                placeholder: 'Type search here'
+                            }
+                        },
+                        bottomEnd: {
+                            paging: {
+                                numbers: 3
+                            }
+                        },
+
+                    },
+
+                    lengthMenu: [
+                        [10, 25, 50, -1],
+                        [10, 25, 50, 'All']
+                    ],
+                });
+            });
+        </script>
+    @endsection
 
 </x-app-layout>

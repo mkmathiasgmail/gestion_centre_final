@@ -7,8 +7,7 @@
         class="text-white bg-blue-700 hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 font-medium rounded-full text-sm px-5 py-2.5 text-center me-2 mb-5 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Actualiser</a>
 
     <div class="py-6 relative overflow-x-auto">
-        <table id="candidatTable"
-            class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+        <table id="candidatTable" class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
             <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                 <tr>
                     @foreach ($labels as $label)
@@ -17,16 +16,13 @@
                             {{ $label }}</th>
                     @endforeach
 
-                    <th scope="col"
-                        class="px-6 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                    <th scope="col" class="px-6 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                         Gender
                     </th>
-                    <th scope="col"
-                        class="px-6 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                    <th scope="col" class="px-6 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                         Profession
                     </th>
-                    <th scope="col"
-                        class="px-6 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                    <th scope="col" class="px-6 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                         Actions
                     </th>
                 </tr>
@@ -48,8 +44,7 @@
                             {{ $profession['translations']['fr']['profession'] ?? '' }}
                         </td>
                         <td>
-                            <button id="dropdownMenuIconButton"
-                                data-dropdown-toggle="dropdownDots{{ $key }}"
+                            <button id="dropdownMenuIconButton" data-dropdown-toggle="dropdownDots{{ $key }}"
                                 class="inline-flex items-center p-2 text-sm font-medium text-center text-gray-900 bg-white rounded-lg hover:bg-gray-100 focus:ring-4 focus:outline-none dark:text-white focus:ring-gray-50 dark:bg-gray-800 dark:hover:bg-gray-700 dark:focus:ring-gray-600"
                                 type="button">
                                 <svg class="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"

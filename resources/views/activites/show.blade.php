@@ -129,7 +129,7 @@
         <x-activitesShow :show="$activite" />
 
         {{-- Affichage des candidats sur l'activité affichée --}}
-        <x-candidats :labels="$labels" :candidatsData="$candidatsData" />
+        <x-show-candidates-event :labels="$labels" :candidatsData="$candidatsData" />
 
         <div class="hidden p-4 rounded-lg bg-gray-50 dark:bg-gray-800" id="styled-settings" role="tabpanel"
             aria-labelledby="settings-tab">
