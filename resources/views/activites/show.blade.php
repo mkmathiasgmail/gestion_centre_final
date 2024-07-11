@@ -127,6 +127,7 @@
     <div id="default-styled-tab-content">
 
         <x-activitesShow :show="$activite" />
+        <x-activite-import :activite="$activite" />
 
         {{-- Affichage des candidats sur l'activité affichée --}}
         <x-show-candidates-event :labels="$labels" :candidatsData="$candidatsData" />
@@ -152,8 +153,8 @@
         </div>
         <div class="hidden p-4 ro unded-lg bg-gray-50 dark:bg-gray-800" id="import" role="tabpanel"
         aria-labelledby="contacts-tab">
-        <p class="text-sm text-gray-500 dark:text-gray-400"><x-activite-import/></p>
-        </div>
+        <p class="text-sm text-gray-500 dark:text-gray-400"><x-activite-import :activite="$activite"/></p>
+    </div>
     </div>
 
 

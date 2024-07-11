@@ -110,7 +110,7 @@
                             @endforeach
                         </td>
                         <td scope="col" class="px-6 py-3">
-                            @foreach ($typeEvent as $event)
+                            @foreach ($item->typEvent as $event)
                                 <span>{{ $event->title }}</span>
                             @endforeach
                         </td>
