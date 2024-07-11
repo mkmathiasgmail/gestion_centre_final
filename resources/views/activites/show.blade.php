@@ -127,6 +127,7 @@
     <div id="default-styled-tab-content">
 
         <x-activitesShow :show="$activite" />
+        <x-activite-import :activite="$activite" />
 
         {{-- Affichage des candidats sur l'activité affichée --}}
         <div class="p-4 rounded-lg bg-gray-50 dark:bg-gray-800" id="styled-dashboard" role="tabpanel"
