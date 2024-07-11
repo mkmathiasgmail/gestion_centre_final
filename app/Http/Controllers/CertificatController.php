@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Certificat;
+use App\Models\Odcuser;
 use Illuminate\Http\Request;
 
 class CertificatController extends Controller
@@ -12,7 +13,7 @@ class CertificatController extends Controller
      */
     public function index()
     {
-        //
+        return view('certificat.indexCertificat');
     }
 
     /**
@@ -61,5 +62,8 @@ class CertificatController extends Controller
     public function destroy(Certificat $certificat)
     {
         //
+    }
+    public function generateCertificat(){
+
     }
 }
