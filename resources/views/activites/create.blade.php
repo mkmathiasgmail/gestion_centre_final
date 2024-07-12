@@ -9,7 +9,7 @@
             </div>
         @endforeach
     @endif
-    <form action="{{ route('activite.store') }}" method="post">
+    <form action="{{ route('activites.store') }}" method="post">
         @csrf
 
                 <div>

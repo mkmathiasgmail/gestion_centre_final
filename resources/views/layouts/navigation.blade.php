@@ -97,7 +97,7 @@
                         data-inactive-classes="text-white dark:text-white">
                         <h2 id="accordion-flush-heading-2">
                             <button type="button"
-                                class="flex items-center w-full gap-3 p-2 font-medium text-gray-400 rounded-lg dark:text-white dark:hover:bg-gray-700"
+                                class="flex items-center w-full gap-3 p-2 font-medium text-gray-800 rounded-lg dark:text-white dark:hover:bg-gray-700"
                                 data-accordion-target="#accordion-flush-body-2" aria-expanded="false"
                                 aria-controls="accordion-flush-body-2">
                                 <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true"
@@ -113,15 +113,13 @@
                         </h2>
                         <div id="accordion-flush-body-2" class="hidden" aria-labelledby="accordion-flush-heading-2">
                             <div class="p-4 border-b border-gray-200 dark:border-gray-700">
-                                <p class="mb-2 text-black hover:text-white dark:text-gray-400"><a
+                                <p class="mb-2 text-black hover:text-gray dark:text-gray-400"><a
                                         href="{{ route('activites.index') }}">Actvités</a></p>
-                                <p class="mb-2 text-black hover:text-white dark:text-gray-400"><a
-                                        href="{{ route('encours') }}">Activités en cours</a></p>
-                                <p class="mb-2 text-black hover:text-white dark:text-gray-400"><a
+                                <p class="mb-2 text-black hover:text-gray dark:text-gray-400"><a
                                         href="{{route('categories.index')}}">Catégories</a></p>
-                                <p class="mb-2 text-black hover:text-white dark:text-gray-400"><a
+                                <p class="mb-2 text-black hover:text-gray dark:text-gray-400"><a
                                         href="{{ route('hashtags.index') }}">Hashtag</a></p>
-                                <p class="mb-2 text-black hover:text-white dark:text-gray-400"><a
+                                <p class="mb-2 text-black hover:text-gray dark:text-gray-400"><a
                                         href="{{ route('typevents.index') }}">Event type</a></p>
                             </div>
                         </div>
