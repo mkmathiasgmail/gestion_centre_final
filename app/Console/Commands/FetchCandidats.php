@@ -19,7 +19,7 @@ class FetchCandidats extends Command
      * @var string
      */
 
-    // What to type in the line-command for running the command
+     // What to type in the line-command for running the command
     protected $signature = 'sync:candidats';
 
     /**
@@ -61,9 +61,6 @@ class FetchCandidats extends Command
                 // Get the response data from the API
                 $data = $queryEvent->object();
 
-                // Get the "data" property from the API response
-                $candidats = $data->data;
-
                 if (isset($data->code) && $data->code === 401) {
                     $this->error("Token expired, refreshing...");
 
@@ -78,6 +75,8 @@ class FetchCandidats extends Command
                         exit;
                     }
                 }
+                // Get the "data" property from the API response
+                $candidats = $data->data;
 
                 // Initialize a counter for the number of candidates being saved
                 $e = 1;
@@ -96,7 +95,7 @@ class FetchCandidats extends Command
                         $candidatInfo = [
                             'odcuser_id' => $odcuser->id,
                             'activite_id' => $activite->id,
-                            'status' => 1
+                            'status' => 'new'
                         ];
 
                         // Create or update the candidate

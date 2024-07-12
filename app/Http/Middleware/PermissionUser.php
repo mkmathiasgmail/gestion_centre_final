@@ -21,11 +21,17 @@ class PermissionUser
 
             $user = $request->user();
 
+            
+
             if($user->hasRole('admin')){
             return $next($request);
             }
+            else {
+                return redirect()->route('activitencours');
 
-            return redirect()->route('activitencours');
+            }
+
+
 
 
 

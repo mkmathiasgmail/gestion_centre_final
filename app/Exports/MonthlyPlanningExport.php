@@ -146,7 +146,7 @@ class MonthlyPlanningExport
             ->whereYear("start_date", $year)
             ->select("activites.title", "activites.location", "activites.start_date", "activites.end_date", "tyev.title as act_title", 'ca.name')
             ->get();
-        
+
         // foreach ($activities as $activity) {
         //     if (is_null($activity->location) || $activity->location === '') {
         //         $activity->location = 'Aucune information';
@@ -162,22 +162,22 @@ class MonthlyPlanningExport
             $sheet->mergeCells('A' . $startRow . ':A' . ($startRow + $activitie->count()));
             $sheet->setCellValue('A' . $startRow, $categorie);
 
-            $data = [];
+        $data = [];
 
             foreach ($activitie as $item){
                 $differenceDay = $item->start_date && $item->end_date ? Carbon::parse($item->start_date)->diffInDays(Carbon::parse($item->end_date)) + 1 : 1;
-                $data[] = [
-                    "title" => $item->title,
+            $data[] = [
+                "title" => $item->title,
                     "periode" => $item->start_date != $item->end_date ? Carbon::parse($item->start_date)->translatedFormat("d M") . " - " . Carbon::parse($item->end_date)->translatedFormat("d M") : Carbon::parse($item->start_date)->translatedFormat("d M"),
-                    "duree" => $differenceDay > 1 ? $differenceDay . " jours" : $differenceDay . " jour",
-                    "cible" => null,
-                    "nombre" => null,
-                    "lieu" => $item->location,
-                    "intervenant" => null,
+                "duree" => $differenceDay > 1 ? $differenceDay . " jours" : $differenceDay . " jour",
+                "cible" => null,
+                "nombre" => null,
+                "lieu" => $item->location,
+                "intervenant" => null,
                     "theme" => $item->act_title ? $item->act_title : null,
-                    "observateur" => null,
-                ];    
-            }
+                "observateur" => null,
+            ];
+        }
 
             $sheet->fromArray($data, NULL, 'B' . $startRow);
             $startRow += count($data) + 1;

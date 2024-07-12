@@ -2,21 +2,18 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\TypeEvent;
-use App\Http\Requests\StoreTypeEventRequest;
-use App\Http\Requests\UpdateTypeEventRequest;
+use App\Models\Certificat;
+use App\Models\Odcuser;
 use Illuminate\Http\Request;
 
-class TypeEventController extends Controller
+class CertificatController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-       $typEvent= TypeEvent::all();
-       return view('typEvents.index',compact("typEvent"));
-      
+        return view('certificat.indexCertificat');
     }
 
     /**
@@ -32,19 +29,13 @@ class TypeEventController extends Controller
      */
     public function store(Request $request)
     {
-        $typeEvent = TypeEvent::create([
-            'code' => $request->code,
-            'title' => $request->type,
-           
-        ]);
-
-        return redirect()->route('typevents.index', compact('typeEvent'));
+        //
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(TypeEvent $typeEvent)
+    public function show(Certificat $certificat)
     {
         //
     }
@@ -52,7 +43,7 @@ class TypeEventController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(TypeEvent $typeEvent)
+    public function edit(Certificat $certificat)
     {
         //
     }
@@ -60,7 +51,7 @@ class TypeEventController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateTypeEventRequest $request, TypeEvent $typeEvent)
+    public function update(Request $request, Certificat $certificat)
     {
         //
     }
@@ -68,8 +59,11 @@ class TypeEventController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(TypeEvent $typeEvent)
+    public function destroy(Certificat $certificat)
     {
         //
+    }
+    public function generateCertificat(){
+
     }
 }
