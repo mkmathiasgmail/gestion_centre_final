@@ -75,30 +75,35 @@ class EmployabiliteController extends Controller
         // Recherche de la dernière activité
         $dateFinDerniereActivite = $dernierActivite->end_date;
 
+        try {
+            $dateEmployabilite =  $request->periode;
+            //comparaison  de superiorités entre deux
+            if ($dateEmployabilite>$dateFinDerniereActivite) {
+                // Création de l'employabilité
+                Employabilite::create([
+                    'name' =>$request->first_name,
+                    'type_contrat' => $request->type_contrat,
+                    'nomboite' => $request->nomboite,
+                    'poste' => $request->poste,
+                    'periode' => $request->periode,
+                    'derniere_activite'=> $activites->first()->title,
+                    'derniere_service'=> $activites->first()->name,
+                    'date_participation'=> $activites->first()->start_date,
+                    'odcuser_id' =>$request->id_user,
 
-        $dateEmployabilite =  $request->periode;
-        //comparaison  de superiorités entre deux
-        if ($dateEmployabilite>$dateFinDerniereActivite) {
-            // Création de l'employabilité
-            Employabilite::create([
-                'name' =>$request->first_name,
-                'type_contrat' => $request->type_contrat,
-                'nomboite' => $request->nomboite,
-                'poste' => $request->poste,
-                'periode' => $request->periode,
-                'derniere_activite'=> $activites->first()->title,
-                'derniere_service'=> $activites->first()->name,
-                'date_participation'=> $activites->first()->start_date,
-                'odcuser_id' =>$request->id_user,
+                ]);
+                return redirect()->route('employabilites.index')->with('success', 'Employé ajoutée avec succès');
 
-            ]);
-            return redirect()->route('employabilites.index')->with('success', 'Employé ajoutée avec succès');
+            } else {
 
-        } else {
+            return back()->with('error', 'La date d\'employabilité doit être supérieure à la dernière activité');
 
-        return back()->with('error', 'La date d\'employabilité doit être supérieure à la dernière activité');
+          }
+        } catch (\Throwable $th) {
+            return back()->with('error', 'Erreur lors de l\'ajout de l\'employabilité parce que l\'utilisateur n\'a pas d\'activités');
+        }
 
-      }
+
 
 
     }

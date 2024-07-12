@@ -23,7 +23,7 @@ class ActiviteController extends Controller
 
     public function index()
     {
-       
+
         $activites = Activite::latest()->get();
         $typeEvent = TypeEvent::all();
         $categories = Categorie::all();
@@ -31,7 +31,7 @@ class ActiviteController extends Controller
 
 
         try {
-        
+
         foreach ($activites as $activite) {
             $message = Carbon::today();
                 $startDate = Carbon::parse($activite->start_date);
@@ -40,7 +40,7 @@ class ActiviteController extends Controller
 
                 $activite->message = 'En cours';
                 } elseif ($message < $startDate) {
-                
+
 
                 $differenceInDays = $startDate->diffInDays($message);
                 $activite->message = "Il y a une activité à venir $differenceInDays jours";
@@ -178,7 +178,7 @@ class ActiviteController extends Controller
             }
             $candidatsData[] = $candidatArray;
         }
-        //recuperer les presents  et la date 
+        //recuperer les presents  et la date
 
         $presences = Presence::orderBy('id')->get();
         $activite = Activite::findOrFail($id);
