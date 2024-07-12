@@ -42,18 +42,6 @@
                     </ul>
                 </div>
             </div>
-            <div class="flex flex-col items-center pb-10">
-                <img class="w-24 h-24 mb-3 rounded-full shadow-lg" src="{{ $odcuser->picture }}"
-                    alt="Profile Picture" />
-                <h5 class="mb-1 text-xl font-medium text-gray-900 dark:text-white">
-                    {{ '' . $odcuser->first_name . ' ' . $odcuser->last_name }} </h5>
-                <span class="text-base text-gray-500 dark:text-gray-400">
-                    @php
-                        $profession = json_decode($odcuser->profession);
-                    @endphp
-                    {{ $profession->translations->fr->profession }}
-                </span>
-            </div>
             <div class="py-6 relative overflow-x-auto">
                 <table id="userTable" class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
                     <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
@@ -84,7 +72,7 @@
                             </th>
                             <th scope="col"
                                 class="px-6 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                Candidature
+                                Candidatures
                             </th>
                             <th scope="col"
                                 class="px-6 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">
@@ -121,7 +109,7 @@
                             <td>
                                 @foreach ($candidats as $candidat)
                                     @if ($candidat->activite)
-                                        {{ $candidat->activite->title }}<br>
+                                        <a href="{{ route('activites.show', $candidat->activite->id) }}">{{ $candidat->activite->title }} : {{ $candidat->activite->start_date }} -> {{ $candidat->activite->end_date }} </a><br>
                                     @endif
                                 @endforeach
                             </td>
