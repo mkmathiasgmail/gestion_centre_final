@@ -141,7 +141,7 @@ class ActiviteController extends Controller
 
             return redirect()->route('activites.index')->with('success', 'Activite created successfully.');
         } catch (\Exception $e) {
-            return back()->withErrors(['error' => "An error occurred while creating the activity."])->withInput();
+            return back()->withErrors(['error' => "An error occurred while creating the activity. $e"])->withInput();
         }
     }
 
@@ -177,6 +177,22 @@ class ActiviteController extends Controller
                 }
             }
             $candidatsData[] = $candidatArray;
+        }
+        $participants = Candidat::where('status', 'accept')->select('id', 'odcuser_id', 'activite_id', 'status')->with(['odcuser', 'candidat_attribute'])->get();
+        $etiquettes = [];
+        $participantsData = [] ;
+        foreach ($participants as $participant) {
+            $participantArray = $participant->toArray();
+
+            if ($participant->candidat_attribute) {
+                foreach ($participant->candidat_attribute as $attribute) {
+                    $participantArray[$attribute->label] = $attribute->value;
+                    if (!in_array($attribute->label, $etiquettes)) {
+                        $etiquettes[] = $attribute->label ;
+                    }
+                }
+            }
+            $participantsData[] = $participantArray;
         }
         //recuperer les presents  et la date
 
@@ -217,7 +233,10 @@ class ActiviteController extends Controller
                 //echo $th->getMessage();
             }
         }
-        return view('activites.show', compact('candidatsData', 'labels', 'data', 'activite', 'id', 'candidats', 'activite_Id', 'odcusers', 'fullDates', 'dates', 'countdate', 'presences'));
+
+
+
+        return view('activites.show', compact('participantsData', 'candidatsData', 'labels', 'data', 'activite', 'id', 'candidats', 'activite_Id', 'odcusers', 'fullDates', 'dates', 'countdate', 'presences'));
     }
 
 
@@ -274,11 +293,13 @@ class ActiviteController extends Controller
         $activite->update([
                 'title' => $validatedData['title'],
                 'categorie_id' => $validatedData['categories'],
-                'content' => $validatedData['contents'],
+                'contents' => $validatedData['content'],
                 'start_date' => $validatedData['startDate'],
                 'end_date' => $validatedData['endDate'],
                 'location' => $validatedData['location'],
         ]);
+
+
 
             if ($request->has('hashtags')) {
                 $activite->hashtag()->sync($validatedData['hashtags']);

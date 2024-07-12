@@ -174,7 +174,12 @@
     </div>
 
     @section('script')
-
+        <script>
+            $('#usersTable').on('click', '#dropdownMenuIconButton', function() {
+                const lien = $(this).attr('data-dropdown-toggle')
+                $('#'+lien).fadeToggle('fast')
+            })
+        </script>
         <script>
             new DataTable('#usersTable', {
                 responsive: true,
@@ -237,6 +242,7 @@
 
             });
         </script>
+
         <script>
             $("#dt-length-0").addClass('text-gray-700 dark:text-gray-200 w-24 bg-white');
             $("label[for='dt-length-0']").addClass('text-gray-700 dark:text-gray-200').text(' Records per page');

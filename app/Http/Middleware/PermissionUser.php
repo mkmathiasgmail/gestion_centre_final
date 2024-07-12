@@ -21,15 +21,19 @@ class PermissionUser
 
             $user = $request->user();
 
-            
 
+        try {
             if($user->hasRole('admin')){
-            return $next($request);
-            }
-            else {
-                return redirect()->route('activitencours');
+                return $next($request);
+                }
+                else {
+                    return redirect()->route('activitencours');
 
-            }
+                }
+
+        } catch (\Throwable $th) {
+            return back()->with('error', 'Vous n\'avez pas les droits pour accéder à cette page');
+        }
 
 
 

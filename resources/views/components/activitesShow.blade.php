@@ -24,6 +24,7 @@
             <kbd
                 class="px-2 py-1.5 text-xs font-semibold text-gray-800 bg-gray-100 border border-gray-200 rounded-lg dark:bg-gray-600 dark:text-gray-100 dark:border-gray-500">{{$item->name}}</kbd>
         @endforeach
-        <p class="mt-5 mb-5">{{ $show->content }}</p>
+       
+        <div class="mt-5 mb-5 text-justify">{!! $show->content !!}</div>
     </div>
 </div>

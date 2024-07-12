@@ -62,16 +62,4 @@
             </tbody>
         </table>
     </div>
-
-
-
-    @section('script')
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-        <script src="https://cdn.datatables.net/2.0.8/js/dataTables.js"></script>
-        <script>
-            $(document).ready(function() {
-               $('#candidatpresence').DataTable();
-            }); 
-        </script>
-    @endsection
 </x-app-layout>
