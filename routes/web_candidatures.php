@@ -8,4 +8,5 @@ Route::resource('candidats', CandidatController::class);
 Route::get('candidat_validate/{id}', [CandidatController::class, 'validate'])->name('candidat_validate');
 Route::get('candidat_reject/{id}', [CandidatController::class, 'reject'])->name('candidat_reject');
 Route::get('candidat_await/{id}', [CandidatController::class, 'await'])->name('candidat_await');
+Route::get('generate_excel/{event}', [CandidatController::class, 'generateExcel'])->name('generate_excel');
 Route::resource('odcusers', OdcuserController::class);

@@ -273,10 +273,12 @@
                                 'colvis',
                                 {
                                     extend: 'excelHtml5',
-                                    exportOptions: {
-                                        columns: ':visible'
-                                    },
-                                    title: "Liste des candidats pour : " + event
+                                    action: function(e, dt, node, config) {
+                                        e.preventDefault();
+                                        let id_event = @json($activite->id);
+                                        // Redirection vers la méthode du contrôleur
+                                        window.location.href = '{{ url('generate_excel') }}/' + id_event;
+                                    }
                                 },
                             ]
                         },
