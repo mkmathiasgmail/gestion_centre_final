@@ -31,6 +31,39 @@ class CandidatController extends Controller
         //
     }
 
+    public function validate($id)
+    {
+        $candidat = Candidat::find($id);
+        if ($candidat) {
+            $candidat->status = 'accept' ;
+            $candidat->save();
+        }
+
+        return redirect()->back();
+    }
+
+    public function reject($id)
+    {
+        $candidat = Candidat::find($id);
+        if ($candidat) {
+            $candidat->status = 'decline';
+            $candidat->save();
+        }
+
+        return redirect()->back();
+    }
+
+    public function await($id)
+    {
+        $candidat = Candidat::find($id);
+        if ($candidat) {
+            $candidat->status = 'wait';
+            $candidat->save();
+        }
+
+        return redirect()->back();
+    }
+
     /**
      * Store a newly created resource in storage.
      */
