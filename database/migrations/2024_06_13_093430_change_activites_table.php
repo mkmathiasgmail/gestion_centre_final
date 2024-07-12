@@ -30,8 +30,12 @@ return new class extends Migration
             $table->renameColumn('date_debut', 'start_date');
             $table->renameColumn('date_fin', 'end_date');
             $table->dropColumn('image');
-            $table->string('thumbnail_url')->nullable(); 
-            $table->string('number_hour')->nullable();     
+            $table->string('thumbnail_url')->nullable();
+            $table->string('number_hour')->nullable();
+        }) ;
+
+        Schema::table('activites', function (Blueprint $table) {
+            $table->json('content')->change();
         });
     }
 

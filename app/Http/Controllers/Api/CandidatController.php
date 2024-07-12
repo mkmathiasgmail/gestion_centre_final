@@ -30,11 +30,11 @@ class CandidatController extends Controller
             'activite_id' => 'required'
         ]);
 
-        // // Create a new Candidat record
+        // Create a new Candidat record
         $candidat = Candidat::firstOrCreate([
             'odcuser_id' => $validatedData['odcuser_id'],
             'activite_id' => $validatedData['activite_id'],
-            'status' => 1 // Assuming default status is 1
+            'status' => 'new' // Assuming default status is 1
         ]);
         return response()->json(['success' => true, 'candidat' => $candidat], 200);
     }

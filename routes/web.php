@@ -26,4 +26,4 @@ require __DIR__.'/web_employabilite.php';
 require __DIR__.'/web_semestriel_rapport.php';
 
 require __DIR__.'/web_import.php';
-
+require __DIR__.'/web_certificat.php';
