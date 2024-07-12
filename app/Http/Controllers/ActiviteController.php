@@ -141,7 +141,7 @@ class ActiviteController extends Controller
 
             return redirect()->route('activites.index')->with('success', 'Activite created successfully.');
         } catch (\Exception $e) {
-            return back()->withErrors(['error' => "An error occurred while creating the activity."])->withInput();
+            return back()->withErrors(['error' => "An error occurred while creating the activity. $e"])->withInput();
         }
     }
 
@@ -274,11 +274,13 @@ class ActiviteController extends Controller
         $activite->update([
                 'title' => $validatedData['title'],
                 'categorie_id' => $validatedData['categories'],
-                'content' => $validatedData['contents'],
+                'contents' => $validatedData['content'],
                 'start_date' => $validatedData['startDate'],
                 'end_date' => $validatedData['endDate'],
                 'location' => $validatedData['location'],
         ]);
+
+
 
             if ($request->has('hashtags')) {
                 $activite->hashtag()->sync($validatedData['hashtags']);

@@ -35,7 +35,7 @@ class FetchForm extends Command
 
             $url = env('API_URL');
 
-            $response = Http::timeout("100000")->get("http://10.143.41.70:8000/2024/odc/public/api/forms");
+            $response = Http::timeout("100000")->get("$url/forms");
 
             if ($response->successful()) {
                 $workshops = $response->json()['data'];
