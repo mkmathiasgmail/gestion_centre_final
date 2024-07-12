@@ -29,6 +29,7 @@ class ActiviteController extends Controller
 
 
 
+
                 $activite = [
                     "title" => $request->title,
                     "categories" => $request->categories,
@@ -58,11 +59,12 @@ class ActiviteController extends Controller
                             ],
                         ]
 
+
                     ],
 
                 ];
 
-                try {
+        try {
 
                     $requette = Http::timeout(100)
                         ->post("$url/events/create", $activite);
@@ -97,6 +99,7 @@ class ActiviteController extends Controller
                         ],
                     ],
 
+
                 ];
 
                 try {
@@ -119,7 +122,10 @@ class ActiviteController extends Controller
 
         // Return the created event
 
+
     }
+
+
 
 
 
@@ -146,5 +152,11 @@ class ActiviteController extends Controller
     public function destroy(Activite $activite)
     {
         //
+    }
+
+    public function getActiviteRecent()
+    {
+        $activite =  Activite::select('id','title', 'content')->latest()->paginate(5);
+        return response()->json($activite);
     }
 }
