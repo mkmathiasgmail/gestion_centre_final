@@ -5,73 +5,89 @@
         </h2>
     </x-slot>
 
-    <section class=" mt-4">
-        <div>
-            <div class="flex gap-4 ">
-                <div class=" flex gap-10 p-4 rounded-lg shadow-lg dark:shadow-lg dark:shadow-cyan-100/20">
-
-                    <div>
-                        <h3 class="text-lg font-semibold text-gray-800 dark:text-gray-200">
-                            Total registered activitity: {{ $data->sum('aggregate') }}
-                        </h3>
-                        <p class="text-sm font-normal text-gray-500 dark:text-gray-400">
-                            Number of activitity registered in the last 30 days.
-                        </p>
-                    </div>
-
-                    <div id="circle"></div>
-
-                </div>
-
-                <div class=" flex gap-10 p-4 rounded-lg shadow-lg dark:shadow-lg dark:shadow-cyan-100/20">
-                    <div>
-                        <h3 class="text-lg font-semibold text-gray-800 dark:text-gray-200">
-                            Total registered activites: <span id="count">{{ $activites->count() }}</span>
-                        </h3>
-                        <p class="text-sm font-normal text-gray-500 dark:text-gray-400">
-                            Number of activities registered in the last 3 </p>
-                    </div>
-
-                    <div id="circle2"></div>
-
-
-                </div>
-
-            </div>
-        </div>
-    </section>
+    <div class=" mt-4">
+        <h1
+            class="mb-4 text-4xl font-extrabold leading-none tracking-tight text-gray-900 md:text-5xl lg:text-6xl dark:text-white">
+            Registered activity in the last 30 days</h1>
+        <p class="mb-6 text-lg font-normal text-gray-500 lg:text-xl  dark:text-gray-400">Here at
+            Flowbite we focus on markets where technology, innovation, and capital can unlock long-term value
+            and
+            drive
+            economic growth.</p>
+    </div>
 
     <section class=" mt-4">
-        <div>
+        <div class=" flex gap-10">
             <div>
-                <h1
-                    class="mb-4 text-4xl font-extrabold leading-none tracking-tight text-gray-900 md:text-5xl lg:text-6xl dark:text-white">
-                    Registered activity in the last 30 days</h1>
-                <p class="mb-6 text-lg font-normal text-gray-500 lg:text-xl  dark:text-gray-400">Here at
-                    Flowbite we focus on markets where technology, innovation, and capital can unlock long-term value
-                    and
-                    drive
-                    economic growth.</p>
+                <div class="flex gap-4 ">
+                    <div class=" flex gap-10 p-4 rounded-lg shadow-lg dark:shadow-lg dark:shadow-cyan-100/20">
+
+                        <div>
+                            <h3 class="text-lg font-semibold text-gray-800 dark:text-gray-200">
+                                Total registered activitity: {{ $data->sum('aggregate') }}
+                            </h3>
+                            <p class="text-sm font-normal text-gray-500 dark:text-gray-400">
+                                Number of activitity registered in the last 30 days.
+                            </p>
+                        </div>
+
+                        <div id="circle"></div>
+
+                    </div>
+
+                    <div class=" flex gap-10 p-4 rounded-lg shadow-lg dark:shadow-lg dark:shadow-cyan-100/20">
+                        <div>
+                            <h3 class="text-lg font-semibold text-gray-800 dark:text-gray-200">
+                                Total registered activites: <span id="count">{{ $activites->count() }}</span>
+                            </h3>
+                            <p class="text-sm font-normal text-gray-500 dark:text-gray-400">
+                                Number of activities registered in the last 3 </p>
+                        </div>
+
+                        <div id="circle2"></div>
+
+
+                    </div>
+                    <div class=" flex gap-10 p-4 rounded-lg shadow-lg dark:shadow-lg dark:shadow-cyan-100/20">
+                        <div>
+                            <h3 class="text-lg font-semibold text-gray-800 dark:text-gray-200">
+                                Total registered activites: <span id="count">{{ $activites->count() }}</span>
+                            </h3>
+                            <p class="text-sm font-normal text-gray-500 dark:text-gray-400">
+                                Number of activities registered in the last 3 </p>
+                        </div>
+
+                        <div id="circle2"></div>
+
+
+                    </div>
+
+                </div>
             </div>
-
-
-            <div>
-                <canvas id="myChart"></canvas>
+            <div class=" flex gap-10">
+                <div class=" p-4 rounded-lg shadow-lg dark:shadow-lg dark:shadow-cyan-100/20">
+                    <div>
+                        <h3 class="text-lg font-semibold text-gray-800 dark:text-gray-200">Total registered activites</h3>
+                    </div>
+                    <div>
+                        <canvas id="myChart"></canvas>
+                    </div>
+                </div>
             </div>
         </div>
 
-
     </section>
+
 
     @section('script')
         <script>
             $(document).ready(function() {
-                let value= document.getElementById('count')
+                let value = document.getElementById('count')
                 $('#circle').circleProgress({
                     value: 0.75,
                     size: 80,
                     fill: {
-                        gradient: ["blue", "orange","red"]
+                        gradient: ["blue", "orange", "red"]
                     }
                 });
 
@@ -79,13 +95,15 @@
                     value: 0.85,
                     size: 80,
                     fill: {
-                        gradient: ["yellow", "orange","red"]
+                        gradient: ["yellow", "orange", "red"]
                     }
                 });
             })
         </script>
-        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
+
+
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
         <script>
             const data = {
@@ -98,7 +116,7 @@
                 }]
             };
             const config = {
-                type: 'bar',
+                type: 'doughnut',
                 data: data,
                 options: {
                     animations: {
