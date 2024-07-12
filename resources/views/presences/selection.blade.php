@@ -44,7 +44,7 @@
         </div>
     @endif
     <div class="mt-20">
-        <form class="max-w-sm mx-auto" action="{{ route('filtrer') }}" method="post" id="verifyuserForm">
+        <form class="max-w-sm mx-auto" action="{{ route('filtrer', $id) }}" method="post" id="verifyuserForm">
             @method('post')
             @csrf
             <div class="mb-5">
