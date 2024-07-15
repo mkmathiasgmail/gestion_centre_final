@@ -41,7 +41,16 @@ class EmployabiliteController extends Controller
      */
     public function store(StoreEmployabiliteRequest $request)
     {
-                    $name = $request->input('first_name');
+
+        $request->validate([
+
+            'first_name' => 'required|string',
+            'type_contrat' => 'required|string',
+            'periode' => 'required|date',
+            'nomboite' => 'required|string',
+            'poste' => 'required|string',
+        ]);
+            $name = $request->input('first_name');
             $names = explode(' ', $name);
 
             $firstName = $names[0];
@@ -68,6 +77,8 @@ class EmployabiliteController extends Controller
         ->where('od.last_name', '=', $lastName)
         ->orderBy('end_date', 'desc')
         ->get();
+
+
                     // Vérifications des dates
                 $dateEmployabilite = $request->periode;
 
@@ -76,16 +87,16 @@ class EmployabiliteController extends Controller
                 $dateFinDerniereActivite = $dernierActivite->end_date;
 
                 try {
-                    // Convertir les dates en objets DateTime
+
                     $dateEmployabilite = new DateTime($request->periode);
                     $dateFinDerniereActivite = new DateTime($dateFinDerniereActivite);
                     $dateAujourdhui = new DateTime();
 
                     // Vérifier si la date d'employabilité est supérieure à la dernière activité
                     if ($dateEmployabilite > $dateFinDerniereActivite) {
-                        // Vérifier si la date d'employabilité n'est pas supérieure à la date du jour
+
                         if ($dateEmployabilite <= $dateAujourdhui) {
-                            // Création de l'employabilité
+                           
                             Employabilite::create([
                                 'name' => $request->first_name,
                                 'type_contrat' => $request->type_contrat,

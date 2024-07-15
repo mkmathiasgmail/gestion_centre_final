@@ -176,56 +176,66 @@
 
 
         <script>
-                //scrpit pour l'autocomplete
-            $(function() {
-                $('#first_name').on('input', function() {
-                    var query = $(this).val();
-                    if (query != '') {
-                        var _token = $('input[name="_token"]').val();
-                        $.ajax({
-                            url: "{{ route('autocomplete') }}",
-                            method: "GET",
-                            data: {
-                                query: query,
-                                _token: _token
-                            },
-                            success: function(data) {
-                                $('#countryList').fadeIn();
-                                $('#countryList').empty(); // Vider la liste avant d'ajouter de nouveaux éléments
-                                let data_user = $.each(data, function(index, item) {
-                                    $('#countryList').append('<p id="id_odc" class="hidden">' +  item.id + '</p><ul class= "font-bold"><li class="pl-4 bg-gray-300 hover:bg-gray-400">' + item.first_name +
-                                        '  ' + item.last_name + '</li></ul>');
+                    //scrpit pour l'autocomplete
+                $(function() {
+                    $('#first_name').on('input', function() {
+                        var query = $(this).val();
+                        if (query != '') {
+                            var _token = $('input[name="_token"]').val();
+                            $.ajax({
+                                url: "{{ route('autocomplete') }}",
+                                method: "GET",
+                                data: {
+                                    query: query,
+                                    _token: _token
+                                },
+                                success: function(data) {
+                                    $('#countryList').fadeIn();
+                                    $('#countryList').empty(); // Vider la liste avant d'ajouter de nouveaux éléments
+                                    let data_user = $.each(data, function(index, item) {
+                                        $('#countryList').append('<p id="id_odc" class="hidden">' +  item.id + '</p><ul class= "font-bold"><li class="pl-4 bg-gray-300 hover:bg-gray-400">' + item.first_name +
+                                            '  ' + item.last_name + '</li></ul>');
 
 
 
-                                });
+                                    });
 
 
-                            }
-                        });
-                    } else {
+                                }
+                            });
+                        } else {
+                            $('#countryList').fadeOut();
+                        }
+                    });
+
+                    delay:500,
+
+                    $(document).on('click', 'li', function() {
+                        $('#first_name').val($(this).text());
+                    var go=   $("#id_odc").text()
+                    $("#id_user").attr("value", go)
                         $('#countryList').fadeOut();
-                    }
+                    });
+                            //faire une reinitialisation de champ
+                        $('#resetButton').click(function() {
+                    $('#first_name').val(''); // Vider le champ de saisie
+                    $('#countryList').fadeOut(); // Cacher la liste des suggestions
+            });
+
+
                 });
+                /// fin script autocomplete
 
-                delay:500,
+                    //script pour
+                new DataTable('#table');
+                    //script pour la date
+                document.addEventListener('DOMContentLoaded', function () {
+                        var today = new Date().toISOString().split('T')[0];
+                        document.getElementById('periode').setAttribute('max', today);
+                    });
 
-                $(document).on('click', 'li', function() {
-                    $('#first_name').val($(this).text());
-                 var go=   $("#id_odc").text()
-                 $("#id_user").attr("value", go)
-                    $('#countryList').fadeOut();
-                });
-                        //faire une reinitialisation de champ
-                    $('#resetButton').click(function() {
-                $('#first_name').val(''); // Vider le champ de saisie
-                $('#countryList').fadeOut(); // Cacher la liste des suggestions
-        });
+                    //fin script date
 
-
-    });
-    new DataTable('#table');
-
-</script>
-    @endsection
+    </script>
+@endsection
 </x-app-layout>
