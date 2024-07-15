@@ -38,7 +38,7 @@ class FetchData extends Command
 
             $url = env('API_URL');
 
-            $response = Http::timeout("100000")->get("http://10.143.41.70:8000/2024/odc/public/api/events/active");
+            $response = Http::timeout("100000")->get("$url/events/active");
 
             if ($response->successful()) {
                 $workshops = $response->json()['data'];
@@ -63,9 +63,19 @@ class FetchData extends Command
                         $categoryName = isset($workshopData['categories'][0]) ? $workshopData['categories'][0] : "";
                         $category = Categorie::firstOrCreate(['name' => $categoryName]);
 
+                        $contentFr = '';
+                        if (isset($workshopData['translations']['fr']['content'])) {
+                            foreach ($workshopData['translations']['fr']['content'] as $contentItem) {
+                                if ($contentItem['type'] == 'content' && $contentItem['lang'] == 'fr') {
+                                    $contentFr = $contentItem['data']['content'] ?? '';
+                                    break;
+                                }
+                            }
+                        }
+
                         $activityData = [
                             'title' => $workshopData['translations']['fr']['title'],
-                            'content' => json_encode($workshopData['translations']['fr']['content']),
+                            'content' => $contentFr,
                             'categorie_id' => $category->id,
                             'start_date' => $start,
                             'status' => $workshopData['status'],

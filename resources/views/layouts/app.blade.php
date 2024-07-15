@@ -15,13 +15,14 @@
     <link rel="stylesheet" href="https://cdn.datatables.net/2.0.8/css/dataTables.dataTables.css">
     <link rel="stylesheet" href="https://cdn.datatables.net/responsive/3.0.2/css/responsive.dataTables.css">
     <link rel="stylesheet" href="https://cdn.datatables.net/buttons/3.0.2/css/buttons.dataTables.css">
+
     <link rel="stylesheet" href="https://cdn.ckeditor.com/ckeditor5/42.0.0/ckeditor5.css" />
     <link rel="stylesheet"
         href="https://cdn.ckeditor.com/ckeditor5-premium-features/42.0.0/ckeditor5-premium-features.css" />
 
 
     <!-- Scripts -->
-    @vite(['resources/css/app.css', 'resources/js/app.js', 'node_modules/select2/dist/js/select2.full.min.js', 'node_modules/select2/dist/css/select2.min.css'])
+    @vite(['resources/css/app.css', 'resources/js/app.js', 'node_modules/select2/dist/js/select2.full.min.js', 'node_modules/select2/dist/css/select2.min.css','node_modules/jquery-circle-progress/dist/circle-progress.min.js',])
 </head>
 
 <body class="font-sans antialiased">
@@ -48,7 +49,18 @@
     </div>
     <script src="{{ Vite::asset('node_modules/jquery/dist/jquery.min.js') }}"></script>
     <script src="{{ Vite::asset('node_modules/select2/dist/js/select2.full.min.js') }}"></script>
-
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdn.datatables.net/2.0.8/js/dataTables.js"></script>
+    <script src="https://cdn.datatables.net/buttons/3.0.2/js/buttons.dataTables.js"></script>
+    <script src="https://cdn.datatables.net/buttons/3.0.2/js/buttons.colVis.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/3.0.2/js/dataTables.buttons.js"></script>
+    <script src="https://cdn.datatables.net/responsive/3.0.2/js/dataTables.responsive.js"></script>
+    <script src="https://cdn.datatables.net/responsive/3.0.2/js/responsive.dataTables.js"></script>
+    <script src="https://cdn.datatables.net/buttons/3.0.2/js/buttons.print.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/3.0.2/js/buttons.html5.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/vfs_fonts.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/pdfmake.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
     @yield('script')
 
 </body>

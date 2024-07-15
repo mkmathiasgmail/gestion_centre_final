@@ -49,7 +49,7 @@ class FetchCandidats extends Command
         foreach ($activites as $key => $value) {
             // Display a message indicating which event is being fetched
             $this->info("Fetching the api url for event $fetchCount");
-            
+
             // Send a GET request to the API with the current event _id
             $queryEvent = Http::timeout(10000)->get("$url/events/show/$value");
 
@@ -60,9 +60,6 @@ class FetchCandidats extends Command
 
                 // Get the response data from the API
                 $data = $queryEvent->object();
-
-                // Get the "data" property from the API response
-                $candidats = $data->data;
 
                 if (isset($data->code) && $data->code === 401) {
                     $this->error("Token expired, refreshing...");
@@ -78,6 +75,8 @@ class FetchCandidats extends Command
                         exit;
                     }
                 }
+                // Get the "data" property from the API response
+                $candidats = $data->data;
 
                 // Initialize a counter for the number of candidates being saved
                 $e = 1;
@@ -87,22 +86,22 @@ class FetchCandidats extends Command
                     // Check if both the odcuser and event exist in the API response
                     $odcuser = Odcuser::where('_id', $candidat->user->_id)->first();
                     $activite = Activite::where('_id', $candidat->event->_id)->first();
-                    
+
                     // If both exist, create or update the candidate
                     if (isset($odcuser) && isset($activite)) {
                         $this->info("The odcuser and the activity exist in the fetch response, making the request...");
-                        
+
                         // Create an array of candidate information
                         $candidatInfo = [
                             'odcuser_id' => $odcuser->id,
                             'activite_id' => $activite->id,
-                            'status' => 1
+                            'status' => 'new'
                         ];
 
                         // Create or update the candidate
                         $candidate = Candidat::firstOrCreate($candidatInfo);
                         $this->info("Candidate $e created successfully.");
-                        
+
                         // If the candidate has form registration data, loop through it
                         if (isset($candidat->formRegistrationData)) {
                             $att = 0 ;
@@ -139,14 +138,14 @@ class FetchCandidats extends Command
                                     'candidat_id' => $candidate->id
                                 ];
 
-    
+
                                 try {
                                     // Create or update the candidate attribute
                                     CandidatAttribute::firstOrCreate($candidateAttributes);
                                 } catch (\Throwable $v) {
                                     echo $v->getMessage();
                                 }
-    
+
                                 // Display a message indicating that the candidate attribute was created successfully
                                 $this->info("Candidate attribute $att created successfully!");
                                 $att++;
