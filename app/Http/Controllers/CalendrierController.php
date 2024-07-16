@@ -1,6 +1,8 @@
 <?php
 
+
 namespace App\Http\Controllers;
+
 
 use App\Models\Activite;
 use App\Models\Presence;
@@ -15,97 +17,465 @@ use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 use PhpOffice\PhpSpreadsheet\Style\Border;
 use PhpOffice\PhpSpreadsheet\Style\Alignment;
 
+
 class CalendrierController extends Controller
 {
     public function export()
 {
-        
-        // Récupérer les données à exporter depuis le modèle
-        $activites=Activite::all();
-    $categorieId = 2;
-    $categorId = 1;
-    $categorieActivites = Activite::where('categorie_id', $categorieId)->get();
-    $categorActivites = Activite::where('categorie_id', $categorId)->get();
-    $mergedActivites = $activites->merge($categorieActivites);
-        $candidats= Presence::leftJoin('candidats as ca', 'ca.id', '=', 'presences.candidat_id')
-        ->leftJoin('odcusers as us', 'us.id', '=', 'ca.odcuser_id')
-        ->leftJoin('activites as ac', 'ac.id', '=', 'ca.activite_id')
-        ->leftJoin('categories  as cat', 'cat.id', '=', 'ac.categorie_id')
-        ->whereNotNull('ac.title')
-        ->orderBy('ac.startDate', 'asc')
-        ->select([
-            'presences.candidat_id',
-            'us.gender',
-            'ac.endDate',
-            'ac.title',
-            'ac.startDate',
-            'cat.categorie'
-            
-        ])
-        ->get();
-    
-    $spreadsheet = new Spreadsheet();
-    $sheet = $spreadsheet->getActiveSheet();
-    $sheet->setCellValue('B1', 'STAGES');
-    $sheet->setCellValue('B2', 'Stage Orange Summer Challenge');
-    $sheet->setCellValue('B3', 'Stage en Reconversion Profesionnelle');
-    $sheet->setCellValue('B4', "Stage PFE (Projet de Fin d'Etudes)");
-    $sheet->setCellValue('B5', "AWS re/Start");
-    ///////////////////////////////////////
-    $sheet->setCellValue('F1', 'FABLAB SOLIDAIRE');
-    $sheet->setCellValue('F2', 'OpenLab');
-    $sheet->setCellValue('F3', "Atelier RoboKID (Ecole Numérique))");
-    $sheet->setCellValue('F4', "Workshop FabLab");
-    //////////////////////////////////////
-    $sheet->setCellValue('I1', 'CIBLE : EXTERNE ODC (GRAND PUBLIC)');
-    $sheet->setCellValue('I2', "Formations en ligne/ODC/Univérsités");
-    $sheet->setCellValue('I3', "ODC talks");
-    $sheet->setCellValue('I4', "Evénement");
-    $sheet->setCellValue('I5', "SuperCodeurs");
-    ///////////////////////////////////////
-    $sheet->setCellValue('A7', "S1 2024");
-    $sheet->setCellValue('D7', "Nom activité");
-    $sheet->setCellValue('E7', "Durée de la formation (jours)");
-    $sheet->setCellValue('F7', "Nbre d'heures (hr)");
-    $sheet->setCellValue('G7', "Cible (Grand public / nom université)");
-    $sheet->setCellValue('H7', "Nombre d'inscriptions");
-    $sheet->setCellValue('I7', "Nombre de participants");
-    $sheet->setCellValue('J7', "Nombre de filles");
-    $sheet->setCellValue('K7', "Nombre de garçons ");
-    $sheet->setCellValue('L7', "Emplois créés");
-    $sheet->setCellValue('M7', "Startups accompagnées");
-    
-      // Remplir les cellules avec les données
-      $row = 8;
-      foreach($activites as $activite){
-        if (stripos($activite->title, 'OpenLab') !==false || stripos($activite->title, 'Open Lab') !== false) {
-          
-          $sheet->setCellValue('D'. $row, $activite->title)
-                      ->getStyle('D'.$row)
+       
+    $activites = Activite::all();
+$categorieId = 2;
+$categorId = 1;
+$categorieActivites = Activite::where('categorie_id', $categorieId)->get();
+$categorActivites = Activite::where('categorie_id', $categorId)->get();
+$mergedActivites = $activites->merge($categorieActivites);
+
+
+$candidats = Presence::leftJoin('candidats as ca', 'ca.id', '=', 'presences.candidat_id')
+    ->leftJoin('odcusers as us', 'us.id', '=', 'ca.odcuser_id')
+    ->leftJoin('activites as ac', 'ac.id', '=', 'ca.activite_id')
+    ->leftJoin('categories  as cat', 'cat.id', '=', 'ac.categorie_id')
+    ->whereNotNull('ac.title')
+    ->orderBy('ac.start_date', 'asc')
+    ->select([
+        'presences.candidat_id',
+        'us.gender',
+        'ac.end_date',
+        'ac.title',
+        'ac.start_date',
+        'cat.name'
+    ])
+    ->get();
+
+
+$spreadsheet = new Spreadsheet();
+$sheet = $spreadsheet->getActiveSheet();
+$sheet->setCellValue('B1', 'STAGES');
+$sheet->setCellValue('B2', 'Stage Orange Summer Challenge');
+$sheet->setCellValue('B3', 'Stage en Reconversion Profesionnelle');
+$sheet->setCellValue('B4', "Stage PFE (Projet de Fin d'Etudes)");
+$sheet->setCellValue('B5', "AWS re/Start");
+$sheet->setCellValue('F1', 'FABLAB SOLIDAIRE');
+$sheet->setCellValue('F2', 'OpenLab');
+$sheet->setCellValue('F3', "Atelier RoboKID (Ecole Numérique))");
+$sheet->setCellValue('F4', "Workshop FabLab");
+$sheet->setCellValue('I1', 'CIBLE : EXTERNE ODC (GRAND PUBLIC)');
+$sheet->setCellValue('I2', "Formations en ligne/ODC/Univérsités");
+$sheet->setCellValue('I3', "ODC talks");
+$sheet->setCellValue('I4', "Evénement");
+$sheet->setCellValue('I5', "SuperCodeurs");
+
+
+$sheet->setCellValue('A7', "S1 2024");
+$sheet->setCellValue('D7', "Nom activité");
+$sheet->setCellValue('E7', "Durée de la formation (jours)");
+$sheet->setCellValue('F7', "Nbre d'heures (hr)");
+$sheet->setCellValue('G7', "Cible (Grand public / nom université)");
+$sheet->setCellValue('H7', "Nombre d'inscriptions");
+$sheet->setCellValue('I7', "Nombre de participants");
+$sheet->setCellValue('J7', "Nombre de filles");
+$sheet->setCellValue('K7', "Nombre de garçons ");
+$sheet->setCellValue('L7', "Emplois créés");
+$sheet->setCellValue('M7', "Startups accompagnées");
+
+
+$sheet->getRowDimension(62)->setRowHeight(75);
+
+
+$row = 62;
+$categoryRow = 62;
+
+
+
+
+foreach ($activites as $activite) {
+    $currentYear = date('Y');
+    if (substr($activite->start_date, 0, 4) == $currentYear)  {
+        $month = date('F', strtotime($activite->start_date));
+        switch ($month) {
+            case 'January':
+                for ($i = 62; $i <= 92; $i++) {
+                    $sheet->getStyle('A' . $i)->getFill()
+                        ->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)
+                        ->getStartColor()->setARGB('ead1dc');
+                }
+
+
+                for ($i = 62; $i <= 92; $i++) {
+                    $sheet->getStyle('B' . $i)->getFill()
+                        ->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)
+                        ->getStartColor()->setARGB('eeeeee');
+                }
+
+
+               
+                /* if ($activite->category == 1) {
+                     $sheet->setCellValue('C' . $row, $activite->title)
+                         ->getStyle('C' . $row)
+                         ->getAlignment()
+                         ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
+                     $sheet->setCellValue('D' . $row, $activite->start_date)
+                         ->getStyle('D' . $row)
+                         ->getAlignment()
+                         ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
+                     $row++;
+                 } else {
+                     $sheet->setCellValue('G' . $categoryRow, $activite->title)
+                         ->getStyle('G' . $categoryRow)
+                         ->getAlignment()
+                         ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
+                     $sheet->setCellValue('H' . $categoryRow, $activite->start_date)
+                         ->getStyle('H' . $categoryRow)
+                         ->getAlignment()
+                         ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
+                     $categoryRow++;
+                 }*/
+                  // Fusionner les cellules
+                  $sheet->mergeCells('A60:J60');
+                  $sheet->mergeCells('A61:B61');
+                 
+                  // Définir le texte du mois dans la cellule A60
+                  $sheet->setCellValue('A60', 'Janvier');
+                 
+                  // Définir le style de la cellule A60:J60
+                  $sheet->getStyle('A60:J60')
+                      ->getFill()
+                      ->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)
+                      ->getStartColor()
+                      ->setARGB('FF000000');
+                  $sheet->getStyle('A60:J60')
+                      ->getFont()
+                      ->getColor()
+                      ->setARGB('FFFFFFFF');
+                  $sheet->getStyle('A60:J60')
+                      ->getAlignment()
+                      ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER)
+                      ->setVertical(\PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER);
+                 
+                  // Définir le style de la cellule A61:B61
+                  $sheet->getStyle('A61:B61')
+                      ->getFill()
+                      ->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)
+                      ->getStartColor()
+                      ->setARGB('FF000000');
+                  $sheet->getStyle('A61:B61')
+                      ->getFont()
+                      ->getColor()
+                      ->setARGB('FFFFFFFF');
+                  $sheet->getStyle('A61:B61')
+                      ->getAlignment()
+                      ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER)
+                      ->setVertical(\PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER);
+                      // Définir la bordure entre A60 et J92
+                 $sheet->getStyle('C61:J61')->getBorders()->getTop()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
+                 $sheet->getStyle('C61:J61')->getBorders()->getBottom()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
+ 
+                 $sheet->getStyle('A60:J92')->getBorders()->getTop()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
+                 $sheet->getStyle('A60:J92')->getBorders()->getBottom()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
+ 
+                 $sheet->getStyle('K60:K92')->getBorders()->getLeft()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
+                 $sheet->getStyle('B61:B92')->getBorders()->getLeft()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
+                 $sheet->getStyle('C61:C92')->getBorders()->getLeft()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
+                 $sheet->getStyle('E61:E92')->getBorders()->getLeft()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
+                 $sheet->getStyle('G61:G92')->getBorders()->getLeft()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
+                 $sheet->getStyle('I61:I92')->getBorders()->getLeft()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
+ 
+ 
+                 // Fusionner les cellules
+                 $sheet->mergeCells('A60:J60');
+                 $sheet->mergeCells('A61:B61');
+                 $sheet->mergeCells('C61:D61');
+                 $sheet->mergeCells('E61:F61');
+                 $sheet->mergeCells('G61:H61');
+                 $sheet->mergeCells('I61:J61');
+ 
+                 // Définir le texte du mois dans la cellule A60
+                 $sheet->setCellValue('A60', 'Janvier');
+ 
+                 // Définir le texte "bonjour" dans les cellules fusionnées
+                 $sheet->setCellValue('C61', 'Ecole du code');
+                 $sheet->setCellValue('E61', 'Université/ODC CLub');
+                 $sheet->setCellValue('G61', 'FabLab');
+                 $sheet->setCellValue('I61', 'Orange Fab');
+ 
+                 // Définir le style de la cellule A60:J60
+                 $sheet->getStyle('A60:J60')
+                     ->getFill()
+                     ->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)
+                     ->getStartColor()
+                     ->setARGB('FF000000');
+                 $sheet->getStyle('A60:J60')
+                     ->getFont()
+                     ->getColor()
+                     ->setARGB('FFFFFFFF');
+                 $sheet->getStyle('A60:J60')
+                     ->getAlignment()
+                     ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER)
+                     ->setVertical(\PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER);
+ 
+                 // Définir le style de la cellule A61:B61
+                 $sheet->getStyle('A61:B61')
+                     ->getFill()
+                     ->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)
+                     ->getStartColor()
+                     ->setARGB('FF000000');
+                 $sheet->getStyle('A61:B61')
+                     ->getFont()
+                     ->getColor()
+                     ->setARGB('FFFFFFFF');
+                 $sheet->getStyle('A61:B61')
+                     ->getAlignment()
+                     ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER)
+                     ->setVertical(\PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER);
+ 
+ 
+                 // Fusion
+                // Définir le style du texte dans les cellules fusionnées
+                 $sheet->getStyle('C61:D61')
+                     ->getFont()
+                     ->setBold(true)
+                     ->setName('Arial')
+                     ->setSize(13)
+                     ->getColor()
+                     ->setARGB('FF000000');
+                 $sheet->getStyle('C61:D61')
+                     ->getAlignment()
+                     ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER)
+                     ->setVertical(\PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER);
+ 
+                 $sheet->getStyle('E61:F61')
+                     ->getFont()
+                     ->setBold(true)
+                     ->setName('Arial')
+                     ->setSize(13)
+                     ->getColor()
+                     ->setARGB('FF000000');
+                 $sheet->getStyle('E61:F61')
+                     ->getAlignment()
+                     ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER)
+                     ->setVertical(\PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER);
+ 
+                 $sheet->getStyle('G61:H61')
+                     ->getFont()
+                     ->setBold(true)
+                     ->setName('Arial')
+                     ->setSize(13)
+                     ->getColor()
+                     ->setARGB('FF000000');
+                 $sheet->getStyle('G61:H61')
+                     ->getAlignment()
+                     ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER)
+                     ->setVertical(\PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER);
+ 
+                 $sheet->getStyle('I61:J61')
+                     ->getFont()
+                     ->setBold(true)
+                     ->setName('Arial')
+                     ->setSize(13)
+                     ->getColor()
+                     ->setARGB('FF000000');
+                 $sheet->getStyle('I61:J61')
+                     ->getAlignment()
+                     ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER)
+                     ->setVertical(\PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER);
+ 
+                break;
+            case 'February':
+             /*   if ($activite->category == 1) {
+                    $sheet->setCellValue('N' . $row, $activite->title)
+                        ->getStyle('N' . $row)
                         ->getAlignment()
                         ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
-          $sheet->setCellValue('E'. $row, $activite->startDate)
-                      ->getStyle('E'.$row)
+                    $sheet->setCellValue('O' . $row, $activite->start_date)
+                        ->getStyle('O' . $row)
                         ->getAlignment()
                         ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
                     $row++;
-        }
-      }
-///////////////////////////////////
+                } else {
+                    $sheet->setCellValue('R' . $categoryRow, $activite->title)
+                        ->getStyle('R' . $categoryRow)
+                        ->getAlignment()
+                        ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
+                    $sheet->setCellValue('S' . $categoryRow, $activite->start_date)
+                        ->getStyle('S' . $categoryRow)
+                        ->getAlignment()
+                        ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
+                    $categoryRow++;
+                }*/
+                 // Fusionner les cellules
+                 $sheet->mergeCells('L60:U60');
+                 $sheet->mergeCells('L60:U60');
+                 
+                 // Définir le texte du mois dans la cellule A60
+                 $sheet->setCellValue('L60', date('F', mktime(0, 0, 0, 2, 1, date('Y'))));
+                 
+                 // Définir le style de la cellule A60:J60
+                 $sheet->getStyle('L60:U60')
+                     ->getFill()
+                     ->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)
+                     ->getStartColor()
+                     ->setARGB('FF000000');
+                 $sheet->getStyle('L60:U60')
+                     ->getFont()
+                     ->getColor()
+                     ->setARGB('FFFFFFFF');
+                 $sheet->getStyle('L60:U60')
+                     ->getAlignment()
+                     ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER)
+                     ->setVertical(\PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER);
+                 
+                 // Définir le style de la cellule A61:B61
+                 $sheet->getStyle('L61:M61')
+                     ->getFill()
+                     ->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)
+                     ->getStartColor()
+                     ->setARGB('FF000000');
+                 $sheet->getStyle('L61:M61')
+                     ->getFont()
+                     ->getColor()
+                     ->setARGB('FFFFFFFF');
+                 $sheet->getStyle('L61:M61')
+                     ->getAlignment()
+                     ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER)
+                     ->setVertical(\PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER);
+                     // Définir la bordure entre A60 et J92
+                $sheet->getStyle('N61:U61')->getBorders()->getTop()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
+                $sheet->getStyle('N61:U61')->getBorders()->getBottom()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-$row = 66;
-foreach ($categorieActivites as $activity) {
-    $sheet->setCellValue('D' . $row, $activity->title);
-    $row++;
-    
+
+                $sheet->getStyle('L60:U92')->getBorders()->getTop()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
+                $sheet->getStyle('L60:U92')->getBorders()->getBottom()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
+
+
+                //$sheet->getStyle('V60:V92')->getBorders()->getLeft()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
+                $sheet->getStyle('M61:M92')->getBorders()->getLeft()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
+                $sheet->getStyle('N61:N92')->getBorders()->getLeft()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
+                $sheet->getStyle('P61:P92')->getBorders()->getLeft()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
+                $sheet->getStyle('R61:R92')->getBorders()->getLeft()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
+                $sheet->getStyle('T61:T92')->getBorders()->getLeft()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
+                $sheet->getStyle('V61:V92')->getBorders()->getLeft()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
+
+
+
+
+                // Fusionner les cellules
+                $sheet->mergeCells('L60:V60');
+                $sheet->mergeCells('N61:O61');
+                $sheet->mergeCells('P61:Q61');
+                $sheet->mergeCells('R61:S61');
+                $sheet->mergeCells('T61:U61');
+
+
+                // Définir le texte du mois dans la cellule A60
+                $sheet->setCellValue('A60', 'Janvier');
+
+
+                // Définir le texte "bonjour" dans les cellules fusionnées
+                $sheet->setCellValue('N61', 'Ecole du code');
+                $sheet->setCellValue('P61', 'Université/ODC CLub');
+                $sheet->setCellValue('R61', 'FabLab');
+                $sheet->setCellValue('T61', 'Orange Fab');
+
+
+                // Définir le style de la cellule
+                $sheet->getStyle('L60:U60')
+                    ->getFill()
+                    ->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)
+                    ->getStartColor()
+                    ->setARGB('FF000000');
+                $sheet->getStyle('L60:V60')
+                    ->getFont()
+                    ->getColor()
+                    ->setARGB('FFFFFFFF');
+                $sheet->getStyle('L60:V60')
+                    ->getAlignment()
+                    ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER)
+                    ->setVertical(\PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER);
+
+
+               // Définir le style du texte
+                $sheet->getStyle('N61:O61')
+                    ->getFont()
+                    ->setBold(true)
+                    ->setName('Arial')
+                    ->setSize(13)
+                    ->getColor()
+                    ->setARGB('FF000000');
+                $sheet->getStyle('N61:O61')
+                    ->getAlignment()
+                    ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER)
+                    ->setVertical(\PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER);
+
+
+                $sheet->getStyle('P61:Q61')
+                    ->getFont()
+                    ->setBold(true)
+                    ->setName('Arial')
+                    ->setSize(13)
+                    ->getColor()
+                    ->setARGB('FF000000');
+                $sheet->getStyle('P61:Q61')
+                    ->getAlignment()
+                    ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER)
+                    ->setVertical(\PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER);
+
+
+                $sheet->getStyle('R61:S61')
+                    ->getFont()
+                    ->setBold(true)
+                    ->setName('Arial')
+                    ->setSize(13)
+                    ->getColor()
+                    ->setARGB('FF000000');
+                $sheet->getStyle('R61:S61')
+                    ->getAlignment()
+                    ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER)
+                    ->setVertical(\PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER);
+
+
+                $sheet->getStyle('T61:U61')
+                    ->getFont()
+                    ->setBold(true)
+                    ->setName('Arial')
+                    ->setSize(13)
+                    ->getColor()
+                    ->setARGB('FF000000');
+                $sheet->getStyle('T61:U61')
+                    ->getAlignment()
+                    ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER)
+                    ->setVertical(\PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER);
+                break;
+            case 'March':
+                if ($activite->category == 1) {
+                    $sheet->setCellValue('Y' . $row, $activite->title)
+                        ->getStyle('Y' . $row)
+                        ->getAlignment()
+                        ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
+                    $sheet->setCellValue('Z' . $row, $activite->start_date)
+                        ->getStyle('Z' . $row)
+                        ->getAlignment()
+                        ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
+                    $row++;
+                } else {
+                    $sheet->setCellValue('AD' . $categoryRow, $activite->title)
+                        ->getStyle('AD' . $categoryRow)
+                        ->getAlignment()
+                        ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
+                    $sheet->setCellValue('AE' . $categoryRow, $activite->start_date)
+                        ->getStyle('AE' . $categoryRow)
+                        ->getAlignment()
+                        ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
+                    $categoryRow++;
+                }
+                break;
+            // Add more cases for other months as needed
+        }
+    }
 }
-$row = 66;
-foreach ($categorActivites as $activite) {
-    $sheet->setCellValue('R' . $row, $activite->title);
-    $row++;
-     
-}
-   
+
+
+
+
    // Définir les styles titre
    $sheet->getStyle('B1')
    ->getFont()
@@ -124,11 +494,12 @@ foreach ($categorActivites as $activite) {
    ->getBorders()
    ->getAllBorders()
    ->setBorderStyle(Border::BORDER_THIN)
-   ->setColor(new Color('000000')); 
+   ->setColor(new Color('000000'));
    $sheet->getStyle('B1')
    ->getFont()
    ->setName('Arial')
    ->setSize(9);
+
 
    ////
    $sheet->getStyle('B2')
@@ -154,6 +525,7 @@ foreach ($categorActivites as $activite) {
     ->setName('Arial')
     ->setSize(9);
 
+
    ////
    $sheet->getStyle('B3')
    ->getFont()
@@ -178,7 +550,9 @@ foreach ($categorActivites as $activite) {
     ->setName('Arial')
     ->setSize(9);
 
+
     ///////
+
 
     $sheet->getStyle('B4')
     ->getFont()
@@ -202,7 +576,7 @@ foreach ($categorActivites as $activite) {
      ->getFont()
      ->setName('Arial')
      ->setSize(9);
-    
+   
     /////
     $sheet->getStyle('B5')
     ->getFont()
@@ -227,7 +601,9 @@ foreach ($categorActivites as $activite) {
      ->setName('Arial')
      ->setSize(9);
 
+
      //// style Fablab
+
 
      $sheet->getStyle('F1')
      ->getFont()
@@ -246,12 +622,13 @@ foreach ($categorActivites as $activite) {
      ->getBorders()
      ->getAllBorders()
      ->setBorderStyle(Border::BORDER_THIN)
-     ->setColor(new Color('000000')); 
+     ->setColor(new Color('000000'));
      $sheet->getStyle('F1')
      ->getFont()
      ->setName('Arial')
      ->setSize(9);
      
+
 
      ///////////////////////
      
@@ -272,11 +649,12 @@ foreach ($categorActivites as $activite) {
      ->getBorders()
      ->getAllBorders()
      ->setBorderStyle(Border::BORDER_THIN)
-     ->setColor(new Color('000000')); 
+     ->setColor(new Color('000000'));
      $sheet->getStyle('F2')
      ->getFont()
      ->setName('Arial')
      ->setSize(9);
+
 
     ////////////////////////
     $sheet->getStyle('F3')
@@ -296,11 +674,12 @@ foreach ($categorActivites as $activite) {
      ->getBorders()
      ->getAllBorders()
      ->setBorderStyle(Border::BORDER_THIN)
-     ->setColor(new Color('000000')); 
+     ->setColor(new Color('000000'));
      $sheet->getStyle('F3')
      ->getFont()
      ->setName('Arial')
      ->setSize(9);
+
 
      /////////////////
      $sheet->getStyle('F4')
@@ -320,7 +699,7 @@ foreach ($categorActivites as $activite) {
      ->getBorders()
      ->getAllBorders()
      ->setBorderStyle(Border::BORDER_THIN)
-     ->setColor(new Color('000000')); 
+     ->setColor(new Color('000000'));
      $sheet->getStyle('F4')
      ->getFont()
      ->setName('Arial')
@@ -344,11 +723,12 @@ foreach ($categorActivites as $activite) {
      ->getBorders()
      ->getAllBorders()
      ->setBorderStyle(Border::BORDER_THIN)
-     ->setColor(new Color('000000')); 
+     ->setColor(new Color('000000'));
      $sheet->getStyle('I1')
      ->getFont()
      ->setName('Arial')
      ->setSize(9);
+
 
      ///////////
      $sheet->getStyle('I2')
@@ -368,11 +748,12 @@ foreach ($categorActivites as $activite) {
      ->getBorders()
      ->getAllBorders()
      ->setBorderStyle(Border::BORDER_THIN)
-     ->setColor(new Color('000000')); 
+     ->setColor(new Color('000000'));
      $sheet->getStyle('I2')
      ->getFont()
      ->setName('Arial')
      ->setSize(9);
+
 
      ///////////
      $sheet->getStyle('I3')
@@ -392,11 +773,12 @@ foreach ($categorActivites as $activite) {
      ->getBorders()
      ->getAllBorders()
      ->setBorderStyle(Border::BORDER_THIN)
-     ->setColor(new Color('000000')); 
+     ->setColor(new Color('000000'));
      $sheet->getStyle('I3')
      ->getFont()
      ->setName('Arial')
      ->setSize(9);
+
 
     ///////////
     $sheet->getStyle('I4')
@@ -416,11 +798,12 @@ foreach ($categorActivites as $activite) {
     ->getBorders()
     ->getAllBorders()
     ->setBorderStyle(Border::BORDER_THIN)
-    ->setColor(new Color('000000')); 
+    ->setColor(new Color('000000'));
     $sheet->getStyle('I4')
     ->getFont()
     ->setName('Arial')
     ->setSize(9);
+
 
     ///////////
     $sheet->getStyle('I5')
@@ -440,11 +823,12 @@ foreach ($categorActivites as $activite) {
     ->getBorders()
     ->getAllBorders()
     ->setBorderStyle(Border::BORDER_THIN)
-    ->setColor(new Color('000000')); 
+    ->setColor(new Color('000000'));
     $sheet->getStyle('I5')
     ->getFont()
     ->setName('Arial')
     ->setSize(9);
+
 
       ///////////////////////////////////////
       $sheet->getStyle('A7')
@@ -464,7 +848,7 @@ foreach ($categorActivites as $activite) {
       ->getBorders()
       ->getAllBorders()
       ->setBorderStyle(Border::BORDER_THIN)
-      ->setColor(new Color('000000')); 
+      ->setColor(new Color('000000'));
       $sheet->getStyle('A7')
       ->getFont()
       ->setName('Arial')
@@ -487,7 +871,7 @@ foreach ($categorActivites as $activite) {
       ->getBorders()
       ->getAllBorders()
       ->setBorderStyle(Border::BORDER_THIN)
-      ->setColor(new Color('000000')); 
+      ->setColor(new Color('000000'));
       $sheet->getStyle('D7')
       ->getFont()
       ->setName('Arial')
@@ -510,7 +894,7 @@ foreach ($categorActivites as $activite) {
       ->getBorders()
       ->getAllBorders()
       ->setBorderStyle(Border::BORDER_THIN)
-      ->setColor(new Color('000000')); 
+      ->setColor(new Color('000000'));
       $sheet->getStyle('E7')
       ->getFont()
       ->setName('Arial')
@@ -533,29 +917,34 @@ foreach ($categorActivites as $activite) {
        ->getBorders()
        ->getAllBorders()
        ->setBorderStyle(Border::BORDER_THIN)
-       ->setColor(new Color('000000')); 
+       ->setColor(new Color('000000'));
        $sheet->getStyle('F7')
        ->getFont()
        ->setName('Arial')
        ->setSize(9);
 
 
+
+
 // Ajuster la largeur des colonnes titre
-$sheet->mergeCells('B1:D1')->getColumnDimension('B')->setWidth(12);
-$sheet->mergeCells('B2:D2')->getColumnDimension('C')->setWidth(12);
-$sheet->mergeCells('B3:D3')->getColumnDimension('D')->setWidth(16);
+$sheet->mergeCells('B1:D1')->getColumnDimension('B')->setWidth(20);
+$sheet->mergeCells('B2:D2')->getColumnDimension('C')->setWidth(20);
+$sheet->mergeCells('B3:D3')->getColumnDimension('D')->setWidth(20);
 $sheet->mergeCells('B4:D4');
 $sheet->mergeCells('B5:D5');
+
 
 $columnWidths = [];
 for ($column = 'B'; $column <= 'D'; $column++) {
     $columnWidths[$column] = $sheet->getColumnDimension($column)->getWidth();
 }
 
+
 // Réinitialiser la largeur de chaque colonne fusionnée
 for ($column = 'B'; $column <= 'D'; $column++) {
     $sheet->getColumnDimension($column)->setWidth($columnWidths[$column]);
 }
+
 
 // Ajuster la largeur des colonnes Fablab
 $sheet->mergeCells('F1:G1')->getColumnDimension('G')->setWidth(20);
@@ -563,15 +952,18 @@ $sheet->mergeCells('F2:G2')->getColumnDimension('F')->setWidth(15);
 $sheet->mergeCells('F3:G3');
 $sheet->mergeCells('F4:G4');
 
+
 $columnWidths = [];
 for ($column = 'F'; $column <= 'G'; $column++) {
     $columnWidths[$column] = $sheet->getColumnDimension($column)->getWidth();
 }
 
+
 // Réinitialiser la largeur de chaque colonne fusionnée
 for ($column = 'F'; $column <= 'G'; $column++) {
     $sheet->getColumnDimension($column)->setWidth($columnWidths[$column]);
 }
+
 
 // Ajuster la largeur des colonnes CIBLE : EXTERNE
 $sheet->mergeCells('I1:M1');
@@ -585,19 +977,24 @@ for ($column = 'I'; $column <= 'M'; $column++) {
     $columnWidths[$column] = $sheet->getColumnDimension($column)->getWidth();
 }
 
+
 // Réinitialiser la largeur de chaque colonne fusionnée
 for ($column = 'I'; $column <= 'M'; $column++) {
     $sheet->getColumnDimension($column)->setWidth($columnWidths[$column]);
 }
+
 
 /////////////////////////////////////////////////
 $sheet->mergeCells('A7:C7')->getRowDimension(1)
 ->setRowHeight(30);;
 
 
+
+
     $writer = new Xlsx($spreadsheet);
     $fileName = 'calendrier.xlsx';
     $writer->save($fileName);
+
 
     return response()->download($fileName);
 }
