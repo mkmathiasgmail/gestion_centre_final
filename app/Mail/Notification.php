@@ -14,51 +14,53 @@ class Notification extends Mailable
 {
     use Queueable, SerializesModels;
 
-    public $name;
+    public $messageContent;
 
     /**
      * Create a new message instance.
      */
-    public function __construct($name)
+    public function __construct($messageContent)
     {
-        $this->name = $name;
+        $this->messageContent = $messageContent;
     }
 
     public function build()
     {
-        return $this->view('emails.test')
-            ->with([
-                'name' => $this->name,
-            ]);
+        return $this->form(config('mail.form.address'))
+                    ->subject('Notification')
+                    ->view('emails.notification');
+            // ->with([
+            //     'name' => $this->name,
+            // ]);
     }
 
     /**
      * Get the message envelope.
      */
-    public function envelope(): Envelope
-    {
-        return new Envelope(
-            subject: 'Notification',
-        );
-    }
+    // public function envelope(): Envelope
+    // {
+    //     return new Envelope(
+    //         subject: 'Notification',
+    //     );
+    // }
 
-    /**
-     * Get the message content definition.
-     */
-    public function content(): Content
-    {
-        return new Content(
-            view: 'emails.notification',
-        );
-    }
+    // /**
+    //  * Get the message content definition.
+    //  */
+    // public function content(): Content
+    // {
+    //     return new Content(
+    //         view: 'emails.notification',
+    //     );
+    // }
 
-    /**
-     * Get the attachments for the message.
-     *
-     * @return array<int, \Illuminate\Mail\Mailables\Attachment>
-     */
-    public function attachments(): array
-    {
-        return [];
-    }
+    // /**
+    //  * Get the attachments for the message.
+    //  *
+    //  * @return array<int, \Illuminate\Mail\Mailables\Attachment>
+    //  */
+    // public function attachments(): array
+    // {
+    //     return [];
+    // }
 }
