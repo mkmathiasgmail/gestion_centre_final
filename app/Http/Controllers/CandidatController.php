@@ -37,6 +37,21 @@ class CandidatController extends Controller
     public function generateExcel($id_event)
     {
         $event = Activite::find($id_event);
+        $candidats = Candidat::where('activite_id', $id_event)->with(['odcuser', 'candidat_attribute', 'presence'])->get();
+        $candidatsData = [];
+        $labels = [];
+        foreach ($candidats as $candidat) {
+            $candidatArray = $candidat->toArray();
+            if ($candidat->candidat_attribute) {
+                foreach ($candidat->candidat_attribute as $attribute) {
+                    $candidatArray[$attribute->label] = $attribute->value;
+                    if (!in_array($attribute->label, $labels)) {
+                        $labels[] = $attribute->label;
+                    }
+                }
+            }
+            $candidatsData[] = $candidatArray;
+        }
         $title = $event->title;
         $activite = strtoupper($title);
         $spreadsheet = new Spreadsheet();
@@ -55,6 +70,126 @@ class CandidatController extends Controller
         $spreadsheet->getActiveSheet()
             ->mergeCells('B3:F3')
             ->setCellValue('B3', $event->_id);
+
+        $spreadsheet->getActiveSheet()
+            ->setCellValue('A4', 'N°');
+
+        $spreadsheet->getActiveSheet()
+            ->setCellValue('B4', 'NOM');
+
+        $spreadsheet->getActiveSheet()
+            ->setCellValue('C4', 'PRENOM');
+
+        $spreadsheet->getActiveSheet()
+            ->setCellValue('D4', 'GENRE');
+
+        $spreadsheet->getActiveSheet()
+            ->setCellValue('E4', 'NUMERO');
+
+        $spreadsheet->getActiveSheet()
+            ->setCellValue('F4', 'EMAIL');
+
+        $spreadsheet->getActiveSheet()
+            ->setCellValue('G4', 'UNIVERSITE');
+
+        $spreadsheet->getActiveSheet()
+            ->setCellValue('H4', 'PRESENCE');
+
+        $style_for_titles = [
+            'font' => [
+                'bold' => true,
+            ],
+            'alignment' => [
+                'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER,
+            ],
+        ];
+
+        $spreadsheet->getActiveSheet()->getStyle('A4:H4')->applyFromArray($style_for_titles);
+
+        $spreadsheet->getActiveSheet()->getDefaultColumnDimension()->setWidth(185, 'px');
+        $spreadsheet->getActiveSheet()
+            ->getColumnDimension('A')
+            ->setAutoSize(false)
+            ->setWidth(35, 'px');
+
+        $spreadsheet->getActiveSheet()
+            ->getColumnDimension('C')
+            ->setAutoSize(false)
+            ->setWidth(100, 'px');
+
+        $spreadsheet->getActiveSheet()
+            ->getColumnDimension('D')
+            ->setAutoSize(false)
+            ->setWidth(90, 'px');
+
+        $spreadsheet->getActiveSheet()
+            ->getColumnDimension('E')
+            ->setAutoSize(false)
+            ->setWidth(95, 'px');
+
+        $spreadsheet->getActiveSheet()
+            ->getColumnDimension('F')
+            ->setAutoSize(false)
+            ->setWidth(235, 'px');
+
+        $spreadsheet->getActiveSheet()
+            ->getColumnDimension('G')
+            ->setAutoSize(false)
+            ->setWidth(300, 'px');
+
+        $spreadsheet->getActiveSheet()->getStyle('A4:H4')
+            ->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID);
+        $spreadsheet->getActiveSheet()->getStyle('A4:H4')
+            ->getFill()->getStartColor()->setARGB('9bc2e6');
+
+        $spreadsheet->getActiveSheet()
+            ->mergeCells('A5:G5');
+        $spreadsheet->getActiveSheet()->getStyle('A5:G5')
+            ->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID);
+        $spreadsheet->getActiveSheet()->getStyle('A5:G5')
+            ->getFill()->getStartColor()->setARGB('000000');
+
+        $cell_key = 6;
+        $i = 1;
+        foreach ($candidatsData as $candidat) {
+            $spreadsheet->getActiveSheet()
+                ->setCellValue("A$cell_key", "$i");
+
+            $name = isset($candidat['Nom']) ? $candidat['Nom'] : $candidat['odcuser']['last_name'];
+            $spreadsheet->getActiveSheet()
+                ->setCellValue("B$cell_key", $name);
+
+            $first_name = isset($candidat['Prénom']) ? $candidat['Prénom'] : $candidat['odcuser']['first_name'];
+            $spreadsheet->getActiveSheet()
+                ->setCellValue("C$cell_key", $first_name);
+
+            $spreadsheet->getActiveSheet()
+                ->setCellValue("D$cell_key", $candidat['odcuser']['gender']);
+
+            $phone = isset($candidat['Téléphone']) ? $candidat['Téléphone'] : '';
+            $spreadsheet->getActiveSheet()
+                ->setCellValue("E$cell_key", $phone);
+
+            // Get the cell object to apply formatting and Set cell value explicitly as text
+            $spreadsheet->getActiveSheet()
+                ->getCell("E$cell_key")
+                ->setValueExplicit($phone, \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING)
+                ->getStyle("E$cell_key")
+                ->getAlignment()
+                ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
+
+            $email = isset($candidat['E-mail']) ? $candidat['E-mail'] : $candidat['odcuser']['email'];
+            $spreadsheet->getActiveSheet()
+                ->setCellValue("F$cell_key", $email);
+
+            $university = isset($candidat["Nom de l'Etablissement / Université"]) ? $candidat["Nom de l'Etablissement / Université"] : "";
+            $spreadsheet->getActiveSheet()
+                ->setCellValue("G$cell_key", $university);
+
+            $i++;
+            $cell_key++;
+        }
+
 
         $writer = new Xlsx($spreadsheet);
         $name = "coach.Xlsx";
