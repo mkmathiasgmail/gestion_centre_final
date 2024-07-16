@@ -6,10 +6,14 @@ use Log;
 use App\Models\Odcuser;
 use App\Models\Activite;
 use App\Models\Candidat;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 use App\Http\Requests\StoreCandidatRequest;
 use App\Http\Requests\UpdateCandidatRequest;
 use Illuminate\Support\Facades\Log as FacadesLog;
+use PhpOffice\PhpSpreadsheet\Reader\Xml\Style\Alignment;
 
 class CandidatController extends Controller
 {
@@ -20,7 +24,7 @@ class CandidatController extends Controller
     {
         $candidats = Candidat::has('odcuser')->get();
 
-        return view('candidats.index', compact('candidats')) ;
+        return view('candidats.index', compact('candidats'));
     }
 
     /**
@@ -28,14 +32,43 @@ class CandidatController extends Controller
      */
     public function create()
     {
-        //
+    }
+
+    public function generateExcel($id_event)
+    {
+        $event = Activite::find($id_event);
+        $title = $event->title;
+        $activite = strtoupper($title);
+        $spreadsheet = new Spreadsheet();
+
+        // Set cell A1 with a string value
+        $spreadsheet->getActiveSheet()
+            ->setCellValue('A1', "FICHE DES CANDIDATS POUR " . $activite)
+            ->mergeCells('A1:H2')
+            ->getStyle('A1:H2')
+            ->getAlignment()->setVertical(\PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER)
+            ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
+
+        $spreadsheet->getActiveSheet()
+            ->setCellValue('A3', "ID");
+
+        $spreadsheet->getActiveSheet()
+            ->mergeCells('B3:F3')
+            ->setCellValue('B3', $event->_id);
+
+        $writer = new Xlsx($spreadsheet);
+        $name = "coach.Xlsx";
+        $tmp = tempnam(sys_get_temp_dir(), $name);
+        $writer->save($tmp);
+
+        return response()->download($tmp, $name)->deleteFileAfterSend(true);
     }
 
     public function validate($id)
     {
         $candidat = Candidat::find($id);
         if ($candidat) {
-            $candidat->status = 'accept' ;
+            $candidat->status = 'accept';
             $candidat->save();
         }
 
@@ -99,7 +132,7 @@ class CandidatController extends Controller
      */
     public function show(Candidat $candidat)
     {
-        return view('candidats.show', compact('candidat')) ;
+        return view('candidats.show', compact('candidat'));
     }
 
     /**

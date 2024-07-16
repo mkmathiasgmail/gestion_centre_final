@@ -1,4 +1,4 @@
-@props(['labels', 'candidatsData'])
+@props(['labels', 'candidatsData', 'url', 'id', 'activite_Id', 'odcusers', 'activite'])
 
 @if (Session('success'))
     <div class="flex items-center p-4 mb-4 text-sm text-green-800 border border-green-300 rounded-lg bg-green-50 dark:bg-gray-800 dark:text-green-400 dark:border-green-800"
@@ -103,45 +103,5 @@
     </div>
 </div>
 
-@section('script')
-    <script>
-        $(document).ready(function() {
-            if ($.fn.DataTable.isDataTable('#candidatTable')) {
-                $('#candidatTable').DataTable().destroy();
-            }
-            $('#candidatTable').DataTable({
-                responsive: true,
 
-                columnDefs: [{
-                        visible: false,
-                        targets: [0, 3, 4, 5, 7, 8, 9]
-                    }, // hide columns 1 and 3 by default
-                    {
-                        responsivePriority: 1,
-                        targets: 0
-                    },
-                    {
-                        responsivePriority: 2,
-                        targets: -1
-                    }
-                ],
-                layout: {
-                    topStart: {
-                        pageLength: {
-                            menu: [10, 25, 50, 100, 200]
-                        },
-                        buttons: [
-                            'colvis'
-                        ]
-                    },
-                    topEnd: {
-                        search: {
-                            placeholder: 'Type search here'
-                        }
-                    },
 
-                },
-            });
-        });
-    </script>
-@endsection
