@@ -17,6 +17,10 @@ return new class extends Migration
             ->nullable()
             ->constrained('activites')
             ->onDelete('cascade');
+            $table->foreignId('candidat_id')
+            ->nullable()
+            ->constrained('candidats')
+            ->onDelete('cascade');
             $table->timestamps();
         });
     }
