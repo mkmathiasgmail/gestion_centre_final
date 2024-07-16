@@ -34,9 +34,7 @@ return new class extends Migration
             $table->string('number_hour')->nullable();
         }) ;
 
-        Schema::table('activites', function (Blueprint $table) {
-            $table->json('content')->change();
-        });
+       
     }
 
     /**

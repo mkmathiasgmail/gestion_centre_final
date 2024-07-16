@@ -5,7 +5,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title>Laravel</title>
+    <title>Gestion Centre</title>
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.bunny.net">
@@ -29,11 +29,11 @@
             </div>
 
             <h1 class="mb-4 text-4xl font-extrabold tracking-tight leading-none text-white md:text-5xl lg:text-6xl">
-                Orange Digital Center, delivering digital training to all</h1>
-            <p class="mb-8 text-lg font-normal text-gray-300 lg:text-xl sm:px-16 lg:px-48">Orange Digital Center houses
-                four strategic programs under the same roof : the coding school, the FabLab Solidaire, Orange Fab and
-                Orange Digital Ventures Africa. This network of free and inclusive resources support local start-ups and
-                projects using digital technology and they are being rolled out across Middle East and Africa.
+                Orange Digital Center, une formation digitale pour tous</h1>
+            <p class="mb-8 text-lg font-normal text-gray-300 lg:text-xl sm:px-16 lg:px-48">Maisons du Centre Numérique Orange
+                quatre programmes stratégiques sous un même toit : l'école de codage, le FabLab Solidaire, Orange Fab et
+                Orange Digital Ventures Afrique. Ce réseau de ressources gratuites et inclusives soutient les start-up locales et
+                projets utilisant le numérique et déployés au Moyen-Orient et en Afrique.
 
             </p>
             @if (Route::has('login'))
