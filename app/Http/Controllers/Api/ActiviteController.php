@@ -36,7 +36,7 @@ class ActiviteController extends Controller
                     "hashtags" => $request->hashtags,
                     "content" => $request->contents,
                     "form" => $request->form,
-                    "thumbnailURL" => $request->thumbnailURL,
+                    "thumbnail_url" => $request->thumbnailURL,
                     "endDate" => $request->endDate,
                     "startDate" => $request->startDate,
                     "location" => $request->location,

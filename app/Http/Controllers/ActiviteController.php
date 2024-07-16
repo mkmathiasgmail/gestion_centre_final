@@ -32,20 +32,20 @@ class ActiviteController extends Controller
 
         try {
 
-        foreach ($activites as $activite) {
-            $message = Carbon::today();
+            foreach ($activites as $activite) {
+                $message = Carbon::today();
                 $startDate = Carbon::parse($activite->start_date);
                 $endDate = Carbon::parse($activite->end_date);
                 if ($message >= $startDate && $message <= $endDate) {
 
-                $activite->message = 'En cours';
+                    $activite->message = 'En cours';
                 } elseif ($message < $startDate) {
 
 
-                $differenceInDays = $startDate->diffInDays($message);
-                $activite->message = "Il y a une activité à venir $differenceInDays jours";
+                    $differenceInDays = $startDate->diffInDays($message);
+                    $activite->message = "Il y a une activité à venir $differenceInDays jours";
                 } else {
-                $activite->message = 'Terminée';
+                    $activite->message = 'Terminée';
                 }
             }
 
@@ -81,7 +81,7 @@ class ActiviteController extends Controller
                 'hashtags' => 'nullable|array',
                 'hashtags.*' => 'exists:hashtags,id',
                 'typeEvent' => 'nullable|array',
-                'thumbnailURL' => 'nullable|array',
+                'thumbnailURL' => 'required',
                 'typeEvent.*' => 'exists:type_events,id',
             ],
 
@@ -109,8 +109,10 @@ class ActiviteController extends Controller
             ]
         );
 
+
+
         try {
-        $activites = Activite::create([
+            $activites = Activite::create([
                 'title' => $validatedData['title'],
                 'categorie_id' => $validatedData['categories'],
                 'content' => $validatedData['contents'],
@@ -118,8 +120,8 @@ class ActiviteController extends Controller
                 'end_date' => $validatedData['endDate'],
                 'publishStatus' => false,
                 'showInSlider' => false,
-                'send' => false,
-                'form' => false,
+                "form" => $request->form,
+                "thumbnail_url" => $validatedData['thumbnailURL'],
                 'miniatureColor' => false,
                 'showInCalendar' => false,
                 'liveStatus' => false,
@@ -290,14 +292,15 @@ class ActiviteController extends Controller
         );
 
         try {
-        $activite->update([
+            $activite->update([
                 'title' => $validatedData['title'],
                 'categorie_id' => $validatedData['categories'],
-                'contents' => $validatedData['content'],
+                'contents' => $validatedData['contents'],
                 'start_date' => $validatedData['startDate'],
                 'end_date' => $validatedData['endDate'],
                 'location' => $validatedData['location'],
-        ]);
+                "thumbnail_url" => $validatedData['thumbnailURL'],
+            ]);
 
 
 
@@ -313,7 +316,7 @@ class ActiviteController extends Controller
 
 
             return redirect()->route('activites.index')
-            ->with('success', 'Activite updated successfully.');
+                ->with('success', 'Activite updated successfully.');
         } catch (\Exception $th) {
             return back()->withErrors(['error' => "An error occurred while creating the activity. $th"])->withInput();
         }
@@ -323,9 +326,9 @@ class ActiviteController extends Controller
     {
 
         try {
-        $activite->delete();
-        return redirect()->route('activites.index')
-            ->with('success', 'Activite deleted successfully.');
+            $activite->delete();
+            return redirect()->route('activites.index')
+                ->with('success', 'Activite deleted successfully.');
         } catch (\Exception $th) {
             return back()->withErrors(['error' => "An error occurred while creating the activity. $th"])->withInput();
         }
@@ -341,8 +344,11 @@ class ActiviteController extends Controller
     public function chartActivity()
     {
         $data = Activite::selectRaw("date_format(createdAt,'%Y-%m-%d') as date , count(*) as aggregate")->whereDate('createdAt', '>=', now()->subDays(30))->groupBy('date')->get();
-        $activites=Activite::all();
+        $activites = Activite::all();
+        $user= Odcuser::all();
 
-        return view('dashboard',compact('data','activites',));
+       
+
+        return view('dashboard', compact('data', 'activites','user'));
     }
 }
