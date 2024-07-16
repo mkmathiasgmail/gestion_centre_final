@@ -197,6 +197,8 @@
         {{-- Script for participants data table --}}
         <script>
             $(document).ready(function() {
+
+
                 let event = @json($activite->title);
                 $('#participantTable').DataTable({
                     responsive: true,
@@ -237,6 +239,8 @@
                         }
                     }
                 });
+
+                $('#participantTable').css('width', '100%');
             });
         </script>
 
