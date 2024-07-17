@@ -189,6 +189,8 @@
         <script>
             $(document).ready(function() {
                 $('#candidatpresence').DataTable();
+
+                $('#candidatpresence').css('width', '100%');
             });
         </script>
 
@@ -279,7 +281,8 @@
                                         e.preventDefault();
                                         let id_event = @json($activite->id);
                                         // Redirection vers la méthode du contrôleur
-                                        window.location.href = '{{ url('generate_excel') }}/' + id_event;
+                                        window.location.href = '{{ url('generate_excel') }}/' +
+                                        id_event;
                                     }
                                 },
                             ]
@@ -291,6 +294,9 @@
                         }
                     }
                 });
+
+                $('#candidatTable').css('width', '100%');
+
             });
         </script>
 
