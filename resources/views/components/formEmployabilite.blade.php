@@ -25,16 +25,14 @@
             <!-- Modal body -->
             <form class="p-4 md:p-5" action="{{ route('employabilites.store') }}" method="post">
                 @csrf
-
                 <div class="grid grid-cols-2 gap-4 mb-4">
-
                     <input type="text" name="id_user" id="id_user" class="hidden"  >
                     <div class="col-span-2">
                         <label for="prenom"
                             class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Prenom</label>
                         <input name="first_name" id="first_name"
                             class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-                            placeholder="" required="" type="text" autocomplete="off" >
+                            placeholder="veuilez saisir votre prenom"  type="text" autocomplete="off" >
                             <div id="countryList" class="text-black bg-gray-300 rounded-lg " >
 
                             </div>
@@ -46,7 +44,7 @@
                             class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">type contrat</label>
                         <select id="type_contrat" name="type_contrat"
                             class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
-                            <option value="#">selectionner type</option>
+                            <option value="#">veuilez selectionner votre type</option>
                             <option value="CDI">CDI</option>
                             <option value="CDD">CDD</option>
                             <option value="ALTERNANCE">ALTERNANCE</option>
@@ -62,7 +60,7 @@
                             class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Entreprise</label>
                         <input id="nomboite" name="nomboite" type="text" rows="4"
                             class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                            placeholder="" autocomplete="off"></input>
+                            placeholder="veuilez saisir le nom de votre entreprise" autocomplete="off"></input>
                     </div>
 
                     <div class="col-span-2">
@@ -70,7 +68,7 @@
                             class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Poste</label>
                         <input id="poste" name="poste" type="text" rows="4"
                             class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                            placeholder="" autocomplete="off"></input>
+                            placeholder="veuilez saisir votre poste" autocomplete="off"></input>
                     </div>
 
                     <div class="col-span-2">
@@ -78,7 +76,7 @@
                             class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">periode</label>
                         <input id="periode" name="periode" type="date" rows="4"
                             class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                            placeholder="" autocomplete="off"></input>
+                            autocomplete="off"></input>
                     </div>
                 </div>
                 <button type="submit"

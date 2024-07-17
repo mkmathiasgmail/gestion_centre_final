@@ -1,38 +1,44 @@
 <x-app-layout>
+    <!-- Display errors if any -->
     @if ($errors->any())
         @foreach ($errors->all() as $error)
             <div class="p-4 mb-4 text-sm text-red-800 rounded-lg bg-green-50 dark:bg-gray-800 dark:text-red-400"
                 role="alert">
-
                 <span class="font-medium">{{ $error }}</span>
-
             </div>
         @endforeach
     @endif
 
+    <!-- Header section -->
     <x-slot name="header">
         <div class="flex justify-between items-center">
             <div>
+                <!-- Title of the page -->
                 <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
                     {{ __('Gestion Activites') }}
                 </h2>
             </div>
 
-            <div class=" flex items-center gap-5">
-
+            <div class="flex items-center gap-5">
+                <!-- Search form -->
                 <div class="">
                     <form class="max-w-lg mx-auto">
                         <div class="flex">
+                            <!-- Search input field -->
                             <label for="search-dropdown"
                                 class="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white">Your
                                 Email</label>
+                            <!-- Dropdown button -->
                             <button id="dropdown-button" data-dropdown-toggle="dropdown"
                                 class="flex-shrink-0 z-10 inline-flex items-center py-2.5 px-4 text-sm font-medium text-center text-gray-900 bg-gray-100 border border-gray-300 rounded-s-lg hover:bg-gray-200 focus:ring-4 focus:outline-none focus:ring-gray-100 dark:bg-gray-700 dark:hover:bg-gray-600 dark:focus:ring-gray-700 dark:text-white dark:border-gray-600"
-                                type="button">All categories <svg class="w-2.5 h-2.5 ms-2.5" aria-hidden="true"
-                                    xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
+                                type="button">All categories
+                                <svg class="w-2.5 h-2.5 ms-2.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
+                                    fill="none" viewBox="0 0 10 6">
                                     <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
                                         stroke-width="2" d="m1 1 4 4 4-4" />
-                                </svg></button>
+                                </svg>
+                            </button>
+                            <!-- Dropdown menu -->
                             <div id="dropdown"
                                 class="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700">
                                 <ul class="py-2 text-sm text-gray-700 dark:text-gray-200"
@@ -55,10 +61,12 @@
                                     </li>
                                 </ul>
                             </div>
+                            <!-- Search input field -->
                             <div class="relative w-full">
                                 <input type="search" id="search-dropdown"
                                     class="block p-2.5 w-full z-20 text-sm text-gray-900 bg-gray-50 rounded-e-lg border-s-gray-50 border-s-2 border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-s-gray-700  dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:border-blue-500"
                                     placeholder="Search Mockups, Logos, Design Templates..." required />
+                                <!-- Search button -->
                                 <button type="submit"
                                     class="absolute top-0 end-0 p-2.5 text-sm font-medium h-full text-white bg-blue-700 rounded-e-lg border border-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
                                     <svg class="w-4 h-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
@@ -72,14 +80,11 @@
                         </div>
                     </form>
                 </div>
-
             </div>
-
         </div>
-
     </x-slot>
 
-
+    <!-- Tab navigation -->
     <div class="mb-4 border-b border-gray-200 dark:border-gray-700">
         <ul class="flex flex-wrap -mb-px text-sm font-medium text-center" id="default-styled-tab"
             data-tabs-toggle="#default-styled-tab-content"
@@ -96,6 +101,12 @@
                     class="inline-block p-4 border-b-2 rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300"
                     id="dashboard-styled-tab" data-tabs-target="#styled-dashboard" type="button" role="tab"
                     aria-controls="dashboard" aria-selected="false">Candidats</button>
+            </li>
+            <li class="me-2" role="presentation">
+                <button
+                    class="inline-block p-4 border-b-2 rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300"
+                    id="dashboard-styled-tab" data-tabs-target="#participants-tab" type="button" role="tab"
+                    aria-controls="dashboard" aria-selected="false">Participants</button>
             </li>
             <li class="me-2" role="presentation">
                 <button
@@ -124,13 +135,23 @@
         </ul>
     </div>
 
+    <!-- Tab content -->
     <div id="default-styled-tab-content">
-
+        <!-- Show activity details -->
         <x-activitesShow :show="$activite" />
 
-        {{-- Affichage des candidats sur l'activité affichée --}}
-        <x-show-candidates-event :labels="$labels" :candidatsData="$candidatsData" />
+        <!-- Show candidates for the activity -->
+        <x-show-candidates-event :activite="$activite" :labels="$labels" :candidatsData="$candidatsData" :odcusers="$odcusers"
+            :activite_Id="$activite_Id" :id="$id" />
 
+        <!-- Participants tab content -->
+        <div class="hidden p-4 rounded-lg bg-gray-50 dark:bg-gray-800" id="participants-tab" role="tabpanel"
+            aria-labelledby="participants-tab">
+            <x-show-participants-event :participantsData="$participantsData" :activite="$activite" :labels="$labels" :candidatsData="$candidatsData"
+                :odcusers="$odcusers" :activite_Id="$activite_Id" :id="$id" />
+        </div>
+
+        <!-- Settings tab content -->
         <div class="hidden p-4 rounded-lg bg-gray-50 dark:bg-gray-800" id="styled-settings" role="tabpanel"
             aria-labelledby="settings-tab">
             <p class="text-sm text-gray-500 dark:text-gray-400">This is some placeholder content the <strong
@@ -138,17 +159,20 @@
                 Clicking another tab will toggle the visibility of this one for the next. The tab JavaScript swaps
                 classes to control the content visibility and styling.</p>
         </div>
+
+        <!-- Presence tab content -->
         <div class="hidden p-4 rounded-lg bg-gray-50 dark:bg-gray-800" id="content-presence" role="tabpanel"
             aria-labelledby="settings-tab">
             <x-activite-presence-component :fullDates="$fullDates" :dates="$dates" :data="$data" :presences="$presences"
                 :countdate="$countdate" :activite="$activite" :candidats="$candidats" />
         </div>
 
-        <div class="hidden p-4 ro unded-lg bg-gray-50 dark:bg-gray-800" id="styled-contacts" role="tabpanel"
+        <!-- Contacts tab content -->
+        <div class="hidden p-4 rounded-lg bg-gray-50 dark:bg-gray-800" id="styled-contacts" role="tabpanel"
             aria-labelledby="contacts-tab">
-            <p class="text-sm text-gray-500 dark:text-gray-400">Settings tab's associated content</strong>.
-                Clicking another tab will toggle the visibility of this one for the next. The tab JavaScript swaps
-                classes to control the content visibility and styling</p>
+            <p class="text-sm text-gray-500 dark:text-gray-400">Settings tab's associated content</strong>. Clicking
+                another tab will toggle the visibility of this one for the next. The tab JavaScript swaps classes to
+                control the content visibility and styling</p>
         </div>
         <div class="hidden p-4 ro unded-lg bg-gray-50 dark:bg-gray-800" id="import" role="tabpanel"
         aria-labelledby="contacts-tab">
@@ -156,30 +180,133 @@
     </div>
     </div>
 
-
-
     @php
         $url = env('API_URL');
     @endphp
 
     @section('script')
-        <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+        {{-- Script for presence data table --}}
+        <script>
+            $(document).ready(function() {
+                $('#candidatpresence').DataTable();
+            });
+        </script>
+
+        {{-- Script for participants data table --}}
+        <script>
+            $(document).ready(function() {
 
 
+                let event = @json($activite->title);
+                $('#participantTable').DataTable({
+                    responsive: true,
+
+                    columnDefs: [{
+                            visible: false,
+                            targets: [0, 3, 5, 7, 8, 9]
+                        }, // hide columns 1 and 3 by default
+                        {
+                            responsivePriority: 1,
+                            targets: 0
+                        },
+                        {
+                            responsivePriority: 2,
+                            targets: -1
+                        }
+                    ],
+                    layout: {
+                        topStart: {
+                            pageLength: {
+                                menu: [10, 25, 50, 100, 200]
+                            },
+                            buttons: [
+                                'colvis',
+                                {
+                                    extend: 'excelHtml5',
+                                    exportOptions: {
+                                        columns: ':visible'
+                                    },
+                                    title: "Liste des candidats pour : " + event
+                                },
+                            ]
+                        },
+                        topEnd: {
+                            search: {
+                                placeholder: 'Type search here'
+                            }
+                        }
+                    }
+                });
+
+                $('#participantTable').css('width', '100%');
+            });
+        </script>
+
+        {{-- Script for candidates data table --}}
+        <script>
+            $(document).ready(function() {
+                let event = @json($activite->title);
+
+                if ($.fn.DataTable.isDataTable('#candidatTable')) {
+                    $('#candidatTable').DataTable().destroy();
+                }
+                $('#candidatTable').DataTable({
+                    responsive: true,
+
+                    columnDefs: [{
+                            visible: false,
+                            targets: [0, 3, 5, 7, 8, 9]
+                        }, // hide columns 1 and 3 by default
+                        {
+                            responsivePriority: 1,
+                            targets: 0
+                        },
+                        {
+                            responsivePriority: 2,
+                            targets: -1
+                        }
+                    ],
+                    layout: {
+                        topStart: {
+                            pageLength: {
+                                menu: [10, 25, 50, 100, 200]
+                            },
+                            buttons: [
+                                'colvis',
+                                {
+                                    extend: 'excelHtml5',
+                                    action: function(e, dt, node, config) {
+                                        e.preventDefault();
+                                        let id_event = @json($activite->id);
+                                        // Redirection vers la méthode du contrôleur
+                                        window.location.href = '{{ url('generate_excel') }}/' + id_event;
+                                    }
+                                },
+                            ]
+                        },
+                        topEnd: {
+                            search: {
+                                placeholder: 'Type search here'
+                            }
+                        }
+                    }
+                });
+            });
+        </script>
+
+        {{-- Script for storing candidates --}}
         <script>
             let url = "{!! $url !!}"
             let id = @json($id);
             let idEvent = "{!! $activite_Id !!}"
             let idUsers = @json($odcusers);
             let user = {};
-            // Initialiser l'objet user avec les paires de `_id` et `id`
+            // Initialize the user object with pairs of `_id` and `id`
             idUsers.forEach(element => {
                 user[element._id] = element.id;
             });
 
-
             function Reload() {
-
                 fetch(`${url}/events/show/${idEvent}`)
                     .then(response => {
                         if (!response.ok) {
@@ -192,10 +319,10 @@
                         events.forEach(event => {
                             let userId = event.user._id;
                             if (user.hasOwnProperty(userId)) {
-                                // Ajouter un objet au tableau candidat avec `odcuser_id` contenant `id`
+                                // Add an object to the candidates array with `odcuser_id` containing `id`
                                 let candidat = {
                                     'odcuser_id': user[userId],
-                                    'activite_id': id, // ou utilisez event.activite_id si disponible
+                                    'activite_id': id, // or use event.activite_id if available
                                     'status': 1
                                 };
                                 console.log(candidat)
