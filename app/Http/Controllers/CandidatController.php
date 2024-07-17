@@ -265,37 +265,34 @@ class CandidatController extends Controller
         return response()->download($tmp, "coach.Xlsx")->deleteFileAfterSend(true);
     }
 
-    public function validate($id)
+    public function accept(Request $request)
     {
-        $candidat = Candidat::find($id);
+        $candidat = Candidat::find($request->input('id'));
         if ($candidat) {
             $candidat->status = 'accept';
             $candidat->save();
         }
-
-        return redirect()->back();
+        return response()->json(['message' => 'Status updated successfully!']);
     }
 
-    public function reject($id)
+    public function decline(Request $request)
     {
-        $candidat = Candidat::find($id);
+        $candidat = Candidat::find($request->input('id'));
         if ($candidat) {
             $candidat->status = 'decline';
             $candidat->save();
         }
-
-        return redirect()->back();
+        return response()->json(['message' => 'Status updated successfully!']);
     }
 
-    public function await($id)
+    public function wait(Request $request)
     {
-        $candidat = Candidat::find($id);
+        $candidat = Candidat::find($request->input('id'));
         if ($candidat) {
             $candidat->status = 'wait';
             $candidat->save();
         }
-
-        return redirect()->back();
+        return response()->json(['message' => 'Status updated successfully!']);
     }
 
     /**
