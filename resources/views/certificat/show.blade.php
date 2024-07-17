@@ -31,7 +31,7 @@
                     </div>
 
                     <div>
-                        <em class="text-4xl">Tshim's Bololo</em>
+                        <em class="text-4xl">{{}}</em>
                     </div>
 
                     <div class=" mb-10 text-center">

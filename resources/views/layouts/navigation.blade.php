@@ -155,6 +155,8 @@
                     </a>
                 </li>
 
+
+                @if (Auth()->user()->hasRole('super-admin'))
                 <li>
                     <a href="{{ route('user_role.index') }}"
                         class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
@@ -169,6 +171,7 @@
 
                     </a>
                 </li>
+                @endif
                 <li>
                     <a href="{{ route('import') }}"
                         class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
