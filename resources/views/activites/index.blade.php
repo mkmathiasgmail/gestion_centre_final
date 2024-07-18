@@ -171,6 +171,25 @@
                                         <a href="{{ route('activites.edit', $item->id) }}"
                                             class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Update</a>
                                     </li>
+                                    <li>
+                                        @if ($item->show_in_calendar == true)
+                                            <form action="{{ route('showInCalendar', $item->id) }}" method="post">
+                                                @csrf
+                                                <input type="text" value="false" class=" hidden" name="status">
+                                                <button type="submit"
+                                                    class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Desactive
+                                                    au calendar</button>
+                                            </form>
+                                        @else
+                                            <form action="{{ route('showInCalendar', $item->id) }}" method="post">
+                                                @csrf
+                                                <input type="text" value="true" class=" hidden" name="status">
+                                                <button type="submit"
+                                                    class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Active
+                                                    au calendar</button>
+                                            </form>
+                                        @endif
+                                    </li>
                                 </ul>
                                 <div class="py-2">
                                     <a href="#"
@@ -246,11 +265,11 @@
 
     @section('script')
         <script>
-            function destroy(event) {
-                event.preventDefault();
-                let link = event.target.getAttribute('href');
-                document.querySelector('.delete').setAttribute('action', link);
-            }
+            // function destroy(event) {
+            //     event.preventDefault();
+            //     let link = event.target.getAttribute('href');
+            //     document.querySelector('.delete').setAttribute('action', link);
+            // }
         </script>
         <script src="https://cdn.ckeditor.com/ckeditor5/41.4.2/classic/ckeditor.js"></script>
 
