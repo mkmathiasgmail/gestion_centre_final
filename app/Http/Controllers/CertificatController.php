@@ -2,9 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use DateTimeImmutable;
+use App\Models\Activite;
+
+use App\Models\Candidat;
 use App\Models\Certificat;
-use App\Models\Odcuser;
 use Illuminate\Http\Request;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class CertificatController extends Controller
 {
@@ -29,7 +33,6 @@ class CertificatController extends Controller
      */
     public function store(Request $request)
     {
-        //
     }
 
     /**
@@ -37,7 +40,7 @@ class CertificatController extends Controller
      */
     public function show(Certificat $certificat)
     {
-        //
+        return view('certificat.show', compact('certificat'));
     }
 
     /**
@@ -63,7 +66,28 @@ class CertificatController extends Controller
     {
         //
     }
-    public function generateCertificat(){
 
+
+
+
+    /**
+     * Generate a certificate for a candidate and activity.
+     */
+
+    public function generateCertificat($candidat)
+    {
+        $candidat = Candidat::find($candidat);
+
+        $date = new DateTimeImmutable($candidat->activite->start_date);
+        $format = date_format($date, 'jS \o\f F Y');
+
+        // $pdf = Pdf::loadView('certificat.generateCertificat', compact('candidat', 'format'));
+
+        // set_time_limit(100000);
+        // $pdf->set_paper("a4", "landscape");
+        // return $pdf->download('certificat.pdf');
+
+
+        return view('certificat.generateCertificat',compact('format','candidat'));
     }
 }

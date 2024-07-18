@@ -174,11 +174,9 @@
                 another tab will toggle the visibility of this one for the next. The tab JavaScript swaps classes to
                 control the content visibility and styling</p>
         </div>
-
-        <!-- Import tab content -->
-        <div class="hidden p-4 rounded-lg bg-gray-50 dark:bg-gray-800" id="import" role="tabpanel"
+        <div class="hidden p-4 ro unded-lg bg-gray-50 dark:bg-gray-800" id="import" role="tabpanel"
             aria-labelledby="contacts-tab">
-            <p class="text-sm text-gray-500 dark:text-gray-400"><x-activite-import /></p>
+            <p class="text-sm text-gray-500 dark:text-gray-400"><x-activite-import :activite="$activite" /></p>
         </div>
     </div>
 
@@ -191,12 +189,16 @@
         <script>
             $(document).ready(function() {
                 $('#candidatpresence').DataTable();
+
+                $('#candidatpresence').css('width', '100%');
             });
         </script>
 
         {{-- Script for participants data table --}}
         <script>
             $(document).ready(function() {
+
+
                 let event = @json($activite->title);
                 $('#participantTable').DataTable({
                     responsive: true,
@@ -237,6 +239,8 @@
                         }
                     }
                 });
+
+                $('#participantTable').css('width', '100%');
             });
         </script>
 
@@ -273,10 +277,13 @@
                                 'colvis',
                                 {
                                     extend: 'excelHtml5',
-                                    exportOptions: {
-                                        columns: ':visible'
-                                    },
-                                    title: "Liste des candidats pour : " + event
+                                    action: function(e, dt, node, config) {
+                                        e.preventDefault();
+                                        let id_event = @json($activite->id);
+                                        // Redirection vers la méthode du contrôleur
+                                        window.location.href = '{{ url('generate_excel') }}/' +
+                                            id_event;
+                                    }
                                 },
                             ]
                         },
@@ -286,6 +293,31 @@
                             }
                         }
                     }
+                });
+
+                $('#candidatTable').css('width', '100%');
+
+                $('#accept-link, #reject-link, #await-link').on('click', function(e) {
+                    e.preventDefault();
+                    var id = $(this).data('id');
+                    var status = $(this).data('text').toLowerCase();
+                    $.ajax({
+                        type: 'POST',
+                        url: '/candidat/' + status,
+                        data: {
+                            id: id,
+                            _token: '{{ csrf_token() }}'
+                        },
+                        success: function(data) {
+                            // Update the UI or display a success message
+                            // Update the table cell with the new status
+                            $('#status').text(status);
+                            console.log('Status updated successfully!');
+                        },
+                        error: function(xhr, status, error) {
+                            console.log('Error updating status: ' + error);
+                        }
+                    });
                 });
             });
         </script>

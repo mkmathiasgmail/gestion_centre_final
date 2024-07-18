@@ -6,63 +6,37 @@
     <meta name="viewport"
         content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Invoice</title>
-
-    <link rel="stylesheet" href="{{ asset('certificat.css') }}" type="text/css"> 
+    <title>Certificate</title>
+    <link rel="stylesheet" href="{{ asset('certificat.css') }}" type="text/css">
+   
 </head>
 
 <body>
-    <table class="w-full">
-        <tr>
-            <td class="w-half">
-                <img src="{{ asset('laraveldaily.png') }}" alt="laravel daily" width="200" />
-            </td>
-            <td class="w-half">
-                <h2>Invoice ID: 834847473</h2>
-            </td>
-        </tr>
-    </table>
-
-    <div class="margin-top">
-        <table class="w-full">
-            <tr>
-                <td class="w-half">
-                    <div>
-                        <h4>To:</h4>
-                    </div>
-                    <div>John Doe</div>
-                    <div>123 Acme Str.</div>
-                </td>
-                <td class="w-half">
-                    <div>
-                        <h4>From:</h4>
-                    </div>
-                    <div>Laravel Daily</div>
-                    <div>London</div>
-                </td>
-            </tr>
-        </table>
-    </div>
-
-    <div class="margin-top">
-        <table class="products">
-            <tr>
-                <th>Qty</th>
-                <th>Description</th>
-                <th>Price</th>
-            </tr>
-            <tr class="items">
-            </tr>
-        </table>
-    </div>
-
-    <div class="total">
-        Total: $129.00 USD
-    </div>
-
-    <div class="footer margin-top">
-        <div>Thank you</div>
-        <div>&copy; Laravel Daily</div>
+    <div class="container">
+        <div class="certificate">
+            <h1>CERTIFICATE</h1>
+            <p>OF APPRECIATION</p>
+            <img src="{{ asset('img/orange.png') }}" alt="Logo" />
+            <div class="organization">Orange Digital Center</div>
+            <div class="recipient">{{ $candidat->name }}</div>
+            <div class="description">
+                Track work across the enterprise through an open, collaborative platform.
+                <em>Link issues across Jira</em> and ingest data from other software development tools, so your IT
+                support
+                and operations teams have richer contextual information to rapidly respond to requests, incidents, and
+                changes.
+            </div>
+            <div class="date-signature">
+                <div class="date">
+                    <span>{{ $format }}</span>
+                    <div class="label">DATE</div>
+                </div>
+                <div class="signature">
+                    <span>Expires on</span>
+                    <div class="label">Signature</div>
+                </div>
+            </div>
+        </div>
     </div>
 </body>
 
