@@ -180,7 +180,7 @@ class ActiviteController extends Controller
             }
             $candidatsData[] = $candidatArray;
         }
-        $participants = Candidat::where('status', 'accept')->select('id', 'odcuser_id', 'activite_id', 'status')->with(['odcuser', 'candidat_attribute'])->get();
+        $participants = Candidat::where('activite_id', $id)->where('status', 'accept')->select('id', 'odcuser_id', 'activite_id', 'status')->with(['odcuser', 'candidat_attribute'])->get();
         $etiquettes = [];
         $participantsData = [] ;
         foreach ($participants as $participant) {
@@ -347,7 +347,7 @@ class ActiviteController extends Controller
         $activites = Activite::all();
         $user= Odcuser::all();
 
-       
+
 
         return view('dashboard', compact('data', 'activites','user'));
     }
