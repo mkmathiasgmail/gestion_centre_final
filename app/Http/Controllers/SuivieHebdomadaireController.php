@@ -2,8 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use Carbon\Carbon;
-use App\Models\Activite;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Exports\SuivieHebdomadaire;
@@ -26,7 +24,7 @@ class SuivieHebdomadaireController extends Controller
                 'activites.end_date', 
                 'activites.number_hour', 
                 'ca.name', 
-                DB::raw('COUNT(cand.status) as cand_count'),
+                DB::raw('COUNT(cand.id) as cand_count'),
                 DB::raw('COUNT(DISTINCT CASE WHEN pre.candidat_id IS NOT NULL AND od.gender = "male" THEN pre.candidat_id ELSE NULL END) as male_count'),
                 DB::raw('COUNT(DISTINCT CASE WHEN pre.candidat_id IS NOT NULL AND od.gender = "female" THEN pre.candidat_id ELSE NULL END) as female_count'),
                 DB::raw('COUNT(DISTINCT pre.candidat_id) as pre_count')
