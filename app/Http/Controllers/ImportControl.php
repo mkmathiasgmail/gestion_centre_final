@@ -11,13 +11,14 @@ use Illuminate\Support\Facades\Log;
 use PhpOffice\PhpSpreadsheet\IOFactory;
 use Illuminate\Support\Facades\Validator;
 use PhpOffice\PhpSpreadsheet\Reader\Xlsx;
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
 
 class ImportControl extends Controller
 {
     public function index()
     {
         $activites = Activite::all();
-        return view(/*'components.activite-import'*/'import.import', ['activites' => $activites]);
+        return view('components.activite-import'/*'import.import'*/, ['activites' => $activites]);
     }
 
     public function import(Request $request)
@@ -40,7 +41,6 @@ class ImportControl extends Controller
         foreach ($fileContents as $line) {
             $data = str_getcsv($line);
             $rowData = array_combine($header, $data);
-            //dd($rowData);
             // Valider les données de chaque ligne
             try {
                 $validatedData = $this->validateRowData($rowData);
@@ -48,18 +48,18 @@ class ImportControl extends Controller
                 // Chercher l'utilisateur par email 
                 $odcuser = Odcuser::where('email', $validatedData['email'])->first();
 
-                $validatedData['birthDay'] = '1970-02-05';
+                $validatedData['birth_date'] = '1970-02-05';
                 $validatedData['password'] = 'kdjksjfkndjskjd5555';
                 $validatedData['profession'] = 'etudiant';
-                $validatedData['odc_country'] = "{'country':'congo'}";
+                //$validatedData['odc_country'] = "{'country':'congo'}";
                 $validatedData['role'] = 'user';
                 $validatedData['is_active'] = '1';
                 $validatedData['_id'] = 'test';
                 $validatedData['createdAt'] = date("Y-m-d h:i:s ");
                 $validatedData['updatedAt'] = date("Y-m-d h:i:s ");
-                $validatedData['status']= 0;
+                //$validatedData['status']= 0;
 
-                if ($odcuser) {
+                /*if ($odcuser) {
                     // Si l'utilisateur existe déjà, on recupere simplement son id.
                     $odcuser->update($validatedData);
                 } else {
@@ -67,30 +67,31 @@ class ImportControl extends Controller
                     $odcuser = Odcuser::create($validatedData);
                 }
 
-                //dd($validatedData);
-
-                //$odcuser = Odcuser::firstOrCreate($validatedData);
-
+                //dd($odcuser);
                 // Ajouter l'utilisateur à la table 'candidat'
-                $candidat=Candidat::create([
+                /*$candidat=Candidat::create([
                     'odcuser_id' => $odcuser->id,
                     'activite_id' => $activiteId,
-                    'status' => $validatedData['status']
-                ]);
+                    'status' => $rowData['status']
+                ]);*/
+                //dd('status');
 
-                $date =$rowData['date'];
+                dump($rowData);
+                //$date = $rowData['Date'];
+                //dd($date);
                 //on remplie la table presence
-                $datemodif = explode('_', $date);+
-                Presence::create([
+                //$datemodif = explode('_', $date);
+                /*Presence::create([
                     'date' => $datemodif[1],
                     'candidat_id' => $candidat->id,
-                ]);
+                ]);*/
                 //dump($validatedData['statut']);
             } catch (\Illuminate\Validation\ValidationException $e) {
                 Log::error('Validation failed for row: ', ['row' => $rowData, 'errors' => $e->errors()]);
                 continue; // Skip invalid rows
             }
         }
+        
 
         return redirect()->back()->with('success', 'Importation exécutée avec succès');
     }
@@ -99,7 +100,7 @@ class ImportControl extends Controller
     {
         // Définir les règles de validation spécifiques
         $validator = Validator::make($rowData, [
-            'firstName' => '',
+            'first_name' => '',
             'last_name' => '',
             'email' => '',
             'password' => '',
@@ -127,7 +128,7 @@ class ImportControl extends Controller
             '__v' => '',
             'picture' => '',
             'user_cv' => '',
-            'statut' => 'boolean'
+            /*'status' => ''*/
         ]);
 
         // Si la validation échoue, lever une exception
@@ -152,7 +153,24 @@ class ImportControl extends Controller
 
 
 
-    //function pour import dans activite
+    //function pour import hors activite
 
+    public function indexacti()
+    {
+        $activites = Activite::all();
+        return view(/*'components.activite-import'*/'import.import', ['activites' => $activites]);
+    }
+
+    public function download($filename)
+    {
+        $path = storage_path('app/public/' . $filename);
+        //dd($path);
+
+        if (!file_exists($path)) {
+            abort(404, 'fichier non trouvé');
+        }
+
+        return response()->download($path);
+    }
 
 }
