@@ -10,7 +10,7 @@
         @endforeach
     @endif
     <form action="{{ route('activites.update', $activite) }}" method="POST">
-        <div class="p-5 md:p-5 space-y-4 text-white items-center">
+        <div class="p-5 md:p-5 space-y-4 mb-6 text-lg font-normal text-gray-800 lg:text-xl  dark:text-gray-400">
             @csrf
             @method('PUT')
 
@@ -30,6 +30,24 @@
                 <label for="date_fin">End Date</label>
                 <input type="date" name="endDate" id="date_fin" class="w-full h-10 rounded-md text-gray-600"
                     required value="{{ $activite->end_date }}">
+            </div>
+            <div>
+
+                <label for="date_debut">Upload File</label>
+                <div class=" flex items-center gap-4">
+
+                    <input type="file" id="file"
+                        class="block w-full mb-4 text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400" />
+                    <input onclick="formImg()" type="button"
+                        class="py-2.5 px-5 me-2 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700"
+                        value="Upload" id="but_upload">
+                </div>
+
+                <div class='preview' id="preview">
+                    <img src="{{ $activite->thumbnail_url }}" id="img" class=" w-96 h-96 object-cover">
+                    <input type="text" name="thumbnailURL" value="" class=" hidden" id="imgGet">
+                </div>
+
             </div>
 
             <div>
@@ -95,6 +113,47 @@
     </form>
 
     @section('script')
+        <script>
+            $(document).ready(function() {
+                $("#preview").click(function() {
+                    var src = $(this).attr('src');
+                    $('#preview').addClass('active');
+                    $(".active").css({
+                        background: 'RGBA(0,0,0,.5)',
+                        width: '100%',
+                        height: '100%',
+                        position: 'fixed',
+                        zIndex: '1000',
+                        top: '0',
+                        left: '0',
+                        cursor: 'zoom-out',
+                        transition: 'background-color 0.3s ease-in-out',
+                        cursor: 'pointer',
+                        padding: '50px'
+
+
+
+                    }).click(function() {
+                        $(this).remove();
+
+                    });
+
+
+
+                    $(".active img").css({
+
+                        width: '100%',
+                        height: 'auto'
+
+
+
+                    })
+
+                })
+
+
+            })
+        </script>
         <script type="module">
             $(document).ready(function() {
                 $('.js-example-basic-multiple').select2();

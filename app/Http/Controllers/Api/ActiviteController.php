@@ -23,47 +23,112 @@ class ActiviteController extends Controller
      */
     public function store(Request $request)
     {
+        $url = env('API_URL');
+        foreach ($request->input('content') as $content) {
+            if ($content['type'] === 'paragraph') {
 
 
-        $activite = [
-            "title" => $request->title,
-            "categories" => $request->categories,
-            "hashtags" => $request->hashtags,
-            "content" => $request->contents,
-            "form" => $request->form,
-            "thumbnailURL"=>$request->thumbnailURL,
-            "endDate" => $request->endDate,
-            "startDate" => $request->startDate,
-            "location" => $request->location,
-            "contents" => $request->content,
-        ];
-        dd($activite);
+
+
+                $activite = [
+                    "title" => $request->title,
+                    "categories" => $request->categories,
+                    "hashtags" => $request->hashtags,
+                    "content" => $request->contents,
+                    "form" => $request->form,
+                    "thumbnail_url" => $request->thumbnailURL,
+                    "endDate" => $request->endDate,
+                    "startDate" => $request->startDate,
+                    "location" => $request->location,
+                    "contents" => [
+                        [
+                            'id' => uniqid(),
+                            'type' => 'paragraphe',
+                            'data' => [
+                                'text' => $content['text'],
+
+                            ],
+                        ],
+
+                        [
+                            'id' => uniqid(),
+                            'type' => 'contents',
+                            'data' => [
+                                'content' => $request->contents,
+
+                            ],
+                        ]
+
+
+                    ],
+
+                ];
 
         try {
-           
-            $requette = Http::timeout(100)
-                ->post('http://10.143.41.70:8000/2024/odc/public/api/events/create', $activite);
 
-            // Check if the request was successful
-            if ($requette->successful()) {
-                return response()->json(['success' => true, 'data' => $requette->json()], 201);
+                    $requette = Http::timeout(100)
+                        ->post("$url/events/create", $activite);
 
-                
-            } else {
-                return response()->json(['success' => false, 'message' => 'Erreur lors de la création de l\'événement', 'error' => $requette->body()], $requette->status());
+                    // Check if the request was successful
+                    if ($requette->successful()) {
+                        return response()->json(['success' => true, 'data' => $requette->json()], 201);
+                    } else {
+                        return response()->json(['success' => false, 'message' => 'Erreur lors de la création de l\'événement', 'error' => $requette->body()], $requette->status());
+                    }
+                } catch (\Exception $e) {
+
+                    return response()->json(['success' => false, 'message' => 'Request failed', 'error' => $e->getMessage()], 500);
+                }
+            } elseif ($content['type'] === 'socialMedia') {
+                $activite = [
+                    "title" => $request->title,
+                    "categories" => $request->categories,
+                    "hashtags" => $request->hashtags,
+                    "content" => $request->contents,
+                    "form" => $request->form,
+                    "thumbnailURL" => $request->thumbnailURL,
+                    "endDate" => $request->endDate,
+                    "startDate" => $request->startDate,
+                    "location" => $request->location,
+                    "contents" => [
+                        'id' => uniqid(),
+                        'type' => 'socialmedia',
+                        'data' => [
+                            'link' => $content['link'],
+
+                        ],
+                    ],
+
+
+                ];
+
+                try {
+
+                    $requette = Http::timeout(100)
+                        ->post("$url/events/create", $activite);
+
+                    // Check if the request was successful
+                    if ($requette->successful()) {
+                        return response()->json(['success' => true, 'data' => $requette->json()], 201);
+                    } else {
+                        return response()->json(['success' => false, 'message' => 'Erreur lors de la création de l\'événement', 'error' => $requette->body()], $requette->status());
+                    }
+                } catch (\Exception $e) {
+
+                    return response()->json(['success' => false, 'message' => 'Request failed', 'error' => $e->getMessage()], 500);
+                }
             }
-        } catch (\Exception $e) {
-          
-            return response()->json(['success' => false, 'message' => 'Request failed', 'error' => $e->getMessage()], 500);
         }
 
-
         // Return the created event
-        
+
+
     }
 
-   
-    
+
+
+
+
 
     /**
      * Display the specified resource.
@@ -87,5 +152,11 @@ class ActiviteController extends Controller
     public function destroy(Activite $activite)
     {
         //
+    }
+
+    public function getActiviteRecent()
+    {
+        $activite =  Activite::select('id','title', 'content')->latest()->paginate(5);
+        return response()->json($activite);
     }
 }

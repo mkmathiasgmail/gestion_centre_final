@@ -1,6 +1,6 @@
 <x-app-layout>
 
-     @if ($errors->any())
+    @if ($errors->any())
         @foreach ($errors->all() as $error)
             <div class="p-4 mb-4 text-sm text-red-800 rounded-lg bg-green-50 dark:bg-gray-800 dark:text-red-400"
                 role="alert">
@@ -110,7 +110,7 @@
                             @endforeach
                         </td>
                         <td scope="col" class="px-6 py-3">
-                            @foreach ($typeEvent as $event)
+                            @foreach ($item->typEvent as $event)
                                 <span>{{ $event->title }}</span>
                             @endforeach
                         </td>
@@ -399,6 +399,15 @@
                 .catch(error => {
                     console.error(error);
                 });
+        </script>
+
+        <script>
+            $(document).ready(function() {
+                $('#table').on('click', '.btn-menu', function() {
+                    const lien = $(this).attr('data-dropdown-toggle')
+                    $('#' + lien).fadeToggle('fast')
+                })
+            })
         </script>
 
         <script src="https://cdn.datatables.net/2.0.8/js/dataTables.js"></script>

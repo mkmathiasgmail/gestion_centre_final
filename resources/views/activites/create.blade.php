@@ -9,26 +9,26 @@
             </div>
         @endforeach
     @endif
-    <form action="{{ route('activite.store') }}" method="post">
+    <form action="{{ route('activites.store') }}" method="post" >
         @csrf
 
-        <div>
-            <h2 class=" text-white text-3xl mb-5">Formulaire</h2>
-        </div>
+                <div class="mb-6 p-5  text-lg font-normal text-gray-800 lg:text-xl  dark:text-gray-400">
+                    <h2 class="  text-3xl mb-5">Formulaire</h2>
+                </div>
 
 
-        <div class="p-5 md:p-5 space-y-4 text-white items-center">
+        <div class="p-5 md:p-5 space-y-4 mb-6 text-lg font-normal text-gray-800 lg:text-xl  dark:text-gray-400">
             @csrf
 
-            <div>
-                <label for="title">Title</label>
+            <div >
+                <label for="title" class="mb-6 text-lg font-normal text-gray-800 lg:text-xl  dark:text-gray-400">Title</label>
                 <input type="text" name="title" id="title"
                     class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                     placeholder="Donne un titre à votre Article" required value="">
-            </div>
+                </div>
 
             <div>
-                <label for="date_debut">Start Date</label>
+                <label for="date_debut" class="mb-6 text-lg font-normal text-gray-500 lg:text-xl  dark:text-gray-400">Start Date</label>
                 <input type="date" name="startDate" id="date_debut"
                     class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                     required value="">
@@ -42,12 +42,12 @@
             </div>
 
             <div>
-                <label for="" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Form</label>
+                <label for="" >Form</label>
                 <select
                     class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                     name="form">
                     @foreach ($forms as $item)
-                        <option value="{{ $item->id }}">{{ $item->name }}</option>
+                        <option value="{{ $item->_id }}">{{ $item->name }}</option>
                     @endforeach
                 </select>
             </div>
@@ -76,11 +76,11 @@
                 <label for="lieu">Location</label>
                 <select name="location" id="lieu"
                     class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-                    <option value="ODC Kinshasa">ODC Kinshasa</option>
-                    <option value="ODC Lubumbashi">ODC Lubumbashi</option>
-                    <option value="ODC Matadi">ODC Matadi</option>
-                </select>
-            </div>
+                        <option value="ODC Kinshasa">ODC Kinshasa</option>
+                        <option value="ODC Lubumbashi">ODC Lubumbashi</option>
+                        <option value="ODC Matadi">ODC Matadi</option>
+                    </select>
+                </div>
 
             <div>
                 <label for="tags">Hashtags</label>
@@ -110,7 +110,7 @@
                 </div>
                 <div class="w-1/2">
                     <label for="categorie_id">Categorie</label>
-                    <select name="categories[]" id="categorie_id"
+                    <select name="categories" id="categorie_id"
                         class=" bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
 
                         @foreach ($categories as $category)
@@ -118,6 +118,12 @@
                         @endforeach
                     </select>
                 </div>
+            </div>
+
+            <div>
+                <textarea id="message" rows="4"
+                    class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                    placeholder="Write your thoughts here..." id="paragraph" name="contents"></textarea>
             </div>
 
 
@@ -140,7 +146,7 @@
         </div>
 
         <div class="flex items-center p-4 md:p-5 border-t border-gray-200 rounded-b dark:border-gray-600">
-            <button type="submit"
+        <button type="submit"
                 class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5">I
                 accept</button>
             <button type="reset"
@@ -172,12 +178,12 @@
 
 
 
-                    }).click(function(){
+                    }).click(function() {
                         $(this).remove();
-                       
+
                     });
 
-                   
+
 
                     $(".active img").css({
 
@@ -190,147 +196,10 @@
 
                 })
 
-             
+
             })
         </script>
-        <script src="https://cdn.ckeditor.com/ckeditor5/41.4.2/classic/ckeditor.js"></script>
-        <script>
-            ClassicEditor.create(document.querySelector('#paragraph'), {
-                toolbar: {
-                    items: [
-                        'exportPDF', 'exportWord', '|',
-                        'findAndReplace', 'selectAll', '|',
-                        'heading', '|',
-                        'bold', 'italic', 'strikethrough', 'underline', 'code', 'subscript', 'superscript',
-                        'removeFormat', '|',
-                        'bulletedList', 'numberedList', 'todoList', '|',
-                        'outdent', 'indent', '|',
-                        'undo', 'redo',
-                        '-',
-                        'fontSize', 'fontFamily', 'fontColor', 'fontBackgroundColor', 'highlight', '|',
-                        'alignment', '|',
-                        'link', 'uploadImage', 'blockQuote', 'insertTable', 'mediaEmbed', 'codeBlock', 'htmlEmbed',
-                        '|',
-                        'specialCharacters', 'horizontalLine', 'pageBreak', '|',
-                        'textPartLanguage', '|',
-                        'sourceEditing'
-                    ],
-                    shouldNotGroupWhenFull: true
-                },
-                list: {
-                    properties: {
-                        styles: true,
-                        startIndex: true,
-                        reversed: true
-                    }
-                },
-                heading: {
-                    options: [{
-                            model: 'paragraph',
-                            title: 'Paragraph',
-                            class: 'ck-heading_paragraph'
-                        },
-                        {
-                            model: 'heading1',
-                            view: 'h1',
-                            title: 'Heading 1',
-                            class: 'ck-heading_heading1'
-                        },
-                        {
-                            model: 'heading2',
-                            view: 'h2',
-                            title: 'Heading 2',
-                            class: 'ck-heading_heading2'
-                        },
-                        {
-                            model: 'heading3',
-                            view: 'h3',
-                            title: 'Heading 3',
-                            class: 'ck-heading_heading3'
-                        },
-                        {
-                            model: 'heading4',
-                            view: 'h4',
-                            title: 'Heading 4',
-                            class: 'ck-heading_heading4'
-                        },
-                        {
-                            model: 'heading5',
-                            view: 'h5',
-                            title: 'Heading 5',
-                            class: 'ck-heading_heading5'
-                        },
-                        {
-                            model: 'heading6',
-                            view: 'h6',
-                            title: 'Heading 6',
-                            class: 'ck-heading_heading6'
-                        }
-                    ]
-                },
-                fontFamily: {
-                    options: [
-                        'default',
-                        'Arial, Helvetica, sans-serif',
-                        'Courier New, Courier, monospace',
-                        'Georgia, serif',
-                        'Lucida Sans Unicode, Lucida Grande, sans-serif',
-                        'Tahoma, Geneva, sans-serif',
-                        'Times New Roman, Times, serif',
-                        'Trebuchet MS, Helvetica, sans-serif',
-                        'Verdana, Geneva, sans-serif'
-                    ],
-                    supportAllValues: true
-                },
-                fontSize: {
-                    options: [10, 12, 14, 'default', 18, 20, 22],
-                    supportAllValues: true
-                },
-                htmlSupport: {
-                    allow: [{
-                        name: /.*/,
-                        attributes: true,
-                        classes: true,
-                        styles: true
-                    }]
-                },
-                htmlEmbed: {
-                    showPreviews: false
-                },
-                link: {
-                    decorators: {
-                        addTargetToExternalLinks: true,
-                        defaultProtocol: 'https://',
-                        toggleDownloadable: {
-                            mode: 'manual',
-                            label: 'Downloadable',
-                            attributes: {
-                                download: 'file'
-                            }
-                        }
-                    }
-                },
-                mention: {
-                    feeds: [{
-                        marker: '@',
-                        feed: [
-                            '@apple', '@bears', '@brownie', '@cake', '@candy', '@canes',
-                            '@chocolate', '@cookie', '@cotton', '@cream',
-                            '@cupcake', '@danish', '@donut', '@dragée', '@fruitcake', '@gingerbread',
-                            '@gummi', '@ice', '@jelly-o',
-                            '@liquorice', '@macaroon', '@marzipan', '@oat', '@pie', '@plum', '@pudding',
-                            '@sesame', '@snaps', '@soufflé',
-                            '@sugar', '@sweet', '@topping', '@wafer'
-                        ],
-                        minimumCharacters: 1
-                    }]
-                },
-                language: 'fr',
-                licenseKey: '',
-            }).catch(error => {
-                console.error(error);
-            });
-        </script>
+        
         <script>
             async function formImg() {
                 let imageodc = document.getElementById('file');
@@ -427,8 +296,8 @@
                                     </svg>
                                 </button>
                     </div>        
-                    <input type="hidden" name="bloc[${contentIndex}][type]" value="paragraph">
-                    <textarea id="paragraph" name="bloc[${contentIndex}][item]" required class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"></textarea>
+                    <input type="hidden" name="content[${contentIndex}][type]" value="paragraph">
+                    <textarea id="paragraph" name="content[${contentIndex}][item]" required class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"></textarea>
 
                 </div>
             `;

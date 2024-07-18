@@ -17,12 +17,15 @@
     },
     "dependencies": {
         "@ckeditor/ckeditor5-build-classic": "^41.4.2",
+        "apexcharts": "^3.50.0",
         "assemblyai": "^4.4.5",
+        "chart.js": "^4.4.3",
         "ckeditor5": "^41.4.2",
         "datatables.net": "^2.0.8",
         "datatables.net-dt": "^2.0.8",
         "flowbite": "^2.3.0",
         "jquery": "^3.7.1",
+        "jquery-circle-progress": "^1.2.2",
         "quill": "^2.0.2",
         "select2": "^4.1.0-rc.0"
     }

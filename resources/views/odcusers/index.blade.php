@@ -174,10 +174,68 @@
     </div>
 
     @section('script')
-        <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
-        <script src="https://cdn.datatables.net/2.0.8/js/dataTables.js"></script>
+
         <script>
-            new DataTable('#usersTable');
+            new DataTable('#usersTable', {
+                responsive: true,
+                columnDefs: [{
+                        responsivePriority: 1,
+                        targets: 0
+                    },
+                    {
+                        responsivePriority: 2,
+                        targets: -1
+                    }
+                ],
+                layout: {
+                    topStart: {
+                        pageLength: {
+                            menu: [10, 25, 50, 100, 200]
+                        },
+                        buttons: [
+                            'copy',
+                            'print',
+
+                            {
+                                extend: 'spacer',
+                                style: 'bar',
+                                text: 'Export files:'
+                            },
+                            'csv',
+                            'excel',
+                            'pdf',
+                            {
+                                extend: 'spacer',
+                                style: 'bar',
+                                text: ':'
+                            },
+
+                            'colvis'
+                        ]
+                    },
+                    topEnd: {
+                        search: {
+                            placeholder: 'Type search here'
+                        }
+                    },
+                    bottomEnd: {
+                        paging: {
+                            numbers: 3
+                        }
+                    },
+
+                },
+
+                lengthMenu: [
+                    [10, 25, 50, -1],
+                    [10, 25, 50, 'All']
+                ],
+
+
+
+
+
+            });
         </script>
         <script>
             $("#dt-length-0").addClass('text-gray-700 dark:text-gray-200 w-24 bg-white');

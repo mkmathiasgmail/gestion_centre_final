@@ -81,7 +81,7 @@ class ActiviteController extends Controller
                 'hashtags' => 'nullable|array',
                 'hashtags.*' => 'exists:hashtags,id',
                 'typeEvent' => 'nullable|array',
-                'thumbnailURL' => 'nullable|array',
+                'thumbnailURL' => 'required',
                 'typeEvent.*' => 'exists:type_events,id',
             ],
 
@@ -109,6 +109,8 @@ class ActiviteController extends Controller
             ]
         );
 
+
+
         try {
             $activites = Activite::create([
                 'title' => $validatedData['title'],
@@ -118,8 +120,8 @@ class ActiviteController extends Controller
                 'end_date' => $validatedData['endDate'],
                 'publishStatus' => false,
                 'showInSlider' => false,
-                'send' => false,
-                'form' => false,
+                "form" => $request->form,
+                "thumbnail_url" => $validatedData['thumbnailURL'],
                 'miniatureColor' => false,
                 'showInCalendar' => false,
                 'liveStatus' => false,
@@ -141,21 +143,21 @@ class ActiviteController extends Controller
 
             return redirect()->route('activites.index')->with('success', 'Activite created successfully.');
         } catch (\Exception $e) {
-            return back()->withErrors(['error' => "An error occurred while creating the activity."])->withInput();
+            return back()->withErrors(['error' => "An error occurred while creating the activity. $e"])->withInput();
         }
     }
 
 
     public function show(Activite $activite)
     {
-        
+
         // Trouver l'Activite correspondant et récupérer le champ '_id'
         $id = $activite->id;
         $activite_Id = $activite->_id;
 
         $odcusers = Odcuser::all(['id', '_id']);
         //recuperer les presents  et la date
-        $presences= Presence::orderBy('id')->get();
+        $presences = Presence::orderBy('id')->get();
         //recuperer les presents  et la date
         $presences = Presence::orderBy('id')->get();
         $test = Presence::all();
@@ -177,6 +179,22 @@ class ActiviteController extends Controller
                 }
             }
             $candidatsData[] = $candidatArray;
+        }
+        $participants = Candidat::where('status', 'accept')->select('id', 'odcuser_id', 'activite_id', 'status')->with(['odcuser', 'candidat_attribute'])->get();
+        $etiquettes = [];
+        $participantsData = [] ;
+        foreach ($participants as $participant) {
+            $participantArray = $participant->toArray();
+
+            if ($participant->candidat_attribute) {
+                foreach ($participant->candidat_attribute as $attribute) {
+                    $participantArray[$attribute->label] = $attribute->value;
+                    if (!in_array($attribute->label, $etiquettes)) {
+                        $etiquettes[] = $attribute->label ;
+                    }
+                }
+            }
+            $participantsData[] = $participantArray;
         }
         //recuperer les presents  et la date
 
@@ -203,22 +221,24 @@ class ActiviteController extends Controller
             $pres = Presence::where('candidat_id', $candidat->id)->get();
             try {
                 $date = $pres->toArray();
-                $presence_date = [] ;
+                $presence_date = [];
                 foreach ($pres->toArray() as $key => $date) {
-                    $presence_date[] = date('Y-m-d', strtotime($date['date'])) ;
+                    $presence_date[] = date('Y-m-d', strtotime($date['date']));
                 }
                 $candidatsPresence = $candidat->toArray();
                 $candidatsPresence['date'] = $presence_date;
                 $candidatsPresence['candidat_id'] = $candidat->id;
-                $candidatsPresence['odcuser'] = $candidat->odcuser ;
+                $candidatsPresence['odcuser'] = $candidat->odcuser;
 
                 $data[] = $candidatsPresence;
             } catch (\Throwable $th) {
                 //echo $th->getMessage();
             }
         }
-        return view('activites.show', compact('candidatsData', 'labels', 'data', 'activite', 'id', 'candidats', 'activite_Id', 'odcusers', 'fullDates', 'dates', 'countdate', 'presences'));
 
+
+
+        return view('activites.show', compact('participantsData', 'candidatsData', 'labels', 'data', 'activite', 'id', 'candidats', 'activite_Id', 'odcusers', 'fullDates', 'dates', 'countdate', 'presences'));
     }
 
 
@@ -275,11 +295,14 @@ class ActiviteController extends Controller
             $activite->update([
                 'title' => $validatedData['title'],
                 'categorie_id' => $validatedData['categories'],
-                'content' => $validatedData['contents'],
+                'contents' => $validatedData['contents'],
                 'start_date' => $validatedData['startDate'],
                 'end_date' => $validatedData['endDate'],
                 'location' => $validatedData['location'],
+                "thumbnail_url" => $validatedData['thumbnailURL'],
             ]);
+
+
 
             if ($request->has('hashtags')) {
                 $activite->hashtag()->sync($validatedData['hashtags']);
@@ -316,5 +339,16 @@ class ActiviteController extends Controller
         $today = Carbon::today();
         $activites = Activite::where('start_date', '<=', $today)->where('end_date', '>=', $today)->get();
         return view('encours', compact('activites'));
+    }
+
+    public function chartActivity()
+    {
+        $data = Activite::selectRaw("date_format(createdAt,'%Y-%m-%d') as date , count(*) as aggregate")->whereDate('createdAt', '>=', now()->subDays(30))->groupBy('date')->get();
+        $activites = Activite::all();
+        $user= Odcuser::all();
+
+       
+
+        return view('dashboard', compact('data', 'activites','user'));
     }
 }

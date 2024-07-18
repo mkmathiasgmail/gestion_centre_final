@@ -26,14 +26,14 @@
             </div>
         @endif
         <table class="w-full text-sm text-left text-gray-500 rtl:text-right dark:text-gray-400">
-            <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+            <thead class="text-xs text-white uppercase bg-gray-50 dark:bg-gray-700 dark:text-white">
                 <tr>
-                    <th scope="col" class="px-6 py-3">
+                    <th scope="col" class="px-6 py-3 bg-slate-700">
                         Nom
                         d'utilisateur
                     </th>
                     @foreach ($roles as $item)
-                        <th scope="col" class="px-6 py-3">
+                        <th scope="col" class="px-6 py-3 bg-slate-700">
                             {{ $item->name }}
                         </th>
                     @endforeach
@@ -71,6 +71,18 @@
                                                 href="{{ route('desactiver_role', ['role' => $role->name, 'user' => $user->id]) }}"></a>
                                         </div>
                                     @endif
+
+                                    @if ($role->name === 'super-admin')
+                                    <div class="flex items-center">
+                                        <input id="checkbox-all-search" onclick="D4(event)"
+                                            data-modal-target="des-role" @checked(true)
+                                            data-modal-toggle="des-role" type="checkbox"
+                                            class="w-4 h-4 text-yellow-600 bg-gray-100 border-gray-300 rounded focus:ring-yellow-500 dark:focus:ring-teal-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+                                        <label for="checkbox-all-search" class="sr-only">checkbox</label>
+                                        <a id="d-{{ $role->name }}"
+                                            href="{{ route('desactiver_role', ['role' => $role->name, 'user' => $user->id]) }}"></a>
+                                    </div>
+                                @endif
                             @endif
                             @if (!in_array($role->name,$user_role))
                             @if ($role->name === 'reader')
@@ -87,6 +99,15 @@
                                 <a id="add-{{$role->name}}" href="{{route('assign_role',['role' => $role->name, 'user' => $user->id])}}"></a>
                             </div>
                             @endif
+
+                            @if ($role->name === 'super-admin')
+                            <div class="flex items-center">
+                                <input id="checkbox-all-search" onclick="Role4(event)" data-modal-target="check-role"  data-modal-toggle="check-role"  type="checkbox" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+                                <label for="checkbox-all-search" class="sr-only">checkbox</label>
+                                <a id="add-{{$role->name}}" href="{{route('assign_role',['role' => $role->name, 'user' => $user->id])}}"></a>
+                            </div>
+                            @endif
+
                     @endif
                         </td>
                     @endforeach

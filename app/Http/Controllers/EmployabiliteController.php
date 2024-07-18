@@ -5,11 +5,10 @@ namespace App\Http\Controllers;
 
 
 
-use Carbon\Carbon;
+use DateTime;
 use App\Models\Odcuser;
 use App\Models\Activite;
 use Illuminate\Http\Request;
-
 use App\Models\Employabilite;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\DB;
@@ -43,22 +42,32 @@ class EmployabiliteController extends Controller
     public function store(StoreEmployabiliteRequest $request)
     {
 
+        $request->validate([
 
-        $name = $request->input('first_name');
-        $names = explode(' ', $name);
+            'first_name' => 'required|string',
+            'type_contrat' => 'required|string',
+            'periode' => 'required|date',
+            'nomboite' => 'required|string',
+            'poste' => 'required|string',
+        ]);
+            $name = $request->input('first_name');
+            $names = explode(' ', $name);
 
-        $firstName = $names[0];
+            $firstName = $names[0];
+            $lastName = '';
 
-        if (isset($names[3])){
-            $lastName = $names[2] +' '+ $names[3];
-        }
-        $lastName = $names[2];
+            // Vérifiez si le tableau $names contient au moins trois éléments
+            if (count($names) >= 3) {
 
+                // Si le tableau contient quatre éléments ou plus, combinez les troisième et quatrième éléments
+                if (isset($names[3])) {
+                    $lastName = $names[2] . ' ' . $names[3];
+                } else {
+                    $lastName = $names[2];
+                }
+            }
 
-
-
-
-
+                // Récupérer les activités liées au candidat
         $activites = DB::table("activites")
         ->join('categories as ca' , 'ca.id' , '=' , 'activites.categorie_id')
         ->join('candidats as cnd' , 'cnd.activite_id' , '=' , 'activites.id')
@@ -68,39 +77,47 @@ class EmployabiliteController extends Controller
         ->where('od.last_name', '=', $lastName)
         ->orderBy('end_date', 'desc')
         ->get();
-        // Vérifications des dates
-        $dateEmployabilite =($request->periode);
-
-        $dernierActivite = Activite::first();
-        // Recherche de la dernière activité
-        $dateFinDerniereActivite = $dernierActivite->end_date;
 
 
-        $dateEmployabilite =  $request->periode;
-        //comparaison  de superiorités entre deux
-        if ($dateEmployabilite>$dateFinDerniereActivite) {
-            // Création de l'employabilité
-            Employabilite::create([
-                'name' =>$request->first_name,
-                'type_contrat' => $request->type_contrat,
-                'nomboite' => $request->nomboite,
-                'poste' => $request->poste,
-                'periode' => $request->periode,
-                'derniere_activite'=> $activites->first()->title,
-                'derniere_service'=> $activites->first()->name,
-                'date_participation'=> $activites->first()->start_date,
-                'odcuser_id' =>$request->id_user,
+                    // Vérifications des dates
+                $dateEmployabilite = $request->periode;
 
-            ]);
-            return redirect()->route('employabilites.index')->with('success', 'Employé ajoutée avec succès');
+                $dernierActivite = Activite::first();
+                // Recherche de la dernière activité
+                $dateFinDerniereActivite = $dernierActivite->end_date;
 
-        } else {
+                try {
 
-        return back()->with('error', 'La date d\'employabilité doit être supérieure à la dernière activité');
+                    $dateEmployabilite = new DateTime($request->periode);
+                    $dateFinDerniereActivite = new DateTime($dateFinDerniereActivite);
+                    $dateAujourdhui = new DateTime();
 
-      }
+                    // Vérifier si la date d'employabilité est supérieure à la dernière activité
+                    if ($dateEmployabilite > $dateFinDerniereActivite) {
 
-
+                        if ($dateEmployabilite <= $dateAujourdhui) {
+                           
+                            Employabilite::create([
+                                'name' => $request->first_name,
+                                'type_contrat' => $request->type_contrat,
+                                'nomboite' => $request->nomboite,
+                                'poste' => $request->poste,
+                                'periode' => $request->periode,
+                                'derniere_activite' => $activites->first()->title,
+                                'derniere_service' => $activites->first()->name,
+                                'date_participation' => $activites->first()->start_date,
+                                'odcuser_id' => $request->id_user,
+                            ]);
+                            return redirect()->route('employabilites.index')->with('success', 'Employé ajouté avec succès');
+                        } else {
+                            return back()->with('error', 'La date d\'employabilité ne doit pas être supérieure à la date du jour');
+                        }
+                    } else {
+                        return back()->with('error', 'La date d\'employabilité doit être supérieure à la dernière activité');
+                    }
+                } catch (\Throwable $th) {
+                    return back()->with('error', 'Erreur lors de l\'ajout de l\'employabilité parce que l\'utilisateur n\'a pas d\'activités');
+                }
     }
 
     /**
