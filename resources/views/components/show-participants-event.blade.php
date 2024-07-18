@@ -30,6 +30,9 @@
                 <th scope="col" class="px-6 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                     Status
                 </th>
+                <th>
+                    action
+                </th>
             </tr>
         </thead>
         <tbody>
@@ -50,6 +53,14 @@
                     </td>
                     <td class="px-6 py-4">
                         {{ $participant['status'] }}
+                    </td>
+
+                    <td>
+                        @if ($participant['status'] == 'accept')
+                            <a href="{{ route('certificat', $participant['id']) }}">Générer le Certificat</a>
+                        @else
+                            <button disabled>Non Certifiable</button>
+                        @endif
                     </td>
                 </tr>
             @endforeach
