@@ -268,11 +268,12 @@ class CandidatController extends Controller
     public function accept(Request $request)
     {
         $candidat = Candidat::find($request->input('id'));
-        if ($candidat) {
-            $candidat->status = 'accept';
-            $candidat->save();
+        $candidat->status = 'accept';
+        if($candidat->save()){
+            return response()->json(['message' => $candidat]);
+        } else {
+            return response()->json(['Erreur obtenue']);
         }
-        return response()->json(['message' => 'Status updated successfully!']);
     }
 
     public function decline(Request $request)
@@ -316,7 +317,7 @@ class CandidatController extends Controller
             $candidat = Candidat::firstOrCreate([
                 'odcuser_id' => $odcuser->id,
                 'activite_id' => $activite->id,
-                'status' => 1 // Assuming default status is 1
+                'status' => 'new'
             ]);
             FacadesLog::warning('User or Event not found', ['odcuser_id' => $candidat['odcuser_id'], 'activite_id' => $candidat['activite_id']]);
             return response()->json(['success' => true, 'candidat' => $candidat], 200);
