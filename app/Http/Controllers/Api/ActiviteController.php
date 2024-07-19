@@ -153,10 +153,24 @@ class ActiviteController extends Controller
     {
         //
     }
-
     public function getActiviteRecent()
     {
-        $activite =  Activite::select('id','title', 'content')->latest()->paginate(5);
-        return response()->json($activite);
+
+        $activiteRecent = Activite::select('id', 'title', 'content', 'start_date', 'end_date')
+        ->where('start_date', '<', now())
+            ->latest()
+            ->paginate(5);
+
+
+        $activitefutur = Activite::select('id', 'title', 'content','start_date', 'end_date')
+        ->where('start_date', '>', now())
+            ->latest()
+            ->paginate(5);
+
+
+        $activites = $activiteRecent->merge($activitefutur);
+
+        return response()->json($activites);
     }
 }
+
