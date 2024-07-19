@@ -174,11 +174,9 @@
                 another tab will toggle the visibility of this one for the next. The tab JavaScript swaps classes to
                 control the content visibility and styling</p>
         </div>
-
-        <!-- Import tab content -->
-        <div class="hidden p-4 rounded-lg bg-gray-50 dark:bg-gray-800" id="import" role="tabpanel"
+        <div class="hidden p-4 ro unded-lg bg-gray-50 dark:bg-gray-800" id="import" role="tabpanel"
             aria-labelledby="contacts-tab">
-            <p class="text-sm text-gray-500 dark:text-gray-400"><x-activite-import /></p>
+            <p class="text-sm text-gray-500 dark:text-gray-400"><x-activite-import :activite="$activite" /></p>
         </div>
     </div>
 
@@ -191,6 +189,8 @@
         <script>
             $(document).ready(function() {
                 $('#candidatpresence').DataTable();
+
+                $('#candidatpresence').css('width', '100%');
             });
         </script>
 
@@ -246,6 +246,7 @@
 
         {{-- Script for candidates data table --}}
         <script>
+            var tr = null ;
             $(document).ready(function() {
                 let event = @json($activite->title);
 
@@ -281,7 +282,8 @@
                                         e.preventDefault();
                                         let id_event = @json($activite->id);
                                         // Redirection vers la méthode du contrôleur
-                                        window.location.href = '{{ url('generate_excel') }}/' + id_event;
+                                        window.location.href = '{{ url('generate_excel') }}/' +
+                                            id_event;
                                     }
                                 },
                             ]
@@ -293,7 +295,38 @@
                         }
                     }
                 });
+
+                $('#candidatTable').css('width', '100%');
             });
+
+            function actionStatus(event, type, id, firstname) {
+                tr = event.target.closest('tr')
+                $('#accept-link, #decline-link, #wait-link').attr('data', id)
+                $('#popup-title').$(selector).append(content);(+ firstname)
+            }
+
+            function changeStatus(event) {
+                event.preventDefault();
+                let status = $(event.target).data('text');
+                let id = $('#accept-link').attr('data')
+                $.ajax({
+                    type: 'POST',
+                    url: '/candidat/' + status,
+                    data: {
+                        id: id,
+                        _token: '{{ csrf_token() }}'
+                    },
+                    success: function(data) {
+                        // Update the UI or display a success message
+                        // Update the table cell with the new status
+                        tr.children[7].textContent = status
+                        console.log('Status updated successfully!');
+                    },
+                    error: function(xhr, status, error) {
+                        console.log('Error updating status: ' + error);
+                    }
+                });
+            }
         </script>
 
         {{-- Script for storing candidates --}}

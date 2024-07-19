@@ -1,0 +1,76 @@
+body {
+     font-family: 'Arial', sans-serif;
+     margin: 0;
+     padding: 0;
+     text-align: center;
+     background-color: #084c61;
+     color: white;
+ }
+
+ .container {
+     display: flex;
+     justify-content: center;
+     align-items: center;
+     min-height: 100vh;
+     background-color: #084c61;
+ }
+
+ .certificate {
+     background-color: white;
+     color: black;
+     width: 800px;
+     padding: 40px;
+     border: 5px solid #4a90e2;
+     border-radius: 20px;
+     box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+     position: relative;
+ }
+
+ .certificate h1 {
+     font-size: 40px;
+     margin-bottom: 10px;
+ }
+
+ .certificate p {
+     font-size: 18px;
+     margin-bottom: 30px;
+ }
+
+ .certificate img {
+     height: 80px;
+     margin-bottom: 20px;
+ }
+
+ .certificate .organization {
+     font-size: 24px;
+     font-weight: bold;
+     margin-bottom: 20px;
+ }
+
+ .certificate .recipient {
+     font-size: 36px;
+     font-style: italic;
+     margin-bottom: 30px;
+ }
+
+ .certificate .description {
+     font-size: 16px;
+     margin-bottom: 40px;
+ }
+
+ .certificate .date-signature {
+     display: flex;
+     justify-content: space-between;
+ }
+
+ .certificate .date,
+ .certificate .signature {
+     font-size: 20px;
+     text-align: left;
+ }
+
+ .certificate .label {
+     font-weight: bold;
+     margin-top: 10px;
+ }
+
