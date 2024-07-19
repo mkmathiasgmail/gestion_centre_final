@@ -343,9 +343,14 @@ class ActiviteController extends Controller
 
     public function chartActivity()
     {
-        $data = Activite::selectRaw("date_format(createdAt,'%Y-%m-%d') as date , count(*) as aggregate")->whereDate('createdAt', '>=', now()->subDays(30))->groupBy('date')->get();
+        $data = Activite::selectRaw("DATE_FORMAT(start_date, '%Y-%m-%d') as date, count(*) as aggregate, title,id")
+            ->whereDate('start_date', '>=', now()->subDays(30))
+            ->groupBy('date', 'title','id')
+            ->paginate(5);
         $activites = Activite::all();
         $user = Odcuser::all();
+
+
 
 
 
@@ -371,11 +376,11 @@ class ActiviteController extends Controller
                 $requette = Http::timeout(1000)
                     ->post("$url/events/calendar/$id", $check);
 
-                return response()->json(['success' => true, 'data' => $requette->json()], 201);
+                return redirect()->route('activites.index')
+                    ->with('success', 'Activite active in calendar successfully.');
             } catch (\Exception $th) {
                 return response()->json(['success' => false, 'message' => 'Request failed', 'error' => $th->getMessage()], 500);
             }
-
         } else {
             $status->show_in_calendar = false;
             $status->save();
@@ -390,7 +395,8 @@ class ActiviteController extends Controller
                 $requette = Http::timeout(1000)
                     ->post("$url/events/calendar/$id", $check);
 
-                return response()->json(['success' => true, 'data' => $requette->json()], 201);
+                return redirect()->route('activites.index')
+                    ->with('success', 'Activite Desactive in calendar successfully.');
             } catch (\Exception $th) {
                 return response()->json(['success' => false, 'message' => 'Request failed', 'error' => $th->getMessage()], 500);
             }
