@@ -175,9 +175,9 @@
                 control the content visibility and styling</p>
         </div>
         <div class="hidden p-4 ro unded-lg bg-gray-50 dark:bg-gray-800" id="import" role="tabpanel"
-            aria-labelledby="contacts-tab">
-            <p class="text-sm text-gray-500 dark:text-gray-400"><x-activite-import :activite="$activite" /></p>
-        </div>
+        aria-labelledby="contacts-tab">
+        <p class="text-sm text-gray-500 dark:text-gray-400"><x-activite-import :activite="$activite"/></p>
+    </div>
     </div>
 
     @php
@@ -298,6 +298,7 @@
                 });
 
                 $('#candidatTable').css('width', '100%');
+            });
             });
 
             function actionStatus(event, type, id, firstname) {
