@@ -9,7 +9,7 @@ use App\Http\Controllers\EmployabiliteController;
 
 
 
-Route::resource('/user_role',UserController::class);
+Route::resource('/user_role',UserController::class)->middleware('permissions');
 
 Route::post('/assignRoles/{role}/{user}', [RoleController::class,'assignRoles'])->name('assign_role');
 
