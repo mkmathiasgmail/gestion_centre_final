@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Odcuser;
 use App\Models\Activite;
 use App\Models\Candidat;
+use App\Models\CandidatAttribute;
 use App\Models\Presence;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
@@ -25,7 +26,7 @@ class ImportControl extends Controller
     {
         // Valider le fichier uploadé
         $request->validate([
-            'file' => 'required|file|mimes:csv,xlsx,xls',
+            'file' => 'required',
             'activite' => 'required|exists:activites,id', // Valide que l'activité sélectionnée existe dans la table des activités
         ]);
 
@@ -42,6 +43,7 @@ class ImportControl extends Controller
             $data = str_getcsv($line);
             $rowData = array_combine($header, $data);
             // Valider les données de chaque ligne
+            //dump($rowData);
             try {
                 $validatedData = $this->validateRowData($rowData);
                 //dump($validatedData);
@@ -50,7 +52,7 @@ class ImportControl extends Controller
 
                 $validatedData['birth_date'] = '1970-02-05';
                 $validatedData['password'] = 'kdjksjfkndjskjd5555';
-                $validatedData['profession'] = 'etudiant';
+                $validatedData['profession'] = "{'profession':'etudiant'}";
                 //$validatedData['odc_country'] = "{'country':'congo'}";
                 $validatedData['role'] = 'user';
                 $validatedData['is_active'] = '1';
@@ -59,7 +61,8 @@ class ImportControl extends Controller
                 $validatedData['updatedAt'] = date("Y-m-d h:i:s ");
                 //$validatedData['status']= 0;
 
-                /*if ($odcuser) {
+
+                if ($odcuser) {
                     // Si l'utilisateur existe déjà, on recupere simplement son id.
                     $odcuser->update($validatedData);
                 } else {
@@ -69,22 +72,58 @@ class ImportControl extends Controller
 
                 //dd($odcuser);
                 // Ajouter l'utilisateur à la table 'candidat'
-                /*$candidat=Candidat::create([
-                    'odcuser_id' => $odcuser->id,
-                    'activite_id' => $activiteId,
-                    'status' => $rowData['status']
-                ]);*/
-                //dd('status');
+                $candidat = Candidat::firstOrCreate(
+                    [
+                        'odcuser_id' => $odcuser->id,
+                        'activite_id' => $activiteId
+                    ],
+                    [
+                        'status' => $rowData['status']
+                    ]
+                );
+                //sauvegarde numero
+                if(empty($rowData['numero'])){
+                    $rowData['numero']= 'non defini';
+                }
+                $setNumber = CandidatAttribute::firstOrCreate(
+                    [
+                        'candidat_id' => $candidat->id,
+                        '_id' => $odcuser->_id,
+                        'label' => 'numero',
+                        'value' => $rowData['numero']
+                    ]
+                );
+                //dd($setNumber);
+                //sauvegarde université
+                if(empty($rowData['etablissement/université'])){
+                    $rowData['etablissement/université']= 'non defini';
+                }
+                $setEtablissement = CandidatAttribute::firstOrCreate(
+                    [
+                        'candidat_id' => $candidat->id,
+                        '_id' => $odcuser->_id,
+                        'label' => 'Etablissement/Université',
+                        'value' => $rowData['etablissement/université']
+                    ]
+                );
+                //dd($setEtablissement);
 
-                dump($rowData);
-                //$date = $rowData['Date'];
+                //dd($candidat);
+                //dump($rowData);
+                $date = $rowData['date_1977-01-01'];
                 //dd($date);
                 //on remplie la table presence
-                //$datemodif = explode('_', $date);
-                /*Presence::create([
-                    'date' => $datemodif[1],
-                    'candidat_id' => $candidat->id,
-                ]);*/
+                $datemodif = explode('_', $date);
+                if (empty($date)){
+                    continue; // Skip rows with empty date
+                }else{
+                    Presence::create([
+                        'date' => $datemodif[1],
+                        'candidat_id' => $candidat->id,
+                    ]);
+                }
+                //dd($date);
+
                 //dump($validatedData['statut']);
             } catch (\Illuminate\Validation\ValidationException $e) {
                 Log::error('Validation failed for row: ', ['row' => $rowData, 'errors' => $e->errors()]);
