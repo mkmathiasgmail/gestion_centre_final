@@ -73,11 +73,11 @@ class CertificatController extends Controller
 
     public function generateCertificat()
     {
-        ini_set('max_execution_time', 300);
+        //ini_set('max_execution_time', 300);
         // Définir les données à afficher dans le certificat
         $data = [
             [
-               
+            
             ]
         ];
 
