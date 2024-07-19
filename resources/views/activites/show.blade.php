@@ -247,6 +247,7 @@
         {{-- Script for candidates data table --}}
         <script>
             var tr = null ;
+            var statusCell = null ;
             $(document).ready(function() {
                 let event = @json($activite->title);
 
@@ -298,11 +299,13 @@
 
                 $('#candidatTable').css('width', '100%');
             });
+            });
 
             function actionStatus(event, type, id, firstname) {
-                tr = event.target.closest('tr')
+                tr = $(event.target.closest('tr'));
+                statusCell = tr.find('#statusCell');
                 $('#accept-link, #decline-link, #wait-link').attr('data', id)
-                $('#popup-title').$(selector).append(content);(+ firstname)
+                $('#popup-title-accept, #popup-title-decline, #popup-title-wait').text("Etes-vous sûr de vouloir changer le statut de " + firstname)
             }
 
             function changeStatus(event) {
@@ -319,7 +322,7 @@
                     success: function(data) {
                         // Update the UI or display a success message
                         // Update the table cell with the new status
-                        tr.children[7].textContent = status
+                        statusCell[0].textContent = status
                         console.log('Status updated successfully!');
                     },
                     error: function(xhr, status, error) {
