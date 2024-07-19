@@ -182,7 +182,7 @@ class ActiviteController extends Controller
         }
         $participants = Candidat::where('activite_id', $id)->where('status', 'accept')->select('id', 'odcuser_id', 'activite_id', 'status')->with(['odcuser', 'candidat_attribute'])->get();
         $etiquettes = [];
-        $participantsData = [] ;
+        $participantsData = [];
         foreach ($participants as $participant) {
             $participantArray = $participant->toArray();
 
@@ -190,7 +190,7 @@ class ActiviteController extends Controller
                 foreach ($participant->candidat_attribute as $attribute) {
                     $participantArray[$attribute->label] = $attribute->value;
                     if (!in_array($attribute->label, $etiquettes)) {
-                        $etiquettes[] = $attribute->label ;
+                        $etiquettes[] = $attribute->label;
                     }
                 }
             }
@@ -350,5 +350,58 @@ class ActiviteController extends Controller
 
 
         return view('dashboard', compact('data', 'activites','user'));
+    }
+}
+
+        $user = Odcuser::all();
+
+
+
+        return view('dashboard', compact('data', 'activites', 'user'));
+    }
+
+    public function showInCalendar(Request $request, $id)
+    {
+
+        $status = Activite::find($id);
+        $url = env('API_URL');
+        if ($status->show_in_calendar == false) {
+            $status->show_in_calendar = true;
+            $status->save();
+            try {
+
+                $id = $status->_id;
+                $valbool = boolval($request->status);
+                $check = [
+                    "action" => $valbool
+                ];
+
+                $requette = Http::timeout(1000)
+                    ->post("$url/events/calendar/$id", $check);
+
+                return response()->json(['success' => true, 'data' => $requette->json()], 201);
+            } catch (\Exception $th) {
+                return response()->json(['success' => false, 'message' => 'Request failed', 'error' => $th->getMessage()], 500);
+            }
+
+        } else {
+            $status->show_in_calendar = false;
+            $status->save();
+
+            try {
+                $id = $status->_id;
+                $valbool = boolval($request->status);
+                $check = [
+                    "action" => $valbool
+                ];
+
+                $requette = Http::timeout(1000)
+                    ->post("$url/events/calendar/$id", $check);
+
+                return response()->json(['success' => true, 'data' => $requette->json()], 201);
+            } catch (\Exception $th) {
+                return response()->json(['success' => false, 'message' => 'Request failed', 'error' => $th->getMessage()], 500);
+            }
+        }
     }
 }
