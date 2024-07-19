@@ -351,15 +351,6 @@ class ActiviteController extends Controller
 
         return view('dashboard', compact('data', 'activites','user'));
     }
-}
-
-        $user = Odcuser::all();
-
-
-
-        return view('dashboard', compact('data', 'activites', 'user'));
-    }
-
     public function showInCalendar(Request $request, $id)
     {
 

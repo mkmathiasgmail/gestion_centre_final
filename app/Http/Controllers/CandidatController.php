@@ -320,7 +320,6 @@ class CandidatController extends Controller
                 'odcuser_id' => $odcuser->id,
                 'activite_id' => $activite->id,
                 'status' => 'new'
-                'status' => 'new'
             ]);
             FacadesLog::warning('User or Event not found', ['odcuser_id' => $candidat['odcuser_id'], 'activite_id' => $candidat['activite_id']]);
             return response()->json(['success' => true, 'candidat' => $candidat], 200);
