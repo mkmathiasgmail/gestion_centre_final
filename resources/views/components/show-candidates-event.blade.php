@@ -33,13 +33,16 @@
                         @endif
                     @endforeach
 
-                    <th scope="col" data-title="Gender" class="px-6 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                    <th scope="col" data-title="Gender"
+                        class="px-6 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                         Gender
                     </th>
-                    <th scope="col" title="Profession" class="px-6 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                    <th scope="col" title="Profession"
+                        class="px-6 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                         Profession
                     </th>
-                    <th scope="col" title="Status" class="px-6 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                    <th scope="col" title="Status"
+                        class="px-6 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                         Status
                     </th>
                     <th scope="col" class="px-6 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">
@@ -66,6 +69,7 @@
                             {{ $profession['translations']['fr']['profession'] ?? '' }}
                         </td>
                         <td class="px-6 py-4" id="statusCell">
+                        <td class="px-6 py-4" id="statusCell">
                             {{ $candidat['status'] }}
                         </td>
                         <td>
@@ -88,6 +92,9 @@
                                         <a data-modal-target="popup-accept" data-modal-toggle="popup-accept"
                                             class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
                                             onclick="actionStatus(event, 'accept', {{ $candidat['id'] }}, '{{ $candidat['odcuser']['first_name'] }}')">Accept</a>
+                                        <a data-modal-target="popup-accept" data-modal-toggle="popup-accept"
+                                            class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
+                                            onclick="actionStatus(event, 'accept', {{ $candidat['id'] }}, '{{ $candidat['odcuser']['first_name'] }}')">Accept</a>
                                     </li>
                                     <li>
                                         <a data-modal-target="popup-decline" data-modal-toggle="popup-decline"
@@ -96,8 +103,14 @@
                                         <a data-modal-target="popup-decline" data-modal-toggle="popup-decline"
                                             class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
                                             onclick="actionStatus(event, 'decline', {{ $candidat['id'] }}, '{{ $candidat['odcuser']['first_name'] }}')">Decline</a>
+                                        <a data-modal-target="popup-decline" data-modal-toggle="popup-decline"
+                                            class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
+                                            onclick="actionStatus(event, 'decline', {{ $candidat['id'] }}, '{{ $candidat['odcuser']['first_name'] }}')">Decline</a>
                                     </li>
                                     <li>
+                                        <a data-modal-target="popup-wait" data-modal-toggle="popup-wait"
+                                            class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
+                                            onclick="actionStatus(event, 'wait', {{ $candidat['id'] }}, '{{ $candidat['odcuser']['first_name'] }}')">Wait</a>
                                         <a data-modal-target="popup-wait" data-modal-toggle="popup-wait"
                                             class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
                                             onclick="actionStatus(event, 'wait', {{ $candidat['id'] }}, '{{ $candidat['odcuser']['first_name'] }}')">Wait</a>
