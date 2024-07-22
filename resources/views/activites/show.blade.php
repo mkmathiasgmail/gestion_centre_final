@@ -175,9 +175,9 @@
                 control the content visibility and styling</p>
         </div>
         <div class="hidden p-4 ro unded-lg bg-gray-50 dark:bg-gray-800" id="import" role="tabpanel"
-            aria-labelledby="contacts-tab">
-            <p class="text-sm text-gray-500 dark:text-gray-400"><x-activite-import :activite="$activite" /></p>
-        </div>
+        aria-labelledby="contacts-tab">
+        <p class="text-sm text-gray-500 dark:text-gray-400"><x-activite-import :activite="$activite"/></p>
+    </div>
     </div>
 
     @php
@@ -246,6 +246,8 @@
 
         {{-- Script for candidates data table --}}
         <script>
+            var tr = null ;
+            var statusCell = null ;
             $(document).ready(function() {
                 let event = @json($activite->title);
 
@@ -296,30 +298,38 @@
                 });
 
                 $('#candidatTable').css('width', '100%');
-
-                $('#accept-link, #reject-link, #await-link').on('click', function(e) {
-                    e.preventDefault();
-                    var id = $(this).data('id');
-                    var status = $(this).data('text').toLowerCase();
-                    $.ajax({
-                        type: 'POST',
-                        url: '/candidat/' + status,
-                        data: {
-                            id: id,
-                            _token: '{{ csrf_token() }}'
-                        },
-                        success: function(data) {
-                            // Update the UI or display a success message
-                            // Update the table cell with the new status
-                            $('#status').text(status);
-                            console.log('Status updated successfully!');
-                        },
-                        error: function(xhr, status, error) {
-                            console.log('Error updating status: ' + error);
-                        }
-                    });
-                });
             });
+            });
+
+            function actionStatus(event, type, id, firstname) {
+                tr = $(event.target.closest('tr'));
+                statusCell = tr.find('#statusCell');
+                $('#accept-link, #decline-link, #wait-link').attr('data', id)
+                $('#popup-title-accept, #popup-title-decline, #popup-title-wait').text("Etes-vous sûr de vouloir changer le statut de " + firstname)
+            }
+
+            function changeStatus(event) {
+                event.preventDefault();
+                let status = $(event.target).data('text');
+                let id = $('#accept-link').attr('data')
+                $.ajax({
+                    type: 'POST',
+                    url: '/candidat/' + status,
+                    data: {
+                        id: id,
+                        _token: '{{ csrf_token() }}'
+                    },
+                    success: function(data) {
+                        // Update the UI or display a success message
+                        // Update the table cell with the new status
+                        statusCell[0].textContent = status
+                        console.log('Status updated successfully!');
+                    },
+                    error: function(xhr, status, error) {
+                        console.log('Error updating status: ' + error);
+                    }
+                });
+            }
         </script>
 
         {{-- Script for storing candidates --}}

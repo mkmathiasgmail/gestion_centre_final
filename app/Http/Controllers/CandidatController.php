@@ -265,34 +265,37 @@ class CandidatController extends Controller
         return response()->download($tmp, "coach.Xlsx")->deleteFileAfterSend(true);
     }
 
-    public function accept(Request $request)
+    public function updateStatus(Request $request, $status)
     {
-        $candidat = Candidat::find($request->input('id'));
-        if ($candidat) {
-            $candidat->status = 'accept';
-            $candidat->save();
+        // Validate the status
+        if (!in_array($status, ['accept', 'decline', 'wait'])) {
+            // Return an error response if the status is invalid
+            return response()->json(['error' => 'Invalid status'], 400);
         }
-        return response()->json(['message' => 'Status updated successfully!']);
-    }
 
-    public function decline(Request $request)
-    {
+        // Get the ID from the request
         $candidat = Candidat::find($request->input('id'));
-        if ($candidat) {
-            $candidat->status = 'decline';
-            $candidat->save();
-        }
-        return response()->json(['message' => 'Status updated successfully!']);
-    }
 
-    public function wait(Request $request)
-    {
-        $candidat = Candidat::find($request->input('id'));
-        if ($candidat) {
-            $candidat->status = 'wait';
-            $candidat->save();
+        // Perform the necessary action based on the status
+        switch ($status) {
+            case 'accept':
+                $candidat->status = 'accept';
+                return response()->json(['message' => 'Candidate successfully validated!'], 200);
+                break;
+
+            case 'decline':
+                $candidat->status = 'decline';
+                return response()->json(['message' => 'Application successfully rejected!'], 200);
+                break;
+
+            case 'wait':
+                $candidat->status = 'wait';
+                return response()->json(['message' => 'Candidate successfully put on hold!'], 200);
+                break;
+            default:
+                return response()->json(['Erreur lors de la mise a jour du statut!']);
+                break;
         }
-        return response()->json(['message' => 'Status updated successfully!']);
     }
 
     /**
@@ -316,7 +319,8 @@ class CandidatController extends Controller
             $candidat = Candidat::firstOrCreate([
                 'odcuser_id' => $odcuser->id,
                 'activite_id' => $activite->id,
-                'status' => 1 // Assuming default status is 1
+                'status' => 'new'
+                'status' => 'new'
             ]);
             FacadesLog::warning('User or Event not found', ['odcuser_id' => $candidat['odcuser_id'], 'activite_id' => $candidat['activite_id']]);
             return response()->json(['success' => true, 'candidat' => $candidat], 200);
