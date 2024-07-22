@@ -62,6 +62,13 @@
                             <button disabled>Non Certifiable</button>
                         @endif
                     </td>
+                       <td>
+                        @if ($participant['status'] == 'accept')
+                            <a href="{{ route('generateQrCode', $participant['id']) }}">Générer un qrcode</a>
+                        @else
+                            <button disabled>Pas qrcode</button>
+                        @endif
+                    </td>
                 </tr>
             @endforeach
         </tbody>
