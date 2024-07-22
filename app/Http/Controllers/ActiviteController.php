@@ -24,7 +24,7 @@ class ActiviteController extends Controller
     public function index()
     {
 
-        $activites = Activite::latest()->get();
+        $activites = Activite::latest()->paginate(100);
         $typeEvent = TypeEvent::all();
         $categories = Categorie::all();
         $hashtag = Hashtag::all();
@@ -343,10 +343,16 @@ class ActiviteController extends Controller
 
     public function chartActivity()
     {
-        $data = Activite::selectRaw("DATE_FORMAT(start_date, '%Y-%m-%d') as date, count(*) as aggregate, title,id")
+        $data1 = Activite::selectRaw("DATE_FORMAT(start_date, '%Y-%m-%d') as date, count(*) as aggregate, title,id")
             ->whereDate('start_date', '>=', now()->subDays(30))
             ->groupBy('date', 'title','id')
-            ->paginate(5);
+            ->get();
+
+
+        $data = Activite::selectRaw("DATE_FORMAT(start_date, '%Y-%m-%d') as date, count(*) as aggregate, title,id")
+        ->whereDate('start_date', '>=', now()->subDays(30))
+        ->groupBy('date', 'title', 'id')
+        ->paginate(4);
         $activites = Activite::all();
         $user = Odcuser::all();
 
@@ -354,8 +360,12 @@ class ActiviteController extends Controller
 
 
 
-        return view('dashboard', compact('data', 'activites', 'user'));
+        return view('dashboard', compact('data1', 'activites', 'user', 'data'));
     }
+
+
+
+    
 
     public function showInCalendar(Request $request, $id)
     {
