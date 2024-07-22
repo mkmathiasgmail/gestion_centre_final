@@ -17,7 +17,7 @@ class MailController extends Controller
 
     public function sendEmail(Request $request)
     {
-        set_time_limit(40000);
+        // set_time_limit(40000);
         $messageContent = $request->input('message');
         $categories = $request->input('categories', []);
 
