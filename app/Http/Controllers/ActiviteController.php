@@ -363,10 +363,6 @@ class ActiviteController extends Controller
         return view('dashboard', compact('data1', 'activites', 'user', 'data'));
     }
 
-
-
-    
-
     public function showInCalendar(Request $request, $id)
     {
 
