@@ -408,4 +408,192 @@ class ActiviteController extends Controller
             }
         }
     }
+
+    public function bookInSeat(Request $request, $id)
+    {
+
+        $status = Activite::find($id);
+        $url = env('API_URL');
+        if ($status->show_in_calendar == false) {
+            $status->show_in_calendar = true;
+            $status->save();
+            try {
+
+                $id = $status->_id;
+                $valbool = boolval($request->status);
+                $check = [
+                    "action" => $valbool
+                ];
+
+                $requette = Http::timeout(1000)
+                    ->post("$url/events/calendar/$id", $check);
+
+                return redirect()->route('activites.index')
+                ->with('success', 'Activite active in calendar successfully.');
+            } catch (\Exception $th) {
+                return response()->json(['success' => false, 'message' => 'Request failed', 'error' => $th->getMessage()], 500);
+            }
+        } else {
+            $status->show_in_calendar = false;
+            $status->save();
+
+            try {
+                $id = $status->_id;
+                $valbool = boolval($request->status);
+                $check = [
+                    "action" => $valbool
+                ];
+
+                $requette = Http::timeout(1000)
+                    ->post("$url/events/calendar/$id", $check);
+
+                return redirect()->route('activites.index')
+                ->with('success', 'Activite Desactive in calendar successfully.');
+            } catch (\Exception $th) {
+                return response()->json(['success' => false, 'message' => 'Request failed', 'error' => $th->getMessage()], 500);
+            }
+        }
+    }
+
+    public function isEvent(Request $request, $id)
+    {
+
+        $status = Activite::find($id);
+        $url = env('API_URL');
+        if ($status->show_in_calendar == false) {
+            $status->show_in_calendar = true;
+            $status->save();
+            try {
+
+                $id = $status->_id;
+                $valbool = boolval($request->status);
+                $check = [
+                    "action" => $valbool
+                ];
+
+                $requette = Http::timeout(1000)
+                    ->post("$url/events/calendar/$id", $check);
+
+                return redirect()->route('activites.index')
+                ->with('success', 'Activite active in calendar successfully.');
+            } catch (\Exception $th) {
+                return response()->json(['success' => false, 'message' => 'Request failed', 'error' => $th->getMessage()], 500);
+            }
+        } else {
+            $status->show_in_calendar = false;
+            $status->save();
+
+            try {
+                $id = $status->_id;
+                $valbool = boolval($request->status);
+                $check = [
+                    "action" => $valbool
+                ];
+
+                $requette = Http::timeout(1000)
+                    ->post("$url/events/calendar/$id", $check);
+
+                return redirect()->route('activites.index')
+                ->with('success', 'Activite Desactive in calendar successfully.');
+            } catch (\Exception $th) {
+                return response()->json(['success' => false, 'message' => 'Request failed', 'error' => $th->getMessage()], 500);
+            }
+        }
+    }
+
+    public function send(Request $request, $id)
+    {
+
+        $status = Activite::find($id);
+        $url = env('API_URL');
+        if ($status->show_in_calendar == false) {
+            $status->show_in_calendar = true;
+            $status->save();
+            try {
+
+                $id = $status->_id;
+                $valbool = boolval($request->status);
+                $check = [
+                    "action" => $valbool
+                ];
+
+                $requette = Http::timeout(1000)
+                    ->post("$url/events/calendar/$id", $check);
+
+                return redirect()->route('activites.index')
+                ->with('success', 'Activite active in calendar successfully.');
+            } catch (\Exception $th) {
+                return response()->json(['success' => false, 'message' => 'Request failed', 'error' => $th->getMessage()], 500);
+            }
+        } else {
+            $status->show_in_calendar = false;
+            $status->save();
+
+            try {
+                $id = $status->_id;
+                $valbool = boolval($request->status);
+                $check = [
+                    "action" => $valbool
+                ];
+
+                $requette = Http::timeout(1000)
+                    ->post("$url/events/calendar/$id", $check);
+
+                return redirect()->route('activites.index')
+                ->with('success', 'Activite Desactive in calendar successfully.');
+            } catch (\Exception $th) {
+                return response()->json(['success' => false, 'message' => 'Request failed', 'error' => $th->getMessage()], 500);
+            }
+        }
+    }
+
+    public function showInSlider(Request $request, $id)
+    {
+
+        $status = Activite::find($id);
+        $url = env('API_URL');
+        if ($status->show_in_slider == false) {
+            $status->show_in_slider = true;
+            $status->save();
+            try {
+
+                $id = $status->_id;
+                $valbool = boolval($request->status);
+                $check = [
+                    "action" => $valbool
+                ];
+
+                $requette = Http::timeout(1000)
+                    ->post("$url/events/slide/$id", $check);
+
+                return redirect()->route('activites.index')
+                ->with('success', 'Activite active in slide successfully.');
+            } catch (\Exception $th) {
+                return response()->json(['success' => false, 'message' => 'Request failed', 'error' => $th->getMessage()], 500);
+            }
+        } else {
+            $status->show_in_slider = false;
+            $status->save();
+
+            try {
+                $id = $status->_id;
+                $valbool = boolval($request->status);
+                $check = [
+                    "action" => $valbool
+                ];
+
+                $requette = Http::timeout(1000)
+                    ->post("$url/events/slide/$id", $check);
+
+                return redirect()->route('activites.index')
+                ->with('success', 'Activite Desactive in slide successfully.');
+            } catch (\Exception $th) {
+                return response()->json(['success' => false, 'message' => 'Request failed', 'error' => $th->getMessage()], 500);
+            }
+        }
+    }
+
+    
+
+    
 }
