@@ -197,8 +197,6 @@
         {{-- Script for participants data table --}}
         <script>
             $(document).ready(function() {
-
-
                 let event = @json($activite->title);
                 $('#participantTable').DataTable({
                     responsive: true,
@@ -251,9 +249,7 @@
             $(document).ready(function() {
                 let event = @json($activite->title);
 
-                if ($.fn.DataTable.isDataTable('#candidatTable')) {
-                    $('#candidatTable').DataTable().destroy();
-                }
+                
                 $('#candidatTable').DataTable({
                     responsive: true,
 
@@ -299,8 +295,6 @@
 
                 $('#candidatTable').css('width', '100%');
             });
-            });
-
             function actionStatus(event, type, id, firstname) {
                 tr = $(event.target.closest('tr'));
                 statusCell = tr.find('#statusCell');
