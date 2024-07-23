@@ -280,16 +280,19 @@ class CandidatController extends Controller
         switch ($status) {
             case 'accept':
                 $candidat->status = 'accept';
+                $candidat->save();
                 return response()->json(['message' => 'Candidate successfully validated!'], 200);
                 break;
 
             case 'decline':
                 $candidat->status = 'decline';
+                $candidat->save();
                 return response()->json(['message' => 'Application successfully rejected!'], 200);
                 break;
 
             case 'wait':
                 $candidat->status = 'wait';
+                $candidat->save();
                 return response()->json(['message' => 'Candidate successfully put on hold!'], 200);
                 break;
             default:
@@ -320,7 +323,7 @@ class CandidatController extends Controller
                 'odcuser_id' => $odcuser->id,
                 'activite_id' => $activite->id,
                 'status' => 'new'
-            
+
             ]);
             FacadesLog::warning('User or Event not found', ['odcuser_id' => $candidat['odcuser_id'], 'activite_id' => $candidat['activite_id']]);
             return response()->json(['success' => true, 'candidat' => $candidat], 200);

@@ -69,7 +69,6 @@
                             {{ $profession['translations']['fr']['profession'] ?? '' }}
                         </td>
                         <td class="px-6 py-4" id="statusCell">
-                        <td class="px-6 py-4" id="statusCell">
                             {{ $candidat['status'] }}
                         </td>
                         <td>
@@ -92,22 +91,13 @@
                                         <a data-modal-target="popup-accept" data-modal-toggle="popup-accept"
                                             class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
                                             onclick="actionStatus(event, 'accept', {{ $candidat['id'] }}, '{{ $candidat['odcuser']['first_name'] }}')">Accept</a>
-                                        <a data-modal-target="popup-accept" data-modal-toggle="popup-accept"
-                                            class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
-                                            onclick="actionStatus(event, 'accept', {{ $candidat['id'] }}, '{{ $candidat['odcuser']['first_name'] }}')">Accept</a>
                                     </li>
                                     <li>
                                         <a data-modal-target="popup-decline" data-modal-toggle="popup-decline"
                                             class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
                                             onclick="actionStatus(event, 'decline', {{ $candidat['id'] }}, '{{ $candidat['odcuser']['first_name'] }}')">Decline</a>
-                                        <a data-modal-target="popup-decline" data-modal-toggle="popup-decline"
-                                            class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
-                                            onclick="actionStatus(event, 'decline', {{ $candidat['id'] }}, '{{ $candidat['odcuser']['first_name'] }}')">Decline</a>
                                     </li>
                                     <li>
-                                        <a data-modal-target="popup-wait" data-modal-toggle="popup-wait"
-                                            class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
-                                            onclick="actionStatus(event, 'wait', {{ $candidat['id'] }}, '{{ $candidat['odcuser']['first_name'] }}')">Wait</a>
                                         <a data-modal-target="popup-wait" data-modal-toggle="popup-wait"
                                             class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
                                             onclick="actionStatus(event, 'wait', {{ $candidat['id'] }}, '{{ $candidat['odcuser']['first_name'] }}')">Wait</a>
@@ -209,7 +199,6 @@
                                 stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
                         </svg>
                         <span class="sr-only">Close</span>
-                        <span class="sr-only">Close</span>
                     </button>
                     <div class="p-4 md:p-5 text-center">
                         <svg class="mx-auto mb-4 text-gray-400 w-12 h-12 dark:text-gray-200" aria-hidden="true"
@@ -222,7 +211,8 @@
                                     stroke-width="2" d="M10 11V6m0 8h.01M19 10a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
                             </svg>
                             <h3 class="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400"
-                                id="popup-title-wait"></h3>
+                                id="popup-title-wait">
+                            </h3>
                             <button id="wait-link" data-text="wait" data-id="{{ $candidat['id'] }}"
                                 data-modal-hide="popup-wait" type="button"
                                 class="text-white bg-red-600 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 dark:focus:ring-red-800 font-medium rounded-lg text-sm inline-flex items-center px-5 py-2.5 text-center"
@@ -230,10 +220,13 @@
                                 Confirmer
                             </button>
                             <button data-modal-hide="popup-wait" type="button"
-                                class="py-2.5 px-5 ms-3 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">Annuler</button>
-                            <button data-modal-hide="popup-wait" type="button"
-                                class="py-2.5 px-5 ms-3 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">Annuler</button>
+                                class="py-2.5 px-5 ms-3 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">
+                                Annuler
+                            </button>
+                        </svg>
                     </div>
+                </svg>
+            </button>
         </div>
     </div>
 </div>
