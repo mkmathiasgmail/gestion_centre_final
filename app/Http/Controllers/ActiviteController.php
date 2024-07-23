@@ -362,56 +362,7 @@ class ActiviteController extends Controller
 
         return view('dashboard', compact('data1', 'activites', 'user', 'data'));
     }
-
-
-
-
-
-    // public function showInCalendar(Request $request, $id)
-    // {
-
-    //     $status = Activite::find($id);
-    //     $url = env('API_URL');
-    //     if ($status->show_in_calendar == false) {
-    //         $status->show_in_calendar = true;
-    //         $status->save();
-    //         try {
-
-    //             $id = $status->_id;
-    //             $valbool = boolval($request->status);
-    //             $check = [
-    //                 "action" => $valbool
-    //             ];
-
-    //             $requette = Http::timeout(1000)
-    //                 ->post("$url/events/calendar/$id", $check);
-
-    //             return redirect()->route('activites.index')
-    //                 ->with('success', 'Activite active in calendar successfully.');
-    //         } catch (\Exception $th) {
-    //             return response()->json(['success' => false, 'message' => 'Request failed', 'error' => $th->getMessage()], 500);
-    //         }
-    //     } else {
-    //         $status->show_in_calendar = false;
-    //         $status->save();
-
-    //         try {
-    //             $id = $status->_id;
-    //             $valbool = boolval($request->status);
-    //             $check = [
-    //                 "action" => $valbool
-    //             ];
-
-    //             $requette = Http::timeout(1000)
-    //                 ->post("$url/events/calendar/$id", $check);
-
-    //             return redirect()->route('activites.index')
-    //                 ->with('success', 'Activite Desactive in calendar successfully.');
-    //         } catch (\Exception $th) {
-    //             return response()->json(['success' => false, 'message' => 'Request failed', 'error' => $th->getMessage()], 500);
-    //         }
-    //     }
-    // }
+    
     public function showInCalendar(Request $request, $id)
     {
 
