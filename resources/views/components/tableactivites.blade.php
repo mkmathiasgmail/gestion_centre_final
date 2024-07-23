@@ -131,13 +131,81 @@
                             </li>
                             <li>
                                 @if ($item->show_in_calendar == true)
-                                    <a href="{{ route('showInCalendar', $item->id) }}" data-modal-target="active" data-modal-toggle="active"
-                                        class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white" onclick="desactiver(event)">Desactive
+                                    <a href="{{ route('showInCalendar', $item->id) }}" data-modal-target="active"
+                                        data-modal-toggle="active"
+                                        class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
+                                        onclick="desactiver(event)">Desactive
                                         au calendar</a>
                                 @else
-                                    <a href="{{ route('showInCalendar', $item->id) }}" data-modal-target="desactive" data-modal-toggle="desactive"
-                                        class="block px-4 py-2 hover:bg-gray-100  dark:hover:bg-gray-600 dark:hover:text-white" onclick="activer(event)">Active
+                                    <a href="{{ route('showInCalendar', $item->id) }}" data-modal-target="desactive"
+                                        data-modal-toggle="desactive"
+                                        class="block px-4 py-2 hover:bg-gray-100  dark:hover:bg-gray-600 dark:hover:text-white"
+                                        onclick="activer(event)">Active
                                         au calendar</a>
+                                @endif
+                            </li>
+
+                             <li>
+                                @if ($item->send == true)
+                                    <a href="{{ route('send', $item->id) }}" data-modal-target="active"
+                                        data-modal-toggle="active"
+                                        class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
+                                        onclick="desactiver(event)">Desactive
+                                        send</a>
+                                @else
+                                    <a href="{{ route('send', $item->id) }}" data-modal-target="desactive"
+                                        data-modal-toggle="desactive"
+                                        class="block px-4 py-2 hover:bg-gray-100  dark:hover:bg-gray-600 dark:hover:text-white"
+                                        onclick="activer(event)">Active
+                                        send</a>
+                                @endif
+                            </li>
+
+                             <li>
+                                @if ($item->show_in_calendar == true)
+                                    <a href="{{ route('IsEvent', $item->id) }}" data-modal-target="active"
+                                        data-modal-toggle="active"
+                                        class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
+                                        onclick="desactiver(event)">Desactive
+                                        IsEvent</a>
+                                @else
+                                    <a href="{{ route('IsEvent', $item->id) }}" data-modal-target="desactive"
+                                        data-modal-toggle="desactive"
+                                        class="block px-4 py-2 hover:bg-gray-100  dark:hover:bg-gray-600 dark:hover:text-white"
+                                        onclick="activer(event)">Active
+                                        IsEvent</a>
+                                @endif
+                            </li>
+
+                             <li>
+                                @if ($item->show_in_calendar == true)
+                                    <a href="{{ route('bookInSeat', $item->id) }}" data-modal-target="active"
+                                        data-modal-toggle="active"
+                                        class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
+                                        onclick="desactiver(event)">Desactive
+                                        bookInSeat</a>
+                                @else
+                                    <a href="{{ route('showInCalendar', $item->id) }}" data-modal-target="desactive"
+                                        data-modal-toggle="desactive"
+                                        class="block px-4 py-2 hover:bg-gray-100  dark:hover:bg-gray-600 dark:hover:text-white"
+                                        onclick="activer(event)">Active
+                                        bookInSeat</a>
+                                @endif
+                            </li>
+
+                             <li>
+                                @if ($item->show_in_calendar == true)
+                                    <a href="{{ route('showInSlider', $item->id) }}" data-modal-target="active"
+                                        data-modal-toggle="active"
+                                        class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
+                                        onclick="desactiver(event)">Desactive
+                                        showInSlider</a>
+                                @else
+                                    <a href="{{ route('showInSlider', $item->id) }}" data-modal-target="desactive"
+                                        data-modal-toggle="desactive"
+                                        class="block px-4 py-2 hover:bg-gray-100  dark:hover:bg-gray-600 dark:hover:text-white"
+                                        onclick="activer(event)">Active
+                                        showInSlider</a>
                                 @endif
                             </li>
                         </ul>
@@ -151,59 +219,5 @@
             </tr>
         @endforeach
     </tbody>
-    {{-- <tfoot thead class="text-xs text-gray-700 uppercase  dark:text-gray-400">
-                <tr>
-                    <th scope="col" class="px-6 py-3">
-                        Id
-                    </th>
-                    <td scope="col" class="px-6 py-3">
-                        Title
-                    </td>
-                    <td scope="col" class="px-6 py-3">
-                        categories
-                    </td>
-                    <td scope="col" class="px-6 py-3">
-                        hashtag
-                    </td>
-                    <td scope="col" class="px-6 py-3">
-                        type event
-                    </td>
 
-                    <td scope="col" class="px-6 py-3">
-                        Lieu
-                    </td>
-
-                    <td scope="col" class="px-6 py-3">
-                        Teming
-                    </td>
-
-                    <td scope="col" class="px-6 py-3">
-                        Status
-                    </td>
-
-                    <td scope="col" class="px-6 py-3">
-                        Show in Slider
-                    </td>
-
-                    <td scope="col" class="px-6 py-3">
-                        Live Status
-                    </td>
-
-                    <td scope="col" class="px-6 py-3">
-                        Book a Seat
-                    </td>
-
-
-                    <td scope="col" class="px-6 py-3">
-                        Date_debut
-                    </td>
-                    <td scope="col" class="px-6 py-3">
-                        Date_fin
-                    </td>
-
-                    <td scope="col" class="px-6 py-3">
-                        Action
-                    </td>
-                </tr>
-            </tfoot> --}}
 </table>

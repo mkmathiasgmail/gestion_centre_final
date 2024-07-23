@@ -118,7 +118,7 @@
             <tbody>
                 @foreach ($odcusers as $key => $odcuser)
                     <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
-                        <td class="px-6 py-4">{{ $odcuser->first_name }}</td>
+                        <td class="px-6 py-4"><a href="{{route('odcusers.show',$odcuser->id)}}">{{ $odcuser->first_name }}</a></td>
                         <td class="px-6 py-4">{{ $odcuser->last_name }}</td>
                         <td class="px-6 py-4">{{ $odcuser->email }}</td>
                         <td class="px-6 py-4">{{ $odcuser->gender }}</td>
