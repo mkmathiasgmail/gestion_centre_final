@@ -413,8 +413,8 @@ class ActiviteController extends Controller
 
         $status = Activite::find($id);
         $url = env('API_URL');
-        if ($status->show_in_calendar == false) {
-            $status->show_in_calendar = true;
+        if ($status->book_in_seat == false) {
+            $status->book_in_seat = true;
             $status->save();
             try {
 
@@ -425,10 +425,10 @@ class ActiviteController extends Controller
                 ];
 
                 $requette = Http::timeout(1000)
-                    ->post("$url/events/calendar/$id", $check);
+                    ->post("$url/events/form/$id", $check);
 
                 return redirect()->route('activites.index')
-                ->with('success', 'Activite active in calendar successfully.');
+                ->with('success', 'Form active  successfully.');
             } catch (\Exception $th) {
                 return response()->json(['success' => false, 'message' => 'Request failed', 'error' => $th->getMessage()], 500);
             }
@@ -444,10 +444,10 @@ class ActiviteController extends Controller
                 ];
 
                 $requette = Http::timeout(1000)
-                    ->post("$url/events/calendar/$id", $check);
+                    ->post("$url/events/form/$id", $check);
 
                 return redirect()->route('activites.index')
-                ->with('success', 'Activite Desactive in calendar successfully.');
+                ->with('success', 'Form Desactive  successfully.');
             } catch (\Exception $th) {
                 return response()->json(['success' => false, 'message' => 'Request failed', 'error' => $th->getMessage()], 500);
             }
@@ -474,7 +474,7 @@ class ActiviteController extends Controller
                     ->post("$url/events/calendar/$id", $check);
 
                 return redirect()->route('activites.index')
-                ->with('success', 'Activite active in calendar successfully.');
+                ->with('success', 'isEvent active  successfully.');
             } catch (\Exception $th) {
                 return response()->json(['success' => false, 'message' => 'Request failed', 'error' => $th->getMessage()], 500);
             }
@@ -493,20 +493,20 @@ class ActiviteController extends Controller
                     ->post("$url/events/calendar/$id", $check);
 
                 return redirect()->route('activites.index')
-                ->with('success', 'Activite Desactive in calendar successfully.');
+                ->with('success', 'isEvent Desactive  successfully.');
             } catch (\Exception $th) {
                 return response()->json(['success' => false, 'message' => 'Request failed', 'error' => $th->getMessage()], 500);
             }
         }
     }
 
-    public function send(Request $request, $id)
+    public function status(Request $request, $id)
     {
 
         $status = Activite::find($id);
         $url = env('API_URL');
-        if ($status->show_in_calendar == false) {
-            $status->show_in_calendar = true;
+        if ($status->status == false) {
+            $status->status = true;
             $status->save();
             try {
 
@@ -517,15 +517,15 @@ class ActiviteController extends Controller
                 ];
 
                 $requette = Http::timeout(1000)
-                    ->post("$url/events/calendar/$id", $check);
+                    ->post("$url/status/calendar/$id", $check);
 
                 return redirect()->route('activites.index')
-                ->with('success', 'Activite active in calendar successfully.');
+                ->with('success', 'Status active  successfully.');
             } catch (\Exception $th) {
                 return response()->json(['success' => false, 'message' => 'Request failed', 'error' => $th->getMessage()], 500);
             }
         } else {
-            $status->show_in_calendar = false;
+            $status->status = false;
             $status->save();
 
             try {
@@ -536,7 +536,7 @@ class ActiviteController extends Controller
                 ];
 
                 $requette = Http::timeout(1000)
-                    ->post("$url/events/calendar/$id", $check);
+                    ->post("$url/events/status/$id", $check);
 
                 return redirect()->route('activites.index')
                 ->with('success', 'Activite Desactive in calendar successfully.');
