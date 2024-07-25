@@ -432,7 +432,7 @@
         </div>  --}}
 
     @section('script')
-<script>
+        <script>
             function genererPlanning(event) {
                 event.preventDefault()
                 const lien = event.target.getAttribute("href")
@@ -444,7 +444,6 @@
                 const lien = event.target.getAttribute("href")
                 document.querySelector("#export-suivie-hebdomadaire-modal form").setAttribute("action", lien)
             }
-
 
             //code de Junoir
             function generateMonthOptions() {
@@ -505,7 +504,7 @@
                 const lien = event.target.getAttribute("href");
                 document.querySelector("#semetrielrapport-modal form").setAttribute("action", lien);
             }
-           
+            
             // Improved function for generating year options
             function generateYearOptions() {
                 const select = document.getElementById('yearselec'); // Ensure ID is 'year'
