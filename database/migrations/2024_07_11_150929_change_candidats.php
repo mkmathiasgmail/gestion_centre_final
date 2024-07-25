@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::table('candidats', function (Blueprint $table) {
             $table->string('status')->change();
+            $table->dateTime('createdAt')->nullable();
         });
     }
 
