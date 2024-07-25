@@ -34,14 +34,14 @@
                         </div>
                         <div class="z-50 hidden my-4 text-base list-none bg-white divide-y divide-gray-100 rounded shadow dark:bg-gray-700 dark:divide-gray-600"
                             id="dropdown-user">
-                            <div class="px-4 py-3" role="none">
+                            {{-- <div class="px-4 py-3" role="none">
                                 <p class="text-sm text-gray-900 dark:text-white" role="none">
                                     {{ Auth::user()->name }}
                                 </p>
                                 <p class="text-sm font-medium text-gray-900 truncate dark:text-gray-300" role="none">
                                     {{ Auth::user()->email }}
                                 </p>
-                            </div>
+                            </div> --}}
                             <ul class="py-1" role="none">
                                 <li>
                                     <a href="{{ route('profile.edit') }}"
@@ -169,6 +169,22 @@
                         </svg>
                         <span class="ms-3">Role</span>
 
+                    </a>
+                </li>
+                @endif
+
+                @if (Auth()->user()->hasRole('super-admin'))
+                <li>
+                    <a href="{{ route('type_Contrats.index') }}"
+                        class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
+                        <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true"
+                            xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none"
+                            viewBox="0 0 24 24">
+                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                stroke-width="2"
+                                d="M10,2H14A2,2 0 0,1 16,4V6H20A2,2 0 0,1 22,8V19A2,2 0 0,1 20,21H4C2.89,21 2,20.1 2,19V8C2,6.89 2.89,6 4,6H8V4C8,2.89 8.89,2 10,2M14,6V4H10V6H14Z" />
+                        </svg>
+                        <span class="ms-3">Type contrat</span>
                     </a>
                 </li>
                 @endif
