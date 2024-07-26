@@ -7,28 +7,25 @@
                         <img src="{{ $odcuser->picture }}" alt=""
                             class=" w-28 h-28 rounded-full object-cover border-4 border-white">
                     </div>
-                    <div>
-
-                        <p class="text-sm text-gray-600">{{ $odcuser->email }}</p>
-                    </div>
                 </div>
-                <div>
+                <div class="mb-4">
                     <h2
-                        class="mb-4 text-4xl font-extrabold leading-none tracking-tight text-gray-700 md:text-5xl lg:text-5xl dark:text-white">
+                        class="text-4xl font-extrabold leading-none tracking-tight text-gray-700 md:text-5xl lg:text-5xl dark:text-white">
                         {{ $odcuser->first_name }} {{ $odcuser->last_name }}</h2>
+                    <p class="text-sm text-gray-600">{{ $odcuser->email }}</p>
                 </div>
 
                 <div class=" flex justify-between gap-5 text-center">
                     <div>
                         <span class="mb-6 text-lg font-normal text-gray-500 lg:text-sm  dark:text-gray-400">Formation
-                            participe</span>
+                            participées </span>
                         <p
                             class="mb-4 text-4xl  leading-none tracking-tight text-gray-700 md:text-2xl lg:text-2xl dark:text-white">
-                            40 +</p>
+                            {{ (isset($nbrParticipation)) ? ($nbrParticipation) : 0 }} +</p>
                     </div>
                     <div>
-                        <span
-                            class="mb-6 text-lg font-normal text-gray-500 lg:text-sm  dark:text-gray-400">Taux Presence</span>
+                        <span class="mb-6 text-lg font-normal text-gray-500 lg:text-sm  dark:text-gray-400">Taux
+                            Presence</span>
                         <p
                             class="mb-4 text-4xl leading-none tracking-tight text-gray-700 md:text-2xl lg:text-2xl dark:text-white">
                             40 %</p>
@@ -48,31 +45,52 @@
                 class=" bg-[#fcdab40a] shadow-lg dark:shadow-lg dark:shadow-gray-500/20 p-4 mb-4 rounded-lg text-lg font-normal text-gray-500 lg:text-sm  dark:text-gray-400">
 
                 <div
-                    class="text-4xl font-extrabold leading-none tracking-tight text-gray-700 md:text-2xl lg:text-2xl dark:text-white">
-                    <h2>Cordonnes Utilisateur</h2>
+                    class="mb-1.5 text-4xl font-extrabold leading-none tracking-tight text-gray-700 md:text-2xl lg:text-2xl dark:text-white">
+                    <h2>Cordonnées utilisateur</h2>
+                </div>
+                @php
+                    $profession = json_decode($odcuser->profession, true);
+                @endphp
+                @foreach ($odcuserDatas as $item)
+                    <div>
+                        <p>Numéro telephone : <span>{{ $item['Téléphone'] }}</span></p>
+                    </div>
+                    <div>
+                        <p>Email : <span>{{ $odcuser->email }}</span></p>
+                    </div>
+                    <div>
+                        <p>
+                            @if (isset($item['Profesion']))
+                                Profession : <span>{{ $item['Profesion'] }}</span>
+                            @else
+                                @if (isset($item['Spécialité ou domaine (étude ou profession)']))
+                                    Profession : <span>{{ $item['Spécialité ou domaine (étude ou profession)'] }}</span>
+                                @else
+                                    Profession :
+                                    <span>{{ $profession['translations']['fr']['profession'] ?? '' }}</span>
+                                @endif
+                            @endif
+                        </p>
+                    </div>
+                @endforeach
+
+                <div>
+                    <p> LinkedIn : <span><a href="{{ $odcuser->linkedin }}">{{ $odcuser->linkedin }}</a></span></p>
                 </div>
 
                 <div>
-                    <p>Numero telephone: <span></span></p>
-                </div>
-                <div>
-                    <p>Email :<span>{{ $odcuser->email }}</span></p>
-                </div>
-                <div>
-                    <p> Profession :<span></span></p>
-                </div>
-                <div>
-                    <p> linkedin :<span><a href="{{ $odcuser->linkedin }}">{{ $odcuser->linkedin }}</a></span></p>
-                </div>
-
-                <div>
-                    <p> Genre :<span>{{ $odcuser->gender }}</span></p>
+                    <p> Genre : <span>{{ $odcuser->gender }}</span></p>
                 </div>
                 <div>
                     <p> Date de naissance :<span>
                             @php
                                 $date = new DateTimeImmutable($odcuser->birth_date);
-                                $format = date_format($date, 'jS \o\f F Y');
+                                $formatter = new IntlDateFormatter(
+                                    'fr_FR',
+                                    IntlDateFormatter::MEDIUM,
+                                    IntlDateFormatter::NONE,
+                                );
+                                $format = $formatter->format($date);
                             @endphp
                             {{ $format }}
                         </span></p>
@@ -86,7 +104,7 @@
             <div class=" flex justify-between mb-4 items-center">
                 <h3
                     class="text-4xl font-extrabold leading-none tracking-tight text-gray-700 md:text-2xl lg:text-2xl dark:text-white">
-                    Historique participation</h3>
+                    Historique de participation</h3>
                 <span class="mb-6 text-lg font-normal text-gray-500 lg:text-sm  dark:text-gray-400">See all</span>
             </div>
             <div class=" flex justify-between gap-4 w-full md:inset-0  mb-8">
@@ -98,6 +116,7 @@
 
                         <h3 class="mb-4 mt-4 text-lg font-semibold text-gray-800 dark:text-gray-200 ">
                             Total des activités enregistrées : <span id="count" class="text-[#ff9822]">
+                                {{ $nbrEvents }}
                             </span>
                         </h3>
 
