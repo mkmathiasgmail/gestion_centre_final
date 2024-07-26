@@ -2,9 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\SendingMail;
+use App\Models\ModelMail;
 use App\Models\Notification;
+use Illuminate\Http\Client\Request;
+use Illuminate\Support\Facades\Mail;
 use App\Http\Requests\StoreNotificationRequest;
 use App\Http\Requests\UpdateNotificationRequest;
+use Illuminate\Notifications\Messages\MailMessage;
 
 class NotificationController extends Controller
 {
@@ -13,7 +18,7 @@ class NotificationController extends Controller
      */
     public function index()
     {
-        //
+        return view("notifications.index");
     }
 
     /**
@@ -62,5 +67,22 @@ class NotificationController extends Controller
     public function destroy(Notification $notification)
     {
         //
+    }
+
+    public function sendMail()
+    {
+
+        $title = 'Ecole de code';
+        // $title = $request->input('title');
+        $subject = 'Invitations a ODC Academy';
+        // $subject = $request->input('subject');
+
+        $message = ModelMail::select('message')->where('title', $title);
+
+        $message = $message->first()->message;
+
+        Mail::to('junwalker001@gmail.com')->send(new SendingMail($subject, $message));
+
+        dd('Mail sent successfully.');
     }
 }
