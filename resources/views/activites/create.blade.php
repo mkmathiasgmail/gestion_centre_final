@@ -21,28 +21,28 @@
             @csrf
 
             <div >
-                <label for="title" class="mb-6 text-lg font-normal text-gray-800 lg:text-xl  dark:text-gray-400">Title</label>
+                <label for="title" class="mb-6 text-lg font-normal text-gray-800 lg:text-xl  dark:text-gray-400">Titre</label>
                 <input type="text" name="title" id="title"
                     class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                     placeholder="Donne un titre à votre Article" required value="">
                 </div>
 
             <div>
-                <label for="date_debut" class="mb-6 text-lg font-normal text-gray-500 lg:text-xl  dark:text-gray-400">Start Date</label>
+                <label for="date_debut" class="mb-6 text-lg font-normal text-gray-500 lg:text-xl  dark:text-gray-400">Date debut</label>
                 <input type="date" name="startDate" id="date_debut"
                     class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                     required value="">
             </div>
 
             <div>
-                <label for="date_fin">End Date</label>
+                <label for="date_fin">Date Fin</label>
                 <input type="date" name="endDate" id="date_fin"
                     class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                     required>
             </div>
 
             <div>
-                <label for="" >Form</label>
+                <label for="" >Formulaire</label>
                 <select
                     class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                     name="form">
@@ -54,7 +54,7 @@
 
             <div>
 
-                <label for="date_debut">Upload File</label>
+                <label for="date_debut">Image</label>
                 <div class=" flex items-center gap-4">
 
                     <input type="file" id="file"
@@ -73,7 +73,7 @@
 
 
             <div>
-                <label for="lieu">Location</label>
+                <label for="lieu">Lieu</label>
                 <select name="location" id="lieu"
                     class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                         <option value="ODC Kinshasa">ODC Kinshasa</option>
@@ -97,7 +97,7 @@
 
             <div class="flex gap-4 w-full">
                 <div class="w-1/2">
-                    <label for="typeEvent">Type Events</label>
+                    <label for="typeEvent">Type Evenement</label>
                     <select name="typeEvent[]" id="typeEvent"
                         class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 js-example-basic-multiple"
                         multiple="multiple">
@@ -148,7 +148,7 @@
         <div class="flex items-center p-4 md:p-5 border-t border-gray-200 rounded-b dark:border-gray-600">
         <button type="submit"
                 class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5">I
-                accept</button>
+                Creer une Activites</button>
             <button type="reset"
                 class="py-2.5 px-5 ms-3 text-sm font-medium text-gray-900 bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100">Decline</button>
         </div>

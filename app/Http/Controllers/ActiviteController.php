@@ -324,11 +324,20 @@ class ActiviteController extends Controller
 
     public function destroy(Activite $activite)
     {
-
+        $url = env('API_URL');
         try {
+            
             $activite->delete();
+            $id = $activite->_id;
+
+            // Supprimer la liaison avec le formulaire de l'activité sur l'API
+
+            $requette = Http::timeout(1000)
+                ->post("$url/events/delete/$id");
             return redirect()->route('activites.index')
                 ->with('success', 'Activite deleted successfully.');
+
+
         } catch (\Exception $th) {
             return back()->withErrors(['error' => "An error occurred while creating the activity. $th"])->withInput();
         }
