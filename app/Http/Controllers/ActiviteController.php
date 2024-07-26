@@ -24,7 +24,7 @@ class ActiviteController extends Controller
     public function index()
     {
 
-        $activites = Activite::latest()->get();
+        $activites = Activite::latest()->paginate(100);
         $typeEvent = TypeEvent::all();
         $categories = Categorie::all();
         $hashtag = Hashtag::all();
@@ -180,9 +180,9 @@ class ActiviteController extends Controller
             }
             $candidatsData[] = $candidatArray;
         }
-        $participants = Candidat::where('status', 'accept')->select('id', 'odcuser_id', 'activite_id', 'status')->with(['odcuser', 'candidat_attribute'])->get();
+        $participants = Candidat::where('activite_id', $id)->where('status', 'accept')->select('id', 'odcuser_id', 'activite_id', 'status')->with(['odcuser', 'candidat_attribute'])->get();
         $etiquettes = [];
-        $participantsData = [] ;
+        $participantsData = [];
         foreach ($participants as $participant) {
             $participantArray = $participant->toArray();
 
@@ -190,7 +190,7 @@ class ActiviteController extends Controller
                 foreach ($participant->candidat_attribute as $attribute) {
                     $participantArray[$attribute->label] = $attribute->value;
                     if (!in_array($attribute->label, $etiquettes)) {
-                        $etiquettes[] = $attribute->label ;
+                        $etiquettes[] = $attribute->label;
                     }
                 }
             }
@@ -343,12 +343,256 @@ class ActiviteController extends Controller
 
     public function chartActivity()
     {
-        $data = Activite::selectRaw("date_format(createdAt,'%Y-%m-%d') as date , count(*) as aggregate")->whereDate('createdAt', '>=', now()->subDays(30))->groupBy('date')->get();
+        $data1 = Activite::selectRaw("DATE_FORMAT(start_date, '%Y-%m-%d') as date, count(*) as aggregate, title,id")
+            ->whereDate('start_date', '>=', now()->subDays(30))
+            ->groupBy('date', 'title','id')
+            ->get();
+
+
+        $data = Activite::selectRaw("DATE_FORMAT(start_date, '%Y-%m-%d') as date, count(*) as aggregate, title,id")
+        ->whereDate('start_date', '>=', now()->subDays(30))
+        ->groupBy('date', 'title', 'id')
+        ->paginate(4);
         $activites = Activite::all();
-        $user= Odcuser::all();
+        $user = Odcuser::all();
 
-       
 
-        return view('dashboard', compact('data', 'activites','user'));
+
+
+
+        return view('dashboard', compact('data1', 'activites', 'user', 'data'));
     }
+    
+    public function showInCalendar(Request $request, $id)
+    {
+
+        $status = Activite::find($id);
+        $url = env('API_URL');
+        if ($status->show_in_calendar == false) {
+            $status->show_in_calendar = true;
+            $status->save();
+            try {
+
+                $id = $status->_id;
+                $valbool = boolval($request->status);
+                $check = [
+                    "action" => $valbool
+                ];
+
+                $requette = Http::timeout(1000)
+                    ->post("$url/events/calendar/$id", $check);
+
+                return response()->json(['success' => true, 'data' => $requette->json()], 201);
+            } catch (\Exception $th) {
+                return response()->json(['success' => false, 'message' => 'Request failed', 'error' => $th->getMessage()], 500);
+            }
+
+        } else {
+            $status->show_in_calendar = false;
+            $status->save();
+
+            try {
+                $id = $status->_id;
+                $valbool = boolval($request->status);
+                $check = [
+                    "action" => $valbool
+                ];
+
+                $requette = Http::timeout(1000)
+                    ->post("$url/events/calendar/$id", $check);
+
+                return response()->json(['success' => true, 'data' => $requette->json()], 201);
+            } catch (\Exception $th) {
+                return response()->json(['success' => false, 'message' => 'Request failed', 'error' => $th->getMessage()], 500);
+            }
+        }
+    }
+
+    public function bookInSeat(Request $request, $id)
+    {
+
+        $status = Activite::find($id);
+        $url = env('API_URL');
+        if ($status->book_in_seat == false) {
+            $status->book_in_seat = true;
+            $status->save();
+            try {
+
+                $id = $status->_id;
+                $valbool = boolval($request->status);
+                $check = [
+                    "action" => $valbool
+                ];
+
+                $requette = Http::timeout(1000)
+                    ->post("$url/events/form/$id", $check);
+
+                return redirect()->route('activites.index')
+                ->with('success', 'Form active  successfully.');
+            } catch (\Exception $th) {
+                return response()->json(['success' => false, 'message' => 'Request failed', 'error' => $th->getMessage()], 500);
+            }
+        } else {
+            $status->show_in_calendar = false;
+            $status->save();
+
+            try {
+                $id = $status->_id;
+                $valbool = boolval($request->status);
+                $check = [
+                    "action" => $valbool
+                ];
+
+                $requette = Http::timeout(1000)
+                    ->post("$url/events/form/$id", $check);
+
+                return redirect()->route('activites.index')
+                ->with('success', 'Form Desactive  successfully.');
+            } catch (\Exception $th) {
+                return response()->json(['success' => false, 'message' => 'Request failed', 'error' => $th->getMessage()], 500);
+            }
+        }
+    }
+
+    public function isEvent(Request $request, $id)
+    {
+
+        $status = Activite::find($id);
+        $url = env('API_URL');
+        if ($status->show_in_calendar == false) {
+            $status->show_in_calendar = true;
+            $status->save();
+            try {
+
+                $id = $status->_id;
+                $valbool = boolval($request->status);
+                $check = [
+                    "action" => $valbool
+                ];
+
+                $requette = Http::timeout(1000)
+                    ->post("$url/events/calendar/$id", $check);
+
+                return redirect()->route('activites.index')
+                ->with('success', 'isEvent active  successfully.');
+            } catch (\Exception $th) {
+                return response()->json(['success' => false, 'message' => 'Request failed', 'error' => $th->getMessage()], 500);
+            }
+        } else {
+            $status->show_in_calendar = false;
+            $status->save();
+
+            try {
+                $id = $status->_id;
+                $valbool = boolval($request->status);
+                $check = [
+                    "action" => $valbool
+                ];
+
+                $requette = Http::timeout(1000)
+                    ->post("$url/events/calendar/$id", $check);
+
+                return redirect()->route('activites.index')
+                ->with('success', 'isEvent Desactive  successfully.');
+            } catch (\Exception $th) {
+                return response()->json(['success' => false, 'message' => 'Request failed', 'error' => $th->getMessage()], 500);
+            }
+        }
+    }
+
+    public function status(Request $request, $id)
+    {
+
+        $status = Activite::find($id);
+        $url = env('API_URL');
+        if ($status->status == false) {
+            $status->status = true;
+            $status->save();
+            try {
+
+                $id = $status->_id;
+                $valbool = boolval($request->status);
+                $check = [
+                    "action" => $valbool
+                ];
+
+                $requette = Http::timeout(1000)
+                    ->post("$url/status/calendar/$id", $check);
+
+                return redirect()->route('activites.index')
+                ->with('success', 'Status active  successfully.');
+            } catch (\Exception $th) {
+                return response()->json(['success' => false, 'message' => 'Request failed', 'error' => $th->getMessage()], 500);
+            }
+        } else {
+            $status->status = false;
+            $status->save();
+
+            try {
+                $id = $status->_id;
+                $valbool = boolval($request->status);
+                $check = [
+                    "action" => $valbool
+                ];
+
+                $requette = Http::timeout(1000)
+                    ->post("$url/events/status/$id", $check);
+
+                return redirect()->route('activites.index')
+                ->with('success', 'Activite Desactive in calendar successfully.');
+            } catch (\Exception $th) {
+                return response()->json(['success' => false, 'message' => 'Request failed', 'error' => $th->getMessage()], 500);
+            }
+        }
+    }
+
+    public function showInSlider(Request $request, $id)
+    {
+
+        $status = Activite::find($id);
+        $url = env('API_URL');
+        if ($status->show_in_slider == false) {
+            $status->show_in_slider = true;
+            $status->save();
+            try {
+
+                $id = $status->_id;
+                $valbool = boolval($request->status);
+                $check = [
+                    "action" => $valbool
+                ];
+
+                $requette = Http::timeout(1000)
+                    ->post("$url/events/slide/$id", $check);
+
+                return redirect()->route('activites.index')
+                ->with('success', 'Activite active in slide successfully.');
+            } catch (\Exception $th) {
+                return response()->json(['success' => false, 'message' => 'Request failed', 'error' => $th->getMessage()], 500);
+            }
+        } else {
+            $status->show_in_slider = false;
+            $status->save();
+
+            try {
+                $id = $status->_id;
+                $valbool = boolval($request->status);
+                $check = [
+                    "action" => $valbool
+                ];
+
+                $requette = Http::timeout(1000)
+                    ->post("$url/events/slide/$id", $check);
+
+                return redirect()->route('activites.index')
+                ->with('success', 'Activite Desactive in slide successfully.');
+            } catch (\Exception $th) {
+                return response()->json(['success' => false, 'message' => 'Request failed', 'error' => $th->getMessage()], 500);
+            }
+        }
+    }
+
+    
+
+    
 }

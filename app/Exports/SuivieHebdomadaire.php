@@ -3,8 +3,6 @@
 namespace App\Exports;
 
 use Carbon\Carbon;
-use App\Models\Activite;
-use App\Models\Candidat;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
@@ -117,6 +115,7 @@ class SuivieHebdomadaire
         $totalPart = 0;
         $totalFille = 0;
         $totalGarc = 0;
+        $cat = [];
 
         while ($weekStart->lessThanOrEqualTo($lastDayOfMonth)) {
             if ($weekStart->month != $firstDayOfMonth->month) {
@@ -131,13 +130,6 @@ class SuivieHebdomadaire
                 $start_date = Carbon::parse($item->start_date);
                 return $start_date->between($weekStart, $weekEnd);
             });
-
-            // Assigner les activités sans location à "Inconnu"
-            // foreach ($weekActivities as $activity) {
-            //     if (is_null($activity->location) || $activity->location === '') {
-            //         $activity->location = 'Aucune information';
-            //     }
-            // }
 
             // Initialisation du regroupement par location
             $groupedByCategorie = $weekActivities->groupBy('name');
@@ -214,6 +206,49 @@ class SuivieHebdomadaire
 
         $sheet->mergeCells('A' . ($startRow + 1) . ':B' . ($startRow + 1));
         $sheet->fromArray(['Somme mensuelle', null, (string)$totalTitle, (string)$totalDay, (string)$totalHours, null, (string)$totalInscris, (string)$totalPart, (string)$totalFille, (string)$totalGarc, null], NULL, 'A' . ($startRow + 1));
+        $startRow += 1;
+
+        $totalTitle = 0;
+        $totalDay = 0;
+        $totalHours = 0;
+        $totalInscris = 0;
+        $totalPart = 0;
+        $totalFille = 0;
+        $totalGarc = 0;
+
+        $groupedByCategori = $activitiesInMonth->groupBy('name');
+
+        foreach ($groupedByCategori as $categorie => $activities) {
+            foreach ($activities as $item) {
+                $differenceDays = $item->start_date && $item->end_date ? Carbon::parse($item->start_date)->diffInDays(Carbon::parse($item->end_date)) + 1 : 1;
+
+                $totalTitle ++;
+                $totalDay += $differenceDays;
+                $totalHours += $item->number_hour != 0 ? $item->number_hour : 0;
+                $totalInscris += $item->cand_count != 0 ? $item->cand_count : 0;
+                $totalPart += $item->pre_count != 0 ? $item->pre_count : 0;
+                $totalFille += $item->female_count != 0 ? $item->female_count : 0;
+                $totalGarc += $item->male_count != 0 ? $item->male_count : 0;
+            }
+
+            $cat[] = [$categorie => [$totalTitle, $totalDay, $totalHours, $totalInscris, $totalPart, $totalFille, $totalGarc]];
+
+            $totalTitle = 0;
+            $totalDay = 0;
+            $totalHours = 0;
+            $totalInscris = 0;
+            $totalPart = 0;
+            $totalFille = 0;
+            $totalGarc = 0;
+        }                    
+
+        foreach ($cat as $categorie){
+            foreach ($categorie as $key => $value){
+                $sheet->mergeCells('A' . ($startRow + 1) . ':B' . ($startRow + 1));
+                $sheet->fromArray(["Somme ".$key, null, (String)$value[0], (String)$value[1], (String)$value[2], null, (String)$value[3], (String)$value[4], (string)$value[5], (String)$value[6]], NULL, 'A' . ($startRow + 1));        
+                $startRow += 1;
+            }    
+        }
 
         $cellRange = "A2:K" . ($sheet->getHighestRow());
         $sheet->getStyle($cellRange)->applyFromArray([
