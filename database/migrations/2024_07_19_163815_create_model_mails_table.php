@@ -11,9 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('candidats', function (Blueprint $table) {
-            $table->string('status')->change();
-            $table->dateTime('createdAt')->nullable();
+        Schema::create('model_mails', function (Blueprint $table) {
+            $table->id();
+            $table->string('title');
+            $table->text('message');
+            $table->timestamps();
         });
     }
 
@@ -22,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        //
+        Schema::dropIfExists('model_mails');
     }
 };

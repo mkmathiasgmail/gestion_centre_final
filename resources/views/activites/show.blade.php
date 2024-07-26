@@ -175,9 +175,9 @@
                 control the content visibility and styling</p>
         </div>
         <div class="hidden p-4 ro unded-lg bg-gray-50 dark:bg-gray-800" id="import" role="tabpanel"
-        aria-labelledby="contacts-tab">
-        <p class="text-sm text-gray-500 dark:text-gray-400"><x-activite-import :activite="$activite"/></p>
-    </div>
+            aria-labelledby="contacts-tab">
+            <p class="text-sm text-gray-500 dark:text-gray-400"><x-activite-import :activite="$activite" /></p>
+        </div>
     </div>
 
     @php
@@ -223,11 +223,14 @@
                                 'colvis',
                                 {
                                     extend: 'excelHtml5',
-                                    exportOptions: {
-                                        columns: ':visible'
-                                    },
-                                    title: "Liste des candidats pour : " + event
-                                },
+                                    action: function(e, dt, node, config) {
+                                        e.preventDefault();
+                                        let id_event = @json($activite->id);
+                                        // Redirection vers la méthode du contrôleur
+                                        window.location.href = '{{ url('generate_excel') }}/' +
+                                            id_event;
+                                    }
+                                }
                             ]
                         },
                         topEnd: {
@@ -244,12 +247,12 @@
 
         {{-- Script for candidates data table --}}
         <script>
-            var tr = null ;
-            var statusCell = null ;
+            var tr = null;
+            var statusCell = null;
             $(document).ready(function() {
                 let event = @json($activite->title);
 
-                
+
                 $('#candidatTable').DataTable({
                     responsive: true,
 
@@ -273,16 +276,6 @@
                             },
                             buttons: [
                                 'colvis',
-                                {
-                                    extend: 'excelHtml5',
-                                    action: function(e, dt, node, config) {
-                                        e.preventDefault();
-                                        let id_event = @json($activite->id);
-                                        // Redirection vers la méthode du contrôleur
-                                        window.location.href = '{{ url('generate_excel') }}/' +
-                                            id_event;
-                                    }
-                                },
                             ]
                         },
                         topEnd: {
@@ -294,12 +287,15 @@
                 });
 
                 $('#candidatTable').css('width', '100%');
+
             });
+
             function actionStatus(event, type, id, firstname) {
                 tr = $(event.target.closest('tr'));
                 statusCell = tr.find('#statusCell');
                 $('#accept-link, #decline-link, #wait-link').attr('data', id)
-                $('#popup-title-accept, #popup-title-decline, #popup-title-wait').text("Etes-vous sûr de vouloir changer le statut de " + firstname)
+                $('#popup-title-accept, #popup-title-decline, #popup-title-wait').text(
+                    "Etes-vous sûr de vouloir changer le statut de " + firstname)
             }
 
             function changeStatus(event) {
