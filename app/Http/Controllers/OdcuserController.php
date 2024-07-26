@@ -15,10 +15,6 @@ class OdcuserController extends Controller
     public function index()
     {
         $odcusers = Odcuser::latest()->get();
-        if (request()->expectsJson()) {
-            return response()->json($odcusers);
-        }
-
 
         return view('odcusers.index', compact('odcusers'));
     }
@@ -45,9 +41,11 @@ class OdcuserController extends Controller
     public function show(Odcuser $odcuser)
     {
         $nbrEvents = Candidat::where('odcuser_id', $odcuser->id)->count();
+        $nbrParticipation = $odcuser->candidat()->where('status', 'accept')->count();
+        $tauxPresence = null;
         $candidats = Candidat::where('odcuser_id', $odcuser->id)->with('candidat_attribute')->get();
         if (isset($candidats)) {
-            $datas = [] ;
+            $odcuserDatas = [] ;
             $labels = [];
             foreach ($candidats as $candidat) {
                 $array = $candidat->toArray();
@@ -58,15 +56,14 @@ class OdcuserController extends Controller
                             $labels[] = $attribute->label ;
                         }
                     }
-                    $datas[] = $array ;
+                    $odcuserDatas[] = $array ;
                 }
 
             }
         } else {
             echo "Sorry the user does not exist.";
         }
-
-        return view('odcusers.show', compact('odcuser', 'candidats', 'nbrEvents', 'datas', 'labels'));
+        return view('odcusers.show', compact('nbrParticipation', 'odcuser', 'candidats', 'nbrEvents', 'odcuserDatas', 'labels'));
     }
 
     /**
