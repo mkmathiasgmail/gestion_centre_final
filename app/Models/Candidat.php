@@ -17,7 +17,8 @@ class Candidat extends Model
     protected $fillable = [
         'odcuser_id',
         'activite_id',
-        'status'
+        'status',
+        'createdAt'
     ];
     protected $table = "candidats";
 
@@ -30,7 +31,7 @@ class Candidat extends Model
     {
         return $this->belongsTo(Activite::class);
     }
-    
+
     public function presence(): HasMany
     {
         return $this->hasMany(Presence::class);

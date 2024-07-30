@@ -10,7 +10,7 @@ class Employabilite extends Model
     use HasFactory;
     protected $fillable = [
         'name',
-        'type_contrat',
+        'type_contrat_id',
         'nomboite',
         'poste',
         'periode',
@@ -26,5 +26,8 @@ class Employabilite extends Model
     {
         return $this->belongsTo(Odcuser::class);
     }
-
+    public function type_contrat()
+    {
+        return $this->belongsTo(TypeContrat::class);
+    }
 }

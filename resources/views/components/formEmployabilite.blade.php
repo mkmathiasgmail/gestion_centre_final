@@ -26,32 +26,28 @@
             <form class="p-4 md:p-5" action="{{ route('employabilites.store') }}" method="post">
                 @csrf
                 <div class="grid grid-cols-2 gap-4 mb-4">
-                    <input type="text" name="id_user" id="id_user" class="hidden"  >
+                    <input type="text" name="id_user" id="id_user" class="hidden">
                     <div class="col-span-2">
                         <label for="prenom"
                             class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Prenom</label>
                         <input name="first_name" id="first_name"
                             class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-                            placeholder="veuilez saisir votre prenom"  type="text" autocomplete="off" >
-                            <div id="countryList" class="text-black bg-gray-300 rounded-lg " >
+                            placeholder="veuilez saisir votre prenom" type="text" autocomplete="off">
+                        <div id="countryList" class="text-black bg-gray-300 rounded-lg ">
 
-                            </div>
+                        </div>
                     </div>
                     {{ csrf_field() }}
 
                     <div class="col-span-2 ">
                         <label for="type_contrat"
                             class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">type contrat</label>
-                        <select id="type_contrat" name="type_contrat"
+                        <select id="type_contrat_id" name="type_contrat"
                             class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
                             <option value="#">veuilez selectionner votre type</option>
-                            <option value="CDI">CDI</option>
-                            <option value="CDD">CDD</option>
-                            <option value="ALTERNANCE">ALTERNANCE</option>
-                            <option value="INTERIM">INTERIM</option>
-                            <option value="STAGE">STAGE</option>
-                            <option value="APPRENTI">APPRENTI</option>
-                            <option value="CONTRAT_PRO">CONTRAT_PRO</option>
+                            @foreach ($typeContrats as $typecontrat)
+                                <option value="{{ $typecontrat->id }}">{{ $typecontrat->libelle }}</option>
+                            @endforeach
                         </select>
                     </div>
 
