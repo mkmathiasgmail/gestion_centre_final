@@ -118,7 +118,8 @@
             <tbody>
                 @foreach ($odcusers as $key => $odcuser)
                     <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
-                        <td class="px-6 py-4"><a href="{{route('odcusers.show',$odcuser->id)}}">{{ $odcuser->first_name }}</a></td>
+                        <td class="px-6 py-4"><a
+                                href="{{ route('odcusers.show', $odcuser->id) }}">{{ $odcuser->first_name }}</a></td>
                         <td class="px-6 py-4">{{ $odcuser->last_name }}</td>
                         <td class="px-6 py-4">{{ $odcuser->email }}</td>
                         <td class="px-6 py-4">{{ $odcuser->gender }}</td>
@@ -174,7 +175,6 @@
     </div>
 
     @section('script')
-
         <script>
             new DataTable('#usersTable', {
                 responsive: true,
@@ -231,17 +231,21 @@
                     [10, 25, 50, 'All']
                 ],
 
-
-
-
-
             });
         </script>
         <script>
-            $("#dt-length-0").addClass('text-gray-700 dark:text-gray-200 w-24 bg-white');
-            $("label[for='dt-length-0']").addClass('text-gray-700 dark:text-gray-200').text(' Records per page');
-            $("label[for='dt-search-0']").addClass('text-gray-700 dark:text-gray-200');
-            $('.dt-input').addClass('text-gray-700 dark:text-gray-200');
+            $(document).ready(function() {
+                $('#usersTable').css('width', '100%')
+                $('.dt-container').addClass('text-lg text-gray-800 dark:text-gray-400 leading-tight')
+
+                $('.dt-buttons').addClass('mt-4')
+                $('.dt-buttons buttons').addClass('cursor-pointer mt-5 bg-slate-600 p-2 rounded-sm font-bold')
+
+                $("#dt-length-0").addClass('text-gray-700 dark:text-gray-200 w-24 bg-white');
+                $("label[for='dt-length-0']").addClass('text-gray-700 dark:text-gray-200').text(' Enregistrements par page');
+                $("label[for='dt-search-0']").addClass('text-gray-700 dark:text-gray-200');
+                $('.dt-input').addClass('text-gray-700 dark:text-gray-200');
+            });
         </script>
     @endsection
 </x-app-layout>

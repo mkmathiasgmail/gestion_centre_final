@@ -288,6 +288,13 @@
 
                 $('#candidatTable').css('width', '100%');
 
+                $('.dt-container').addClass('text-lg text-gray-800 dark:text-gray-400 leading-tight')
+
+                $('.dt-buttons').addClass('mt-4')
+                $('.dt-buttons buttons').addClass('cursor-pointer mt-5 bg-slate-600 p-2 rounded-sm font-bold')
+
+                $("#dt-length-2").addClass('text-gray-700 dark:text-gray-200 w-24 bg-white');
+                $("label[for='dt-length-2']").addClass('text-gray-700 dark:text-gray-200').text(' Enregistrements par page');
             });
 
             function actionStatus(event, type, id, firstname) {
