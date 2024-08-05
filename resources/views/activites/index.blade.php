@@ -66,11 +66,11 @@
         </script>
 
         <script>
-            // function destroy(event) {
-            //     event.preventDefault();
-            //     let link = event.target.getAttribute('href');
-            //     document.querySelector('.delete').setAttribute('action', link);
-            // }
+            function destroy(event) {
+                event.preventDefault();
+                let link = event.target.getAttribute('href');
+                document.querySelector('.delete').setAttribute('action', link);
+            }
 
         $(document).ready(function(){
             $('.dt-container').addClass('text-xl text-gray-800 dark:text-gray-200 leading-tight')

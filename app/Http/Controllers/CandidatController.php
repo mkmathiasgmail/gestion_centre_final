@@ -12,6 +12,7 @@ use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
+use PhpOffice\PhpSpreadsheet\Style\Border;
 use App\Http\Requests\StoreCandidatRequest;
 use PhpOffice\PhpSpreadsheet\Cell\DataType;
 use App\Http\Requests\UpdateCandidatRequest;
@@ -134,12 +135,12 @@ class CandidatController extends Controller
         foreach ($daysOfWeek as $day) {
             $cellCoordinate = Coordinate::stringFromColumnIndex($columnIndex) . '3';
             $spreadsheet->getActiveSheet()
-            ->setCellValue($cellCoordinate, $day)
-            ->mergeCells($cellCoordinate . ":" . Coordinate::stringFromColumnIndex($columnIndex + 2) . "3")
-            ->getStyle($cellCoordinate . ":" . Coordinate::stringFromColumnIndex($columnIndex + 2) . "3")
-            ->getAlignment()
-            ->setVertical(cellAlignment::VERTICAL_CENTER)
-            ->setHorizontal(cellAlignment::HORIZONTAL_CENTER);
+                ->setCellValue($cellCoordinate, $day)
+                ->mergeCells($cellCoordinate . ":" . Coordinate::stringFromColumnIndex($columnIndex + 2) . "3")
+                ->getStyle($cellCoordinate . ":" . Coordinate::stringFromColumnIndex($columnIndex + 2) . "3")
+                ->getAlignment()
+                ->setVertical(cellAlignment::VERTICAL_CENTER)
+                ->setHorizontal(cellAlignment::HORIZONTAL_CENTER);
             $columnIndex += 3; // Increment column index by 3 (since we're merging 3 cells)
 
             $cellC = Coordinate::stringFromColumnIndex($index);
@@ -183,7 +184,7 @@ class CandidatController extends Controller
             ],
         ];
 
-        $spreadsheet->getActiveSheet()->getStyle('A3:H3')->applyFromArray($style_for_titles);
+        $spreadsheet->getActiveSheet()->getStyle('A3:S3')->applyFromArray($style_for_titles);
 
         // Set the column widths
         $spreadsheet->getActiveSheet()
@@ -248,6 +249,19 @@ class CandidatController extends Controller
             $spreadsheet->getActiveSheet()
                 ->setCellValue("F$cell_key", $email);
 
+            $styleArrayForBorders = [
+                'borders' => [
+                    'allBorders' => [
+                        'borderStyle' => Border::BORDER_THIN,
+                        'color' => ['argb ' => '000000'],
+                    ],
+                ],
+            ];
+
+            $spreadsheet->getActiveSheet()
+            ->getStyle('A1:U8')
+            ->applyFromArray($styleArrayForBorders);
+
             $i++;
             $cell_key++;
         }
@@ -265,7 +279,7 @@ class CandidatController extends Controller
         $writer->save($tmp);
 
         // Return the Excel file as a download response
-        return response()->download($tmp, "coach.Xlsx")->deleteFileAfterSend(true);
+        return response()->download($tmp, "Participants.Xlsx")->deleteFileAfterSend(true);
     }
 
     public function updateStatus(Request $request, $status)
