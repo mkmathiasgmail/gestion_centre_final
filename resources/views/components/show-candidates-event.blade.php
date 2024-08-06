@@ -23,8 +23,7 @@
 
     <div class="py-6 relative overflow-x-auto">
         @if (count($candidatsData) > 0)
-            <table id="candidatTable"
-                class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+            <table id="candidatTable" class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
                 <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                     <tr>
                         @foreach (array_unique($labels) as $label)
@@ -53,6 +52,10 @@
                         <th scope="col"
                             class="px-6 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                             Actions
+                        </th>
+                        <th scope="col" title="checkbox"
+                            class="px-6 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+
                         </th>
                     </tr>
                 </thead>
@@ -113,6 +116,10 @@
                                         </li>
                                     </ul>
                                 </div>
+                            </td>
+                            <td class="px-6 py-4" id="statusCell">
+                                <input id="default-checkbox" type="checkbox" value=""
+                                    class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
                             </td>
                         </tr>
                     @endforeach
