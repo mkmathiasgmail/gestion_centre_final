@@ -307,7 +307,7 @@ class ActiviteController extends Controller
                 'start_date' => $validatedData['startDate'],
                 'end_date' => $validatedData['endDate'],
                 'location' => $validatedData['location'],
-                "thumbnail_url" => $validatedData['thumbnailURL'],
+                "thumbnail_url" => $request->thumbnailURL,
             ]);
 
 
