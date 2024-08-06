@@ -25,7 +25,7 @@ class MailController extends Controller
         $message = $request->input('message');
         $model = $request->input('model-mail');
     
-        $activite = Activite::find($activiteId);
+        $activite = Activite::where("id", $activiteId);
         if (!$activite) {
             return back()->with("error", "Activité non trouvée");
         }    
@@ -33,7 +33,7 @@ class MailController extends Controller
         $startDate = Carbon::parse($activite->first()->start_date)->translatedFormat('l d F Y');
         $endDate = Carbon::parse($activite->first()->end_date)->translatedFormat('l d F Y');
 
-        $message = str_replace(['::activite', '::start_date', '::end_date'], [$activite->title, $startDate, $endDate], $message);
+        $message = str_replace(['::activite', '::start_date', '::end_date'], [$activite->first()->title, $startDate, $endDate], $message);
 
         $mailUsersQuery = Odcuser::query();
 
@@ -149,8 +149,7 @@ class MailController extends Controller
         if ($mailUsersQuery->count() !== 0) {
             $mailUsersQuery->chunk(100, function ($mailUsers) use ($subject, $message) {
                 foreach ($mailUsers as $mailUser) {
-                    // Mail::to($mailUser->email)->send(new SendingMail($subject, $message));
-                    Mail::to('junwalker001@gmail.com')->send(new SendingMail($subject, $message));
+                    Mail::to($mailUser->email)->send(new SendingMail($subject, $message));
                 }
             });
 
