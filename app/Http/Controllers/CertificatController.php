@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use Dompdf\Dompdf;
+use Dompdf\Options;
+
 use DateTimeImmutable;
 use App\Models\Activite;
-
 use App\Models\Candidat;
 use App\Models\Certificat;
 use Illuminate\Http\Request;
@@ -69,25 +71,37 @@ class CertificatController extends Controller
 
 
 
-
     /**
      * Generate a certificate for a candidate and activity.
      */
 
     public function generateCertificat($candidat)
     {
+        set_time_limit(100000);
         $candidat = Candidat::find($candidat);
 
         $date = new DateTimeImmutable($candidat->activite->start_date);
         $format = date_format($date, 'jS \o\f F Y');
 
-        // $pdf = Pdf::loadView('certificat.generateCertificat', compact('candidat', 'format'));
+        $pdf = view('certificat.generateCertificat', compact('candidat', 'format'));
 
-        // set_time_limit(100000);
-        // $pdf->set_paper("a4", "landscape");
-        // return $pdf->download('certificat.pdf');
+        
+        // $pdf->setOptions([
+        //     'font-family' => 'beau_rivage_normal_61dc1080149248972ebebb6af5e36968'
+        // ]);
+        $options = new Options();
+        $options->set('isHtml5ParserEnabled', true);
+        $options->set('isRemoteEnabled', true);
+        $dompdf = new Dompdf($options);
+        $dompdf->loadHtml($pdf);
+        $dompdf->setPaper('A4', 'landscape');
+        $dompdf->render();
+        return $dompdf->stream('certificat.pdf');
 
-
-        return view('certificat.generateCertificat',compact('format','candidat'));
+        //return view('certificat.generateCertificat',compact('format','candidat'));
+    }
+    public  function generateAllCertificat($candidat)
+    {
+    
     }
 }
