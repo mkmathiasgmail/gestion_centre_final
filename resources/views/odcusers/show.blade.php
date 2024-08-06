@@ -57,7 +57,9 @@
                 @endphp
                 @foreach ($odcuserDatas as $item)
                     <div>
-                        <p>Numéro telephone : <span>{{ isset($item['Téléphone']) ? $item['Téléphone'] : (isset($item['Téléphone (obligatoire)']) ? $item['Téléphone (obligatoire)'] : 'N/A')}}</span></p>
+                        <p>Numéro telephone :
+                            <span>{{ isset($item['Téléphone']) ? $item['Téléphone'] : (isset($item['Téléphone (obligatoire)']) ? $item['Téléphone (obligatoire)'] : 'N/A') }}</span>
+                        </p>
                     </div>
                     <div>
                         <p>Email : <span>{{ $odcuser->email }}</span></p>
@@ -110,12 +112,7 @@
             <h3
                 class="text-4xl font-extrabold leading-none tracking-tight text-gray-700 md:text-2xl lg:text-2xl dark:text-white">
                 Historique de participation</h3>
-            <a href="#" data-modal-target="participations-modal" data-modal-toggle="participations-modal"
-                class="mb-6 text-lg font-normal text-gray-500 lg:text-sm  dark:text-gray-400">
-                Voir tout
-            </a>
         </div>
-        <x-show-list-participations :activitespAll="$activitespAll" />
         <div class=" flex justify-between gap-4 w-full md:inset-0  mb-8">
             @if (count($activitesP) > 0)
                 @foreach ($activitesP as $item)
@@ -144,40 +141,27 @@
             @endif
 
         </div>
-
+        <div class="py-6 relative overflow-x-auto">
+            <x-table-list-participations :activitespAll="$activitespAll" />
+        </div>
     </div>
 
 </section>
 
 
 @section('script')
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
-        function redirect(event) {
-            event.preventDefault();
-            var id = $(event.target).attr('data-id');
-        }
-    </script>
-    <script>
-        const ctx = document.getElementById('myChart');
+        $(document).ready(function() {
+            $('#participationsTable').css('width', '100%');
+            $('.dt-container').addClass('text-lg text-gray-800 dark:text-gray-400 leading-tight')
+            $('.dt-buttons').addClass('mt-4')
+            $('.dt-buttons buttons').addClass('cursor-pointer mt-5 bg-slate-600 p-2 rounded-sm font-bold')
 
-        new Chart(ctx, {
-            type: 'line',
-            data: {
-                labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
-                datasets: [{
-                    label: '# of Votes',
-                    data: [12, 19, 3, 5, 2, 3],
-                    borderWidth: 1
-                }]
-            },
-            options: {
-                scales: {
-                    y: {
-                        beginAtZero: true
-                    }
-                }
-            }
+            $("#dt-length-0").addClass('text-gray-700 dark:text-gray-200 w-24 bg-white');
+            $("label[for='dt-length-0']").addClass('text-gray-700 dark:text-gray-200').text(
+                ' Records par page');
+            $("label[for='dt-search-0']").addClass('text-gray-700 dark:text-gray-200');
+            $('.dt-input').addClass('text-gray-700 dark:text-gray-200');
         });
     </script>
 @endsection
