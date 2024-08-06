@@ -57,7 +57,7 @@
                 @endphp
                 @foreach ($odcuserDatas as $item)
                     <div>
-                        <p>Numéro telephone : <span>{{ $item['Téléphone'] }}</span></p>
+                        <p>Numéro telephone : <span>{{ isset($item['Téléphone']) ? $item['Téléphone'] : (isset($item['Téléphone (obligatoire)']) ? $item['Téléphone (obligatoire)'] : 'N/A')}}</span></p>
                     </div>
                     <div>
                         <p>Email : <span>{{ $odcuser->email }}</span></p>
