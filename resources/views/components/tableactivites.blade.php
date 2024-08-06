@@ -87,7 +87,7 @@
 
 
                 <td scope="col" class="px-6 py-3" id="startdate">
-                    {{ $item->number_hours }}
+                    {{ $item->number_day}}
                 </td>
 
                 <td scope="col" class="px-6 py-3" id="startdate">
