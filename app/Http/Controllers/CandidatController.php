@@ -12,9 +12,11 @@ use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
+use PhpOffice\PhpSpreadsheet\Style\Border;
 use App\Http\Requests\StoreCandidatRequest;
 use PhpOffice\PhpSpreadsheet\Cell\DataType;
 use App\Http\Requests\UpdateCandidatRequest;
+use PhpOffice\PhpSpreadsheet\Cell\Coordinate;
 use Illuminate\Support\Facades\Log as FacadesLog;
 use PhpOffice\PhpSpreadsheet\Reader\Xml\Style\Fill;
 use PhpOffice\PhpSpreadsheet\Style\Fill as cellFill;
@@ -96,7 +98,7 @@ class CandidatController extends Controller
 
             // Generate an array of presence states (1 or 0) for each date
             foreach ($fullDates as $date) {
-                $presence_state[] = in_array($date, $presence_dates) ? 1 : 0;
+                $presence_state[] = in_array($date, $presence_dates) ? 1 : "";
             }
 
             $candidatArray['presence_state'] = $presence_state;
@@ -111,48 +113,65 @@ class CandidatController extends Controller
         // Set the title and merge cells
         $spreadsheet->getActiveSheet()
             ->setCellValue('A1', "FICHE DES CANDIDATS POUR " . strtoupper($activite->title))
-            ->mergeCells('A1:H2')
-            ->getStyle('A1:H2')
+            ->mergeCells('A1:U2')
+            ->getStyle('A1:U2')
             ->getAlignment()->setVertical(cellAlignment::VERTICAL_CENTER)
             ->setHorizontal(cellAlignment::HORIZONTAL_CENTER);
 
-        // Set the headers
-        $spreadsheet->getActiveSheet()
-            ->setCellValue('A3', "ID")
-            ->mergeCells('B3:F3')
-            ->setCellValue('B3', $activite->_id);
-
         // Set the column headers
         $spreadsheet->getActiveSheet()
-            ->setCellValue('A4', 'N°')
-            ->setCellValue('B4', 'NOM')
-            ->setCellValue('C4', 'PRENOM')
-            ->setCellValue('D4', 'GENRE')
-            ->setCellValue('E4', 'NUMERO')
-            ->setCellValue('F4', 'EMAIL')
-            ->setCellValue('G4', 'UNIVERSITE')
-            ->setCellValue('H4', 'PRESENCE')
-            ->mergeCells("H4:" . \PhpOffice\PhpSpreadsheet\Cell\Coordinate::stringFromColumnIndex(7 + count($dates)) . "4")
-            ->getStyle("H4:" . \PhpOffice\PhpSpreadsheet\Cell\Coordinate::stringFromColumnIndex(7 + count($dates)) . "4")
-            ->getAlignment()
-            ->setVertical(cellAlignment::VERTICAL_CENTER)
-            ->setHorizontal(cellAlignment::HORIZONTAL_CENTER);
+            ->setCellValue('A3', 'N°')
+            ->setCellValue('B3', 'NOM')
+            ->setCellValue('C3', 'PRENOM')
+            ->setCellValue('D3', 'GENRE')
+            ->setCellValue('E3', 'NUMERO')
+            ->setCellValue('F3', 'EMAIL');
 
-        // Set the dates headers
-        $col = 'H';
-        foreach ($dates as $date) {
+        $daysOfWeek = [
+            'Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi'
+        ];
+        $columnIndex = 7; // Starting column index (H)
+        $index = 7;
+        foreach ($daysOfWeek as $day) {
+            $cellCoordinate = Coordinate::stringFromColumnIndex($columnIndex) . '3';
             $spreadsheet->getActiveSheet()
-                ->setCellValue("$col" . 5, $date)
-                ->getStyle("$col" . 5)
+                ->setCellValue($cellCoordinate, $day)
+                ->mergeCells($cellCoordinate . ":" . Coordinate::stringFromColumnIndex($columnIndex + 2) . "3")
+                ->getStyle($cellCoordinate . ":" . Coordinate::stringFromColumnIndex($columnIndex + 2) . "3")
                 ->getAlignment()
-                ->setHorizontal(cellAlignment::HORIZONTAL_RIGHT);
+                ->setVertical(cellAlignment::VERTICAL_CENTER)
+                ->setHorizontal(cellAlignment::HORIZONTAL_CENTER);
+            $columnIndex += 3; // Increment column index by 3 (since we're merging 3 cells)
+
+            $cellC = Coordinate::stringFromColumnIndex($index);
+            $spreadsheet->getActiveSheet()
+                ->getColumnDimension(Coordinate::stringFromColumnIndex($index))
+                ->setAutoSize(false)
+                ->setWidth(45, 'px');
 
             $spreadsheet->getActiveSheet()
-                ->getColumnDimension($col)
+                ->getColumnDimension(Coordinate::stringFromColumnIndex($index + 1))
                 ->setAutoSize(false)
-                ->setWidth(50, 'px');
+                ->setWidth(45, 'px');
 
-            $col++;
+            $spreadsheet->getActiveSheet()
+                ->getColumnDimension(Coordinate::stringFromColumnIndex($index + 2))
+                ->setAutoSize(false)
+                ->setWidth(45, 'px');
+
+            $spreadsheet->getActiveSheet()
+                ->setCellValue($cellC . "4", "H/E");
+            $spreadsheet->getActiveSheet()
+                ->setCellValue(Coordinate::stringFromColumnIndex($index + 1) . "4", "H/S");
+            $spreadsheet->getActiveSheet()
+                ->setCellValue(Coordinate::stringFromColumnIndex($index + 2) . "4", "Sign");
+
+            $spreadsheet->getActiveSheet()
+                ->getStyle($cellC . "4:" . Coordinate::stringFromColumnIndex($index + 2) . "4")
+                ->getAlignment()
+                ->setVertical(cellAlignment::VERTICAL_CENTER)
+                ->setHorizontal(cellAlignment::HORIZONTAL_CENTER);
+            $index += 3;
         }
 
         // Set the style for titles
@@ -165,14 +184,17 @@ class CandidatController extends Controller
             ],
         ];
 
-        $spreadsheet->getActiveSheet()->getStyle('A4:H4')->applyFromArray($style_for_titles);
+        $spreadsheet->getActiveSheet()->getStyle('A3:S3')->applyFromArray($style_for_titles);
 
         // Set the column widths
-        $spreadsheet->getActiveSheet()->getDefaultColumnDimension()->setWidth(185, 'px');
         $spreadsheet->getActiveSheet()
             ->getColumnDimension('A')
             ->setAutoSize(false)
-            ->setWidth(35, 'px');
+            ->setWidth(34, 'px');
+        $spreadsheet->getActiveSheet()
+            ->getColumnDimension('B')
+            ->setAutoSize(false)
+            ->setWidth(184, 'px');
         $spreadsheet->getActiveSheet()
             ->getColumnDimension('C')
             ->setAutoSize(false)
@@ -184,30 +206,20 @@ class CandidatController extends Controller
         $spreadsheet->getActiveSheet()
             ->getColumnDimension('E')
             ->setAutoSize(false)
-            ->setWidth(95, 'px');
+            ->setWidth(94, 'px');
         $spreadsheet->getActiveSheet()
             ->getColumnDimension('F')
             ->setAutoSize(false)
-            ->setWidth(235, 'px');
-        $spreadsheet->getActiveSheet()
-            ->getColumnDimension('G')
-            ->setAutoSize(false)
-            ->setWidth(300, 'px');
-
-        // Set the fill color for titles
-        $spreadsheet->getActiveSheet()->getStyle('A4:H4')
-            ->getFill()->setFillType(cellFill::FILL_SOLID);
-        $spreadsheet->getActiveSheet()->getStyle('A4:H4')
-            ->getFill()->getStartColor()->setARGB('9bc2e6');
+            ->setWidth(234, 'px');
 
         // Set the fill color for the header row
-        $spreadsheet->getActiveSheet()->getStyle('A5:G5')
+        $spreadsheet->getActiveSheet()->getStyle('A4:F4')
             ->getFill()->setFillType(cellFill::FILL_SOLID);
-        $spreadsheet->getActiveSheet()->getStyle('A5:G5')
+        $spreadsheet->getActiveSheet()->getStyle('A4:F4')
             ->getFill()->getStartColor()->setARGB('000000');
 
         // Loop through each candidat and set its data
-        $cell_key = 6;
+        $cell_key = 5;
         $i = 1;
         foreach ($candidatsData as $candidat) {
             $spreadsheet->getActiveSheet()
@@ -237,32 +249,37 @@ class CandidatController extends Controller
             $spreadsheet->getActiveSheet()
                 ->setCellValue("F$cell_key", $email);
 
-            $university = isset($candidat["Nom de l'Etablissement / Université"]) ? $candidat["Nom de l'Etablissement / Université"] : (isset($candidat['Université']) ? $candidat['Université'] : "");
-            $spreadsheet->getActiveSheet()
-                ->setCellValue("G$cell_key", $university);
+            $styleArrayForBorders = [
+                'borders' => [
+                    'allBorders' => [
+                        'borderStyle' => Border::BORDER_THIN,
+                        'color' => ['argb ' => '000000'],
+                    ],
+                ],
+            ];
 
-            $column = 'H';
-            foreach ($candidat['presence_state'] as $state) {
-                $spreadsheet->getActiveSheet()
-                    ->setCellValue("$column$cell_key", $state);
-                $column++;
-            }
+            $spreadsheet->getActiveSheet()
+            ->getStyle('A1:U8')
+            ->applyFromArray($styleArrayForBorders);
 
             $i++;
             $cell_key++;
         }
 
+        // Set font for body
+        $spreadsheet->getDefaultStyle()->getFont()->setName('Verdana')->setSize(8);
+
         // Create a writer for the Spreadsheet
         $writer = new Xlsx($spreadsheet);
 
         // Create a temporary file for the Excel file
-        $tmp = tempnam(sys_get_temp_dir(), "coach.Xlsx");
+        $tmp = tempnam(sys_get_temp_dir(), "Participants.Xlsx");
 
         // Save the Excel file to the temporary file
         $writer->save($tmp);
 
         // Return the Excel file as a download response
-        return response()->download($tmp, "coach.Xlsx")->deleteFileAfterSend(true);
+        return response()->download($tmp, "Participants.Xlsx")->deleteFileAfterSend(true);
     }
 
     public function updateStatus(Request $request, $status)
@@ -270,7 +287,7 @@ class CandidatController extends Controller
         // Validate the status
         if (!in_array($status, ['accept', 'decline', 'wait'])) {
             // Return an error response if the status is invalid
-            return response()->json(['error' => 'Invalid status'], 400);
+            return response()->json(['error' => 'Invalid status'], 300);
         }
 
         // Get the ID from the request
@@ -328,7 +345,7 @@ class CandidatController extends Controller
             FacadesLog::warning('User or Event not found', ['odcuser_id' => $candidat['odcuser_id'], 'activite_id' => $candidat['activite_id']]);
             return response()->json(['success' => true, 'candidat' => $candidat], 200);
         } else {
-            return response()->json(['success' => false, 'message' => 'User or Event not found'], 404);
+            return response()->json(['success' => false, 'message' => 'User or Event not found'], 303);
         }
     }
 

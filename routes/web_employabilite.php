@@ -4,10 +4,11 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\TypeContratController;
 use App\Http\Controllers\EmployabiliteController;
 
 
-
+Route::resource('type_Contrats', TypeContratController::class);
 
 Route::resource('/user_role',UserController::class)->middleware('permissions');
 

@@ -32,9 +32,10 @@ return new class extends Migration
             $table->dropColumn('image');
             $table->string('thumbnail_url')->nullable();
             $table->string('number_hour')->nullable();
+            $table->string('number_day')->nullable();
         }) ;
 
-       
+
     }
 
     /**
