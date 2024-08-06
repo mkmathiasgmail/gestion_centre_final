@@ -1,8 +1,14 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\MailController;
 use App\Http\Controllers\NotificationController;
 
-Route::get('notifications/sendMail', [NotificationController::class, 'sendMail'])->name('sendMail');
+Route::middleware('auth')->group(function () {
+    Route::get('notifications/sendMail', [MailController::class, 'sendMail'])->name('sendMail');
+    Route::get('notifications/autocomplete', [MailController::class, 'autocomplete'])->name('autocomplete');
+    Route::resource('notifications', NotificationController::class);
+})->middleware('permissions');
 
-Route::resource('notifications', NotificationController::class);
+require __DIR__ . '/auth.php';
+

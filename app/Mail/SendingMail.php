@@ -3,11 +3,12 @@
 namespace App\Mail;
 
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Mail\Mailables\Content;
-use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Mail\Mailables\Envelope;
+use Illuminate\Contracts\Queue\ShouldQueue;
 
 class SendingMail extends Mailable
 {
@@ -29,9 +30,7 @@ class SendingMail extends Mailable
     {
         return $this->view('notifications.mail')
                     ->subject($this->subject)
-                    ->with([
-                        'message' => $this->message,
-                    ]);
+                    ->with(['body' => $this->message]);
     }
 
     // /**
