@@ -9,11 +9,11 @@ use Carbon\Carbon;
 
 use App\Models\Odcuser;
 use App\Models\Activite;
-use App\Models\Candidat;
 use App\Models\Presence;
+use App\Models\Userlocal;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use App\Http\Requests\UpdatePresenceRequest;
+
 
 class PresenceController extends Controller
 {
@@ -22,40 +22,40 @@ class PresenceController extends Controller
      */
     public function index()
     {
-        $presence = Presence::orderBy('id')->get();
-        return view('presences.presence', compact('presence'));
-    }
+        $presences = Presence::orderBy('id')->get();
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        return view('presences.selection');
+        return view('presences.presence', compact('presences'));
     }
-    public function filtrer(Request $request)
+    public function create($id)
+    {
+        return view('presences.selection', compact('id'));
+    }
+    public function filtrer(Request $request, $id)
     {
         $request->validate([
             'email' => 'required|max:50|min:6',
         ]);
         $email = $request->input('email');
         $filtre = Odcuser::where('email', $email)->first();
-        if ($filtre) {
-            $candidat = $filtre->candidat()->where('status', 1)->first();
-            if ($candidat) {
-                
-                return view('presences.confirInfo', ['prenom' => $filtre->first_name, 'nom' => $filtre->last_name]);
+        if (isset($filtre)) {
+            $candidat = $filtre->candidat()->where('status', 'accept')->where('activite_id', $id)->first();
+
+            $activiteCandidat = $candidat->where('activite_id', $id);
+
+            if (isset($activiteCandidat)) {
+
+                return view('presences.confirInfo', ['prenom' => $filtre->first_name, 'nom' => $filtre->last_name], compact('id')) ;
             } else {
-                return back()->with('error', 'Compte innactif!');
+                return back()->with('errorinactif', 'Compte innactif!');
             }
         } else {
             return back()->with('error', 'Utilisateur n\'existe pas!');
         }
-    } 
-    public function store(Request $request)
+    }
+    public function store(Request $request, $id)
     {
         // Valider les données entrantes
-
+       
         $validatedData = $request->validate([
             'firstname' => 'required|string',
             'lastname' => 'required|string',
@@ -63,59 +63,27 @@ class PresenceController extends Controller
 
         $prenom = $validatedData['firstname'];
         $nom = $validatedData['lastname'];
-
         // Rechercher l'ID du candidat correspondant
         $candidatId = DB::table('candidats')
-        ->join('odcusers', 'candidats.odcuser_id', '=', 'odcusers.id')
-        ->join('activites', 'candidats.activite_id', '=', 'activites.id')
-        ->where('odcusers.first_name', $prenom)
-        ->where('odcusers.last_name', $nom)
-        ->whereRaw('CURRENT_DATE() BETWEEN activites.start_date AND activites.end_date')
-        ->select('candidats.id')
-        ->first();
-
-        if ($candidatId) {
+            ->join('odcusers', 'candidats.odcuser_id', '=', 'odcusers.id')
+            ->join('activites', 'candidats.activite_id', '=', 'activites.id')
+            ->where('odcusers.first_name', $prenom)
+            ->where('odcusers.last_name', $nom)
+            ->where('activites.id',$id)
+            ->select('candidats.id')
+            ->first();
+        if ($candidatId->id) {
             $presence = new Presence;
             $presence->candidat_id = $candidatId->id;
             $presence->date = now();
             $presence->save();
-            return redirect()->route('confirmation')->with('success', 'Présence enregistrée avec succès.');
+            return view('presences.confirmation');
         } else {
             return redirect()->back()->with('error', 'Aucun candidat trouvé pour cet utilisateur.');
         }
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(Presence $presence)
-    {
-       
-    }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Presence $presence)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(UpdatePresenceRequest $request, Presence $presence)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Presence $presence)
-    {
-        //
-    }
     public function encours()
     {
         $today = Carbon::today();
@@ -123,14 +91,22 @@ class PresenceController extends Controller
         return view('presences.activiteEncours', compact('activites'));
     }
 
-    public function confirmation(){
-        return view('presences.confirmation');
+
+    public function userlocal(Request $request)
+    {
+        $validated = $request->validate([
+            'first_name' => 'required|string',
+            'last_name' => 'required|string',
+            'email' => 'required|string',
+            'password' => 'required|string',
+            
+        ]);
+        $userlocal = new Odcuser;
+        $userlocal->first_name = $validated['first_name'];
+        $userlocal->last_name = $validated['last_name'];
+        $userlocal->email = $validated['email'];
+        $userlocal->password = $validated['password'];
+        return back();
     }
-   
-       
+    
 }
- 
-
-
- 
-
