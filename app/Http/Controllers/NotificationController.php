@@ -2,14 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use App\Mail\SendingMail;
-use App\Models\ModelMail;
+use Carbon\Carbon;
+use App\Models\Activite;
 use App\Models\Notification;
 use Illuminate\Http\Client\Request;
-use Illuminate\Support\Facades\Mail;
 use App\Http\Requests\StoreNotificationRequest;
 use App\Http\Requests\UpdateNotificationRequest;
-use Illuminate\Notifications\Messages\MailMessage;
+use App\Models\ModelMail;
 
 class NotificationController extends Controller
 {
@@ -18,7 +17,25 @@ class NotificationController extends Controller
      */
     public function index()
     {
-        return view("notifications.index");
+        $activites = Activite::where('start_date', '>', Carbon::now())->get();
+        $modelMail = ModelMail::all();
+        $notifications = Notification::query()->leftJoin('users as us', 'us.id', '=', 'notifications.user_id')
+            ->leftJoin('activites as ac', 'ac.id', '=', 'notifications.activite_id')
+            ->leftJoin('model_mails as mm', 'mm.id', '=', 'notifications.model_mail_id')
+            ->leftJoin('sms_models as sm', 'sm.id', '=', 'notifications.sms_model_id')
+            ->select(
+                'us.name',
+                'ac.title',
+                'notifications.message', 
+                'notifications.type', 
+                'notifications.send_date', 
+                'notifications.person_number', 
+                'notifications.model_mail_id', 
+                'notifications.sms_model_id'
+                )
+            ->get();
+
+        return view("notifications.index", compact('activites', 'modelMail', 'notifications'));
     }
 
     /**
@@ -69,20 +86,4 @@ class NotificationController extends Controller
         //
     }
 
-    public function sendMail()
-    {
-
-        $title = 'Ecole de code';
-        // $title = $request->input('title');
-        $subject = 'Invitations a ODC Academy';
-        // $subject = $request->input('subject');
-
-        $message = ModelMail::select('message')->where('title', $title);
-
-        $message = $message->first()->message;
-
-        Mail::to('junwalker001@gmail.com')->send(new SendingMail($subject, $message));
-
-        dd('Mail sent successfully.');
-    }
 }
