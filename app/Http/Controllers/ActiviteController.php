@@ -81,12 +81,14 @@ class ActiviteController extends Controller
                 'hashtags' => 'nullable|array',
                 'hashtags.*' => 'exists:hashtags,id',
                 'typeEvent' => 'nullable|array',
-                'thumbnailURL' => 'required',
+             
                 'typeEvent.*' => 'exists:type_events,id',
+                'day'=>'required',
             ],
 
             [
                 'title.required' => 'The title is required.',
+                'day.required' => 'The title is required.',
                 'title.string' => 'The title must be a string.',
                 'title.max' => 'The title may not be greater than 255 characters.',
                 'categories.required' => 'The category is required.',
@@ -121,7 +123,7 @@ class ActiviteController extends Controller
                 'publishStatus' => false,
                 'showInSlider' => false,
                 "form" => $request->form,
-                "thumbnail_url" => $validatedData['thumbnailURL'],
+                "thumbnail_url" => $request->thumbnailURL,
                 'miniatureColor' => false,
                 'showInCalendar' => false,
                 'liveStatus' => false,
@@ -129,7 +131,11 @@ class ActiviteController extends Controller
                 'isEvents' => false,
                 'creator' => false,
                 'location' => $validatedData['location'],
+                'number_day '=> $validatedData['day'],
             ]);
+
+
+           
 
 
 
@@ -265,6 +271,8 @@ class ActiviteController extends Controller
                 'hashtags.*' => 'exists:hashtags,id',
                 'typeEvent' => 'nullable|array',
                 'typeEvent.*' => 'exists:type_events,id',
+                'thumbnailURL' => 'nullable|url',
+                
             ],
 
             [
@@ -299,7 +307,7 @@ class ActiviteController extends Controller
                 'start_date' => $validatedData['startDate'],
                 'end_date' => $validatedData['endDate'],
                 'location' => $validatedData['location'],
-                "thumbnail_url" => $validatedData['thumbnailURL'],
+                "thumbnail_url" => $request->thumbnailURL,
             ]);
 
 
