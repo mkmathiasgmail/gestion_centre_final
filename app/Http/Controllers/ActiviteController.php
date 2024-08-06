@@ -214,7 +214,7 @@ class ActiviteController extends Controller
         // dd($dates);
         $countdate = count($dates);
 
-        $candidats_on_activity = Candidat::where('activite_id', $id)->with('odcuser')->get();
+        $candidats_on_activity = Candidat::where('activite_id', $id)->where('status','accept')->with('odcuser')->get();
         $data = [];
         $pres = Presence::all()->pluck('candidat_id');
         foreach ($candidats_on_activity as $candidat) {

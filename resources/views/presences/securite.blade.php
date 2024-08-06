@@ -8,8 +8,8 @@
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=figtree:400,600&display=swap" rel="stylesheet" />
-    @vite(['resources/css/app.css', 'resources/js/app.js', 'node_modules/select2/dist/js/select2.full.min.js', 'node_modules/select2/dist/css/select2.min.css'])
-    
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
+
 </head>
 
 <body class="font-sans antialiased dark:bg-black dark:text-white/50">
@@ -26,17 +26,27 @@
     </nav>
     <div class=" p-5">
         <h1
-            class ="mb-4 text-4xl font-extrabold tracking-tight leading-none text-gray-900 md:text-5xl lg:text-6xl dark:text-white">
+            class ="mb-4 text-4xl font-extrabold tracking-tight leading-none md:text-5xl lg:text-6xl dark:text-orange-400">
             security page</h1>
     </div>
-<div class="p-4 mb-4 text-gray-800 border border-gray-300 rounded-lg bg-orange-50 dark:bg-gray-800 dark:text-orange-400 dark:border-gray-700 "
-                    role="alert">
-   
- <button> <a href="{{route('activitencours')}}"> <div  class=" bg-orange-600 p-11 mb-6 text-white ">Les activites en cours</div></a>
-    <button> <a href="{{route('scanner')}}"> <div  class="bg-orange-600 p-11 text-white ">Camera scanner code</div></a>
-     
-</button> 
+    <div class="p-4 mb-4 text-gray-800 border border-gray-300 rounded-lg  dark:bg-orange-40 dark:border-gray-700 "
+        role="alert">
 
-</div>
+        <button class="w-full dark:bg-gray-800 dark:text-orange-400 p-11 mb-6 text-white ">
+             <a href="{{ route('activitencours') }}" > Voir les activites encours</a>>
+            
+        </button>
+        <button class="w-full dark:bg-gray-800 dark:text-orange-400 p-11 mb-6 text-white"> 
+            <a href="{{ route('scanner') }}">Scanner le qrcode </a> 
+           
+        </button>
+        <button data-modal-target="crud-modal" data-modal-toggle="crud-modal" class="w-full dark:bg-gray-800 dark:text-orange-400 p-11 text-white">
+            Créer un compte
+        </button>
+        
+    </div>
+    <x-userlocal-component />
 
 </body>
+
+</html>
