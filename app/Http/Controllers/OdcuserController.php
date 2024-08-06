@@ -6,6 +6,11 @@ use App\Models\Odcuser;
 use App\Models\Candidat;
 use App\Http\Requests\StoreOdcuserRequest;
 use App\Http\Requests\UpdateOdcuserRequest;
+use App\Models\Activite;
+use App\Models\Presence;
+use Illuminate\Support\Facades\DB;
+
+use function PHPSTORM_META\type;
 
 class OdcuserController extends Controller
 {
@@ -15,10 +20,6 @@ class OdcuserController extends Controller
     public function index()
     {
         $odcusers = Odcuser::latest()->get();
-        if (request()->expectsJson()) {
-            return response()->json($odcusers);
-        }
-
 
         return view('odcusers.index', compact('odcusers'));
     }
@@ -45,28 +46,68 @@ class OdcuserController extends Controller
     public function show(Odcuser $odcuser)
     {
         $nbrEvents = Candidat::where('odcuser_id', $odcuser->id)->count();
+        $nbrParticipation = $odcuser->candidat()->where('status', 'accept')->count();
+
+        $userId = $odcuser->id;
+        $activitesP = DB::select(
+            '
+            SELECT act.*, cat.name
+            FROM activites act
+            JOIN candidats c ON act.id = c.activite_id
+            JOIN categories cat ON act.categorie_id = cat.id
+            WHERE c.odcuser_id = ? AND c.status=\'accept\'
+            ORDER BY c.createdAt
+            LIMIT 3',
+            [$userId]
+        );
+
+        $activitespAll = DB::select(
+            '
+            SELECT act.*, cat.name
+            FROM activites act
+            JOIN candidats c ON act.id = c.activite_id
+            JOIN categories cat ON act.categorie_id = cat.id
+            WHERE c.odcuser_id = ? AND c.status=\'accept\'
+            ORDER BY c.createdAt',
+            [$userId]
+        );
+
+        $activitesC = DB::select(
+            '
+            SELECT act.*, cat.name
+            FROM activites act
+            JOIN categories cat ON act.categorie_id = cat.id
+            JOIN candidats c ON act.id = c.activite_id
+            WHERE c.odcuser_id = ?
+            ORDER BY c.createdAt
+            ',
+            [$userId]
+        );
+
+        $taux_presence = null;
+        $total_dates_presences = Presence::count();
         $candidats = Candidat::where('odcuser_id', $odcuser->id)->with('candidat_attribute')->get();
         if (isset($candidats)) {
-            $datas = [] ;
+            $odcuserDatas = [];
             $labels = [];
             foreach ($candidats as $candidat) {
                 $array = $candidat->toArray();
+                $total_presences = $candidat->presence()->count();
+                $taux_presence = ($total_presences / $total_dates_presences) * 100 ;
                 if (isset($candidat->candidat_attribute)) {
                     foreach ($candidat->candidat_attribute as $attribute) {
-                        $array[$attribute->label] = $attribute->value ;
+                        $array[$attribute->label] = $attribute->value;
                         if (!in_array($attribute->label, $labels)) {
-                            $labels[] = $attribute->label ;
+                            $labels[] = $attribute->label;
                         }
                     }
-                    $datas[] = $array ;
+                    $odcuserDatas[] = $array;
                 }
-
             }
         } else {
             echo "Sorry the user does not exist.";
         }
-
-        return view('odcusers.show', compact('odcuser', 'candidats', 'nbrEvents', 'datas', 'labels'));
+        return view('odcusers.show', compact('taux_presence', 'activitespAll', 'nbrParticipation', 'activitesC', 'activitesP', 'odcuser', 'candidats', 'nbrEvents', 'odcuserDatas', 'labels'));
     }
 
     /**

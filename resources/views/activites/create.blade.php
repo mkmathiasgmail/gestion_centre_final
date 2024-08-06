@@ -1,4 +1,5 @@
 <x-app-layout>
+
     @if ($errors->any())
         @foreach ($errors->all() as $error)
             <div class="p-4 mb-4 text-sm text-red-800 rounded-lg bg-green-50 dark:bg-gray-800 dark:text-red-400"
@@ -9,155 +10,476 @@
             </div>
         @endforeach
     @endif
-    <form action="{{ route('activites.store') }}" method="post" >
-        @csrf
-
-                <div class="mb-6 p-5  text-lg font-normal text-gray-800 lg:text-xl  dark:text-gray-400">
-                    <h2 class="  text-3xl mb-5">Formulaire</h2>
-                </div>
 
 
-        <div class="p-5 md:p-5 space-y-4 mb-6 text-lg font-normal text-gray-800 lg:text-xl  dark:text-gray-400">
-            @csrf
-
-            <div >
-                <label for="title" class="mb-6 text-lg font-normal text-gray-800 lg:text-xl  dark:text-gray-400">Title</label>
-                <input type="text" name="title" id="title"
-                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                    placeholder="Donne un titre à votre Article" required value="">
-                </div>
-
-            <div>
-                <label for="date_debut" class="mb-6 text-lg font-normal text-gray-500 lg:text-xl  dark:text-gray-400">Start Date</label>
-                <input type="date" name="startDate" id="date_debut"
-                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                    required value="">
-            </div>
-
-            <div>
-                <label for="date_fin">End Date</label>
-                <input type="date" name="endDate" id="date_fin"
-                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                    required>
-            </div>
-
-            <div>
-                <label for="" >Form</label>
-                <select
-                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                    name="form">
-                    @foreach ($forms as $item)
-                        <option value="{{ $item->_id }}">{{ $item->name }}</option>
-                    @endforeach
-                </select>
-            </div>
-
-            <div>
-
-                <label for="date_debut">Upload File</label>
-                <div class=" flex items-center gap-4">
-
-                    <input type="file" id="file"
-                        class="block w-full mb-4 text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400" />
-                    <input onclick="formImg()" type="button"
-                        class="py-2.5 px-5 me-2 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700"
-                        value="Upload" id="but_upload">
-                </div>
-
-                <div class='preview' id="preview">
-                    <img src="" id="img" class=" hidden w-96 h-96 object-cover">
-                    <input type="text" name="thumbnailURL" value="" class=" hidden" id="imgGet">
-                </div>
-
-            </div>
-
-
-            <div>
-                <label for="lieu">Location</label>
-                <select name="location" id="lieu"
-                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-                        <option value="ODC Kinshasa">ODC Kinshasa</option>
-                        <option value="ODC Lubumbashi">ODC Lubumbashi</option>
-                        <option value="ODC Matadi">ODC Matadi</option>
-                    </select>
-                </div>
-
-            <div>
-                <label for="tags">Hashtags</label>
-                <select name="hashtags[]" id="tags" multiple
-                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 js-example-basic-multiple">
-                    @foreach ($hashtag as $item)
-                        <option value="{{ $item->id }}">
-                            {{ $item->name }}
-
-                        </option>
-                    @endforeach
-                </select>
-            </div>
-
-            <div class="flex gap-4 w-full">
-                <div class="w-1/2">
-                    <label for="typeEvent">Type Events</label>
-                    <select name="typeEvent[]" id="typeEvent"
-                        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 js-example-basic-multiple"
-                        multiple="multiple">
-                        @foreach ($typeEvent as $event)
-                            <option value="{{ $event->id }}">
-                                {{ $event->title }}
-                            </option>
-                        @endforeach
-                    </select>
-                </div>
-                <div class="w-1/2">
-                    <label for="categorie_id">Categorie</label>
-                    <select name="categories" id="categorie_id"
-                        class=" bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-
-                        @foreach ($categories as $category)
-                            <option value="{{ $category->id }}">{{ $category->name }}</option>
-                        @endforeach
-                    </select>
-                </div>
-            </div>
-
-            <div>
-                <textarea id="message" rows="4"
-                    class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                    placeholder="Write your thoughts here..." id="paragraph" name="contents"></textarea>
-            </div>
-
-
-
-            <div id="paraphe"></div>
-            <div id="socialmedia"></div>
-
-            <div class=" flex gap-5 mb-10">
+    <div class=" p-5  text-lg font-normal text-gray-800 lg:text-xl  dark:text-gray-400">
+        <h2 class="  text-3xl mb-5">Formulaire Creation Activites</h2>
+    </div>
+    <div class=" border-b border-gray-200 dark:border-gray-700">
+        <ul class="flex flex-wrap -mb-px text-sm font-medium text-center" id="default-tab"
+            data-tabs-toggle="#default-tab-content" role="tablist">
+            <li class="me-2" role="presentation">
+                <button class="inline-block p-4 border-b-2 rounded-t-lg" id="profile-tab" data-tabs-target="#profile"
+                    type="button" role="tab" aria-controls="profile" aria-selected="false">Local</button>
+            </li>
+            <li class="me-2" role="presentation">
                 <button
-                    class="py-2.5 px-5 me-2 mb-2 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700"
-                    type="button" onclick="addParagraph()" id="addParaphe">ajouter
-                    un paragraphe</button>
+                    class="inline-block p-4 border-b-2 rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300"
+                    id="dashboard-tab" data-tabs-target="#dashboard" type="button" role="tab"
+                    aria-controls="dashboard" aria-selected="false">En ligne</button>
+            </li>
 
-                <button
-                    class="py-2.5 px-5 me-2 mb-2 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700"
-                    type="button" onclick="addSocialMedia()" id="addParaphe">ajouter
-                    un Social</button>
+        </ul>
+    </div>
 
-            </div>
+
+    <div id="default-tab-content">
+        <div class="hidden p-4 rounded-lg bg-gray-50 dark:bg-gray-800" id="profile" role="tabpanel"
+            aria-labelledby="profile-tab">
+
+            <form action="{{ route('activites.store') }}" method="post">
+                @csrf
+
+
+                <div class="grid max-w-screen-2xl px-4 py-8 mx-auto lg:gap-8 xl:gap-0 lg:py-16 lg:grid-cols-12">
+                    <div class="mr-auto w-1/2 place-self-center lg:col-span-7">
+                        <div class=" mt-4 mb-4">
+                            <label for="title"
+                                class="mb-6 text-lg font-normal text-gray-800 lg:text-xl  dark:text-gray-400">Titre</label>
+                            <input type="text" name="title" id="title"
+                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                placeholder="Donne un titre à votre Article" required value="">
+                        </div>
+
+                        <div class=" mb-4">
+                            <label for="date_debut"
+                                class="mb-6 text-lg font-normal text-gray-500 lg:text-xl  dark:text-gray-400">Date
+                                debut</label>
+                            <input type="date" name="startDate" id="datepicker" min="today"
+                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                required value="">
+                        </div>
+
+                        <div class=" mb-4">
+                            <label for="date_fin" class="mb-6 text-lg font-normal text-gray-500 lg:text-xl  dark:text-gray-400">Date Fin</label>
+                            <input type="date" name="endDate" id="datepickers"
+                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                required>
+                        </div>
+                        <div class="flex gap-4 w-full mb-4">
+                            <div class="w-1/2">
+                                <label for="typeEvent" class="mb-6 text-lg font-normal text-gray-500 lg:text-xl  dark:text-gray-400">Type Evenement</label>
+                                <select name="typeEvent[]" id="typeEvents"
+                                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 js-example-basic-multiple"
+                                    multiple="multiple">
+                                    @foreach ($typeEvent as $event)
+                                        <option value="{{ $event->id }}">
+                                            {{ $event->title }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div class="w-1/2">
+                                <label for="categorie_id" class="mb-6 text-lg font-normal text-gray-500 lg:text-xl  dark:text-gray-400">Categorie</label>
+                                <select name="categories" id="categorie_id"
+                                    class=" bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+
+                                    @foreach ($categories as $category)
+                                        <option value="{{ $category->id }}">{{ $category->name }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+
+
+                        <div class=" mb-4 mt-4">
+                            <label for="lieu" class="mb-6 text-lg font-normal text-gray-500 lg:text-xl  dark:text-gray-400">Lieu</label>
+                            <select name="location" id="lieu"
+                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                                <option value="ODC Kinshasa">ODC Kinshasa</option>
+                                <option value="ODC Lubumbashi">ODC Lubumbashi</option>
+                                <option value="ODC Matadi">ODC Matadi</option>
+                            </select>
+                        </div>
+
+
+                    </div>
+
+                    <div class=" w-full lg:mt-0 lg:col-span-5 ">
+
+                        <div class=" mb-4">
+
+                            <label for="date_debut" class="mb-6 text-lg font-normal text-gray-500 lg:text-xl  dark:text-gray-400">Image</label>
+                            <div class=" flex items-center gap-4">
+
+                                <input type="file" id="file" accept="image/png,image/jpeg"
+                                    class="block w-full mb-4 text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400" />
+                                <input onclick="formImg()" type="button"
+                                    class="py-2.5 px-5 me-2 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700"
+                                    value="Upload" id="but_upload">
+                            </div>
+
+                            <div class='preview w-full' id="preview">
+                                <img src="" id="img" class=" hidden w-96 h-96 object-cover">
+                                <input type="text" name="thumbnailURL" value="" class=" hidden"
+                                    id="imgGet">
+                            </div>
+
+                        </div>
+
+                        <div class=" mb-4">
+                            <label for="" class="mb-6 text-lg font-normal text-gray-500 lg:text-xl  dark:text-gray-400">Formulaire</label>
+                            <select
+                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                name="form">
+                                @foreach ($forms as $item)
+                                    <option value="{{ $item->_id }}">{{ $item->name }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+
+                        <div class=" mb-4">
+                            <div><label for="tags" class="mb-6 text-lg font-normal text-gray-500 lg:text-xl  dark:text-gray-400">Hashtags</label></div>
+                            <div>
+                                <select name="hashtags[]" id="tags" multiple
+                                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 js-example-basic-multiple">
+                                    @foreach ($hashtag as $item)
+                                        <option value="{{ $item->id }}">
+                                            {{ $item->name }}
+
+                                        </option>
+                                    @endforeach
+                                </select>
+                            </div>
+
+                        </div>
+                        <div class=" mb-4">
+                            <label for="tags" class="mb-6 text-lg font-normal text-gray-500 lg:text-xl  dark:text-gray-400">Nombre des Jours</label>
+                            <input type="number" name="day" id="day" class=" bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="1h" required="" min="1">
+                        </div>
+
+
+
+                        <div class=" mb-4">
+                            <textarea id="editor" rows="4"
+                                class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                placeholder="Write your thoughts here..." id="paragraph" name="contents"></textarea>
+                        </div>
+
+                    </div>
+                </div>
+
+                <div class="flex items-center p-4 gap-10 md:p-5 border-t border-gray-200 rounded-b dark:border-gray-600">
+                    <button type="submit"
+                        class="cursor-pointer mt-5 bg-slate-600 p-2 rounded-sm font-bold hover:bg-slate-700">
+                        Creer une Activites</button>
+                   
+                </div>
+            </form>
+
         </div>
 
-        <div class="flex items-center p-4 md:p-5 border-t border-gray-200 rounded-b dark:border-gray-600">
-        <button type="submit"
-                class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5">I
-                accept</button>
-            <button type="reset"
-                class="py-2.5 px-5 ms-3 text-sm font-medium text-gray-900 bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100">Decline</button>
+        <div class="hidden p-4 rounded-lg bg-gray-50 dark:bg-gray-800" id="dashboard" role="tabpanel"
+            aria-labelledby="dashboard-tab">
+            <form action="{{ route('activite.store') }}" method="post">
+                @csrf
+
+
+                <div class="grid max-w-screen-2xl px-4 py-8 mx-auto lg:gap-8 xl:gap-0 lg:py-16 lg:grid-cols-12">
+                    <div class="mr-auto place-self-center lg:col-span-7">
+                        <div class=" mt-4 mb-4">
+                            <label for="title"
+                                class="mb-6 text-lg font-normal text-gray-800 lg:text-xl  dark:text-gray-400">Titre</label>
+                            <input type="text" name="title" id="title"
+                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                placeholder="Donne un titre à votre Article" required value="">
+                        </div>
+
+                        <div class=" mb-4">
+                            <label for="date_debut"
+                                class="mb-6 text-lg font-normal text-gray-500 lg:text-xl  dark:text-gray-400">Date
+                                debut</label>
+                            <input type="date" name="startDate" id="datepicker" min="today"
+                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                required value="">
+                        </div>
+
+                        <div class=" mb-4">
+                            <label for="date_fin">Date Fin</label>
+                            <input type="date" name="endDate" id="datepicker"
+                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                required>
+                        </div>
+                        <div class=" w-full mb-4">
+
+
+                            <label for="categorie_id">Categorie</label>
+                            <select name="categories" id="categorie_id"
+                                class=" bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+
+                                @foreach ($categories as $category)
+                                    <option value="{{ $category->id }}">{{ $category->name }}</option>
+                                @endforeach
+                            </select>
+
+                        </div>
+
+
+
+                        <div class=" mb-4 mt-4">
+                            <label for="lieu">Lieu</label>
+                            <select name="location" id="lieu"
+                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                                <option value="ODC Kinshasa">ODC Kinshasa</option>
+                                <option value="ODC Lubumbashi">ODC Lubumbashi</option>
+                                <option value="ODC Matadi">ODC Matadi</option>
+                            </select>
+                        </div>
+
+                        <div class=" flex gap-5 mb-10 mt-10">
+                            <button
+                                class="py-2.5 px-5 me-2 mb-2 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700"
+                                type="button" onclick="addParagraph()" id="addParaphe">Ajouter
+                                Un Paragraphe</button>
+
+                            <button
+                                class="py-2.5 px-5 me-2 mb-2 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700"
+                                type="button" onclick="addSocialMedia()" id="addParaphe">Ajouter
+                                un Social</button>
+
+                        </div>
+                    </div>
+
+                    <div class=" w-full lg:mt-0 lg:col-span-5 ">
+
+                        <div class=" mb-4">
+
+                            <label for="date_debut">Image</label>
+                            <div class=" flex items-center gap-4">
+
+                                <input type="file" id="files" accept="image/png,image/jpeg"
+                                    class="block w-full mb-4 text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400" />
+                                <input onclick="" type="button"
+                                    class="py-2.5 px-5 me-2 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700"
+                                    value="Upload" id="but_uploads">
+                            </div>
+
+                            <div class='preview w-full' id="preview">
+                                <img src="" id="img" class=" hidden w-96 h-96 object-cover">
+                                <input type="text" name="thumbnailURL" value="" class=" hidden"
+                                    id="imgGet">
+                            </div>
+
+                        </div>
+
+                        <div class=" mb-4">
+                            <label for="">Formulaire</label>
+                            <select
+                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                name="form">
+                                @foreach ($forms as $item)
+                                    <option value="{{ $item->_id }}">{{ $item->name }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+
+                        <div class=" mb-4">
+                            <div>
+                                <label for="tags">Hashtags</label>
+                            </div>
+                            <div class=" w-full">
+                                <select name="hashtags[]" id="tag" multiple
+                                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 js-example-basic-multiple">
+                                    @foreach ($hashtag as $item)
+                                        <option value="{{ $item->id }}">
+                                            {{ $item->name }}
+
+                                        </option>
+                                    @endforeach
+                                </select>
+                            </div>
+
+                        </div>
+
+
+
+                        <div class=" mb-4">
+                            <textarea id="message" rows="4"
+                                class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                placeholder="Write your thoughts here..." id="paragraph" name="contents"></textarea>
+                        </div>
+
+                        <div id="paraphe" class=" mb-4"></div>
+                        <div id="socialmedia"></div>
+                    </div>
+                </div>
+
+                <div class="flex items-center p-4 md:p-5 border-t border-gray-200 rounded-b dark:border-gray-600">
+                    <button type="submit"
+                        class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5">I
+                        Creer une Activites</button>
+                    <button type="reset"
+                        class="py-2.5 px-5 ms-3 text-sm font-medium text-gray-900 bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100">Decline</button>
+                </div>
+            </form>
         </div>
 
+    </div>
 
 
 
-    </form>
+
     @section('script')
+        <script src="https://cdn.ckeditor.com/ckeditor5/41.4.2/classic/ckeditor.js"></script>
+        <script>
+            ClassicEditor.create(document.querySelector('#editor'), {
+                toolbar: {
+                    items: [
+                        'exportPDF', 'exportWord', '|',
+                        'findAndReplace', 'selectAll', '|',
+                        'heading', '|',
+                        'bold', 'italic', 'strikethrough', 'underline', 'code', 'subscript', 'superscript',
+                        'removeFormat', '|',
+                        'bulletedList', 'numberedList', 'todoList', '|',
+                        'outdent', 'indent', '|',
+                        'undo', 'redo',
+                        '-',
+                        'fontSize', 'fontFamily', 'fontColor', 'fontBackgroundColor', 'highlight', '|',
+                        'alignment', '|',
+                        'link', 'uploadImage', 'blockQuote', 'insertTable', 'mediaEmbed', 'codeBlock', 'htmlEmbed',
+                        '|',
+                        'specialCharacters', 'horizontalLine', 'pageBreak', '|',
+                        'textPartLanguage', '|',
+                        'sourceEditing'
+                    ],
+                    shouldNotGroupWhenFull: true
+                },
+                list: {
+                    properties: {
+                        styles: true,
+                        startIndex: true,
+                        reversed: true
+                    }
+                },
+                heading: {
+                    options: [{
+                            model: 'paragraph',
+                            title: 'Paragraph',
+                            class: 'ck-heading_paragraph'
+                        },
+                        {
+                            model: 'heading1',
+                            view: 'h1',
+                            title: 'Heading 1',
+                            class: 'ck-heading_heading1'
+                        },
+                        {
+                            model: 'heading2',
+                            view: 'h2',
+                            title: 'Heading 2',
+                            class: 'ck-heading_heading2'
+                        },
+                        {
+                            model: 'heading3',
+                            view: 'h3',
+                            title: 'Heading 3',
+                            class: 'ck-heading_heading3'
+                        },
+                        {
+                            model: 'heading4',
+                            view: 'h4',
+                            title: 'Heading 4',
+                            class: 'ck-heading_heading4'
+                        },
+                        {
+                            model: 'heading5',
+                            view: 'h5',
+                            title: 'Heading 5',
+                            class: 'ck-heading_heading5'
+                        },
+                        {
+                            model: 'heading6',
+                            view: 'h6',
+                            title: 'Heading 6',
+                            class: 'ck-heading_heading6'
+                        }
+                    ]
+                },
+                fontFamily: {
+                    options: [
+                        'default',
+                        'Arial, Helvetica, sans-serif',
+                        'Courier New, Courier, monospace',
+                        'Georgia, serif',
+                        'Lucida Sans Unicode, Lucida Grande, sans-serif',
+                        'Tahoma, Geneva, sans-serif',
+                        'Times New Roman, Times, serif',
+                        'Trebuchet MS, Helvetica, sans-serif',
+                        'Verdana, Geneva, sans-serif'
+                    ],
+                    supportAllValues: true
+                },
+                fontSize: {
+                    options: [10, 12, 14, 'default', 18, 20, 22],
+                    supportAllValues: true
+                },
+                htmlSupport: {
+                    allow: [{
+                        name: /.*/,
+                        attributes: true,
+                        classes: true,
+                        styles: true
+                    }]
+                },
+                htmlEmbed: {
+                    showPreviews: false
+                },
+                link: {
+                    decorators: {
+                        addTargetToExternalLinks: true,
+                        defaultProtocol: 'https://',
+                        toggleDownloadable: {
+                            mode: 'manual',
+                            label: 'Downloadable',
+                            attributes: {
+                                download: 'file'
+                            }
+                        }
+                    }
+                },
+                mention: {
+                    feeds: [{
+                        marker: '@',
+                        feed: [
+                            '@apple', '@bears', '@brownie', '@cake', '@candy', '@canes',
+                            '@chocolate', '@cookie', '@cotton', '@cream',
+                            '@cupcake', '@danish', '@donut', '@dragée', '@fruitcake', '@gingerbread',
+                            '@gummi', '@ice', '@jelly-o',
+                            '@liquorice', '@macaroon', '@marzipan', '@oat', '@pie', '@plum', '@pudding',
+                            '@sesame', '@snaps', '@soufflé',
+                            '@sugar', '@sweet', '@topping', '@wafer'
+                        ],
+                        minimumCharacters: 1
+                    }]
+                },
+                language: 'fr',
+                licenseKey: '',
+            }).catch(error => {
+                console.error(error);
+            });
+        </script>
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                var today = new Date().toISOString().split('T')[0];
+                document.getElementById('datepicker').setAttribute('min', today);
+            })
+
+
+             document.addEventListener('DOMContentLoaded', function() {
+                var today = new Date().toISOString().split('T')[0];
+                document.getElementById('datepickers').setAttribute('min', today);
+            })
+        </script>
         <script>
             $(document).ready(function() {
                 $("#preview").click(function() {
@@ -199,7 +521,6 @@
 
             })
         </script>
-        
         <script>
             async function formImg() {
                 let imageodc = document.getElementById('file');

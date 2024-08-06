@@ -1,6 +1,6 @@
 @props(['activites'])
 
-<table id="table" class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400 cell-border">
+<table id="table" class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400 cell-border display">
     <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
         <tr>
             <th scope="col" class="px-6 py-3">
@@ -87,7 +87,7 @@
 
 
                 <td scope="col" class="px-6 py-3" id="startdate">
-                    {{ $item->number_hours }}
+                    {{ $item->number_day}}
                 </td>
 
                 <td scope="col" class="px-6 py-3" id="startdate">
@@ -120,11 +120,7 @@
                                 <a href="{{ route('activites.show', $item->id) }}"
                                     class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">View</a>
                             </li>
-                            <li>
-                                <a onclick="destroy(event)" href="{{ route('activites.destroy', $item->id) }}"
-                                    class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
-                                    data-modal-target="delete" data-modal-toggle="delete">Delete</a>
-                            </li>
+                          
                             <li>
                                 <a href="{{ route('activites.edit', $item->id) }}"
                                     class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Update</a>
@@ -146,18 +142,18 @@
                             </li>
 
                              <li>
-                                @if ($item->send == true)
+                                @if ($item->status == true)
                                     <a href="{{ route('send', $item->id) }}" data-modal-target="active"
                                         data-modal-toggle="active"
                                         class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
                                         onclick="desactiver(event)">Desactive
-                                        send</a>
+                                        Status</a>
                                 @else
                                     <a href="{{ route('send', $item->id) }}" data-modal-target="desactive"
                                         data-modal-toggle="desactive"
                                         class="block px-4 py-2 hover:bg-gray-100  dark:hover:bg-gray-600 dark:hover:text-white"
                                         onclick="activer(event)">Active
-                                        send</a>
+                                        Status</a>
                                 @endif
                             </li>
 
@@ -194,7 +190,7 @@
                             </li>
 
                              <li>
-                                @if ($item->show_in_calendar == true)
+                                @if ($item->show_in_slider == true)
                                     <a href="{{ route('showInSlider', $item->id) }}" data-modal-target="active"
                                         data-modal-toggle="active"
                                         class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
@@ -210,8 +206,11 @@
                             </li>
                         </ul>
                         <div class="py-2">
-                            <a href="#"
-                                class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">Status</a>
+                             <li>
+                                <a onclick="destroy(event)" href="{{ route('activites.destroy', $item->id) }}"
+                                    class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
+                                    data-modal-target="delete" data-modal-toggle="delete">Delete</a>
+                            </li>
                         </div>
                     </div>
                 </td>

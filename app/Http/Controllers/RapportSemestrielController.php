@@ -26,7 +26,7 @@ class RapportSemestrielController extends Controller
         //recuprer les valeurs selectionnée dans le select du rapport semestrielle
         $selectYear = $request->input('yearselec');
         $selectSemestre = $request->input('semestre');
-       
+
 
         // on calclue  les dates de début et de fin du semestre
         if ($selectSemestre == '1') {
@@ -39,7 +39,7 @@ class RapportSemestrielController extends Controller
 
 
         //DB::enableQueryLog();
-        
+
 
         //On recuper les données depuis le model
         $activites = Activite::all();
@@ -50,6 +50,7 @@ class RapportSemestrielController extends Controller
             ->leftJoin('activite_type_event as acty', 'acty.activite_id', '=', 'ac.id')
             ->leftJoin('type_events as typ', 'typ.id', '=', 'acty.type_event_id')
             ->leftJoin('employabilites as empl', 'empl.odcuser_id', '=', 'us.id')
+            ->leftJoin('type_contrats as typecont', 'typecont.id', '=', 'empl.type_contrat_id')
             ->whereNotNull('ac.title')
             ->whereBetween('ac.start_date', [$startDate, $endDate])
             ->orderBy('ac.start_date', 'asc')
@@ -65,7 +66,7 @@ class RapportSemestrielController extends Controller
                 'ca.odcuser_id',
                 'ac.end_date',
                 'ac.title',
-                'empl.type_contrat',
+                'typecont.libelle as type_contrat',
                 'empl.nomboite',
                 'empl.poste',
                 DB::raw('(ac.start_date) as startYear'),
@@ -395,6 +396,9 @@ class RapportSemestrielController extends Controller
             $interval = $today->diff($birthDay);
             $ages = $interval->y; // Âge en années
 
+            if ($ages >=3 && $ages <= 14){
+                $tranche = "6 - 14 years";
+            }
             if ($ages >= 15 && $ages <= 24) {
                 $tranche = "15 - 24 years";
             } elseif ($ages >= 25 && $ages <= 34) {
@@ -402,96 +406,93 @@ class RapportSemestrielController extends Controller
             } elseif ($ages >= 35) {
                 $tranche = "35 > years";
             }
-
             $worksheet->setCellValue('A' . $row, $candidat->first_name)
-            ->getStyle('A' . $row)
-            ->getAlignment()
-            ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_LEFT);
-        $worksheet->setCellValue('B' . $row, $candidat->last_name)
-            ->getStyle('B' . $row)
-            ->getAlignment()
-            ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_LEFT);
-        $worksheet->setCellValue('C' . $row, $candidat->gender)
-            ->getStyle('C' . $row)
-            ->getAlignment()
-            ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
-        $worksheet->setCellValue('D' . $row, $tranche)
-            ->getStyle('D' . $row)
-            ->getAlignment()
-            ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_LEFT);
-        $worksheet->setCellValue('E' . $row, $professionValue)
-            ->getStyle('E' . $row)
-            ->getAlignment()
-            ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_LEFT);
-        $worksheet->setCellValue('F' . $row, $universiteValue)
-            ->getStyle('F' . $row)
-            ->getAlignment()
-            ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_LEFT);
-        $worksheet->setCellValue('G' . $row, $specialiteValue)
-            ->getStyle('G' . $row)
-            ->getAlignment()
-            ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_LEFT);
-        $worksheet->setCellValue('H' . $row, $candidat->email)
-            ->getStyle('H' . $row)
-            ->getAlignment()
-            ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
-        $worksheet->setCellValue('I' . $row, $phoneNumber)
-            ->getStyle('I' . $row)
-            ->getAlignment()
-            ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
-        $worksheet->setCellValue('J' . $row, $candidat->linkedin)
-            ->getStyle('J' . $row)
-            ->getAlignment()
-            ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
-
-        if (in_array($candidat->code, $typeform)) {
-            $worksheet->setCellValue('Q' . $row, $candidat->namecat)
-                ->getStyle('Q' . $row)
+                ->getStyle('A' . $row)
+                ->getAlignment()
+                ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_LEFT);
+            $worksheet->setCellValue('B' . $row, $candidat->last_name)
+                ->getStyle('B' . $row)
+                ->getAlignment()
+                ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_LEFT);
+            $worksheet->setCellValue('C' . $row, $candidat->gender)
+                ->getStyle('C' . $row)
                 ->getAlignment()
                 ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
-            $worksheet->setCellValue('R' . $row, $candidat->startYear)
-                ->getStyle('R' . $row)
+            $worksheet->setCellValue('D' . $row, $tranche)
+                ->getStyle('D' . $row)
+                ->getAlignment()
+                ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_LEFT);
+            $worksheet->setCellValue('E' . $row, $professionValue)
+                ->getStyle('E' . $row)
+                ->getAlignment()
+                ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_LEFT);
+            $worksheet->setCellValue('F' . $row, $universiteValue)
+                ->getStyle('F' . $row)
+                ->getAlignment()
+                ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_LEFT);
+            $worksheet->setCellValue('G' . $row, $specialiteValue)
+                ->getStyle('G' . $row)
+                ->getAlignment()
+                ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_LEFT);
+            $worksheet->setCellValue('H' . $row, $candidat->email)
+                ->getStyle('H' . $row)
+                ->getAlignment()
+                ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
+            $worksheet->setCellValue('I' . $row, $phoneNumber)
+                ->getStyle('I' . $row)
                 ->getAlignment()
                 ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
-            $worksheet->setCellValue('S' . $row, $candidat->end_date)
-                ->getStyle('S' . $row)
-                ->getAlignment()
-                ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
-            $worksheet->setCellValue('U' . $row, $candidat->title)
-                ->getStyle('U' . $row)
+            $worksheet->setCellValue('J' . $row, $candidat->linkedin)
+                ->getStyle('J' . $row)
                 ->getAlignment()
                 ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
 
-        } elseif (in_array($candidat->code, $typeparc)) {
-            $worksheet->setCellValue('L' . $row, $candidat->namecat)
-                ->getStyle('L' . $row)
-                ->getAlignment()
-                ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
-            $worksheet->setCellValue('M' . $row, $candidat->startYear)
-                ->getStyle('M' . $row)
-                ->getAlignment()
-                ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
-            $worksheet->setCellValue('O' . $row, $candidat->title)
-                ->getStyle('O' . $row)
-                ->getAlignment()
-                ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
-
-        } elseif (in_array($candidat->code, $typeconf)) {
-            $worksheet->setCellValue('X' . $row, $candidat->namecat)
-                ->getStyle('X' . $row)
-                ->getAlignment()
-                ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
-            $worksheet->setCellValue('Y' . $row, $candidat->startYear)
-                ->getStyle('Y' . $row)
-                ->getAlignment()
-                ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
-            $worksheet->setCellValue('AA' . $row, $candidat->title)
-                ->getStyle('AA' . $row)
-                ->getAlignment()
-                ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
-        }
+            if (in_array($candidat->code, $typeform)) {
+                $worksheet->setCellValue('Q' . $row, $candidat->namecat)
+                    ->getStyle('Q' . $row)
+                    ->getAlignment()
+                    ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
+                $worksheet->setCellValue('R' . $row, $candidat->startYear)
+                    ->getStyle('R' . $row)
+                    ->getAlignment()
+                    ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
+                $worksheet->setCellValue('S' . $row, $candidat->end_date)
+                    ->getStyle('S' . $row)
+                    ->getAlignment()
+                    ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
+                $worksheet->setCellValue('U' . $row, $candidat->title)
+                    ->getStyle('U' . $row)
+                    ->getAlignment()
+                    ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
+            } elseif (in_array($candidat->code, $typeparc)) {
+                $worksheet->setCellValue('L' . $row, $candidat->namecat)
+                    ->getStyle('L' . $row)
+                    ->getAlignment()
+                    ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
+                $worksheet->setCellValue('M' . $row, $candidat->startYear)
+                    ->getStyle('M' . $row)
+                    ->getAlignment()
+                    ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
+                $worksheet->setCellValue('O' . $row, $candidat->title)
+                    ->getStyle('O' . $row)
+                    ->getAlignment()
+                    ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
+            } elseif (in_array($candidat->code, $typeconf)) {
+                $worksheet->setCellValue('X' . $row, $candidat->namecat)
+                    ->getStyle('X' . $row)
+                    ->getAlignment()
+                    ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
+                $worksheet->setCellValue('Y' . $row, $candidat->startYear)
+                    ->getStyle('Y' . $row)
+                    ->getAlignment()
+                    ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
+                $worksheet->setCellValue('AA' . $row, $candidat->title)
+                    ->getStyle('AA' . $row)
+                    ->getAlignment()
+                    ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
+            }
             $worksheet->setCellValue('AC' . $row, $candidat->nomboite)
-                ->getStyle('AC'. $row)
+                ->getStyle('AC' . $row)
                 ->getAlignment()
                 ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
             $worksheet->setCellValue('AD' . $row, $candidat->type_contrat)
@@ -503,8 +504,8 @@ class RapportSemestrielController extends Controller
                 ->getAlignment()
                 ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
 
-        $row++;
-    }
+            $row++;
+        }
 
 
         //Deuxieme section du tableau

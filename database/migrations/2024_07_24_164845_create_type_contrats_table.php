@@ -11,9 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('candidats', function (Blueprint $table) {
-            $table->string('status')->change();
-            $table->dateTime('createdAt')->nullable();
+        Schema::create('type_contrats', function (Blueprint $table) {
+            $table->id();
+            $table->string('libelle');
+          
+            $table->timestamps();
         });
     }
 
@@ -22,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        //
+        Schema::dropIfExists('type_contrats');
     }
 };

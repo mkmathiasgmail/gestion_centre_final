@@ -40,7 +40,7 @@
         </div>
     @endif
 
-    <div class="relative overflow-x-auto mt-4">
+    <div class="relative overflow-x-auto mt-4" id="selecteurTab">
         <x-tableactivites :activites="$activites" />
     </div>
 
@@ -66,11 +66,19 @@
         </script>
 
         <script>
-            // function destroy(event) {
-            //     event.preventDefault();
-            //     let link = event.target.getAttribute('href');
-            //     document.querySelector('.delete').setAttribute('action', link);
-            // }
+            function destroy(event) {
+                event.preventDefault();
+                let link = event.target.getAttribute('href');
+                document.querySelector('.delete').setAttribute('action', link);
+            }
+
+        $(document).ready(function(){
+            $('.dt-container').addClass('text-xl text-gray-800 dark:text-gray-200 leading-tight')
+
+            $('.dt-buttons').addClass('mt-4')
+
+            $('.dt-buttons buttons').addClass('cursor-pointer mt-5 bg-slate-600 p-2 rounded-sm font-bold')
+        })
         </script>
 
         <script>
@@ -93,6 +101,7 @@
         <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/vfs_fonts.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/pdfmake.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+       
         <script>
             new DataTable('#table', {
                 responsive: true,
