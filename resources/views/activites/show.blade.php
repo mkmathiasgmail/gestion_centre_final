@@ -175,9 +175,9 @@
                 control the content visibility and styling</p>
         </div>
         <div class="hidden p-4 ro unded-lg bg-gray-50 dark:bg-gray-800" id="import" role="tabpanel"
-        aria-labelledby="contacts-tab">
-        <p class="text-sm text-gray-500 dark:text-gray-400"><x-activite-import :activite="$activite"/></p>
-    </div>
+            aria-labelledby="contacts-tab">
+            <p class="text-sm text-gray-500 dark:text-gray-400"><x-activite-import :activite="$activite" /></p>
+        </div>
     </div>
 
     @php
@@ -197,64 +197,8 @@
         {{-- Script for participants data table --}}
         <script>
             $(document).ready(function() {
-
-
                 let event = @json($activite->title);
                 $('#participantTable').DataTable({
-                    responsive: true,
-
-                    columnDefs: [{
-                            visible: false,
-                            targets: [0, 3, 5, 7, 8, 9]
-                        }, // hide columns 1 and 3 by default
-                        {
-                            responsivePriority: 1,
-                            targets: 0
-                        },
-                        {
-                            responsivePriority: 2,
-                            targets: -1
-                        }
-                    ],
-                    layout: {
-                        topStart: {
-                            pageLength: {
-                                menu: [10, 25, 50, 100, 200]
-                            },
-                            buttons: [
-                                'colvis',
-                                {
-                                    extend: 'excelHtml5',
-                                    exportOptions: {
-                                        columns: ':visible'
-                                    },
-                                    title: "Liste des candidats pour : " + event
-                                },
-                            ]
-                        },
-                        topEnd: {
-                            search: {
-                                placeholder: 'Type search here'
-                            }
-                        }
-                    }
-                });
-
-                $('#participantTable').css('width', '100%');
-            });
-        </script>
-
-        {{-- Script for candidates data table --}}
-        <script>
-            var tr = null ;
-            var statusCell = null ;
-            $(document).ready(function() {
-                let event = @json($activite->title);
-
-                if ($.fn.DataTable.isDataTable('#candidatTable')) {
-                    $('#candidatTable').DataTable().destroy();
-                }
-                $('#candidatTable').DataTable({
                     responsive: true,
 
                     columnDefs: [{
@@ -286,7 +230,52 @@
                                         window.location.href = '{{ url('generate_excel') }}/' +
                                             id_event;
                                     }
-                                },
+                                }
+                            ]
+                        },
+                        topEnd: {
+                            search: {
+                                placeholder: 'Type search here'
+                            }
+                        }
+                    }
+                });
+
+                $('#participantTable').css('width', '100%');
+            });
+        </script>
+
+        {{-- Script for candidates data table --}}
+        <script>
+            var tr = null;
+            var statusCell = null;
+            $(document).ready(function() {
+                let event = @json($activite->title);
+
+
+                $('#candidatTable').DataTable({
+                    responsive: true,
+
+                    columnDefs: [{
+                            visible: false,
+                            targets: [0, 3, 5, 7, 8, 9]
+                        }, // hide columns 1 and 3 by default
+                        {
+                            responsivePriority: 1,
+                            targets: 0
+                        },
+                        {
+                            responsivePriority: 2,
+                            targets: -1
+                        }
+                    ],
+                    layout: {
+                        topStart: {
+                            pageLength: {
+                                menu: [10, 25, 50, 100, 200]
+                            },
+                            buttons: [
+                                'colvis',
                             ]
                         },
                         topEnd: {
@@ -298,14 +287,22 @@
                 });
 
                 $('#candidatTable').css('width', '100%');
-            });
+
+                $('.dt-container').addClass('text-lg text-gray-800 dark:text-gray-400 leading-tight')
+
+                $('.dt-buttons').addClass('mt-4')
+                $('.dt-buttons buttons').addClass('cursor-pointer mt-5 bg-slate-600 p-2 rounded-sm font-bold')
+
+                $("#dt-length-2").addClass('text-gray-700 dark:text-gray-200 w-24 bg-white');
+                $("label[for='dt-length-2']").addClass('text-gray-700 dark:text-gray-200').text(' Enregistrements par page');
             });
 
             function actionStatus(event, type, id, firstname) {
                 tr = $(event.target.closest('tr'));
                 statusCell = tr.find('#statusCell');
                 $('#accept-link, #decline-link, #wait-link').attr('data', id)
-                $('#popup-title-accept, #popup-title-decline, #popup-title-wait').text("Etes-vous sûr de vouloir changer le statut de " + firstname)
+                $('#popup-title-accept, #popup-title-decline, #popup-title-wait').text(
+                    "Etes-vous sûr de vouloir changer le statut de " + firstname)
             }
 
             function changeStatus(event) {

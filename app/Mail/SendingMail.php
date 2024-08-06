@@ -4,43 +4,42 @@ namespace App\Mail;
 
 use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
-use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Mail\Mailables\Content;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Contracts\Queue\ShouldQueue;
 
-class Notification extends Mailable
+class SendingMail extends Mailable
 {
     use Queueable, SerializesModels;
 
-    public $messageContent;
+    public $subject;
+    public $message;
 
     /**
      * Create a new message instance.
      */
-    public function __construct($messageContent)
+    public function __construct($subject, $message)
     {
-        $this->messageContent = $messageContent;
+        $this->subject = $subject;
+        $this->message = $message;
     }
 
     public function build()
     {
-        return $this->form(config('mail.form.address'))
-                    ->subject('Notification')
-                    ->view('emails.notification');
-            // ->with([
-            //     'name' => $this->name,
-            // ]);
+        return $this->view('notifications.mail')
+                    ->subject($this->subject)
+                    ->with(['body' => $this->message]);
     }
 
-    /**
-     * Get the message envelope.
-     */
+    // /**
+    //  * Get the message envelope.
+    //  */
     // public function envelope(): Envelope
     // {
     //     return new Envelope(
-    //         subject: 'Notification',
+    //         subject: 'Sending Mail',
     //     );
     // }
 
@@ -50,7 +49,7 @@ class Notification extends Mailable
     // public function content(): Content
     // {
     //     return new Content(
-    //         view: 'emails.notification',
+    //         view: 'notifications.mail',
     //     );
     // }
 
