@@ -178,7 +178,7 @@
                         <td class="px-6 py-4">{{ $item->person_number }}</td>
                         @if ($item->type === 'Mail')
                             <td class="px-6 py-4">Mail</td>
-                        @elseif ($item->type === 'sms')
+                        @elseif ($item->type === 'SMS')
                             <td class="px-6 py-4">SMS</td>
                         @else
                             <td class="px-6 py-4">Mail/SMS</td>
