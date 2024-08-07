@@ -122,15 +122,18 @@
 
 
         <x-FormTypeContrat :typeContrats="$typeContrats" />
-
-            {{-- @section('script')
+ @section('script')
     <script>
-        $(document).ready(function() {
-            $('#myTable').DataTable();
-        });
+        
+       //faire une reinitialisation de champ
+       $('#resetButton').click(function() {
+       $('#libelle').val(''); // Vider le champ de saisie
+
+       });
+
 
     </script>
-    @endsection --}}
+    @endsection
 
 </x-app-layout>
 
