@@ -81,7 +81,7 @@ class ActiviteController extends Controller
                 'hashtags' => 'nullable|array',
                 'hashtags.*' => 'exists:hashtags,id',
                 'typeEvent' => 'nullable|array',
-             
+
                 'typeEvent.*' => 'exists:type_events,id',
                 'day'=>'required',
             ],
@@ -135,7 +135,7 @@ class ActiviteController extends Controller
             ]);
 
 
-           
+
 
 
 
@@ -172,35 +172,50 @@ class ActiviteController extends Controller
 
         // Récupérer les candidats liés à cette activité
         $candidats = Candidat::where('activite_id', $id)->with(['odcuser', 'candidat_attribute'])->get();
-        $candidatsData = [];
-        $labels = [];
-        foreach ($candidats as $candidat) {
-            $candidatArray = $candidat->toArray();
-            if ($candidat->candidat_attribute) {
-                foreach ($candidat->candidat_attribute as $attribute) {
-                    $candidatArray[$attribute->label] = $attribute->value;
-                    if (!in_array($attribute->label, $labels)) {
-                        $labels[] = $attribute->label;
+
+        if (count($candidats) > 0) {
+            $candidatsData = [];
+            $labels = [];
+            foreach ($candidats as $candidat) {
+                $candidatArray = $candidat->toArray();
+                if ($candidat->candidat_attribute) {
+                    foreach ($candidat->candidat_attribute as $attribute) {
+                        $candidatArray[$attribute->label] = $attribute->value;
+                        if (!in_array($attribute->label, $labels)) {
+                            $labels[] = $attribute->label;
+                        }
                     }
                 }
+                $candidatsData[] = $candidatArray;
             }
-            $candidatsData[] = $candidatArray;
+        } else {
+            $candidatsData = null ;
+            $labels = null;
         }
+
+
         $participants = Candidat::where('activite_id', $id)->where('status', 'accept')->select('id', 'odcuser_id', 'activite_id', 'status')->with(['odcuser', 'candidat_attribute'])->get();
+
         $etiquettes = [];
         $participantsData = [];
-        foreach ($participants as $participant) {
-            $participantArray = $participant->toArray();
 
-            if ($participant->candidat_attribute) {
-                foreach ($participant->candidat_attribute as $attribute) {
-                    $participantArray[$attribute->label] = $attribute->value;
-                    if (!in_array($attribute->label, $etiquettes)) {
-                        $etiquettes[] = $attribute->label;
+        if (count($participants) > 0) {
+            foreach ($participants as $participant) {
+                $participantArray = $participant->toArray();
+
+                if ($participant->candidat_attribute) {
+                    foreach ($participant->candidat_attribute as $attribute) {
+                        $participantArray[$attribute->label] = $attribute->value;
+                        if (!in_array($attribute->label, $etiquettes)) {
+                            $etiquettes[] = $attribute->label;
+                        }
                     }
                 }
+                $participantsData[] = $participantArray;
             }
-            $participantsData[] = $participantArray;
+        } else {
+            $participantsData = null;
+            $etiquettes = null;
         }
         //recuperer les presents  et la date
 
@@ -272,7 +287,7 @@ class ActiviteController extends Controller
                 'typeEvent' => 'nullable|array',
                 'typeEvent.*' => 'exists:type_events,id',
                 'thumbnailURL' => 'nullable|url',
-                
+
             ],
 
             [
@@ -334,7 +349,7 @@ class ActiviteController extends Controller
     {
         $url = env('API_URL');
         try {
-            
+
             $activite->delete();
             $id = $activite->_id;
 
@@ -379,7 +394,7 @@ class ActiviteController extends Controller
 
         return view('dashboard', compact('data1', 'activites', 'user', 'data'));
     }
-    
+
     public function showInCalendar(Request $request, $id)
     {
 
@@ -609,7 +624,7 @@ class ActiviteController extends Controller
         }
     }
 
-    
 
-    
+
+
 }
