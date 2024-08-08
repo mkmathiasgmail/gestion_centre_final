@@ -16,6 +16,9 @@
             font-family: 'Arial', sans-serif;
             box-sizing: border-box;
             border: 20px solid #ccc;
+            align-items: center;
+            width: 297mm;
+            height: 210mm;
 
         }
 
@@ -43,8 +46,14 @@
 
         }
 
+        .certificate {
+            display: flex;
+            flex-direction: column;
+          
+        }
+
         .title {
-            font-size: 45px;
+            font-size: 1em;
             font-weight: bold;
             margin-bottom: 0px;
 
@@ -57,17 +66,13 @@
             margin: 20px;
         }
 
-        .certificate {
-            width: 100%;
-            display: flex;
-            justify-content: space-around;
-        }
+       
 
         .certificate>div {
             /* flex-basis: 50%; */
-            margin-left: 10px;
+            /* margin-left: 10px;
             margin-right: 10px;
-            justify-content: space-around;
+            justify-content: space-around; */
         }
 
         .certhead {
