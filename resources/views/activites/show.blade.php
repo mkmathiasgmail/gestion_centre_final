@@ -188,7 +188,12 @@
         {{-- Script for presence data table --}}
         <script>
             $(document).ready(function() {
-                $('#candidatpresence').DataTable();
+                $('#candidatpresence').DataTable({
+                    "scrollX": true,
+                    "fixedColumns": {
+                        "start": 3
+                    }
+                });
 
                 $('#candidatpresence').css('width', '100%');
             });
@@ -294,7 +299,8 @@
                 $('.dt-buttons buttons').addClass('cursor-pointer mt-5 bg-slate-600 p-2 rounded-sm font-bold')
 
                 $("#dt-length-2").addClass('text-gray-700 dark:text-gray-200 w-24 bg-white');
-                $("label[for='dt-length-2']").addClass('text-gray-700 dark:text-gray-200').text(' Enregistrements par page');
+                $("label[for='dt-length-2']").addClass('text-gray-700 dark:text-gray-200').text(
+                    ' Enregistrements par page');
             });
 
             function actionStatus(event, type, id, firstname) {

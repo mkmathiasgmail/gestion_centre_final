@@ -15,39 +15,39 @@
                             {{ $label }}</th>
                     @endforeach
 
-                    <th scope="col" class="px-6 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                        Gender
-                    </th>
-                    <th scope="col" class="px-6 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                        Profession
-                    </th>
-                    <th scope="col" class="px-6 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                        Status
-                    </th>
-                    <th>
-                        action
-                    </th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach ($participantsData as $participant)
-                    <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
-                        @foreach ($labels as $label)
-                            <td class="px-6 py-4">
-                                {{ isset($participant[$label]) && $participant[$label] !== '' ? $participant[$label] : 'N/A' }}
-                            </td>
-                        @endforeach
-                        <td class="px-6 py-4">{{ $participant['odcuser']['gender'] }}</td>
+                <th scope="col" class="px-6 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                    Gender
+                </th>
+                <th scope="col" class="px-6 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                    Profession
+                </th>
+                <th scope="col" class="px-6 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                    Status
+                </th>
+                <th>
+                    action
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach ($participantsData as $participant)
+                <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                    @foreach ($labels as $label)
                         <td class="px-6 py-4">
-                            @php
-                                $profession = json_decode($participant['odcuser']['profession'], true);
+                            {{ isset($participant[$label]) && $participant[$label] !== '' ? $participant[$label] : 'N/A' }}
+                        </td>
+                    @endforeach
+                    <td class="px-6 py-4">{{ $participant['odcuser']['gender'] }}</td>
+                    <td class="px-6 py-4">
+                        @php
+                            $profession = json_decode($participant['odcuser']['profession'], true);
 
-                            @endphp
-                            {{ $profession['translations']['fr']['profession'] ?? '' }}
-                        </td>
-                        <td class="px-6 py-4">
-                            {{ $participant['status'] }}
-                        </td>
+                        @endphp
+                        {{ $profession['translations']['fr']['profession'] ?? '' }}
+                    </td>
+                    <td class="px-6 py-4">
+                        {{ $participant['status'] }}
+                    </td>
 
                         <td>
                             @if ($participant['status'] == 'accept')
