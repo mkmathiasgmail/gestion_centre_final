@@ -165,7 +165,12 @@
         {{-- Script for presence data table --}}
         <script>
             $(document).ready(function() {
-                $('#candidatpresence').DataTable();
+                $('#candidatpresence').DataTable({
+                    "scrollX": true,
+                    "fixedColumns": {
+                        "start": 3
+                    }
+                });
 
                 $('#candidatpresence').css('width', '100%');
             });

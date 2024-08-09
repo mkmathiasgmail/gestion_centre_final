@@ -171,7 +171,7 @@
                 if (query != '') {
                     var _token = $('input[name="_token"]').val();
                     $.ajax({
-                        url: "{{ route('autocomplete') }}"
+                        url: "{{ route('autocompleted') }}"
                         , method: "GET"
                         , data: {
                             query: query
@@ -185,8 +185,7 @@
                                 $('#countryList').append(
                                     '<p id="id_odc" class="hidden">' + item.id +
                                     '</p><ul class= "font-bold"><li class="pl-4 bg-gray-300 hover:bg-gray-400">' +
-                                    item.first_name +
-                                    '  ' + item.last_name + '</li></ul>');
+                                    item.first_name +'  ' + item.last_name + '</li></ul>');
 
 
 

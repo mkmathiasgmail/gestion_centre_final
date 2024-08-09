@@ -28,12 +28,9 @@
             class ="mb-4 text-4xl font-extrabold tracking-tight leading-none text-gray-900 md:text-5xl lg:text-6xl dark:text-white">
             Check</h1>
     </div>
-    <form class="max-w-sm mx-auto" action="{{ route('presences.store') }}" method="post">
+  
+    <form class="max-w-sm mx-auto" action="{{ route('presences.store', ['id'=>$id])}}" method="post">
         @csrf
-<<<<<<< HEAD
-        
-=======
->>>>>>> 03360cbbd4006de2704fd44990b6cfcd5217be27
         @if (isset($nom) && isset($prenom))
             <div id="userInfo">
                 <div class="mb-5">

@@ -5,7 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProfileController;
 
 Route::get('/', function () {
-    return view('welcome');
+    return redirect('login');
 });
 
 Route::get('/dashboard', [ActiviteController::class, 'chartActivity'])->middleware(['auth', 'verified'])->name('dashboard')->middleware('permissions');
