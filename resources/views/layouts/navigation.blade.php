@@ -54,7 +54,6 @@
                                     <!-- Authentication -->
                                     <form method="POST" action="{{ route('logout') }}">
                                         @csrf
-
                                         <x-dropdown-link :href="route('logout')"
                                             onclick="event.preventDefault();
                                                 this.closest('form').submit();">
@@ -79,7 +78,7 @@
             <ul class="space-y-2 font-medium">
                 <li>
                     <a href="{{ route('dashboard') }}"
-                        class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
+                        class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group {{ request()->routeIs('dashboard') ? ' bg-gray-100 ' : 'bg-white' }}">
                         <svg class="w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"
                             aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor"
                             viewBox="0 0 22 21">
@@ -97,29 +96,29 @@
                         data-inactive-classes="text-white dark:text-white">
                         <h2 id="accordion-flush-heading-2">
                             <button type="button"
-                                class="flex items-center w-full gap-3 p-2 font-medium text-gray-800 rounded-lg dark:text-white dark:hover:bg-gray-700"
+                                class="flex items-center w-full gap-3 p-2 font-medium hover:bg-gray-100 text-gray-800 rounded-lg dark:text-white dark:hover:bg-gray-700"
                                 data-accordion-target="#accordion-flush-body-2" aria-expanded="false"
                                 aria-controls="accordion-flush-body-2">
-                                <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true"
+                                <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="false"
                                     xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none"
                                     viewBox="0 0 24 24">
                                     <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
                                         stroke-width="2"
                                         d="M15 4h3a1 1 0 0 1 1 1v15a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1V5a1 1 0 0 1 1-1h3m0 3h6m-3 5h3m-6 0h.01M12 16h3m-6 0h.01M10 3v4h4V3h-4Z" />
                                 </svg>
-                                <span>Activite</span>
+                                <span class=" text-gray-900  dark:text-gray-400">Activite</span>
 
                             </button>
                         </h2>
                         <div id="accordion-flush-body-2" class="hidden" aria-labelledby="accordion-flush-heading-2">
                             <div class="p-4 border-b border-gray-200 dark:border-gray-700">
-                                <p class="mb-2 text-black hover:text-gray dark:text-gray-400"><a
+                                <p class="mb-2 p-2 hover:bg-gray-100 rounded-lg text-gray-900 hover:text-gray dark:text-gray-400 {{ request()->routeIs('activites.index') ? ' bg-gray-100 ' : 'bg-white' }}"><a
                                         href="{{ route('activites.index') }}">Actvités</a></p>
-                                <p class="mb-2 text-black hover:text-gray dark:text-gray-400"><a
+                                <p class="mb-2 p-2 hover:bg-gray-100 rounded-lg text-gray-900hover:text-gray dark:text-gray-400 {{ request()->routeIs('categories.index') ? ' bg-gray-100 ' : 'bg-white' }}"><a
                                         href="{{ route('categories.index') }}">Catégories</a></p>
-                                <p class="mb-2 text-black hover:text-gray dark:text-gray-400"><a
+                                <p class="mb-2 p-2 hover:bg-gray-100 rounded-lg text-gray-900 hover:text-gray dark:text-gray-400 {{ request()->routeIs('hashtags.index') ? ' bg-gray-100 ' : 'bg-white' }}"><a
                                         href="{{ route('hashtags.index') }}">Hashtag</a></p>
-                                <p class="mb-2 text-black hover:text-gray dark:text-gray-400"><a
+                                <p class="mb-2 p-2 hover:bg-gray-100 rounded-lg text-gray-900 hover:text-gray dark:text-gray-400 {{ request()->routeIs('typevents.index') ? ' bg-gray-100 ' : 'bg-white' }}"><a
                                         href="{{ route('typevents.index') }}">Event type</a></p>
                             </div>
                         </div>
@@ -127,7 +126,7 @@
                 </li>
                 <li>
                     <a href="{{ route('odcusers.index') }}"
-                        class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
+                        class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group {{ request()->routeIs('odcusers.index') ? ' bg-gray-100 ' : 'bg-white' }}">
                         <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true"
                             xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor"
                             viewBox="0 0 24 24">
@@ -142,7 +141,7 @@
 
                 <li>
                     <a href="{{ route('employabilites.index') }}"
-                        class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
+                        class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group {{ request()->routeIs('employabilites.index') ? ' bg-gray-100 ' : 'bg-white' }}">
                         <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true"
                             xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none"
                             viewBox="0 0 24 24">
@@ -164,7 +163,7 @@
                 @if (Auth()->user()->hasRole('super-admin'))
                     <li>
                         <a href="{{ route('user_role.index') }}"
-                            class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
+                            class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group {{ request()->routeIs('user_role.index') ? ' bg-gray-100 ' : 'bg-white' }}">
                             <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true"
                                 xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none"
                                 viewBox="0 0 24 24">
@@ -183,23 +182,23 @@
                 @endif
 
                 @if (Auth()->user()->hasRole('super-admin'))
-                    <li>
-                        <a href="{{ route('type_Contrats.index') }}"
-                            class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
-                            <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true"
-                                xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none"
-                                viewBox="0 0 24 24">
-                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
-                                    stroke-width="2"
-                                    d="M10,2H14A2,2 0 0,1 16,4V6H20A2,2 0 0,1 22,8V19A2,2 0 0,1 20,21H4C2.89,21 2,20.1 2,19V8C2,6.89 2.89,6 4,6H8V4C8,2.89 8.89,2 10,2M14,6V4H10V6H14Z" />
-                            </svg>
-                            <span class="ms-3">Type contrat</span>
-                        </a>
-                    </li>
+                <li>
+                    <a href="{{ route('type_Contrats.index') }}"
+                        class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group {{ request()->routeIs('type_Contrats.index') ? ' bg-gray-100 ' : 'bg-white' }}">
+                        <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true"
+                            xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none"
+                            viewBox="0 0 24 24">
+                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                stroke-width="2"
+                                d="M10,2H14A2,2 0 0,1 16,4V6H20A2,2 0 0,1 22,8V19A2,2 0 0,1 20,21H4C2.89,21 2,20.1 2,19V8C2,6.89 2.89,6 4,6H8V4C8,2.89 8.89,2 10,2M14,6V4H10V6H14Z" />
+                        </svg>
+                        <span class="ms-3">Type contrat</span>
+                    </a>
+                </li>
                 @endif
                 <li>
                     <a href="{{ route('import') }}"
-                        class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
+                        class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group {{ request()->routeIs('import') ? ' bg-gray-100 ' : 'bg-white' }}">
                         <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true"
                             xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none"
                             viewBox="0 0 24 24">
@@ -213,7 +212,7 @@
                 </li>
                 <li>
                     <a href="{{ route('evaluations.index') }}"
-                        class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
+                        class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group {{ request()->routeIs('evaluations.index') ? ' bg-gray-100 ' : 'bg-white' }}">
                         <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true"
                             xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none"
                             viewBox="0 0 24 24">
@@ -227,7 +226,7 @@
                 </li>
                 <li>
                     <a href="{{ route('notifications.index') }}"
-                        class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
+                        class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group {{ request()->routeIs('notifications.index') ? ' bg-gray-100 ' : 'bg-white' }}">
                         <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true"
                             xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none"
                             viewBox="0 0 24 24">
