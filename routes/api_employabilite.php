@@ -7,5 +7,5 @@ use Illuminate\Support\Facades\Route;
 
 
 
-Route::get('/autocomplete', [SearchController::class,'searchQuery'])->name('autocomplete');
+Route::get('/autocomplete', [SearchController::class,'searchQuery'])->name('autocompleted');
 Route::apiResource('employabilite', SearchController::class);

@@ -2,9 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use ZipArchive;
 use Dompdf\Dompdf;
-use Dompdf\Options;
 
+use Dompdf\Options;
 use DateTimeImmutable;
 use App\Models\Activite;
 use App\Models\Candidat;
@@ -84,8 +85,10 @@ class CertificatController extends Controller
         $format = date_format($date, 'jS \o\f F Y');
 
         $pdf = view('certificat.generateCertificat', compact('candidat', 'format'));
+        echo $pdf;
+        exit();
 
-        
+
         // $pdf->setOptions([
         //     'font-family' => 'beau_rivage_normal_61dc1080149248972ebebb6af5e36968'
         // ]);
@@ -98,10 +101,49 @@ class CertificatController extends Controller
         $dompdf->render();
         return $dompdf->stream('certificat.pdf');
 
-        //return view('certificat.generateCertificat',compact('format','candidat'));
+        // return view('certificat.generateCertificat',compact('format','candidat'));
     }
-    public  function generateAllCertificat($candidat)
+
+    public  function generateAllCertificat($activite)
     {
+        $id = Activite::find($activite);
+        $idactivite= $id->id;
+
     
+        $candidats = Candidat::where('activite_id', $idactivite)
+                            ->where('status', 'accept')
+                            ->select('id', 'odcuser_id', 'activite_id', 'status')
+                            ->with(['odcuser', 'candidat_attribute'])
+                            ->get();
+        
+        //extension de la classe ZipArchive pour stocké tous les certificats
+        $zip = new ZipArchive();
+        $zipFilename = 'certificats.zip';
+        $zip->open($zipFilename, ZipArchive::CREATE | ZipArchive::OVERWRITE);
+
+        // Boucler sur chaque candidat et générer le certificat
+        foreach ($candidats as $candidat) {
+
+            $date = new DateTimeImmutable($candidat->activite->start_date);
+            $format = date_format($date, 'jS \o\f F Y');
+
+            $pdf = view('certificat.generateCertificat', compact('candidat', 'format'));
+
+            $options = new Options();
+            $options->set('isHtml5ParserEnabled', true);
+            $options->set('isRemoteEnabled', true);
+            $dompdf = new Dompdf($options);
+            $dompdf->loadHtml($pdf);
+            $dompdf->setPaper('A4', 'landscape');
+            $dompdf->render();
+        
+            $pdfContent = $dompdf->output();
+            $filename = 'certificat_' . $candidat->id . '.pdf';
+            $zip->addFromString($filename, $pdfContent);
+        }
+
+        $zip->close();
+        return response()->download($zipFilename);
+
     }
 }
