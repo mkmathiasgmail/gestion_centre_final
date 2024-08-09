@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+
+use PhpOffice\PhpSpreadsheet\Style\Font;
 use DateTime;
 use App\Models\Activite;
 use App\Models\Presence;
@@ -61,19 +63,62 @@ class CalendrierController extends Controller
         $sheet->setCellValue('I4', "Evénement");
         $sheet->setCellValue('I5', "SuperCodeurs");
 
-        $sheet->setCellValue('A7', "S1 2024");
+        // --------------------------------------------------------------------//
+        function applyCellStyle($sheet, $cell, $fontSize) {
+            $sheet->getStyle($cell)
+                ->getFont()
+                ->setBold(true)
+                ->setColor(new Color(Color::COLOR_BLACK))
+                ->setName('Arial')
+                ->setSize($fontSize);
+        
+            $sheet->getStyle($cell)
+                ->getFill()
+                ->setFillType(Fill::FILL_SOLID)
+                ->getStartColor()
+                ->setARGB('cccccc');
+        
+            $sheet->getStyle($cell)
+                ->getAlignment()
+                ->setHorizontal(Alignment::HORIZONTAL_CENTER)
+                ->setVertical(Alignment::VERTICAL_CENTER);
+        
+            $sheet->getStyle($cell)
+                ->getBorders()
+                ->getAllBorders()
+                ->setBorderStyle(Border::BORDER_THIN)
+                ->setColor(new Color('000000'));
+        }        
+        
+        
         $sheet->setCellValue('D7', "Nom activité");
-        $sheet->setCellValue('E7', "Durée de la formation (jours)");
-        $sheet->setCellValue('F7', "Nbre d'heures (hr)");
-        $sheet->setCellValue('G7', "Cible (Grand public / nom université)");
-        $sheet->setCellValue('H7', "Nombre d'inscriptions");
-        $sheet->setCellValue('I7', "Nombre de participants");
-        $sheet->setCellValue('J7', "Nombre de filles");
-        $sheet->setCellValue('K7', "Nombre de garçons ");
-        $sheet->setCellValue('L7', "Emplois créés");
-        $sheet->setCellValue('M7', "Startups accompagnées");
-
-        /*-- 1ere partie du calendrier ---*/
+        $sheet->setCellValue('E7', "Durée de la \nformation \n(jours)");
+        $sheet->setCellValue('F7', "Nbre \nd'heures (hr)");
+        $sheet->setCellValue('G7', "Cible (Grand \npublic / nom\n université)");
+        $sheet->setCellValue('H7', "Nombre\n d'inscriptions");
+        $sheet->setCellValue('I7', "Nombre de\n participants");
+        $sheet->setCellValue('J7', "Nombre de\n filles");
+        $sheet->setCellValue('K7', "Nombre de\n garçons");
+        $sheet->setCellValue('L7', "Emplois\n créés");
+        $sheet->setCellValue('M7', "Startups\n accompagné\nes");
+        
+        applyCellStyle($sheet, 'A7', 18);
+        applyCellStyle($sheet, 'D7', 9);
+        applyCellStyle($sheet, 'E7', 9);
+        applyCellStyle($sheet, 'F7', 9);
+        applyCellStyle($sheet, 'G7', 9);
+        applyCellStyle($sheet, 'H7', 9);
+        applyCellStyle($sheet, 'I7', 9);
+        applyCellStyle($sheet, 'J7', 9);
+        applyCellStyle($sheet, 'K7', 9);
+        applyCellStyle($sheet, 'L7', 9);
+        applyCellStyle($sheet, 'M7', 9);
+        
+        // Activer l'habillage de texte pour les cellules avec des retours à la ligne
+        $columns = ['E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M'];
+        foreach ($columns as $column) {
+            $sheet->getStyle($column . '7')->getAlignment()->setWrapText(true);
+        }
        
      // Ajuster la largeur des colonnes Fablab
         $sheet->mergeCells('F1:G1')->getColumnDimension('G')->setWidth(20);
@@ -681,75 +726,7 @@ class CalendrierController extends Controller
             ->getFont()
             ->setName('Arial')
             ->setSize(18);
-        ///////////////////////
-        $sheet->getStyle('D7')
-            ->getFont()
-            ->setBold(true)
-            ->setColor(new Color(Color::COLOR_BLACK));
-        $sheet->getStyle('D7')
-            ->getFill()
-            ->setFillType(Fill::FILL_SOLID)
-            ->getStartColor()
-            ->setARGB('cccccc');
-        $sheet->getStyle('D7')
-            ->getAlignment()
-            ->setHorizontal(Alignment::HORIZONTAL_CENTER)
-            ->setVertical(Alignment::VERTICAL_CENTER);
-        $sheet->getStyle('D7')
-            ->getBorders()
-            ->getAllBorders()
-            ->setBorderStyle(Border::BORDER_THIN)
-            ->setColor(new Color('000000'));
-        $sheet->getStyle('D7')
-            ->getFont()
-            ->setName('Arial')
-            ->setSize(9);
-        ///////////////////////
-        $sheet->getStyle('E7')
-            ->getFont()
-            ->setBold(true)
-            ->setColor(new Color(Color::COLOR_BLACK));
-        $sheet->getStyle('E7')
-            ->getFill()
-            ->setFillType(Fill::FILL_SOLID)
-            ->getStartColor()
-            ->setARGB('cccccc');
-        $sheet->getStyle('E7')
-            ->getAlignment()
-            ->setHorizontal(Alignment::HORIZONTAL_CENTER)
-            ->setVertical(Alignment::VERTICAL_CENTER);
-        $sheet->getStyle('E7')
-            ->getBorders()
-            ->getAllBorders()
-            ->setBorderStyle(Border::BORDER_THIN)
-            ->setColor(new Color('000000'));
-        $sheet->getStyle('E7')
-            ->getFont()
-            ->setName('Arial')
-            ->setSize(9);
-        ///////////////////////
-        $sheet->getStyle('F7')
-            ->getFont()
-            ->setBold(true)
-            ->setColor(new Color(Color::COLOR_BLACK));
-        $sheet->getStyle('F7')
-            ->getFill()
-            ->setFillType(Fill::FILL_SOLID)
-            ->getStartColor()
-            ->setARGB('cccccc');
-        $sheet->getStyle('F7')
-            ->getAlignment()
-            ->setHorizontal(Alignment::HORIZONTAL_CENTER)
-            ->setVertical(Alignment::VERTICAL_CENTER);
-        $sheet->getStyle('F7')
-            ->getBorders()
-            ->getAllBorders()
-            ->setBorderStyle(Border::BORDER_THIN)
-            ->setColor(new Color('000000'));
-        $sheet->getStyle('F7')
-            ->getFont()
-            ->setName('Arial')
-            ->setSize(9);
+
 
         // Ajuster la largeur des colonnes contenant les titres
         $sheet->mergeCells('B1:D1')->getColumnDimension('B')->setWidth(20);
@@ -798,7 +775,74 @@ class CalendrierController extends Controller
         $sheet->mergeCells('I3:M3');
         $sheet->mergeCells('I4:M4');
         $sheet->mergeCells('I5:M5');
-        // Récupérer la largeur de chaque colonne
+        $sheet->mergeCells('M8:M56');
+
+        $styleArray = [
+            'borders' => [
+                'outline' => [
+                    'borderStyle' => Border::BORDER_THIN,
+                    'color' => ['argb' => 'FF000000'],
+                ],
+            ],
+        ];
+        
+        $sheet->getStyle('M8:M56')->applyFromArray($styleArray);
+        // ------------------------------------------------------------// 
+
+        $styleArray = [
+            'borders' => [
+                'bottom' => [
+                    'borderStyle' =>Border::BORDER_THIN,
+                    'color' => ['argb' => 'FF000000'],
+                ],
+            ],
+        ];
+        $startColumn = 'D';
+        $startRow = 8;
+        $endColumn = 'L';
+        $endRow = 56;
+        
+        // Parcourir chaque cellule dans la plage
+        for ($row = $startRow; $row <= $endRow; $row++) {
+            for ($col = ord($startColumn); $col <= ord($endColumn); $col++) {
+                $cell = chr($col) . $row;
+                $sheet->getStyle($cell)->applyFromArray($styleArray);
+            }
+        }
+
+        //-----------------------------------------------------------//
+       
+        $styleArray = [
+            'borders' => [
+                'left' => [
+                    'borderStyle' =>Border::BORDER_THIN,
+                    'color' => ['argb' => 'FF000000'],
+                ],
+            ],
+        ];
+        $startColumn = 'E';
+        $startRow = 8;
+        $endColumn = 'L';
+        $endRow = 56;
+        
+        // Parcourir chaque cellule dans la plage
+        for ($row = $startRow; $row <= $endRow; $row++) {
+            for ($col = ord($startColumn); $col <= ord($endColumn); $col++) {
+                $cell = chr($col) . $row;
+                $sheet->getStyle($cell)->applyFromArray($styleArray);
+            }
+        }
+        //-----------------------------------------------------------//
+
+        $styleArray = [
+            'fill' => [
+                'fillType' => Fill::FILL_SOLID,
+                'startColor' => ['argb' => 'FF000000'],
+            ],
+        ];
+        
+        $sheet->getStyle('D57:M57')->applyFromArray($styleArray);
+        //-----------------------------------------------------------//
         $columnWidths = [];
         for ($column = 'I'; $column <= 'M'; $column++) {
             $columnWidths[$column] = $sheet->getColumnDimension($column)->getWidth();
