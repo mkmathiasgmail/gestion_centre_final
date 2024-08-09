@@ -12,9 +12,7 @@
             <td scope="col" class="px-6 py-3">
                 categories
             </td>
-            <td scope="col" class="px-6 py-3">
-                hashtag
-            </td>
+           
             <td scope="col" class="px-6 py-3">
                 type event
             </td>
@@ -62,11 +60,7 @@
                 <td scope="col" class="px-6 py-3">
                     {{ $item->categorie->name }}
                 </td>
-                <td scope="col" class="px-6 py-3">
-                    @foreach ($item->hashtag as $hasthtag)
-                        <span>{{ $hasthtag->name }}</span>
-                    @endforeach
-                </td>
+               
                 <td scope="col" class="px-6 py-3">
                     @foreach ($item->typEvent as $event)
                         <span>{{ $event->title }}</span>
