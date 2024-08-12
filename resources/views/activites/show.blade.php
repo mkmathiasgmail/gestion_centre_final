@@ -168,6 +168,14 @@
         <script>
             var tr = null;
             var statusCell = null;
+
+            function readMore(event, value) {
+                event.preventDefault();
+                var td = $(event.target).closest('td');
+                $(td).text(value);
+
+            }
+
             $(document).ready(function() {
 
                 $('#candidatTable').on('click', '.btn-menu', function() {
@@ -214,7 +222,7 @@
 
                     columnDefs: [{
                             visible: false,
-                            targets: [0, 3, 5, 7, 8, 9]
+                            targets: [0, 3, 4, 5, 7, 8, 9, 10]
                         }, // hide columns 1 and 3 by default
                         {
                             responsivePriority: 1,
@@ -253,37 +261,61 @@
                 $("label[for='dt-length-2']").addClass('text-gray-700 dark:text-gray-200').text(
                     ' Enregistrements par page');
 
-                function actionStatus(event, type, id, firstname) {
-                    tr = $(event.target.closest('tr'));
-                    statusCell = tr.find('#statusCell');
-                    $('#accept-link, #decline-link, #wait-link').attr('data', id)
-                    $('#popup-title-accept, #popup-title-decline, #popup-title-wait').text(
-                        "Etes-vous sûr de vouloir changer le statut de " + firstname)
+            })
+
+            function changeStatus(event) {
+                event.preventDefault();
+                let status = $(event.target).data('text');
+
+                let id = $('#decline-link').attr('data')
+                console.log(id)
+                $.ajax({
+                    type: 'POST',
+                    url: '/candidat/' + status,
+                    data: {
+                        id: id,
+                        _token: '{{ csrf_token() }}'
+                    },
+                    success: function(data) {
+                        // Update the UI or display a success message
+                        // Update the table cell with the new status
+                        statusCell[0].textContent = status
+                        console.log('Status updated successfully!');
+                    },
+                    error: function(xhr, status, error) {
+                        console.log('Error updating status: ' + error);
+                    }
+                });
+            }
+
+            function actionStatus(event, type, id, firstname, lastname) {
+                tr = $(event.target.closest('tr'));
+                statusCell = tr.find('#statusCell');
+
+                switch (type) {
+                    case 'accept':
+                        $('#accept-link').attr('data', id)
+                        $('#popup-title-accept').text(
+                            "Confirmez-vous la validation de la candidature de " + firstname + " ?")
+                        document.getElementById('first-modal').click()
+                        break;
+                    case 'decline':
+                        $('#decline-link').attr('data', id)
+                        $('#popup-title-decline').text(
+                            "Confirmez-vous l'annulation de la candidature de " + firstname + " ?");
+                        document.getElementById('second-modal').click()
+                        break;
+                    case 'wait':
+                        $('#wait-link').attr('data', id)
+                        $('#popup-title-wait').text(
+                            "Confirmez-vous la mise en attente de " + firstname + " ?")
+                        document.getElementById('third-modal').click()
+                    default:
+                        break;
                 }
 
-                function changeStatus(event) {
-                    event.preventDefault();
-                    let status = $(event.target).data('text');
-                    let id = $('#accept-link').attr('data')
-                    $.ajax({
-                        type: 'POST',
-                        url: '/candidat/' + status,
-                        data: {
-                            id: id,
-                            _token: '{{ csrf_token() }}'
-                        },
-                        success: function(data) {
-                            // Update the UI or display a success message
-                            // Update the table cell with the new status
-                            statusCell[0].textContent = status
-                            console.log('Status updated successfully!');
-                        },
-                        error: function(xhr, status, error) {
-                            console.log('Error updating status: ' + error);
-                        }
-                    });
-                }
-            })
+
+            }
         </script>
 
         {{-- Script for storing candidates --}}
