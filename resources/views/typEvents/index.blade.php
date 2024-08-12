@@ -4,9 +4,9 @@
 
     <!-- Modal toggle -->
     <button data-modal-target="authentication-modal" data-modal-toggle="authentication-modal"
-        class="block mt-4 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+        class="cursor-pointer mt-5 bg-slate-600 p-2 rounded-sm font-bold"
         type="button">
-        Toggle modal
+       Creation type Event
     </button>
 
     <!-- Main modal -->
@@ -60,7 +60,7 @@
 
     <div class="relative overflow-x-auto mt-4">
         <table id="table" class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400 ">
-            <thead class="text-xs text-white uppercase bg-gray-50 dark:bg-gray-700 dark:text-white">
+            <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                 <tr>
                     <th scope="col" class="px-6 py-3">
                         Id
@@ -85,7 +85,7 @@
             </thead>
             <tbody>
                 @foreach ($typEvent as $i => $item)
-                    <tr>
+                    <tr id="rowAll" class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
                         <th scope="col" class="px-6 py-3">
                             {{ $i + 1 }}
                         </th>

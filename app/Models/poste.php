@@ -5,20 +5,16 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Entreprise extends Model
+class Poste extends Model
 {
     use HasFactory;
     protected $fillable = [
-
-
         'libelle',
-
-
-
+        'employabilite_id',
     ];
 
-    public function employabilte()
+    public function employabilite()
     {
-        return $this->belongsToMany(Employabilite::class);
+        return $this->belongsTo(Employabilite::class);
     }
 }

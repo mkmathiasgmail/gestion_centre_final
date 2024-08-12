@@ -16,6 +16,13 @@
             Ajouter
         </button>
     </div>
+    {{-- <div class="flex justify-end my-2">
+        <button data-modal-target="authentication-modal" data-modal-toggle="authentication-modal"
+            class="px-5 py-2.5 text-sm font-medium text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 rounded-lg text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+            type="button">
+            Ajouter
+        </button>
+    </div> --}}
 
 
     @if ($errors->any())
@@ -74,7 +81,7 @@
                         Id
                     </th>
                     <th scope="col" class="px-6 py-3 bg-slate-700">
-                        Name
+                        Nom
                     </th>
                     <th scope="col" class="px-6 py-3 bg-slate-700">
                         type contrat
@@ -123,14 +130,16 @@
                     <td class="px-6 py-4">
                         {{ (isset($item->type_contrat->libelle)) ? $item->type_contrat->libelle : '' }}
                     </td>
-                    <td class="px-6 py-4">
-                        {{ $item->nomboite }}
+                   <td class="px-6 py-4">
+                        @foreach ($item->entreprise as $entre)
+                        {{ $entre->nomboite }} <br>
+                        @endforeach
                     </td>
-
                     <td class="px-6 py-4">
-                        {{ $item->poste }}
+                        @foreach ($item->poste as $poste)
+                        {{ $poste->libelle }} <br>
+                        @endforeach
                     </td>
-
                     <td class="px-6 py-4">
                         {{ $item->periode }}
                     </td>
@@ -185,7 +194,7 @@
                                 $('#countryList').append(
                                     '<p id="id_odc" class="hidden">' + item.id +
                                     '</p><ul class= "font-bold"><li class="pl-4 bg-gray-300 hover:bg-gray-400">' +
-                                    item.first_name +'  ' + item.last_name + '</li></ul>');
+                                    item.first_name + '  ' + item.last_name + '</li></ul>');
 
 
 
@@ -228,6 +237,44 @@
         //fin script date
 
     </script>
+
+    <!-- Code JavaScript ajout champs -->
+    <script>
+        let postsNomboitesCounter = 1;
+        const addButton = document.getElementById('add-button');
+
+        function addPostesNomboites() {
+            const container = document.getElementById('postes-nomboites-container');
+            const newRow = document.createElement('div');
+            newRow.classList.add('col-span-2', 'postes-nomboites-row');
+            newRow.innerHTML = `
+            <div>
+                <label for="poste-${postsNomboitesCounter}" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"></label>
+                <input id="poste-${postsNomboitesCounter}" name="poste1" type="text" rows="4" class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Veuilez saisir votre poste" autocomplete="off">
+            </div>
+            <div>
+                <label for="nomboite-${postsNomboitesCounter}" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"></label>
+                <input id="nomboite-${postsNomboitesCounter}" name="nomboite1" type="text" rows="4" class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Veuilez saisir le nom de votre entreprise" autocomplete="off">
+            </div>
+        `;
+            container.appendChild(newRow);
+            postsNomboitesCounter++;
+            updateAddButtonState();
+        }
+
+        function updateAddButtonState() {
+            const rows = document.querySelectorAll('.postes-nomboites-row');
+            if (rows.length >= 2) {
+                addButton.disabled = true;
+            } else {
+                addButton.disabled = false;
+            }
+
+        }
+        document.getElementById('add-button').addEventListener('click', addPostesNomboites);
+
+    </script>
+
+
     @endsection
 </x-app-layout>
-

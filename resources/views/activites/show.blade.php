@@ -52,17 +52,7 @@
                     aria-controls="presence" aria-selected="false">Presence</button>
             </li>
             <li class="me-2" role="presentation">
-                <button
-                    class="inline-block p-4 border-b-2 rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300"
-                    id="settings-styled-tab" data-tabs-target="#styled-settings" type="button" role="tab"
-                    aria-controls="settings" aria-selected="false">Settings</button>
-            </li>
-            <li role="presentation">
-                <button
-                    class="inline-block p-4 border-b-2 rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300"
-                    id="contacts-styled-tab" data-tabs-target="#styled-contacts" type="button" role="tab"
-                    aria-controls="contacts" aria-selected="false">Contacts</button>
-            </li>
+           
             <li role="presentation">
                 <button
                     class="inline-block p-4 border-b-2 rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300"
@@ -75,7 +65,7 @@
     <!-- Tab content -->
     <div id="default-styled-tab-content">
         <!-- Show activity details -->
-        <x-activitesShow :show="$activite" />
+        <x-activitesShow :datachart="$datachart" :show="$activite" />
 
         <!-- Show candidates for the activity -->
         <x-show-candidates-event :activite="$activite" :labels="$labels" :candidatsData="$candidatsData" :odcusers="$odcusers"
@@ -88,14 +78,7 @@
                 :odcusers="$odcusers" :activite_Id="$activite_Id" :id="$id" />
         </div>
 
-        <!-- Settings tab content -->
-        <div class="hidden p-4 rounded-lg bg-gray-50 dark:bg-gray-800" id="styled-settings" role="tabpanel"
-            aria-labelledby="settings-tab">
-            <p class="text-sm text-gray-500 dark:text-gray-400">This is some placeholder content the <strong
-                    class="font-medium text-gray-800 dark:text-white">Settings tab's associated content</strong>.
-                Clicking another tab will toggle the visibility of this one for the next. The tab JavaScript swaps
-                classes to control the content visibility and styling.</p>
-        </div>
+       
 
         <!-- Presence tab content -->
         <div class="hidden p-4 rounded-lg bg-gray-50 dark:bg-gray-800" id="content-presence" role="tabpanel"
@@ -104,13 +87,7 @@
                 :countdate="$countdate" :activite="$activite" :candidats="$candidats" />
         </div>
 
-        <!-- Contacts tab content -->
-        <div class="hidden p-4 rounded-lg bg-gray-50 dark:bg-gray-800" id="styled-contacts" role="tabpanel"
-            aria-labelledby="contacts-tab">
-            <p class="text-sm text-gray-500 dark:text-gray-400">Settings tab's associated content</strong>. Clicking
-                another tab will toggle the visibility of this one for the next. The tab JavaScript swaps classes to
-                control the content visibility and styling</p>
-        </div>
+       
         <div class="hidden p-4 ro unded-lg bg-gray-50 dark:bg-gray-800" id="import" role="tabpanel"
             aria-labelledby="contacts-tab">
             <p class="text-sm text-gray-500 dark:text-gray-400"><x-activite-import :activite="$activite" /></p>
@@ -407,6 +384,107 @@
             function redirectToPresence() {
                 window.location.href = '{{ route('presences.index') }}';
             }
+        </script>
+        <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+
+
+
+        <script>
+            const getChartOptions = () => {
+                return {
+                    series: [
+                        @json([$datachart->sum('total_candidats')]),
+                        @json([$datachart->sum('total_filles')]), // Total des filles
+                        @json([$datachart->sum('total_garcons')]),
+                        // Total des garçons
+                    ],
+                    colors: ["#1C64F2", "#16BDCA", "#FDBA8C"],
+                    chart: {
+                        height: "380px",
+                        width: "100%",
+                        type: "radialBar",
+                        sparkline: {
+                            enabled: true,
+                        },
+                    },
+                    stroke: {
+                        colors: ["transparent"],
+                        lineCap: "round", // Use 'round' for the end caps of the radial bar
+                    },
+                    plotOptions: {
+                        radialBar: {
+                            track: {
+                                background: '#E5E7EB',
+                            },
+                            dataLabels: {
+                                show: false,
+                            },
+                            hollow: {
+                                margin: 0,
+                                size: "32%",
+                            },
+                            donut: {
+                                labels: {
+                                    show: true,
+                                    name: {
+                                        show: true,
+                                        fontFamily: "Inter, sans-serif",
+                                        offsetY: 20,
+                                    },
+
+                                    value: {
+                                        show: true,
+                                        fontFamily: "Inter, sans-serif",
+                                        offsetY: -20,
+                                        formatter: function(value) {
+                                            return value; // Afficher la valeur brute
+                                        },
+                                    },
+                                },
+                                size: "70%",
+                            },
+                        },
+                    },
+                    grid: {
+                        show: false,
+                        strokeDashArray: 4,
+                        padding: {
+                            left: 2,
+                            right: 2,
+                            top: -23,
+                            bottom: -20,
+                        },
+                    },
+                    labels: ["Total", "Filles", "Garçons"], // Étiquettes pour les séries
+                    dataLabels: {
+                        enabled: false,
+                    },
+                    legend: {
+
+                        show: true,
+                        position: "bottom",
+                        fontFamily: "Inter, sans-serif",
+                    },
+                    tooltip: {
+                        enabled: true,
+                        x: {
+                            show: false,
+                        },
+                    },
+                    yaxis: {
+                        show: false,
+
+                    }
+                }
+            }
+
+            document.addEventListener('DOMContentLoaded', function() {
+                const options = getChartOptions();
+                const chart = new ApexCharts(document.querySelector("#chart"), options);
+                chart.render();
+            });
+        </script>
+
         </script>
     @endsection
 </x-app-layout>

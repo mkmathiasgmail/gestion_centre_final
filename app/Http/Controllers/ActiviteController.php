@@ -43,7 +43,7 @@ class ActiviteController extends Controller
 
 
                     $differenceInDays = $startDate->diffInDays($message);
-                    $activite->message = "Il y a une activité à venir $differenceInDays jours";
+                    $activite->message = "Jour j$differenceInDays ";
                 } else {
                     $activite->message = 'Terminée';
                 }
@@ -83,7 +83,7 @@ class ActiviteController extends Controller
                 'typeEvent' => 'nullable|array',
 
                 'typeEvent.*' => 'exists:type_events,id',
-                'day'=>'required',
+                'day' => 'required',
             ],
 
             [
@@ -131,7 +131,7 @@ class ActiviteController extends Controller
                 'isEvents' => false,
                 'creator' => false,
                 'location' => $validatedData['location'],
-                'number_day '=> $validatedData['day'],
+                'number_day ' => $validatedData['day'],
             ]);
 
 
@@ -257,9 +257,36 @@ class ActiviteController extends Controller
             }
         }
 
+        $id = $activite->id;
 
 
-        return view('activites.show', compact('participantsData', 'candidatsData', 'labels', 'data', 'activite', 'id', 'candidats', 'activite_Id', 'odcusers', 'fullDates', 'dates', 'countdate', 'presences'));
+
+     
+
+
+
+        $datachart = DB::table('candidats')
+            ->join('odcusers', 'candidats.odcuser_id', '=', 'odcusers.id')
+            ->join('activites', 'candidats.activite_id', '=', 'activites.id')
+            ->where('candidats.activite_id', $id) // Utilisez l'ID de l'activité spécifique
+            ->selectRaw("
+        activites.title as activite,
+        SUM(CASE WHEN odcusers.gender = 'female' THEN 1 ELSE 0 END) as total_filles,
+        SUM(CASE WHEN odcusers.gender = 'male' THEN 1 ELSE 0 END) as total_garcons,
+        COUNT(*) as total_candidats
+    ")
+            ->groupBy('activites.title')
+            ->get();
+
+
+
+       
+
+
+
+
+
+        return view('activites.show', compact('participantsData', 'datachart', 'candidatsData', 'labels', 'data', 'activite', 'id', 'candidats', 'activite_Id', 'odcusers', 'fullDates', 'dates', 'countdate', 'presences'));
     }
 
 
@@ -359,8 +386,6 @@ class ActiviteController extends Controller
                 ->post("$url/events/delete/$id");
             return redirect()->route('activites.index')
                 ->with('success', 'Activite deleted successfully.');
-
-
         } catch (\Exception $th) {
             return back()->withErrors(['error' => "An error occurred while creating the activity. $th"])->withInput();
         }
@@ -377,14 +402,14 @@ class ActiviteController extends Controller
     {
         $data1 = Activite::selectRaw("DATE_FORMAT(start_date, '%Y-%m-%d') as date, count(*) as aggregate, title,id")
             ->whereDate('start_date', '>=', now()->subDays(30))
-            ->groupBy('date', 'title','id')
+            ->groupBy('date', 'title', 'id')
             ->get();
 
 
         $data = Activite::selectRaw("DATE_FORMAT(start_date, '%Y-%m-%d') as date, count(*) as aggregate, title,id")
-        ->whereDate('start_date', '>=', now()->subDays(30))
-        ->groupBy('date', 'title', 'id')
-        ->paginate(4);
+            ->whereDate('start_date', '>=', now()->subDays(30))
+            ->groupBy('date', 'title', 'id')
+            ->paginate(4);
         $activites = Activite::all();
         $user = Odcuser::all();
 
@@ -418,7 +443,6 @@ class ActiviteController extends Controller
             } catch (\Exception $th) {
                 return response()->json(['success' => false, 'message' => 'Request failed', 'error' => $th->getMessage()], 500);
             }
-
         } else {
             $status->show_in_calendar = false;
             $status->save();
@@ -460,7 +484,7 @@ class ActiviteController extends Controller
                     ->post("$url/events/form/$id", $check);
 
                 return redirect()->route('activites.index')
-                ->with('success', 'Form active  successfully.');
+                    ->with('success', 'Form active  successfully.');
             } catch (\Exception $th) {
                 return response()->json(['success' => false, 'message' => 'Request failed', 'error' => $th->getMessage()], 500);
             }
@@ -479,7 +503,7 @@ class ActiviteController extends Controller
                     ->post("$url/events/form/$id", $check);
 
                 return redirect()->route('activites.index')
-                ->with('success', 'Form Desactive  successfully.');
+                    ->with('success', 'Form Desactive  successfully.');
             } catch (\Exception $th) {
                 return response()->json(['success' => false, 'message' => 'Request failed', 'error' => $th->getMessage()], 500);
             }
@@ -506,7 +530,7 @@ class ActiviteController extends Controller
                     ->post("$url/events/calendar/$id", $check);
 
                 return redirect()->route('activites.index')
-                ->with('success', 'isEvent active  successfully.');
+                    ->with('success', 'isEvent active  successfully.');
             } catch (\Exception $th) {
                 return response()->json(['success' => false, 'message' => 'Request failed', 'error' => $th->getMessage()], 500);
             }
@@ -525,7 +549,7 @@ class ActiviteController extends Controller
                     ->post("$url/events/calendar/$id", $check);
 
                 return redirect()->route('activites.index')
-                ->with('success', 'isEvent Desactive  successfully.');
+                    ->with('success', 'isEvent Desactive  successfully.');
             } catch (\Exception $th) {
                 return response()->json(['success' => false, 'message' => 'Request failed', 'error' => $th->getMessage()], 500);
             }
@@ -552,7 +576,7 @@ class ActiviteController extends Controller
                     ->post("$url/status/calendar/$id", $check);
 
                 return redirect()->route('activites.index')
-                ->with('success', 'Status active  successfully.');
+                    ->with('success', 'Status active  successfully.');
             } catch (\Exception $th) {
                 return response()->json(['success' => false, 'message' => 'Request failed', 'error' => $th->getMessage()], 500);
             }
@@ -571,7 +595,7 @@ class ActiviteController extends Controller
                     ->post("$url/events/status/$id", $check);
 
                 return redirect()->route('activites.index')
-                ->with('success', 'Activite Desactive in calendar successfully.');
+                    ->with('success', 'Activite Desactive in calendar successfully.');
             } catch (\Exception $th) {
                 return response()->json(['success' => false, 'message' => 'Request failed', 'error' => $th->getMessage()], 500);
             }
@@ -598,7 +622,7 @@ class ActiviteController extends Controller
                     ->post("$url/events/slide/$id", $check);
 
                 return redirect()->route('activites.index')
-                ->with('success', 'Activite active in slide successfully.');
+                    ->with('success', 'Activite active in slide successfully.');
             } catch (\Exception $th) {
                 return response()->json(['success' => false, 'message' => 'Request failed', 'error' => $th->getMessage()], 500);
             }
@@ -617,14 +641,10 @@ class ActiviteController extends Controller
                     ->post("$url/events/slide/$id", $check);
 
                 return redirect()->route('activites.index')
-                ->with('success', 'Activite Desactive in slide successfully.');
+                    ->with('success', 'Activite Desactive in slide successfully.');
             } catch (\Exception $th) {
                 return response()->json(['success' => false, 'message' => 'Request failed', 'error' => $th->getMessage()], 500);
             }
         }
     }
-
-
-
-
 }

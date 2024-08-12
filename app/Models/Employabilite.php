@@ -11,15 +11,11 @@ class Employabilite extends Model
     protected $fillable = [
         'name',
         'type_contrat_id',
-        'nomboite',
-        'poste',
         'periode',
         'odcuser_id',
         'derniere_activite',
         'derniere_service',
-        'date_participation'
-
-
+        'date_participation',
     ];
 
     public function odcuser()
@@ -29,5 +25,15 @@ class Employabilite extends Model
     public function type_contrat()
     {
         return $this->belongsTo(TypeContrat::class);
+    }
+
+    public function entreprise()
+    {
+        return $this->hasMany(Entreprise::class);
+    }
+
+    public function poste()
+    {
+        return $this->hasMany(Poste::class);
     }
 }
