@@ -34,13 +34,13 @@
                             {{ isset($activitesC) ? count($activitesC) : 0 }} +
                         </p>
                     </div>
-                    <div>
+                    {{-- <div>
                         <span class="mb-6 text-lg font-normal text-gray-500 lg:text-sm  dark:text-gray-400">
                             Taux Presence</span>
                         <p
                             class="mb-4 text-4xl leading-none tracking-tight text-gray-700 md:text-2xl lg:text-2xl dark:text-white">
                             {{ $taux_presence . ' %' }}</p>
-                    </div>
+                    </div> --}}
                 </div>
 
             </div>
