@@ -82,6 +82,7 @@ class ActiviteController extends Controller
                 'hashtags.*' => 'exists:hashtags,id',
                 'typeEvent' => 'nullable|array',
 
+
                 'typeEvent.*' => 'exists:type_events,id',
                 'day' => 'required',
             ],
@@ -133,6 +134,7 @@ class ActiviteController extends Controller
                 'location' => $validatedData['location'],
                 'number_day ' => $validatedData['day'],
             ]);
+
 
 
 
@@ -315,6 +317,7 @@ class ActiviteController extends Controller
                 'typeEvent.*' => 'exists:type_events,id',
                 'thumbnailURL' => 'nullable|url',
 
+
             ],
 
             [
@@ -377,6 +380,7 @@ class ActiviteController extends Controller
         $url = env('API_URL');
         try {
 
+
             $activite->delete();
             $id = $activite->_id;
 
@@ -419,6 +423,7 @@ class ActiviteController extends Controller
 
         return view('dashboard', compact('data1', 'activites', 'user', 'data'));
     }
+
 
     public function showInCalendar(Request $request, $id)
     {

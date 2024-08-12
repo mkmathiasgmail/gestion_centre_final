@@ -52,7 +52,7 @@
                     aria-controls="presence" aria-selected="false">Presence</button>
             </li>
             <li class="me-2" role="presentation">
-           
+
             <li role="presentation">
                 <button
                     class="inline-block p-4 border-b-2 rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300"
@@ -78,7 +78,7 @@
                 :odcusers="$odcusers" :activite_Id="$activite_Id" :id="$id" />
         </div>
 
-       
+
 
         <!-- Presence tab content -->
         <div class="hidden p-4 rounded-lg bg-gray-50 dark:bg-gray-800" id="content-presence" role="tabpanel"
@@ -87,12 +87,16 @@
                 :countdate="$countdate" :activite="$activite" :candidats="$candidats" />
         </div>
 
-       
+
         <div class="hidden p-4 ro unded-lg bg-gray-50 dark:bg-gray-800" id="import" role="tabpanel"
             aria-labelledby="contacts-tab">
             <p class="text-sm text-gray-500 dark:text-gray-400"><x-activite-import :activite="$activite" /></p>
         </div>
     </div>
+
+    <x-statusactive :name="__('Would you like show in calendar this activity? ')" />
+
+    <x-statusdesactive :name="__('Would you like disable in calendar this activity? ')" />
 
     @php
         $url = env('API_URL');
@@ -388,7 +392,19 @@
         <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
 
 
+        <script>
+            function activer(event) {
+                event.preventDefault();
+                let link = event.target.getAttribute('href');
+                document.querySelector('#desactiveStatus form').setAttribute('action', link);
+            }
 
+            function desactiver(event) {
+                event.preventDefault();
+                let link = event.target.getAttribute('href');
+                document.querySelector('#activeStatus form').setAttribute('action', link);
+            }
+        </script>
         <script>
             const getChartOptions = () => {
                 return {
