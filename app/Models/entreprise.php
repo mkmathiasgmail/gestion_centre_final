@@ -9,16 +9,12 @@ class Entreprise extends Model
 {
     use HasFactory;
     protected $fillable = [
-
         'nomboite',
-        
-
-
-
+        'employabilite_id',
     ];
 
-    public function employabilte()
+    public function employabilite()
     {
-        return $this->belongsToMany(Employabilite::class);
+        return $this->belongsTo(Employabilite::class);
     }
 }
