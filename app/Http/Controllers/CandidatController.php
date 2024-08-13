@@ -292,7 +292,11 @@ class CandidatController extends Controller
 
         // Get the ID from the request
         $candidat = Candidat::find($request->input('id'));
-
+        
+        if (!$candidat) {
+            // Return an error response if the candidat is not found
+            return response()->json(['error' => 'Candidat not found'], 404);
+        }
         // Perform the necessary action based on the status
         switch ($status) {
             case 'accept':
