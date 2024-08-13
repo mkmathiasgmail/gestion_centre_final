@@ -14,7 +14,9 @@ use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\DB;
 use App\Http\Requests\StoreEmployabiliteRequest;
 use App\Http\Requests\UpdateEmployabiliteRequest;
+use App\Models\Entreprise;
 use App\Models\TypeContrat;
+use App\Models\Poste;
 
 class EmployabiliteController extends Controller
 {
@@ -44,15 +46,21 @@ class EmployabiliteController extends Controller
                 ) AS subquery
             )",
                 [$name]
-            )->get();
+            )
+                ->get();
 
             $employabilites = $employabilites->merge($employabilite);
         }
+
+
         $typeContrats = TypeContrat::all();
+        $employabilite = Employabilite::all();
+
+
+
 
         return view('employabilites.index', compact('employabilites', 'typeContrats'));
     }
-
 
     /**
      * Show the form for creating a new resource.
@@ -74,9 +82,9 @@ class EmployabiliteController extends Controller
             'first_name' => 'required|string',
             'type_contrat' => 'required|string',
             'periode' => 'required|date',
-            'nomboite' => 'required|string',
-            'poste' => 'required|string',
+
         ]);
+
         $name = $request->input('first_name');
         $names = explode(' ', $name);
 
@@ -96,15 +104,14 @@ class EmployabiliteController extends Controller
 
         // Récupérer les activités liées au candidat
         $activites = DB::table("activites")
-            ->join('categories as ca', 'ca.id', '=', 'activites.categorie_id')
-            ->join('candidats as cnd', 'cnd.activite_id', '=', 'activites.id')
-            ->join('odcusers as od', 'od.id', '=', 'cnd.odcuser_id')
-            ->select('activites.title', 'ca.name', 'activites.start_date', 'activites.end_date')
-            ->where('od.first_name', '=', $firstName)
+        ->join('categories as ca', 'ca.id', '=', 'activites.categorie_id')
+        ->join('candidats as cnd', 'cnd.activite_id', '=', 'activites.id')
+        ->join('odcusers as od', 'od.id', '=', 'cnd.odcuser_id')
+        ->select('activites.title', 'ca.name', 'activites.start_date', 'activites.end_date')
+        ->where('od.first_name', '=', $firstName)
             ->where('od.last_name', '=', $lastName)
             ->orderBy('end_date', 'desc')
             ->get();
-
 
         // Vérifications des dates
         $dateEmployabilite = $request->periode;
@@ -127,14 +134,33 @@ class EmployabiliteController extends Controller
                     Employabilite::create([
                         'name' => $request->first_name,
                         'type_contrat' => $request->type_contrat,
-                        'nomboite' => $request->nomboite,
-                        'poste' => $request->poste,
                         'periode' => $request->periode,
                         'derniere_activite' => $activites->first()->title,
                         'derniere_service' => $activites->first()->name,
                         'date_participation' => $activites->first()->start_date,
                         'odcuser_id' => $request->id_user,
-                        'type_contrat_id' => $request->type_contrat,
+                        'type_contrat_id' => $request->type_contrat
+                    ]);
+
+                    $employabiliteId = Employabilite::query()->latest()->first()->id;
+
+                    Poste::create([
+                        'libelle' => $request->input('poste'),
+                        'employabilite_id' => $employabiliteId,
+                    ]);
+
+                    Poste::create([
+                        'libelle' => $request->input('poste1'),
+                        'employabilite_id' => $employabiliteId,
+                    ]);
+
+                    Entreprise::create([
+                        'nomboite' => $request->input('nomboite'),
+                        'employabilite_id' => $employabiliteId,
+                    ]);
+                    Entreprise::create([
+                        'nomboite' => $request->input('nomboite1'),
+                        'employabilite_id' => $employabiliteId,
                     ]);
                     return redirect()->route('employabilites.index')->with('success', 'Employé ajouté avec succès');
                 } else {
@@ -144,16 +170,14 @@ class EmployabiliteController extends Controller
                 return back()->with('error', 'La date d\'employabilité doit être supérieure à la dernière activité');
             }
         } catch (\Throwable $th) {
-            return back()->with('error', 'Erreur lors de l\'ajout de l\'employabilité parce que l\'utilisateur n\'a pas d\'activités');
+            return back()->with('error', 'Erreur lors de l\'ajout de l\'employabilité parce que cette personne n\'a pas d\'activités');
         }
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(Employabilite $employabilite)
-    {
-    }
+    public function show(Employabilite $employabilite) {}
 
     /**
      * Show the form for editing the specified resource.
@@ -166,9 +190,7 @@ class EmployabiliteController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateEmployabiliteRequest $request, Employabilite $employabilite)
-    {
-    }
+    public function update(UpdateEmployabiliteRequest $request, Employabilite $employabilite) {}
 
     /**
      * Remove the specified resource from storage.

@@ -66,7 +66,18 @@
                                 @if (isset($label))
                                     @if ($label != 'Cv de votre parcours (Obligatoire)')
                                         <td class="px-6 py-4">
-                                            {{ isset($candidat[$label]) && $candidat[$label] !== '' ? $candidat[$label] : 'N/A' }}
+                                            @php
+                                                $value =
+                                                    isset($candidat[$label]) && $candidat[$label] !== ''
+                                                        ? $candidat[$label]
+                                                        : 'N/A';
+                                            @endphp
+                                            {{ Str::of($value)->limit(40, '...') }}
+                                            @if (strlen($value) > 40)
+                                                <a href="#" onclick='readMore(event, `{{ $value }}`)'
+                                                    class="dark:text-gray-500 hover:text-gray-600">Read
+                                                    more</a>
+                                            @endif
                                         </td>
                                     @endif
                                 @endif
@@ -94,7 +105,8 @@
                                 </button>
 
                                 <!-- Dropdown menu -->
-                                <div id="dropdownDots{{ $key }}" style="position: absolute; top:50px; right: 50px;"
+                                <div id="dropdownDots{{ $key }}"
+                                    style="position: absolute; top:50px; right: 50px;"
                                     class="div-dropdown z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700 dark:divide-gray-600">
                                     <ul class="dropdown-menu py-2 text-sm text-gray-700 dark:text-gray-200"
                                         aria-labelledby="dropdownMenuIconButton">
@@ -111,7 +123,7 @@
                                         <li>
                                             <a data-modal-target="popup-wait" data-modal-toggle="popup-wait"
                                                 class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
-                                                onclick="actionStatus(event, 'wait', {{ $candidat['id'] }}, '{{ $candidat['odcuser']['first_name'] }}')">Wait</a>
+                                                onclick="actionStatus(event, 'wait', {{ $candidat['id'] }}, '{{ $candidat['odcuser']['first_name'] }}', '{{ $candidat['odcuser']['last_name'] }}')">Wait</a>
                                         </li>
                                     </ul>
                                 </div>
@@ -122,8 +134,21 @@
                             </td>
                         </tr>
                     @endforeach
+
                 </tbody>
             </table>
+            <button type="button" data-modal-target="popup-accept" id="first-modal" data-modal-toggle="popup-accept"
+                hidden>
+                Launch Modal
+            </button>
+            <button type="button" data-modal-target="popup-decline" id="second-modal" data-modal-toggle="popup-decline"
+                hidden>
+                Launch Modal
+            </button>
+            <button type="button" data-modal-target="popup-wait" id="third-modal" data-modal-toggle="popup-wait"
+                hidden>
+                Launch Modal
+            </button>
         @else
             <div class="flex justify-center items-center">
                 <div class="text-center">

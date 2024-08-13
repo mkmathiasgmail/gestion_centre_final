@@ -15,6 +15,10 @@ return new class extends Migration
             $table->id();
             $table->string('libelle');
             $table->timestamps();
+            $table->foreignId('employabilite_id')
+            ->constrained('employabilites')
+            ->onDelete('cascade')
+            ->onUpdate('cascade');
         });
     }
 
