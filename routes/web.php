@@ -29,3 +29,4 @@ require __DIR__.'/web_import.php';
 require __DIR__.'/web_certificat.php';
 
 require __DIR__.'/web_notification.php';
+require __DIR__.'/web_coursera.php';
