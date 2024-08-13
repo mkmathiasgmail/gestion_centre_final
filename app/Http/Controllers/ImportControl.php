@@ -44,12 +44,19 @@ class ImportControl extends Controller
             $rowData = array_combine($header, $data);
             // Valider les données de chaque ligne
             //dump($rowData);
+            //dd($rowData['status']);
             try {
                 $validatedData = $this->validateRowData($rowData);
-                //dump($validatedData);
+                //dd($validatedData);
                 // Chercher l'utilisateur par email 
+                //ump($rowData['email']);
                 $odcuser = Odcuser::where('email', $validatedData['email'])->first();
+                //dd($odcuser);
 
+                /*if(empty($validatedData['email'])){
+                    continue;
+                }*/
+            
                 $validatedData['birth_date'] = '1970-02-05';
                 $validatedData['password'] = 'kdjksjfkndjskjd5555';
                 $validatedData['profession'] = "{'profession':'etudiant'}";
@@ -110,7 +117,7 @@ class ImportControl extends Controller
 
                 //dd($candidat);
                 //dump($rowData);
-                $date = $rowData['date_1977-01-01'];
+                $date = $rowData['Date_1977-01-01'];
                 //dd($date);
                 //on remplie la table presence
                 $datemodif = explode('_', $date);
@@ -202,7 +209,7 @@ class ImportControl extends Controller
 
     public function download($filename)
     {
-        $path = storage_path('app/public/' . $filename);
+        $path = storage_path('app/public/modelcsv' . $filename);
         //dd($path);
 
         if (!file_exists($path)) {
