@@ -271,7 +271,7 @@
                 event.preventDefault();
                 let status = $(event.target).data('text');
 
-                let id = $('#decline-link').attr('data')
+                let id = $(event.target).attr('data')
                 console.log(id)
                 $.ajax({
                     type: 'POST',
