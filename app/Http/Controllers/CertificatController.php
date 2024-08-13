@@ -82,7 +82,7 @@ class CertificatController extends Controller
         $candidat = Candidat::find($candidat);
 
         $date = new DateTimeImmutable($candidat->activite->start_date);
-        $format = date_format($date, 'jS \o\f F Y');
+        $format = $date->format("j F Y");
 
         $pdf = view('certificat.generateCertificat', compact('candidat', 'format'));
         echo $pdf;
