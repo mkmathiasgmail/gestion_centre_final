@@ -188,7 +188,9 @@
                         </a>
                     </li>
                 @endif
-                <li>
+
+                <!-- bar importation csv, don't needed now -->
+                <!--<li>
                     <a href="{{ route('import') }}"
                         class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
                         <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true"
@@ -201,7 +203,8 @@
                         <span class="ms-3">Importation CSV</span>
 
                     </a>
-                </li>
+                </li>-->
+                
                 <li>
                     <a href="{{ route('evaluations.index') }}"
                         class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">

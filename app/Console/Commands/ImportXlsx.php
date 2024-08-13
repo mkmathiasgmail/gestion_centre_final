@@ -83,6 +83,7 @@ class ImportXlsx extends Command
                 }
             } catch (\Throwable $th) {
                 $this->error('Erreur id On: '.$worksheet->getTitle());
+                //dd($worksheet->getTitle())
             }
             //dd($currentActivity);
             $this->info('Processing...: '.$currentActivity->title);       
