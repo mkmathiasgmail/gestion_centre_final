@@ -193,8 +193,8 @@
                             let data_user = $.each(data, function(index, item) {
                                 $('#countryList').append(
                                     '<p id="id_odc" class="hidden">' + item.id +
-                                    '</p><ul class= "font-bold"><li class="pl-4 bg-gray-300 hover:bg-gray-400">' +
-                                    item.first_name + '  ' + item.last_name + '</li></ul>');
+                                    '</p><ul class= "font-bold"><li class="pl-4 bg-gray-300 hover:bg-gray-400" data-id="'+item.id+'">' +
+                                    item.first_name + '  ' + item.last_name+'</li></ul>');
 
 
 
@@ -212,7 +212,8 @@
 
                 $(document).on('click', 'li', function() {
                     $('#first_name').val($(this).text());
-                    var go = $("#id_odc").text()
+                    var go = $(this).attr("data-id")
+                    console.log('id slectionne', go)
                     $("#id_user").attr("value", go)
                     $('#countryList').fadeOut();
                 });
