@@ -8,15 +8,16 @@ use App\Models\Hashtag;
 use App\Models\Odcuser;
 use App\Models\Activite;
 use App\Models\Candidat;
-use App\Models\CandidatAttribute;
 use App\Models\Presence;
 use App\Models\Categorie;
 use App\Models\TypeEvent;
 use Illuminate\Http\Request;
+use App\Models\CandidatAttribute;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Http;
+use Yajra\DataTables\Facades\DataTables;
 
 class ActiviteController extends Controller
 {
@@ -191,7 +192,7 @@ class ActiviteController extends Controller
                 $candidatsData[] = $candidatArray;
             }
         } else {
-            $candidatsData = null ;
+            $candidatsData = null;
             $labels = null;
         }
 
@@ -237,7 +238,7 @@ class ActiviteController extends Controller
         // dd($dates);
         $countdate = count($dates);
 
-        $candidats_on_activity = Candidat::where('activite_id', $id)->where('status','accept')->with('odcuser')->get();
+        $candidats_on_activity = Candidat::where('activite_id', $id)->where('status', 'accept')->with('odcuser')->get();
         $data = [];
         $pres = Presence::all()->pluck('candidat_id');
         foreach ($candidats_on_activity as $candidat) {
@@ -263,7 +264,7 @@ class ActiviteController extends Controller
 
 
 
-     
+
 
 
 
@@ -282,7 +283,7 @@ class ActiviteController extends Controller
 
 
 
-       
+
 
 
 
@@ -651,5 +652,22 @@ class ActiviteController extends Controller
                 return response()->json(['success' => false, 'message' => 'Request failed', 'error' => $th->getMessage()], 500);
             }
         }
+    }
+
+
+    public function getActivites(Request $request)
+    {
+        $query = Activite::query();
+
+      
+        if ($request->has('start_date') && $request->has('end_date')) {
+            $query->whereBetween('start_date', [$request->start_date, $request->end_date]);
+        }
+
+        $activites = $query->get();
+
+    
+
+        return response()->json($activites);
     }
 }
