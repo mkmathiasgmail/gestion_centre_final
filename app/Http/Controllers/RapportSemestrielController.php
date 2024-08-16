@@ -51,6 +51,8 @@ class RapportSemestrielController extends Controller
             ->leftJoin('type_events as typ', 'typ.id', '=', 'acty.type_event_id')
             ->leftJoin('employabilites as empl', 'empl.odcuser_id', '=', 'us.id')
             ->leftJoin('type_contrats as typecont', 'typecont.id', '=', 'empl.type_contrat_id')
+            ->leftJoin('postes as pst', 'pst.employabilite_id', '=', 'empl.id')
+            ->leftJoin('entreprises as entrp', 'entrp.employabilite_id', '=', 'empl.id')
             ->whereNotNull('ac.title')
             ->whereBetween('ac.start_date', [$startDate, $endDate])
             ->orderBy('ac.start_date', 'asc')
@@ -67,8 +69,8 @@ class RapportSemestrielController extends Controller
                 'ac.end_date',
                 'ac.title',
                 'typecont.libelle as type_contrat',
-                'empl.nomboite',
-                'empl.poste',
+                'entrp.nomboite as entreprise',
+                'pst.libelle as poste',
                 DB::raw('(ac.start_date) as startYear'),
                 'cat.name as namecat',
                 'typ.title as titletype',
@@ -396,8 +398,10 @@ class RapportSemestrielController extends Controller
             $interval = $today->diff($birthDay);
             $ages = $interval->y; // Âge en années
 
-            if ($ages >=3 && $ages <= 14){
-                $tranche = "6 - 14 years";
+            $tranche = "";
+
+            if ($ages >= 3 && $ages <= 14) {
+                $tranche = "0 - 14 years";
             }
             if ($ages >= 15 && $ages <= 24) {
                 $tranche = "15 - 24 years";
@@ -433,7 +437,7 @@ class RapportSemestrielController extends Controller
             $worksheet->setCellValue('G' . $row, $specialiteValue)
                 ->getStyle('G' . $row)
                 ->getAlignment()
-                ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_LEFT);
+                ->setHorizontal(Alignment::HORIZONTAL_LEFT);
             $worksheet->setCellValue('H' . $row, $candidat->email)
                 ->getStyle('H' . $row)
                 ->getAlignment()
@@ -491,7 +495,7 @@ class RapportSemestrielController extends Controller
                     ->getAlignment()
                     ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
             }
-            $worksheet->setCellValue('AC' . $row, $candidat->nomboite)
+            $worksheet->setCellValue('AC' . $row, $candidat->entreprise)
                 ->getStyle('AC' . $row)
                 ->getAlignment()
                 ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
@@ -560,7 +564,6 @@ class RapportSemestrielController extends Controller
 
         //Code formule pour avoir le nombre de jours de durée d'une activité
 
-        // Récupérer la feuille de travail
         // Récupérer la feuille de travail
         $worksheet = $spreadsheet->getActiveSheet();
 

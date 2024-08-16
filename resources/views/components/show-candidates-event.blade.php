@@ -111,17 +111,17 @@
                                     <ul class="dropdown-menu py-2 text-sm text-gray-700 dark:text-gray-200"
                                         aria-labelledby="dropdownMenuIconButton">
                                         <li>
-                                            <a data-modal-target="popup-accept" data-modal-toggle="popup-accept"
+                                            <a
                                                 class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
                                                 onclick="actionStatus(event, 'accept', {{ $candidat['id'] }}, '{{ $candidat['odcuser']['first_name'] }}')">Accept</a>
                                         </li>
                                         <li>
-                                            <a data-modal-target="popup-decline" data-modal-toggle="popup-decline"
+                                            <a
                                                 class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
                                                 onclick="actionStatus(event, 'decline', {{ $candidat['id'] }}, '{{ $candidat['odcuser']['first_name'] }}')">Decline</a>
                                         </li>
                                         <li>
-                                            <a data-modal-target="popup-wait" data-modal-toggle="popup-wait"
+                                            <a 
                                                 class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
                                                 onclick="actionStatus(event, 'wait', {{ $candidat['id'] }}, '{{ $candidat['odcuser']['first_name'] }}', '{{ $candidat['odcuser']['last_name'] }}')">Wait</a>
                                         </li>

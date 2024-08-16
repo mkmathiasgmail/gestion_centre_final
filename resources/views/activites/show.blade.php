@@ -87,7 +87,7 @@
                 :countdate="$countdate" :activite="$activite" :candidats="$candidats" />
         </div>
 
-
+        <!-- import tab content -->
         <div class="hidden p-4 ro unded-lg bg-gray-50 dark:bg-gray-800" id="import" role="tabpanel"
             aria-labelledby="contacts-tab">
             <p class="text-sm text-gray-500 dark:text-gray-400"><x-activite-import :activite="$activite" /></p>
@@ -271,7 +271,7 @@
                 event.preventDefault();
                 let status = $(event.target).data('text');
 
-                let id = $('#decline-link').attr('data')
+                let id = $(event.target).attr('data')
                 console.log(id)
                 $.ajax({
                     type: 'POST',
