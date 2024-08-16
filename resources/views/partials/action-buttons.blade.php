@@ -2,8 +2,8 @@
 
 
 
- <button id="openModal" data-dropdown-toggle="simpleModal" data-modal-target="dropdownMenuIconButton"
-     class="inline-flex items-center p-2 text-sm font-medium text-center text-gray-900 bg-white rounded-lg hover:bg-gray-100 focus:ring-4 focus:outline-none dark:text-white focus:ring-gray-50 dark:bg-gray-800 dark:hover:bg-gray-700 dark:focus:ring-gray-600"
+ <button id="openModal{{$activite->id}}" data-dropdown-toggle="simpleModal{{$activite->id}}" data-modal-target="simpleModal{{$activite->id}}"
+     class=" btnModal inline-flex items-center p-2 text-sm font-medium text-center text-gray-900 bg-white rounded-lg hover:bg-gray-100 focus:ring-4 focus:outline-none dark:text-white focus:ring-gray-50 dark:bg-gray-800 dark:hover:bg-gray-700 dark:focus:ring-gray-600"
      type="button">
      <svg class="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 4 15">
          <path
@@ -12,8 +12,8 @@
  </button>
 
 
- <div id="simpleModal"
-     class=" z-40 right-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700 dark:divide-gray-600 absolute">
+ <div id="simpleModal{{$activite->id}}"
+     class=" z-40 right-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700 dark:divide-gray-600 absolute modal">
      <ul class="py-2 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdownMenuIconButton">
          <li>
              <a href="{{ route('activites.show', $activite->id) }}"
@@ -105,19 +105,4 @@
 
 
 
- <script>
-     document.querySelectorAll('.openModal').forEach(button => {
-         button.addEventListener('click', function() {
-             let modalId = button.getAttribute('data-modal-id');
-             document.getElementById(modalId).classList.remove('hidden');
-         });
-     });
-
-     // Fermer le modal
-     document.querySelectorAll('.closeModal').forEach(button => {
-         button.addEventListener('click', function() {
-             let modalId = button.getAttribute('data-modal-id');
-             document.getElementById(modalId).classList.add('hidden');
-         });
-     });
- </script>
+ 
