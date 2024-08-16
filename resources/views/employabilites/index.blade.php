@@ -111,7 +111,6 @@
                     <th scope="col" class="px-6 py-3 bg-slate-700">
                         Date participation
                     </th>
-
                 </tr>
             </thead>
             <tbody>
@@ -125,20 +124,16 @@
                         {{ $id_use }}
                     </td>
                     <td class="px-6 py-4">
-                        <a href="{{ route('odcusers.show', $item->odcuser->id) }}"> {{ $item->name }} </a>
+                        <a href="{{ route('odcusers.show', $item->odcuser_id) }}"> {{ $item->name }} </a>
                     </td>
                     <td class="px-6 py-4">
                         {{ (isset($item->type_contrat->libelle)) ? $item->type_contrat->libelle : '' }}
                     </td>
                    <td class="px-6 py-4">
-                        @foreach ($item->entreprise as $entre)
-                        {{ $entre->nomboite }} <br>
-                        @endforeach
+                    {!! nl2br($item->nomboites) !!}
                     </td>
                     <td class="px-6 py-4">
-                        @foreach ($item->poste as $poste)
-                        {{ $poste->libelle }} <br>
-                        @endforeach
+                        {!! nl2br($item->postes) !!}
                     </td>
                     <td class="px-6 py-4">
                         {{ $item->periode }}
