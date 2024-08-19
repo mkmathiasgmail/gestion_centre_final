@@ -120,6 +120,7 @@
                                         href="{{ route('hashtags.index') }}">Hashtag</a></p>
                                 <p class="mb-2 p-2 hover:bg-gray-100 rounded-lg text-gray-900 hover:text-gray dark:text-gray-400 {{ request()->routeIs('typevents.index') ? ' bg-gray-100 dark:bg-gray-700' : 'bg-white dark:bg-gray-800' }}"><a
                                         href="{{ route('typevents.index') }}">Event type</a></p>
+                                     
                             </div>
                         </div>
                     </div>
@@ -254,6 +255,16 @@
                         </svg>
 
                         <span class="ms-3">Presences</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ route('coursera.rapports') }}"
+                        class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
+
+                        <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 18">
+                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 5h9M5 9h5m8-8H2a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h4l3.5 4 3.5-4h5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1Z"/>
+                        </svg>
+                        <span class="ms-3">Rapports coursera</span>
                     </a>
                 </li>
             </ul>
