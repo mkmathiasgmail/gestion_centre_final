@@ -112,15 +112,19 @@
                         </h2>
                         <div id="accordion-flush-body-2" class="hidden" aria-labelledby="accordion-flush-heading-2">
                             <div class="p-4 border-b border-gray-200 dark:border-gray-700">
-                                <p class="mb-2 p-2 hover:bg-gray-100 rounded-lg text-gray-900 hover:text-gray dark:text-gray-400 {{ request()->routeIs('activites.index') ? ' bg-gray-100 dark:bg-gray-700' : 'bg-white dark:bg-gray-800' }}"><a
-                                        href="{{ route('activites.index') }}">Actvités</a></p>
-                                <p class="mb-2 p-2 hover:bg-gray-100 rounded-lg text-gray-900hover:text-gray dark:text-gray-400 {{ request()->routeIs('categories.index') ? ' bg-gray-100 dark:bg-gray-700' : 'bg-white dark:bg-gray-800' }}"><a
-                                        href="{{ route('categories.index') }}">Catégories</a></p>
-                                <p class="mb-2 p-2 hover:bg-gray-100 rounded-lg text-gray-900 hover:text-gray dark:text-gray-400 {{ request()->routeIs('hashtags.index') ? ' bg-gray-100 dark:bg-gray-700' : 'bg-white dark:bg-gray-800' }}"><a
-                                        href="{{ route('hashtags.index') }}">Hashtag</a></p>
-                                <p class="mb-2 p-2 hover:bg-gray-100 rounded-lg text-gray-900 hover:text-gray dark:text-gray-400 {{ request()->routeIs('typevents.index') ? ' bg-gray-100 dark:bg-gray-700' : 'bg-white dark:bg-gray-800' }}"><a
-                                        href="{{ route('typevents.index') }}">Event type</a></p>
-                                     
+                                <p
+                                    class="mb-2 p-2 hover:bg-gray-100 rounded-lg text-gray-900 hover:text-gray dark:text-gray-400 {{ request()->routeIs('activites.index') ? ' bg-gray-100 dark:bg-gray-700' : 'bg-white dark:bg-gray-800' }}">
+                                    <a href="{{ route('activites.index') }}">Actvités</a></p>
+                                <p
+                                    class="mb-2 p-2 hover:bg-gray-100 rounded-lg text-gray-900hover:text-gray dark:text-gray-400 {{ request()->routeIs('categories.index') ? ' bg-gray-100 dark:bg-gray-700' : 'bg-white dark:bg-gray-800' }}">
+                                    <a href="{{ route('categories.index') }}">Catégories</a></p>
+                                <p
+                                    class="mb-2 p-2 hover:bg-gray-100 rounded-lg text-gray-900 hover:text-gray dark:text-gray-400 {{ request()->routeIs('hashtags.index') ? ' bg-gray-100 dark:bg-gray-700' : 'bg-white dark:bg-gray-800' }}">
+                                    <a href="{{ route('hashtags.index') }}">Hashtag</a></p>
+                                <p
+                                    class="mb-2 p-2 hover:bg-gray-100 rounded-lg text-gray-900 hover:text-gray dark:text-gray-400 {{ request()->routeIs('typevents.index') ? ' bg-gray-100 dark:bg-gray-700' : 'bg-white dark:bg-gray-800' }}">
+                                    <a href="{{ route('typevents.index') }}">Event type</a></p>
+
                             </div>
                         </div>
                     </div>
@@ -148,12 +152,11 @@
                             viewBox="0 0 24 24">
                             <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
                                 stroke-width="2"
-                                
                                 d="M17 9h2V7h-2zm1 14q-2.075 0-3.537-1.463T13 18t1.463-3.537T18 13t3.538 1.463T23 18t-1.463 3.538T18 23m-.5-2h1v-2.5H21v-1h-2.5V15h-1v2.5H15v1h2.5zm5.5-7.875q-.975-1.05-2.275-1.588T18 11q-.275 0-.513.013t-.487.062V10l-7-5.05V3h13zM1 21V11l7-5l7 5v.675q-1.8.85-2.9 2.588T11 18q0 .775.163 1.538T11.675 21H10v-6H6v6z" />
 
 
 
-                                {{-- d="M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18Zm0 0a8.949 8.949 0 0 0 4.951-1.488A3.987 3.987 0 0 0 13 16h-2a3.987 3.987 0 0 0-3.951 3.512A8.948 8.948 0 0 0 12 21Zm3-11a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" /> --}}
+                            {{-- d="M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18Zm0 0a8.949 8.949 0 0 0 4.951-1.488A3.987 3.987 0 0 0 13 16h-2a3.987 3.987 0 0 0-3.951 3.512A8.948 8.948 0 0 0 12 21Zm3-11a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" /> --}}
                         </svg>
                         <span class="ms-3">Employabilité</span>
 
@@ -170,10 +173,8 @@
                                 viewBox="0 0 24 24">
                                 <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
                                     stroke-width="2"
-
-
-                                 d="M12,1L3,5V11C3,16.55 6.84,21.74 12,23C17.16,21.74 21,16.55 21,11V5L12,1M12,7C13.4,7 14.8,8.1 14.8,9.5V11C15.4,11 16,11.6 16,12.3V15.8C16,16.4 15.4,17 14.7,17H9.2C8.6,17 8,16.4 8,15.7V12.2C8,11.6 8.6,11 9.2,11V9.5C9.2,8.1 10.6,7 12,7M12,8.2C11.2,8.2 10.5,8.7 10.5,9.5V11H13.5V9.5C13.5,8.7 12.8,8.2 12,8.2Z" />
-                                    </svg>
+                                    d="M12,1L3,5V11C3,16.55 6.84,21.74 12,23C17.16,21.74 21,16.55 21,11V5L12,1M12,7C13.4,7 14.8,8.1 14.8,9.5V11C15.4,11 16,11.6 16,12.3V15.8C16,16.4 15.4,17 14.7,17H9.2C8.6,17 8,16.4 8,15.7V12.2C8,11.6 8.6,11 9.2,11V9.5C9.2,8.1 10.6,7 12,7M12,8.2C11.2,8.2 10.5,8.7 10.5,9.5V11H13.5V9.5C13.5,8.7 12.8,8.2 12,8.2Z" />
+                            </svg>
 
                             </svg>
                             <span class="ms-3">Role</span>
@@ -183,19 +184,19 @@
                 @endif
 
                 @if (Auth()->user()->hasRole('super-admin'))
-                <li>
-                    <a href="{{ route('type_Contrats.index') }}"
-                        class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group {{ request()->routeIs('type_Contrats.index') ? ' bg-gray-100 dark:bg-gray-700' : 'bg-white dark:bg-gray-800' }}">
-                        <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true"
-                            xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none"
-                            viewBox="0 0 24 24">
-                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
-                                stroke-width="2"
-                                d="M10,2H14A2,2 0 0,1 16,4V6H20A2,2 0 0,1 22,8V19A2,2 0 0,1 20,21H4C2.89,21 2,20.1 2,19V8C2,6.89 2.89,6 4,6H8V4C8,2.89 8.89,2 10,2M14,6V4H10V6H14Z" />
-                        </svg>
-                        <span class="ms-3">Type contrat</span>
-                    </a>
-                </li>
+                    <li>
+                        <a href="{{ route('type_Contrats.index') }}"
+                            class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group {{ request()->routeIs('type_Contrats.index') ? ' bg-gray-100 dark:bg-gray-700' : 'bg-white dark:bg-gray-800' }}">
+                            <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true"
+                                xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none"
+                                viewBox="0 0 24 24">
+                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                    stroke-width="2"
+                                    d="M10,2H14A2,2 0 0,1 16,4V6H20A2,2 0 0,1 22,8V19A2,2 0 0,1 20,21H4C2.89,21 2,20.1 2,19V8C2,6.89 2.89,6 4,6H8V4C8,2.89 8.89,2 10,2M14,6V4H10V6H14Z" />
+                            </svg>
+                            <span class="ms-3">Type contrat</span>
+                        </a>
+                    </li>
                 @endif
 
                 <!-- bar importation csv, don't needed now -->
@@ -213,7 +214,7 @@
 
                     </a>
                 </li>-->
-                
+
                 <li>
                     <a href="{{ route('evaluations.index') }}"
                         class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group {{ request()->routeIs('evaluations.index') ? ' bg-gray-100 dark:bg-gray-700' : 'bg-white dark:bg-gray-800' }}">
@@ -258,11 +259,29 @@
                     </a>
                 </li>
                 <li>
+                    <a href="{{ route('security') }}"
+                        class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
+                        <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true"
+                            xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor"
+                            viewBox="0 0 24 24">
+                            <path fill-rule="evenodd"
+                                d="M5 8a4 4 0 1 1 7.796 1.263l-2.533 2.534A4 4 0 0 1 5 8Zm4.06 5H7a4 4 0 0 0-4 4v1a2 2 0 0 0 2 2h2.172a2.999 2.999 0 0 1-.114-1.588l.674-3.372a3 3 0 0 1 .82-1.533L9.06 13Zm9.032-5a2.907 2.907 0 0 0-2.056.852L9.967 14.92a1 1 0 0 0-.273.51l-.675 3.373a1 1 0 0 0 1.177 1.177l3.372-.675a1 1 0 0 0 .511-.273l6.07-6.07a2.91 2.91 0 0 0-.944-4.742A2.907 2.907 0 0 0 18.092 8Z"
+                                clip-rule="evenodd" />
+                        </svg>
+
+
+                        <span class="ms-3">security page</span>
+                    </a>
+                </li>
+                <li>
                     <a href="{{ route('coursera.rapports') }}"
                         class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
 
-                        <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 18">
-                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 5h9M5 9h5m8-8H2a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h4l3.5 4 3.5-4h5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1Z"/>
+                        <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true"
+                            xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 18">
+                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                stroke-width="2"
+                                d="M5 5h9M5 9h5m8-8H2a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h4l3.5 4 3.5-4h5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1Z" />
                         </svg>
                         <span class="ms-3">Rapports coursera</span>
                     </a>

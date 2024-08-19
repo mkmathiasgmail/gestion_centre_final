@@ -35,18 +35,26 @@ class PresenceController extends Controller
         $request->validate([
             'email' => 'required|max:50|min:6',
         ]);
+
         $email = $request->input('email');
         $filtre = Odcuser::where('email', $email)->first();
-        if (isset($filtre)) {
+
+        if ($filtre) {
             $candidat = $filtre->candidat()->where('status', 'accept')->where('activite_id', $id)->first();
+            if ($candidat) {
+                $activiteCandidat = $candidat->where('activite_id', $id);
 
-            $activiteCandidat = $candidat->where('activite_id', $id);
-
-            if (isset($activiteCandidat)) {
-
-                return view('presences.confirInfo', ['prenom' => $filtre->first_name, 'nom' => $filtre->last_name], compact('id')) ;
+                if ($activiteCandidat) {
+                    return view('presences.confirInfo', [
+                        'prenom' => $filtre->first_name,
+                        'nom' => $filtre->last_name,
+                        'id' => $id,
+                    ]);
+                } else {
+                    return back()->with('errorinactif', 'vous n\'êtes de cette activité!');
+                }
             } else {
-                return back()->with('errorinactif', 'Compte innactif!');
+                return back()->with('error', 'Vous n\'êtes pas un participant de cette activite!');
             }
         } else {
             return back()->with('error', 'Utilisateur n\'existe pas!');
