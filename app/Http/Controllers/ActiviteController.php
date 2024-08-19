@@ -405,10 +405,14 @@ class ActiviteController extends Controller
 
     public function chartActivity()
     {
-        $data1 = Activite::selectRaw("DATE_FORMAT(start_date, '%Y-%m-%d') as date, count(*) as aggregate, title,id")
-            ->whereDate('start_date', '>=', now()->subDays(30))
-            ->groupBy('date', 'title', 'id')
-            ->get();
+        $participationData = Candidat::selectRaw("SUM(CASE WHEN odcusers.gender = 'male' THEN 1 ELSE 0 END) as hommes")
+            ->selectRaw("SUM(CASE WHEN odcusers.gender = 'female' THEN 1 ELSE 0 END) as femmes")
+            ->join('odcusers', 'odcusers.id', '=', 'candidats.odcuser_id')
+            ->whereBetween('candidats.created_at', [Carbon::now()->subDays(7), Carbon::now()])
+            ->first();
+
+        $hommes = $participationData->hommes;
+        $femmes = $participationData->femmes;
 
 
         $data = Activite::selectRaw("DATE_FORMAT(start_date, '%Y-%m-%d') as date, count(*) as aggregate, title,id")
@@ -418,11 +422,24 @@ class ActiviteController extends Controller
         $activites = Activite::all();
         $user = Odcuser::all();
 
+        $activityForWeekend = Activite::whereRaw('(start_date BETWEEN ? AND ?) 
+                                  OR (end_date BETWEEN ? AND ?) 
+                                  OR (start_date <= ? AND end_date >= ?)', [
+            Carbon::now()->subDays(Carbon::now()->dayOfWeek),
+            Carbon::now()->addDays(5 - Carbon::now()->dayOfWeek),
+            Carbon::now()->subDays(Carbon::now()->dayOfWeek),
+            Carbon::now()->addDays(5 - Carbon::now()->dayOfWeek),
+            Carbon::now()->subDays(Carbon::now()->dayOfWeek),
+            Carbon::now()->addDays(5 - Carbon::now()->dayOfWeek),
+        ])->get();
 
 
 
 
-        return view('dashboard', compact('data1', 'activites', 'user', 'data'));
+
+
+
+        return view('dashboard', compact('activites', 'user', 'data', 'hommes', 'femmes', "activityForWeekend"));
     }
 
 
@@ -659,15 +676,22 @@ class ActiviteController extends Controller
     {
         $query = Activite::query();
 
-      
+
         if ($request->has('start_date') && $request->has('end_date')) {
             $query->whereBetween('start_date', [$request->start_date, $request->end_date]);
         }
 
         $activites = $query->get();
 
-    
+
 
         return response()->json($activites);
+    }
+
+    public function weeekActivites()
+    {
+
+
+        return view('dashboard', compact('week'));
     }
 }
