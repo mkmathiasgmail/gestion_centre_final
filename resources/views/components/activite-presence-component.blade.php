@@ -5,12 +5,12 @@
     <table id="candidatpresence" class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
         <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
             <tr>
-                <th scope="col" class="px-6 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                <th scope="col" class="bg-gray-700 px-6 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                     Id
                 </th>
-                <th scope="col" class="px-6 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                <th scope="col" class=" bg-gray-700 px-6 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                     FirstName</th>
-                <th scope="col" class="px-6 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                <th scope="col" class="bg-gray-700 px-6 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                     Lastname
                 </th>
                 @foreach ($dates as $item)
@@ -23,11 +23,11 @@
         <tbody>
             @foreach ($data as $i => $item)
                 <tr id="rowAll" class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
-                    <td scope="col" class="px-6 py-3">
+                    <td scope="col" class="px-6 py-3 bg-gray-700 text-white">
                         {{ $i + 1 }}</td>
-                    <td scope="col" class="px-6 py-3">
+                    <td scope="col" class="px-6 py-3 bg-gray-700 text-white">
                         {{ $item['odcuser']['first_name'] }}</td>
-                    <td scope="col" class="px-6 py-3">
+                    <td scope="col" class="px-6 py-3 bg-gray-700 text-white">
                         {{ $item['odcuser']['last_name'] }}
                     </td>
                     @foreach ($fullDates as $date)
