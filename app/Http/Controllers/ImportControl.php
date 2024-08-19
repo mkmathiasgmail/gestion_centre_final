@@ -5,14 +5,17 @@ namespace App\Http\Controllers;
 use App\Models\Odcuser;
 use App\Models\Activite;
 use App\Models\Candidat;
-use App\Models\CandidatAttribute;
 use App\Models\Presence;
 use Illuminate\Http\Request;
+use App\Models\CandidatAttribute;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use PhpOffice\PhpSpreadsheet\IOFactory;
 use Illuminate\Support\Facades\Validator;
-use PhpOffice\PhpSpreadsheet\Reader\Xlsx;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
+use PhpOffice\PhpSpreadsheet\Style\Border;
+use PhpOffice\PhpSpreadsheet\Style\Alignment;
 
 class ImportControl extends Controller
 {
@@ -31,13 +34,16 @@ class ImportControl extends Controller
         ]);
 
         // Récupérer l'ID de l'activité à partir du formulaire
+        //$activiteId = $request->activite;
         $activiteId = $request->activite;
+        
 
         // Lire le fichier
         $file = $request->file('file');
         $fileContents = file($file->getPathname());
         // Supposons que le fichier CSV contient des en-têtes
         $header = str_getcsv(array_shift($fileContents));
+        //dd($this->activiteId);
         // Parcourir les lignes du fichier CSV
         foreach ($fileContents as $line) {
             $data = str_getcsv($line);
@@ -207,16 +213,168 @@ class ImportControl extends Controller
         return view(/*'components.activite-import'*/'import.import', ['activites' => $activites]);
     }
 
-    public function download($filename)
+    public function download($activiteId)
     {
-        $path = storage_path('app/public/modelcsv' . $filename);
+        /*$path = storage_path('app/public/modelcsv' . $filename);
         //dd($path);
+         $filename//a parameter for our function
 
         if (!file_exists($path)) {
             abort(404, 'fichier non trouvé');
         }
 
         return response()->download($path);
-    }
+        */
+        // Valider que l'ID de l'activité existe
+        /*
+        $activite = Activite::findOrFail($activiteId);
 
+        $spreadsheet = new Spreadsheet();
+        $sheet = $spreadsheet->getActiveSheet();
+        $sheet->setTitle('Model 1'); // This is where I set the title of my sheet
+
+        //$header = ['first_name', 'last_name', 'email','gender', 'numero', 'Etablissement/univerisité', 'Date_1977-01-01', 'status'];
+        //$sheet->fromArray($header, null, 'A1');
+
+        /*here is the header of my sheet*/
+        $sheet->setCellValue('A1', 'first_name'); 
+        $sheet->setCellValue('B1', 'last_name'); 
+        $sheet->setCellValue('C1', 'email'); 
+        $sheet->setCellValue('D1', 'gender'); 
+        $sheet->setCellValue('E1', 'numero'); 
+        $sheet->setCellValue('F1', 'Etablissement/univerisité'); 
+        $sheet->setCellValue('G1', 'Date_1977-01-01'); 
+        $sheet->setCellValue('H1', 'status'); // 
+        $row = 2; // Initialize row counter
+
+        //handle datas and fill my model
+        //where('activite_id', $this->activiteId)->
+        dd($activiteId);
+        $participants = Candidat::where('activite_id', $activiteId)->where('status', 'new')->limit(100)->get();
+        dd($participants);
+        // This is the loop to fill datas
+        /*for ($i = 1; $i < 5; $i++) {
+            $sheet->setCellValue('A' . $row, $i);
+            $sheet->setCellValue('B' . $row, "test " . $i);
+            $row++;
+    }*/
+    foreach ($participants as $participant) {
+        $sheet->setCellValue('A' . $row, $participant->first_name);
+        $sheet->setCellValue('B' . $row, $participant->last_name);
+        $sheet->setCellValue('C' . $row, $participant->email);
+        $sheet->setCellValue('D' . $row, $participant->gender);
+        $sheet->setCellValue('E' . $row, $participant->numero);
+        $sheet->setCellValue('F' . $row, $participant->etablissement);
+        $sheet->setCellValue('G' . $row, $participant->date);
+        $sheet->setCellValue('H' . $row, $participant->status);
+        $row++;
+    }
+    
+        /*
+    $writer = new Xlsx($spreadsheet);
+    $fileName = "Model du fichier d'importation.xlsx";
+    header("Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+    header("Content-Disposition: attachment;filename=\"$fileName\"");
+    $writer->save("php://output");
+    exit();*/
+        // Retourner le fichier comme réponse
+        return response()->stream(
+            function () use ($writer) {
+                $writer->save('php://output');
+            },
+            200,
+            [
+                'Content-Type' => 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+                'Content-Disposition' => 'attachment; filename="Model_du_fichier_d_importation.xlsx"',
+            ]
+        );
+
+}
+    public function exportModel(Request $request){
+        // Récupérer l'ID de l'activité à partir du formulaire
+        $activiteId = $request->activite;
+        //header of our spreadsheet
+        $spreadsheet = new Spreadsheet();
+        $sheet = $spreadsheet->getActiveSheet();
+        $sheet->setTitle('Model 1'); // This is where I set the title of my sheet
+        /*here is the header of my sheet*/
+        $sheet->setCellValue('A1', 'first_name'); 
+        $sheet->setCellValue('B1', 'last_name'); 
+        $sheet->setCellValue('C1', 'email'); 
+        $sheet->setCellValue('D1', 'gender'); 
+        $sheet->setCellValue('E1', 'numero'); 
+        $sheet->setCellValue('F1', 'Etablissement/univerisité'); 
+        $sheet->setCellValue('G1', 'Date_1977-01-01'); 
+        $sheet->setCellValue('H1', 'status'); // 
+        $row = 2; // Initialize row counter
+
+        //dd($activiteId);
+        $participants = Candidat::where('activite_id', $activiteId)->where('status', 'accept')->get();
+        //dd($participants);
+        //handle sheet
+
+
+
+        foreach ($participants as $participant) {
+            //recuperation et filtrage des numeros de telephone
+            $phoneNumberResult = DB::table('candidat_attributes')
+            ->whereRaw('LENGTH(CAST(RIGHT(value, 9) AS SIGNED)) = 9')
+            ->select(DB::raw('CAST(RIGHT(value, 9) AS SIGNED) AS phone_number'))
+            ->where('candidat_id', $participant->id)
+            ->first();
+            //dd($phoneNumberResult);
+
+            if ($phoneNumberResult) {
+                $phoneNumber = $phoneNumberResult->phone_number;
+            } else {
+                $phoneNumber = '';
+            }
+
+            // Récupération de l'université du candidat dans la table candidat_attributes et odcusers
+            $variables = ['Université', 'Etablissement'];
+
+            $universiteLabelAttribute = DB::table('candidat_attributes')
+                ->where(function ($query) use ($variables) {
+                    foreach ($variables as $value) {
+                        $query->orWhere('label', 'LIKE', "%{$value}%");
+                    }
+                })
+                ->where('candidat_id', $participant->id)
+                ->first();  
+            if ($universiteLabelAttribute) {
+                $universiteValue = $universiteLabelAttribute->value;
+            } else {
+                $odcusers = Odcuser::where('id', $participant->id)
+                    ->get();
+                if (request()->expectsJson()) {
+                    return response()->json($odcusers);
+                }
+                foreach ($odcusers as $key => $odcuser) {
+                    $detail_profession = json_decode($odcuser->detail_profession, true);
+                    $universiteValue = $detail_profession['university'] ?? '';
+                }
+                
+            }
+           
+            $sheet->setCellValue('A' . $row, $participant->odcuser->first_name);
+            $sheet->setCellValue('B' . $row, $participant->odcuser->last_name);
+            $sheet->setCellValue('C' . $row, $participant->odcuser->email);
+            $sheet->setCellValue('D' . $row, $participant->odcuser->gender);
+            $sheet->setCellValue('E' . $row, $phoneNumber);
+            $sheet->setCellValue('F' . $row, $participant->Etablissement);
+            $sheet->setCellValue('G' . $row, $participant->date);
+            $sheet->setCellValue('H' . $row, $participant->status);
+            //dd($sheet->setCellValue('H' . $row, $participant->status));
+            $row++;
+        }
+
+        // Save the spreadsheet to a temporary file
+        $writer = new Xlsx($spreadsheet);
+        $fileName = "Model du fichier d'importation.xlsx";
+        header("Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+        header("Content-Disposition: attachment;filename=\"$fileName\"");
+        $writer->save("php://output");
+        exit();
+
+    }
 }
