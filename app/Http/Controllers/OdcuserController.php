@@ -2,15 +2,18 @@
 
 namespace App\Http\Controllers;
 
+use Carbon\Carbon;
 use App\Models\Odcuser;
+use App\Models\Activite;
 use App\Models\Candidat;
+use App\Models\Presence;
+use Illuminate\Http\Request;
+use function PHPSTORM_META\type;
+
+use Illuminate\Support\Facades\DB;
+use Yajra\DataTables\Facades\DataTables;
 use App\Http\Requests\StoreOdcuserRequest;
 use App\Http\Requests\UpdateOdcuserRequest;
-use App\Models\Activite;
-use App\Models\Presence;
-use Illuminate\Support\Facades\DB;
-
-use function PHPSTORM_META\type;
 
 class OdcuserController extends Controller
 {
@@ -19,9 +22,54 @@ class OdcuserController extends Controller
      */
     public function index()
     {
-        $odcusers = Odcuser::latest()->get();
+        return view('odcusers.index');
+    }
 
-        return view('odcusers.index', compact('odcusers'));
+
+    public function getUsers(Request $request)
+    {
+        $users = Odcuser::latest()->get();
+        try {
+            $query = Odcuser::query()->latest();
+
+            return DataTables::eloquent($query)
+                ->editColumn('firstname', function ($odcuser) {
+                    return $odcuser->first_name;
+                })
+                ->editColumn('lastname', function ($odcuser) {
+                    return $odcuser->last_name;
+                })
+                ->editColumn('email', function ($odcuser) {
+                    return $odcuser->email;
+                })
+
+                ->editColumn('gender', function ($odcuser) {
+                    return $odcuser->gender;
+                })
+
+                ->editColumn('birth_date', function ($odcuser) {
+                    $birthd = strtotime($odcuser->birth_date);
+                    $birth_date = date('d-m-Y', $birthd);
+                    return $birth_date;
+                })
+
+                ->editColumn('profession', function ($odcuser) {
+                    $profession = json_decode($odcuser->profession, true);
+                    return $profession['translations']['fr']['profession'] ?? '';
+                })
+                ->editColumn('detail_profession', function ($odcuser) {
+                    $detail_profession = json_decode($odcuser->detail_profession, true);
+                    return $detail_profession['speciality'] ?? '';
+                })
+
+                ->addColumn('action', function ($odcuser) {
+                    return view('partials.users-btn-action', ['odcuser' => $odcuser])->render();
+                })
+
+                ->make(true);
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Une erreur est survenue : ' . $e->getMessage()], 500);
+        }
     }
 
     /**
@@ -93,7 +141,7 @@ class OdcuserController extends Controller
             foreach ($candidats as $candidat) {
                 $array = $candidat->toArray();
                 $total_presences = $candidat->presence()->count();
-                $taux_presence = ($total_presences / $total_dates_presences) * 100 ;
+                $taux_presence = ($total_presences / $total_dates_presences) * 100;
                 if (isset($candidat->candidat_attribute)) {
                     foreach ($candidat->candidat_attribute as $attribute) {
                         $array[$attribute->label] = $attribute->value;
