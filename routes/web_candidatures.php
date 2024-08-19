@@ -10,4 +10,3 @@ Route::resource('candidats', CandidatController::class);
 Route::post('/candidat/{status}', [CandidatController::class, 'updateStatus']);
 
 Route::get('generate_excel/{event}', [CandidatController::class, 'generateExcel'])->name('generate_excel');
-Route::resource('odcusers', OdcuserController::class);
