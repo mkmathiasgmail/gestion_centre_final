@@ -8,15 +8,17 @@ use App\Models\Hashtag;
 use App\Models\Odcuser;
 use App\Models\Activite;
 use App\Models\Candidat;
-use App\Models\CandidatAttribute;
 use App\Models\Presence;
 use App\Models\Categorie;
 use App\Models\TypeEvent;
 use Illuminate\Http\Request;
+use App\Models\CourseraMember;
+use App\Models\CandidatAttribute;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Http;
+use Yajra\DataTables\Facades\DataTables;
 
 class ActiviteController extends Controller
 {
@@ -43,7 +45,7 @@ class ActiviteController extends Controller
 
 
                     $differenceInDays = $startDate->diffInDays($message);
-                    $activite->message = "Il y a une activité à venir $differenceInDays jours";
+                    $activite->message = "Jour j$differenceInDays ";
                 } else {
                     $activite->message = 'Terminée';
                 }
@@ -81,9 +83,10 @@ class ActiviteController extends Controller
                 'hashtags' => 'nullable|array',
                 'hashtags.*' => 'exists:hashtags,id',
                 'typeEvent' => 'nullable|array',
-             
+
+
                 'typeEvent.*' => 'exists:type_events,id',
-                'day'=>'required',
+                'day' => 'required',
             ],
 
             [
@@ -131,11 +134,12 @@ class ActiviteController extends Controller
                 'isEvents' => false,
                 'creator' => false,
                 'location' => $validatedData['location'],
-                'number_day '=> $validatedData['day'],
+                'number_day ' => $validatedData['day'],
             ]);
 
 
-           
+
+
 
 
 
@@ -172,35 +176,50 @@ class ActiviteController extends Controller
 
         // Récupérer les candidats liés à cette activité
         $candidats = Candidat::where('activite_id', $id)->with(['odcuser', 'candidat_attribute'])->get();
-        $candidatsData = [];
-        $labels = [];
-        foreach ($candidats as $candidat) {
-            $candidatArray = $candidat->toArray();
-            if ($candidat->candidat_attribute) {
-                foreach ($candidat->candidat_attribute as $attribute) {
-                    $candidatArray[$attribute->label] = $attribute->value;
-                    if (!in_array($attribute->label, $labels)) {
-                        $labels[] = $attribute->label;
+
+        if (count($candidats) > 0) {
+            $candidatsData = [];
+            $labels = [];
+            foreach ($candidats as $candidat) {
+                $candidatArray = $candidat->toArray();
+                if ($candidat->candidat_attribute) {
+                    foreach ($candidat->candidat_attribute as $attribute) {
+                        $candidatArray[$attribute->label] = $attribute->value;
+                        if (!in_array($attribute->label, $labels)) {
+                            $labels[] = $attribute->label;
+                        }
                     }
                 }
+                $candidatsData[] = $candidatArray;
             }
-            $candidatsData[] = $candidatArray;
+        } else {
+            $candidatsData = null;
+            $labels = null;
         }
+
+
         $participants = Candidat::where('activite_id', $id)->where('status', 'accept')->select('id', 'odcuser_id', 'activite_id', 'status')->with(['odcuser', 'candidat_attribute'])->get();
+
         $etiquettes = [];
         $participantsData = [];
-        foreach ($participants as $participant) {
-            $participantArray = $participant->toArray();
 
-            if ($participant->candidat_attribute) {
-                foreach ($participant->candidat_attribute as $attribute) {
-                    $participantArray[$attribute->label] = $attribute->value;
-                    if (!in_array($attribute->label, $etiquettes)) {
-                        $etiquettes[] = $attribute->label;
+        if (count($participants) > 0) {
+            foreach ($participants as $participant) {
+                $participantArray = $participant->toArray();
+
+                if ($participant->candidat_attribute) {
+                    foreach ($participant->candidat_attribute as $attribute) {
+                        $participantArray[$attribute->label] = $attribute->value;
+                        if (!in_array($attribute->label, $etiquettes)) {
+                            $etiquettes[] = $attribute->label;
+                        }
                     }
                 }
+                $participantsData[] = $participantArray;
             }
-            $participantsData[] = $participantArray;
+        } else {
+            $participantsData = null;
+            $etiquettes = null;
         }
         //recuperer les presents  et la date
 
@@ -220,7 +239,7 @@ class ActiviteController extends Controller
         // dd($dates);
         $countdate = count($dates);
 
-        $candidats_on_activity = Candidat::where('activite_id', $id)->where('status','accept')->with('odcuser')->get();
+        $candidats_on_activity = Candidat::where('activite_id', $id)->where('status', 'accept')->with('odcuser')->get();
         $data = [];
         $pres = Presence::all()->pluck('candidat_id');
         foreach ($candidats_on_activity as $candidat) {
@@ -242,9 +261,36 @@ class ActiviteController extends Controller
             }
         }
 
+        $id = $activite->id;
 
 
-        return view('activites.show', compact('participantsData', 'candidatsData', 'labels', 'data', 'activite', 'id', 'candidats', 'activite_Id', 'odcusers', 'fullDates', 'dates', 'countdate', 'presences'));
+
+
+
+
+
+        $datachart = DB::table('candidats')
+            ->join('odcusers', 'candidats.odcuser_id', '=', 'odcusers.id')
+            ->join('activites', 'candidats.activite_id', '=', 'activites.id')
+            ->where('candidats.activite_id', $id) // Utilisez l'ID de l'activité spécifique
+            ->selectRaw("
+        activites.title as activite,
+        SUM(CASE WHEN odcusers.gender = 'female' THEN 1 ELSE 0 END) as total_filles,
+        SUM(CASE WHEN odcusers.gender = 'male' THEN 1 ELSE 0 END) as total_garcons,
+        COUNT(*) as total_candidats
+    ")
+            ->groupBy('activites.title')
+            ->get();
+
+
+
+
+
+
+
+
+
+        return view('activites.show', compact('participantsData', 'datachart', 'candidatsData', 'labels', 'data', 'activite', 'id', 'candidats', 'activite_Id', 'odcusers', 'fullDates', 'dates', 'countdate', 'presences'));
     }
 
 
@@ -272,7 +318,8 @@ class ActiviteController extends Controller
                 'typeEvent' => 'nullable|array',
                 'typeEvent.*' => 'exists:type_events,id',
                 'thumbnailURL' => 'nullable|url',
-                
+
+
             ],
 
             [
@@ -334,7 +381,8 @@ class ActiviteController extends Controller
     {
         $url = env('API_URL');
         try {
-            
+
+
             $activite->delete();
             $id = $activite->_id;
 
@@ -344,8 +392,6 @@ class ActiviteController extends Controller
                 ->post("$url/events/delete/$id");
             return redirect()->route('activites.index')
                 ->with('success', 'Activite deleted successfully.');
-
-
         } catch (\Exception $th) {
             return back()->withErrors(['error' => "An error occurred while creating the activity. $th"])->withInput();
         }
@@ -362,14 +408,14 @@ class ActiviteController extends Controller
     {
         $data1 = Activite::selectRaw("DATE_FORMAT(start_date, '%Y-%m-%d') as date, count(*) as aggregate, title,id")
             ->whereDate('start_date', '>=', now()->subDays(30))
-            ->groupBy('date', 'title','id')
+            ->groupBy('date', 'title', 'id')
             ->get();
 
 
         $data = Activite::selectRaw("DATE_FORMAT(start_date, '%Y-%m-%d') as date, count(*) as aggregate, title,id")
-        ->whereDate('start_date', '>=', now()->subDays(30))
-        ->groupBy('date', 'title', 'id')
-        ->paginate(4);
+            ->whereDate('start_date', '>=', now()->subDays(30))
+            ->groupBy('date', 'title', 'id')
+            ->paginate(4);
         $activites = Activite::all();
         $user = Odcuser::all();
 
@@ -379,7 +425,70 @@ class ActiviteController extends Controller
 
         return view('dashboard', compact('data1', 'activites', 'user', 'data'));
     }
+
+    public function coursera_rapport()
+    {
+        $membersMonths = CourseraMember::selectRaw('MONTH(join_date) as month, COUNT(*) as count')
+                    ->whereYear('join_date', date('Y'))
+                    ->groupBy('month')->orderBy('month')->get();
+
+                    $labels = [];
+                    $mydata = [];
+                    $colors = ['#FF6384', '#36A2EB', '#c9625b', '#cf72fa','#f83d3d','#fa43cc','#ADD478',
+                    '#fcc737','#ADD813','#36d4fc', '#c92daf', '#FF7890'];
+
+                    for( $i = 1; $i <= 12; $i++ ) {
+                        $month = date('F', mktime(0,0,0,$i,1));
+                        $count = 0;
+                        foreach( $membersMonths as $member ) {
+                            if($member->month == $i){
+                                $count = $member->count;
+                                break;
+                            }
+                        }
+                        
+                        array_push($labels, $month);
+                        array_push($mydata, $count);
+                    }
+
+                    $datasets = [
+                        [
+                            'label'=> "member join by month",
+                            'data'=> $mydata,
+                            'backgroundColor'=> $colors
+                        ]
+                    ];
+
+
+
+                $coursera_members = DB::table('coursera_members')
+                    ->selectRaw('count(*) as total')
+                    ->selectRaw("count(case when member_state = 'MEMBER' then 1 end) as members")
+                    ->selectRaw("count(case when member_state = 'INVITED' then 1 end) as invites")
+                    ->first();
     
+    
+                $coursera_usages = DB::table('coursera_usages')
+                    ->selectRaw('count(*) as total')
+                    ->selectRaw("count(case when completed = 'Yes' then 1 end) as completed")
+                    ->selectRaw("count(case when completed = 'No' then 1 end) as noCompleted")
+                    ->first();
+            
+    
+            $specialisationsCount = DB::table('coursera_specialisations')->select('specialisaton_name')->count();
+
+
+
+
+            $usagesEncourrs = DB::table('coursera_usages')
+                                            ->where('class_start_time', '<=', now())
+                                            ->where('class_end_time','>=', now())->count();
+
+
+        return view('coursera.coursera_rapports', compact('datasets','labels',"coursera_members", "specialisationsCount","coursera_usages"));
+    }
+
+
     public function showInCalendar(Request $request, $id)
     {
 
@@ -403,7 +512,6 @@ class ActiviteController extends Controller
             } catch (\Exception $th) {
                 return response()->json(['success' => false, 'message' => 'Request failed', 'error' => $th->getMessage()], 500);
             }
-
         } else {
             $status->show_in_calendar = false;
             $status->save();
@@ -445,7 +553,7 @@ class ActiviteController extends Controller
                     ->post("$url/events/form/$id", $check);
 
                 return redirect()->route('activites.index')
-                ->with('success', 'Form active  successfully.');
+                    ->with('success', 'Form active  successfully.');
             } catch (\Exception $th) {
                 return response()->json(['success' => false, 'message' => 'Request failed', 'error' => $th->getMessage()], 500);
             }
@@ -464,7 +572,7 @@ class ActiviteController extends Controller
                     ->post("$url/events/form/$id", $check);
 
                 return redirect()->route('activites.index')
-                ->with('success', 'Form Desactive  successfully.');
+                    ->with('success', 'Form Desactive  successfully.');
             } catch (\Exception $th) {
                 return response()->json(['success' => false, 'message' => 'Request failed', 'error' => $th->getMessage()], 500);
             }
@@ -491,7 +599,7 @@ class ActiviteController extends Controller
                     ->post("$url/events/calendar/$id", $check);
 
                 return redirect()->route('activites.index')
-                ->with('success', 'isEvent active  successfully.');
+                    ->with('success', 'isEvent active  successfully.');
             } catch (\Exception $th) {
                 return response()->json(['success' => false, 'message' => 'Request failed', 'error' => $th->getMessage()], 500);
             }
@@ -510,7 +618,7 @@ class ActiviteController extends Controller
                     ->post("$url/events/calendar/$id", $check);
 
                 return redirect()->route('activites.index')
-                ->with('success', 'isEvent Desactive  successfully.');
+                    ->with('success', 'isEvent Desactive  successfully.');
             } catch (\Exception $th) {
                 return response()->json(['success' => false, 'message' => 'Request failed', 'error' => $th->getMessage()], 500);
             }
@@ -537,7 +645,7 @@ class ActiviteController extends Controller
                     ->post("$url/status/calendar/$id", $check);
 
                 return redirect()->route('activites.index')
-                ->with('success', 'Status active  successfully.');
+                    ->with('success', 'Status active  successfully.');
             } catch (\Exception $th) {
                 return response()->json(['success' => false, 'message' => 'Request failed', 'error' => $th->getMessage()], 500);
             }
@@ -556,7 +664,7 @@ class ActiviteController extends Controller
                     ->post("$url/events/status/$id", $check);
 
                 return redirect()->route('activites.index')
-                ->with('success', 'Activite Desactive in calendar successfully.');
+                    ->with('success', 'Activite Desactive in calendar successfully.');
             } catch (\Exception $th) {
                 return response()->json(['success' => false, 'message' => 'Request failed', 'error' => $th->getMessage()], 500);
             }
@@ -583,7 +691,7 @@ class ActiviteController extends Controller
                     ->post("$url/events/slide/$id", $check);
 
                 return redirect()->route('activites.index')
-                ->with('success', 'Activite active in slide successfully.');
+                    ->with('success', 'Activite active in slide successfully.');
             } catch (\Exception $th) {
                 return response()->json(['success' => false, 'message' => 'Request failed', 'error' => $th->getMessage()], 500);
             }
@@ -602,14 +710,27 @@ class ActiviteController extends Controller
                     ->post("$url/events/slide/$id", $check);
 
                 return redirect()->route('activites.index')
-                ->with('success', 'Activite Desactive in slide successfully.');
+                    ->with('success', 'Activite Desactive in slide successfully.');
             } catch (\Exception $th) {
                 return response()->json(['success' => false, 'message' => 'Request failed', 'error' => $th->getMessage()], 500);
             }
         }
     }
 
-    
+
+    public function getActivites(Request $request)
+    {
+        $query = Activite::query();
+
+      
+        if ($request->has('start_date') && $request->has('end_date')) {
+            $query->whereBetween('start_date', [$request->start_date, $request->end_date]);
+        }
+
+        $activites = $query->get();
 
     
+
+        return response()->json($activites);
+    }
 }

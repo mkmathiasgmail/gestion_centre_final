@@ -18,69 +18,6 @@
                     {{ __('Gestion Activites') }}
                 </h2>
             </div>
-
-            <div class="flex items-center gap-5">
-                <!-- Search form -->
-                <div class="">
-                    <form class="max-w-lg mx-auto">
-                        <div class="flex">
-                            <!-- Search input field -->
-                            <label for="search-dropdown"
-                                class="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white">Your
-                                Email</label>
-                            <!-- Dropdown button -->
-                            <button id="dropdown-button" data-dropdown-toggle="dropdown"
-                                class="flex-shrink-0 z-10 inline-flex items-center py-2.5 px-4 text-sm font-medium text-center text-gray-900 bg-gray-100 border border-gray-300 rounded-s-lg hover:bg-gray-200 focus:ring-4 focus:outline-none focus:ring-gray-100 dark:bg-gray-700 dark:hover:bg-gray-600 dark:focus:ring-gray-700 dark:text-white dark:border-gray-600"
-                                type="button">All categories
-                                <svg class="w-2.5 h-2.5 ms-2.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
-                                    fill="none" viewBox="0 0 10 6">
-                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
-                                        stroke-width="2" d="m1 1 4 4 4-4" />
-                                </svg>
-                            </button>
-                            <!-- Dropdown menu -->
-                            <div id="dropdown"
-                                class="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700">
-                                <ul class="py-2 text-sm text-gray-700 dark:text-gray-200"
-                                    aria-labelledby="dropdown-button">
-                                    <li>
-                                        <button type="button"
-                                            class="inline-flex w-full px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Mockups</button>
-                                    </li>
-                                    <li>
-                                        <button type="button"
-                                            class="inline-flex w-full px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Templates</button>
-                                    </li>
-                                    <li>
-                                        <button type="button"
-                                            class="inline-flex w-full px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Design</button>
-                                    </li>
-                                    <li>
-                                        <button type="button"
-                                            class="inline-flex w-full px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Logos</button>
-                                    </li>
-                                </ul>
-                            </div>
-                            <!-- Search input field -->
-                            <div class="relative w-full">
-                                <input type="search" id="search-dropdown"
-                                    class="block p-2.5 w-full z-20 text-sm text-gray-900 bg-gray-50 rounded-e-lg border-s-gray-50 border-s-2 border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-s-gray-700  dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:border-blue-500"
-                                    placeholder="Search Mockups, Logos, Design Templates..." required />
-                                <!-- Search button -->
-                                <button type="submit"
-                                    class="absolute top-0 end-0 p-2.5 text-sm font-medium h-full text-white bg-blue-700 rounded-e-lg border border-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
-                                    <svg class="w-4 h-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
-                                        fill="none" viewBox="0 0 20 20">
-                                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
-                                            stroke-width="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z" />
-                                    </svg>
-                                    <span class="sr-only">Search</span>
-                                </button>
-                            </div>
-                        </div>
-                    </form>
-                </div>
-            </div>
         </div>
     </x-slot>
 
@@ -115,17 +52,7 @@
                     aria-controls="presence" aria-selected="false">Presence</button>
             </li>
             <li class="me-2" role="presentation">
-                <button
-                    class="inline-block p-4 border-b-2 rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300"
-                    id="settings-styled-tab" data-tabs-target="#styled-settings" type="button" role="tab"
-                    aria-controls="settings" aria-selected="false">Settings</button>
-            </li>
-            <li role="presentation">
-                <button
-                    class="inline-block p-4 border-b-2 rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300"
-                    id="contacts-styled-tab" data-tabs-target="#styled-contacts" type="button" role="tab"
-                    aria-controls="contacts" aria-selected="false">Contacts</button>
-            </li>
+
             <li role="presentation">
                 <button
                     class="inline-block p-4 border-b-2 rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300"
@@ -138,7 +65,7 @@
     <!-- Tab content -->
     <div id="default-styled-tab-content">
         <!-- Show activity details -->
-        <x-activitesShow :show="$activite" />
+        <x-activitesShow :datachart="$datachart" :show="$activite" />
 
         <!-- Show candidates for the activity -->
         <x-show-candidates-event :activite="$activite" :labels="$labels" :candidatsData="$candidatsData" :odcusers="$odcusers"
@@ -151,14 +78,7 @@
                 :odcusers="$odcusers" :activite_Id="$activite_Id" :id="$id" />
         </div>
 
-        <!-- Settings tab content -->
-        <div class="hidden p-4 rounded-lg bg-gray-50 dark:bg-gray-800" id="styled-settings" role="tabpanel"
-            aria-labelledby="settings-tab">
-            <p class="text-sm text-gray-500 dark:text-gray-400">This is some placeholder content the <strong
-                    class="font-medium text-gray-800 dark:text-white">Settings tab's associated content</strong>.
-                Clicking another tab will toggle the visibility of this one for the next. The tab JavaScript swaps
-                classes to control the content visibility and styling.</p>
-        </div>
+
 
         <!-- Presence tab content -->
         <div class="hidden p-4 rounded-lg bg-gray-50 dark:bg-gray-800" id="content-presence" role="tabpanel"
@@ -167,18 +87,16 @@
                 :countdate="$countdate" :activite="$activite" :candidats="$candidats" />
         </div>
 
-        <!-- Contacts tab content -->
-        <div class="hidden p-4 rounded-lg bg-gray-50 dark:bg-gray-800" id="styled-contacts" role="tabpanel"
-            aria-labelledby="contacts-tab">
-            <p class="text-sm text-gray-500 dark:text-gray-400">Settings tab's associated content</strong>. Clicking
-                another tab will toggle the visibility of this one for the next. The tab JavaScript swaps classes to
-                control the content visibility and styling</p>
-        </div>
+        <!-- import tab content -->
         <div class="hidden p-4 ro unded-lg bg-gray-50 dark:bg-gray-800" id="import" role="tabpanel"
             aria-labelledby="contacts-tab">
             <p class="text-sm text-gray-500 dark:text-gray-400"><x-activite-import :activite="$activite" /></p>
         </div>
     </div>
+
+    <x-statusactive :name="__('Would you like show in calendar this activity? ')" />
+
+    <x-statusdesactive :name="__('Would you like disable in calendar this activity? ')" />
 
     @php
         $url = env('API_URL');
@@ -254,7 +172,52 @@
         <script>
             var tr = null;
             var statusCell = null;
+
+            function readMore(event, value) {
+                event.preventDefault();
+                var td = $(event.target).closest('td');
+                $(td).text(value);
+
+            }
+
             $(document).ready(function() {
+
+                $('#candidatTable').on('click', '.btn-menu', function() {
+                    const rel = $(this).attr('rel')
+                    $('.div-dropdown').fadeOut('fast')
+
+                    const lien = $(this).attr('data-target')
+
+                    $('.btn-menu').each(function() {
+                        if (lien != $(this).attr('data-target')) {
+                            $(this).attr('rel', 0)
+                        }
+                    })
+
+                    if (rel == 1) {
+                        $(this).attr('rel', 0)
+                        $('#' + lien).fadeOut('fast')
+                    } else {
+                        $(this).attr('rel', 1)
+                        $('#' + lien).fadeIn('fast')
+                    }
+                    // const lien = $(this).attr('data-target')
+                    // $('#' + lien).fadeToggle('fast')
+                });
+
+                $('body').on('click', function(event) {
+                    if (!event.target.closest('.tdAction')) {
+                        $('.div-dropdown').fadeOut('fast')
+                        $('.btn-menu').each(function() {
+                            $(this).attr('rel', 0)
+                        })
+                    } else {
+                        console.log('td act', $(this).hasClass('tdAction'))
+                    }
+
+
+                });
+
                 let event = @json($activite->title);
 
 
@@ -263,7 +226,7 @@
 
                     columnDefs: [{
                             visible: false,
-                            targets: [0, 3, 5, 7, 8, 9]
+                            targets: [0, 3, 4, 5, 7, 8, 9, 10]
                         }, // hide columns 1 and 3 by default
                         {
                             responsivePriority: 1,
@@ -301,20 +264,15 @@
                 $("#dt-length-2").addClass('text-gray-700 dark:text-gray-200 w-24 bg-white');
                 $("label[for='dt-length-2']").addClass('text-gray-700 dark:text-gray-200').text(
                     ' Enregistrements par page');
-            });
 
-            function actionStatus(event, type, id, firstname) {
-                tr = $(event.target.closest('tr'));
-                statusCell = tr.find('#statusCell');
-                $('#accept-link, #decline-link, #wait-link').attr('data', id)
-                $('#popup-title-accept, #popup-title-decline, #popup-title-wait').text(
-                    "Etes-vous sûr de vouloir changer le statut de " + firstname)
-            }
+            })
 
             function changeStatus(event) {
                 event.preventDefault();
                 let status = $(event.target).data('text');
-                let id = $('#accept-link').attr('data')
+
+                let id = $(event.target).attr('data')
+                console.log(id)
                 $.ajax({
                     type: 'POST',
                     url: '/candidat/' + status,
@@ -332,6 +290,35 @@
                         console.log('Error updating status: ' + error);
                     }
                 });
+            }
+
+            function actionStatus(event, type, id, firstname, lastname) {
+                tr = $(event.target.closest('tr'));
+                statusCell = tr.find('#statusCell');
+
+                switch (type) {
+                    case 'accept':
+                        $('#accept-link').attr('data', id)
+                        $('#popup-title-accept').text(
+                            "Confirmez-vous la validation de la candidature de " + firstname + " ?")
+                        document.getElementById('first-modal').click()
+                        break;
+                    case 'decline':
+                        $('#decline-link').attr('data', id)
+                        $('#popup-title-decline').text(
+                            "Confirmez-vous l'annulation de la candidature de " + firstname + " ?");
+                        document.getElementById('second-modal').click()
+                        break;
+                    case 'wait':
+                        $('#wait-link').attr('data', id)
+                        $('#popup-title-wait').text(
+                            "Confirmez-vous la mise en attente de " + firstname + " ?")
+                        document.getElementById('third-modal').click()
+                    default:
+                        break;
+                }
+
+
             }
         </script>
 
@@ -401,6 +388,119 @@
             function redirectToPresence() {
                 window.location.href = '{{ route('presences.index') }}';
             }
+        </script>
+        <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+
+
+        <script>
+            function activer(event) {
+                event.preventDefault();
+                let link = event.target.getAttribute('href');
+                document.querySelector('#desactiveStatus form').setAttribute('action', link);
+            }
+
+            function desactiver(event) {
+                event.preventDefault();
+                let link = event.target.getAttribute('href');
+                document.querySelector('#activeStatus form').setAttribute('action', link);
+            }
+        </script>
+        <script>
+            const getChartOptions = () => {
+                return {
+                    series: [
+                        @json([$datachart->sum('total_candidats')]),
+                        @json([$datachart->sum('total_filles')]), // Total des filles
+                        @json([$datachart->sum('total_garcons')]),
+                        // Total des garçons
+                    ],
+                    colors: ["#1C64F2", "#16BDCA", "#FDBA8C"],
+                    chart: {
+                        height: "380px",
+                        width: "100%",
+                        type: "radialBar",
+                        sparkline: {
+                            enabled: true,
+                        },
+                    },
+                    stroke: {
+                        colors: ["transparent"],
+                        lineCap: "round", // Use 'round' for the end caps of the radial bar
+                    },
+                    plotOptions: {
+                        radialBar: {
+                            track: {
+                                background: '#E5E7EB',
+                            },
+                            dataLabels: {
+                                show: false,
+                            },
+                            hollow: {
+                                margin: 0,
+                                size: "32%",
+                            },
+                            donut: {
+                                labels: {
+                                    show: true,
+                                    name: {
+                                        show: true,
+                                        fontFamily: "Inter, sans-serif",
+                                        offsetY: 20,
+                                    },
+
+                                    value: {
+                                        show: true,
+                                        fontFamily: "Inter, sans-serif",
+                                        offsetY: -20,
+                                        formatter: function(value) {
+                                            return value; // Afficher la valeur brute
+                                        },
+                                    },
+                                },
+                                size: "70%",
+                            },
+                        },
+                    },
+                    grid: {
+                        show: false,
+                        strokeDashArray: 4,
+                        padding: {
+                            left: 2,
+                            right: 2,
+                            top: -23,
+                            bottom: -20,
+                        },
+                    },
+                    labels: ["Total", "Filles", "Garçons"], // Étiquettes pour les séries
+                    dataLabels: {
+                        enabled: false,
+                    },
+                    legend: {
+
+                        show: true,
+                        position: "bottom",
+                        fontFamily: "Inter, sans-serif",
+                    },
+                    tooltip: {
+                        enabled: true,
+                        x: {
+                            show: false,
+                        },
+                    },
+                    yaxis: {
+                        show: false,
+
+                    }
+                }
+            }
+
+            document.addEventListener('DOMContentLoaded', function() {
+                const options = getChartOptions();
+                const chart = new ApexCharts(document.querySelector("#chart"), options);
+                chart.render();
+            });
+        </script>
+
         </script>
     @endsection
 </x-app-layout>

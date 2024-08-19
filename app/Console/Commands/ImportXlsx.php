@@ -52,7 +52,7 @@ class ImportXlsx extends Command
 
             $this->importBd($spreadsheet);
         }
-        dd($files);
+        //dd($files);
     }
 
     /**
@@ -83,9 +83,10 @@ class ImportXlsx extends Command
                 }
             } catch (\Throwable $th) {
                 $this->error('Erreur id On: '.$worksheet->getTitle());
+                //dd($worksheet->getTitle())
             }
+            //dd($currentActivity);
             $this->info('Processing...: '.$currentActivity->title);       
-
             for ($lineexcel = 6; $lineexcel <= $worksheet->getHighestRow(); $lineexcel++)
             {
                 $prenom = $worksheet->getcell("B{$lineexcel}")->getvalue();
@@ -194,7 +195,7 @@ class ImportXlsx extends Command
         }
 
 
-
+        
 
         //code  coach alain
         /*foreach ($cols as $key => $col) {

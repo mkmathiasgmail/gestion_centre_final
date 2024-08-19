@@ -33,3 +33,4 @@ yarn-error.log
 /.idea
 /.vscode
 storage/importxlsx/*
+test.exemple

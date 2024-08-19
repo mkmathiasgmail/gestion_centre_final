@@ -2,10 +2,14 @@
 
 namespace App\Http\Controllers\Api;
 
+use DateTime;
+use Carbon\Carbon;
+use DateTimeImmutable;
 use App\Models\Activite;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Http;
+use Yajra\DataTables\Facades\DataTables;
 
 class ActiviteController extends Controller
 {
@@ -64,7 +68,7 @@ class ActiviteController extends Controller
 
                 ];
 
-        try {
+                try {
 
                     $requette = Http::timeout(100)
                         ->post("$url/events/create", $activite);
@@ -157,13 +161,13 @@ class ActiviteController extends Controller
     {
 
         $activiteRecent = Activite::select('id', 'title', 'content', 'start_date', 'end_date')
-        ->where('start_date', '<', now())
+            ->where('start_date', '<', now())
             ->latest()
             ->paginate(5);
 
 
-        $activitefutur = Activite::select('id', 'title', 'content','start_date', 'end_date')
-        ->where('start_date', '>', now())
+        $activitefutur = Activite::select('id', 'title', 'content', 'start_date', 'end_date')
+            ->where('start_date', '>', now())
             ->latest()
             ->paginate(5);
 
@@ -172,5 +176,76 @@ class ActiviteController extends Controller
 
         return response()->json($activites);
     }
-}
 
+
+    public function get(Request $request)
+    {
+
+        try {
+            $query = Activite::query()->latest();
+
+
+            if ($request->has('start_date') && $request->has('end_date')) {
+                $query->whereBetween('start_date', [$request->start_date, $request->end_date]);
+            }
+
+
+            return DataTables::eloquent($query)
+                ->editColumn('message', function ($activite) {
+                    $today = Carbon::today();
+                    $startDate = Carbon::parse($activite->start_date);
+                    $endDate = Carbon::parse($activite->end_date);
+
+                    if ($today >= $startDate && $today <= $endDate) {
+                        return 'En cours';
+                    } elseif ($today < $startDate) {
+                        $differenceInDays = $startDate->diffInDays($today);
+                        return "Jour j-$differenceInDays";
+                    } else {
+                        $differenceInDays = $endDate->diffInDays($today);
+                        return "Terminée ($differenceInDays jours)";
+                    }
+                })
+                ->editColumn('status', function ($activite) {
+                    if ($activite->status == 1) {
+                        return '✔️';
+                    } else {
+                        return '❌';
+                    }
+                })
+
+                ->editColumn('start_date', function ($activite) {
+                    $date = new DateTimeImmutable($activite->start_date);
+                    return $date->format('j F Y H:i:s');
+                })
+
+                ->editColumn('end_date', function ($activite) {
+                    $date = new DateTimeImmutable($activite->end_date);
+                    return $date->format('j F Y H:i:s');
+                })
+
+                ->editColumn('book_a_seat', function ($activite) {
+                    if ($activite->book_a_seat == 1) {
+                        return '✔️';
+                    } else {
+                        return '❌';
+                    }
+                })
+                ->editColumn('categories', function ($activite) {
+                    return $activite->categorie->name;
+                })
+                ->editColumn('typEvent', function ($activite) {
+                    foreach ($activite->typEvent as $value) {
+                        return $value->title;
+                    }
+                })
+                ->addColumn('action', function ($activite) {
+                    return view('partials.action-buttons', ['activite' => $activite])->render();
+                })
+             
+                ->make(true);
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Une erreur est survenue : ' . $e->getMessage()], 500);
+        }
+    }
+}

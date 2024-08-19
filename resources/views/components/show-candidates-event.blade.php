@@ -22,7 +22,7 @@
         class="self-center text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">Actualiser</a>
 
     <div class="py-6 relative overflow-x-auto">
-        @if (count($candidatsData) > 0)
+        @if (isset($candidatsData))
             <table id="candidatTable" class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
                 <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                     <tr>
@@ -66,7 +66,18 @@
                                 @if (isset($label))
                                     @if ($label != 'Cv de votre parcours (Obligatoire)')
                                         <td class="px-6 py-4">
-                                            {{ isset($candidat[$label]) && $candidat[$label] !== '' ? $candidat[$label] : 'N/A' }}
+                                            @php
+                                                $value =
+                                                    isset($candidat[$label]) && $candidat[$label] !== ''
+                                                        ? $candidat[$label]
+                                                        : 'N/A';
+                                            @endphp
+                                            {{ Str::of($value)->limit(40, '...') }}
+                                            @if (strlen($value) > 40)
+                                                <a href="#" onclick='readMore(event, `{{ $value }}`)'
+                                                    class="dark:text-gray-500 hover:text-gray-600">Read
+                                                    more</a>
+                                            @endif
                                         </td>
                                     @endif
                                 @endif
@@ -82,9 +93,8 @@
                             <td class="px-6 py-4" id="statusCell">
                                 {{ $candidat['status'] }}
                             </td>
-                            <td>
-                                <button id="dropdownMenuIconButton"
-                                    data-dropdown-toggle="dropdownDots{{ $key }}"
+                            <td class="tdAction" style="position: relative">
+                                <button id="dropdownMenuIconButton" data-target="dropdownDots{{ $key }}"
                                     class="btn-menu inline-flex items-center p-2 text-sm font-medium text-center text-gray-900 bg-white rounded-lg hover:bg-gray-100 focus:ring-4 focus:outline-none dark:text-white focus:ring-gray-50 dark:bg-gray-800 dark:hover:bg-gray-700 dark:focus:ring-gray-600"
                                     type="button">
                                     <svg class="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
@@ -96,23 +106,24 @@
 
                                 <!-- Dropdown menu -->
                                 <div id="dropdownDots{{ $key }}"
-                                    class="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700 dark:divide-gray-600">
-                                    <ul class="py-2 text-sm text-gray-700 dark:text-gray-200"
+                                    style="position: absolute; top:50px; right: 50px;"
+                                    class="div-dropdown z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700 dark:divide-gray-600">
+                                    <ul class="dropdown-menu py-2 text-sm text-gray-700 dark:text-gray-200"
                                         aria-labelledby="dropdownMenuIconButton">
                                         <li>
-                                            <a data-modal-target="popup-accept" data-modal-toggle="popup-accept"
+                                            <a
                                                 class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
                                                 onclick="actionStatus(event, 'accept', {{ $candidat['id'] }}, '{{ $candidat['odcuser']['first_name'] }}')">Accept</a>
                                         </li>
                                         <li>
-                                            <a data-modal-target="popup-decline" data-modal-toggle="popup-decline"
+                                            <a
                                                 class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
                                                 onclick="actionStatus(event, 'decline', {{ $candidat['id'] }}, '{{ $candidat['odcuser']['first_name'] }}')">Decline</a>
                                         </li>
                                         <li>
-                                            <a data-modal-target="popup-wait" data-modal-toggle="popup-wait"
+                                            <a 
                                                 class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
-                                                onclick="actionStatus(event, 'wait', {{ $candidat['id'] }}, '{{ $candidat['odcuser']['first_name'] }}')">Wait</a>
+                                                onclick="actionStatus(event, 'wait', {{ $candidat['id'] }}, '{{ $candidat['odcuser']['first_name'] }}', '{{ $candidat['odcuser']['last_name'] }}')">Wait</a>
                                         </li>
                                     </ul>
                                 </div>
@@ -123,18 +134,32 @@
                             </td>
                         </tr>
                     @endforeach
+
                 </tbody>
             </table>
+            <button type="button" data-modal-target="popup-accept" id="first-modal" data-modal-toggle="popup-accept"
+                hidden>
+                Launch Modal
+            </button>
+            <button type="button" data-modal-target="popup-decline" id="second-modal" data-modal-toggle="popup-decline"
+                hidden>
+                Launch Modal
+            </button>
+            <button type="button" data-modal-target="popup-wait" id="third-modal" data-modal-toggle="popup-wait"
+                hidden>
+                Launch Modal
+            </button>
         @else
-            <div class="text-center p-4 text-sm text-blue-800 rounded-lg bg-blue-50 dark:bg-gray-700 dark:text-blue-200"
-                role="alert">
-                Aucun candidat n'a été trouvé sur cette activité !
+            <div class="flex justify-center items-center">
+                <div class="text-center">
+                    <p class="dark:text-gray-400 text-black">Aucun candidat n'a été trouvé sur cette activité !</p>
+                </div>
             </div>
         @endif
     </div>
 </div>
 
-@if (count($candidatsData) > 0)
+@if (isset($candidatsData))
     <div id="popup-accept" tabindex="-1"
         class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
         <div class="relative p-4 w-full max-w-md max-h-full">
