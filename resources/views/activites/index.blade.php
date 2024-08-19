@@ -77,6 +77,29 @@
 
     @section('script')
         <script>
+            $(document).ready(function() {
+                $(document).on('click', '.btnModal', function() {
+                    let id = $(this).data('dropdown-toggle');
+                    $('.modal').not('#' + id).hide();
+                    $('#' + id).toggle();
+                    event.stopPropagation();
+                });
+
+                $('body').on('click', function(event) {
+                    if (!$(event.target).closest('.modal, .btnModal').length) {
+                        $('.modal').hide();
+                    }
+                });
+
+
+                $(document).on('click', '.modal', function(event) {
+                    event.stopPropagation();
+                });
+
+
+            });
+        </script>
+        <script>
             function activer(event) {
                 event.preventDefault();
                 let link = event.target.getAttribute('href');
