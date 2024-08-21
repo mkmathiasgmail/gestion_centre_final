@@ -11,6 +11,7 @@ use App\Models\Candidat;
 use App\Models\Presence;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
+use Yajra\DataTables\Facades\DataTables;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 use PhpOffice\PhpSpreadsheet\Style\Border;
@@ -30,11 +31,56 @@ class CandidatController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
-    {
-        $candidats = Candidat::has('odcuser')->get();
+    public function index() {}
 
-        return view('candidats.index', compact('candidats'));
+    public function getCandidats(Request $request, $id)
+    {
+        try {
+            $candidats = Candidat::where('activite_id', $id)->with(['odcuser', 'candidat_attribute'])->get();
+
+            if (count($candidats) > 0) {
+                $candidatsData = [];
+                $labels = [];
+                foreach ($candidats as $candidat) {
+                    $candidatArray = $candidat->toArray();
+                    if ($candidat->candidat_attribute) {
+                        foreach ($candidat->candidat_attribute as $attribute) {
+                            $candidatArray[$attribute->label] = $attribute->value;
+                            if (!in_array($attribute->label, $labels)) {
+                                $labels[] = $attribute->label;
+                            }
+                        }
+                    }
+                    $candidatsData[] = $candidatArray;
+                }
+            } else {
+                $candidatsData = null;
+                $labels = null;
+            }
+
+            $dataTable = DataTables::of($candidatsData)
+                ->editColumn('first_name', function ($candidat) {
+                    return $candidat['odcuser']['first_name'];
+                })
+                ->editColumn('last_name', function ($candidat) {
+                    return $candidat['odcuser']['last_name'];
+                });
+
+            foreach (array_unique($labels) as $label) {
+                $dataTable->addColumn($label, function ($candidat) use ($label) {
+                    $value = isset($candidat[$label]) && $candidat[$label] !== '' ? $candidat[$label] : 'N/A';
+                    return Str::of($value)->limit(40, '...');
+                });
+            }
+
+            $dataTable->addColumn('action', function ($candidat) {
+                return view('partials.action-btn-candidats', ['candidat' => $candidat])->render();
+            });
+
+            return $dataTable->toJson();
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Une erreur est survenue : ' . $e->getMessage()], 500);
+        }
     }
 
     /**
