@@ -144,7 +144,8 @@
                         {!! nl2br($item->postes) !!}
                     </td>
                     <td class="px-6 py-4">
-                        {{ $item->periode }}
+                        {!! nl2br($item->periodes) !!}
+
                     </td>
 
                     <td class="px-6 py-4">
