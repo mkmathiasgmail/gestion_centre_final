@@ -2,7 +2,7 @@
     {{-- <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
             {{ __('Dashboard') }}
-        </h2>
+    </h2>
     </x-slot> --}}
 
     <div class=" mt-4">
@@ -113,43 +113,78 @@
 
         <div
             class=" bg-[#fcdab40a] dark:bg-gray-800 p-5 rounded-lg w-1/2 shadow-lg dark:shadow-lg dark:shadow-gray-500/20 ">
-            <div class=" flex gap-5">
-                <div class=" ">
-                    <a href="{{ route('activites.create') }}" class=" flex items-center">
-                        <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true"
-                            xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor"
-                            viewBox="0 0 24 24">
-                            <path fill-rule="evenodd"
-                                d="M4.857 3A1.857 1.857 0 0 0 3 4.857v4.286C3 10.169 3.831 11 4.857 11h4.286A1.857 1.857 0 0 0 11 9.143V4.857A1.857 1.857 0 0 0 9.143 3H4.857Zm10 0A1.857 1.857 0 0 0 13 4.857v4.286c0 1.026.831 1.857 1.857 1.857h4.286A1.857 1.857 0 0 0 21 9.143V4.857A1.857 1.857 0 0 0 19.143 3h-4.286Zm-10 10A1.857 1.857 0 0 0 3 14.857v4.286C3 20.169 3.831 21 4.857 21h4.286A1.857 1.857 0 0 0 11 19.143v-4.286A1.857 1.857 0 0 0 9.143 13H4.857ZM18 14a1 1 0 1 0-2 0v2h-2a1 1 0 1 0 0 2h2v2a1 1 0 1 0 2 0v-2h2a1 1 0 1 0 0-2h-2v-2Z"
-                                clip-rule="evenodd" />
-                        </svg>
+            <div class=" flex justify-between items-center ">
+                <div class=" flex gap-4">
+                    <div class=" ">
+                        <a href="{{ route('activites.create') }}" class=" flex items-center">
+                            <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true"
+                                xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor"
+                                viewBox="0 0 24 24">
+                                <path fill-rule="evenodd"
+                                    d="M4.857 3A1.857 1.857 0 0 0 3 4.857v4.286C3 10.169 3.831 11 4.857 11h4.286A1.857 1.857 0 0 0 11 9.143V4.857A1.857 1.857 0 0 0 9.143 3H4.857Zm10 0A1.857 1.857 0 0 0 13 4.857v4.286c0 1.026.831 1.857 1.857 1.857h4.286A1.857 1.857 0 0 0 21 9.143V4.857A1.857 1.857 0 0 0 19.143 3h-4.286Zm-10 10A1.857 1.857 0 0 0 3 14.857v4.286C3 20.169 3.831 21 4.857 21h4.286A1.857 1.857 0 0 0 11 19.143v-4.286A1.857 1.857 0 0 0 9.143 13H4.857ZM18 14a1 1 0 1 0-2 0v2h-2a1 1 0 1 0 0 2h2v2a1 1 0 1 0 2 0v-2h2a1 1 0 1 0 0-2h-2v-2Z"
+                                    clip-rule="evenodd" />
+                            </svg>
 
 
 
-                        <span class="text-gray-800 lg:text-sm  dark:text-gray-200">Ajouter une activite</span>
+                            <span class="text-gray-800 lg:text-sm  dark:text-gray-200">Ajouter une activite</span>
 
-                    </a>
+                        </a>
+                    </div>
+                    <div>
+                        <a href="{{ route('rapportSemestriel.index') }}" class=" flex items-center">
+                            <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true"
+                                xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor"
+                                viewBox="0 0 24 24">
+                                <path fill-rule="evenodd"
+                                    d="M11.403 5H5a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-6.403a3.01 3.01 0 0 1-1.743-1.612l-3.025 3.025A3 3 0 1 1 9.99 9.768l3.025-3.025A3.01 3.01 0 0 1 11.403 5Z"
+                                    clip-rule="evenodd" />
+                                <path fill-rule="evenodd"
+                                    d="M13.232 4a1 1 0 0 1 1-1H20a1 1 0 0 1 1 1v5.768a1 1 0 1 1-2 0V6.414l-6.182 6.182a1 1 0 0 1-1.414-1.414L17.586 5h-3.354a1 1 0 0 1-1-1Z"
+                                    clip-rule="evenodd" />
+                            </svg>
+
+
+                            <span class="text-gray-800 lg:text-sm  dark:text-gray-200">Genere Rapport</span>
+
+                        </a>
+                    </div>
                 </div>
+
+
                 <div>
-                    <a href="{{ route('rapportSemestriel.index') }}" class=" flex items-center">
-                        <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true"
-                            xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor"
-                            viewBox="0 0 24 24">
-                            <path fill-rule="evenodd"
-                                d="M11.403 5H5a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-6.403a3.01 3.01 0 0 1-1.743-1.612l-3.025 3.025A3 3 0 1 1 9.99 9.768l3.025-3.025A3.01 3.01 0 0 1 11.403 5Z"
-                                clip-rule="evenodd" />
-                            <path fill-rule="evenodd"
-                                d="M13.232 4a1 1 0 0 1 1-1H20a1 1 0 0 1 1 1v5.768a1 1 0 1 1-2 0V6.414l-6.182 6.182a1 1 0 0 1-1.414-1.414L17.586 5h-3.354a1 1 0 0 1-1-1Z"
-                                clip-rule="evenodd" />
-                        </svg>
 
+                    <form class="max-w-sm mx-auto">
+                        <div class=" flex items-center gap-4">
+                            <div>
+                                <select id="countries_disabled"
+                                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                                    <option selected>Choose a country</option>
+                                    <option value="US">United States</option>
 
-                        <span class="text-gray-800 lg:text-sm  dark:text-gray-200">Genere Rapport</span>
+                                </select>
+                            </div>
 
-                    </a>
+                            <div>
+                                <select id="countries_disabled"
+                                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                                    <option selected>Choose a country</option>
+                                    <option value="US">United States</option>
+                                    <option value="CA">Canada</option>
+                                    <option value="FR">France</option>
+                                    <option value="DE">Germany</option>
+                                </select>
+                            </div>
+
+                        </div>
+
+                    </form>
+
                 </div>
 
             </div>
+
+
             <div>
                 <canvas id="myChart"></canvas>
             </div>
@@ -195,7 +230,7 @@
             <div class="-m-1.5 overflow-x-auto">
                 <div class="p-1.5 min-w-full inline-block align-middle">
                     <div
-                        class="bg-white border border-gray-200 rounded-xl shadow-sm overflow-hidden dark:bg-neutral-900 dark:border-neutral-700">
+                        class="bg-[#fcdab40a] border border-gray-200 rounded-xl shadow-sm overflow-hidden dark:bg-neutral-900 dark:border-neutral-700">
                         <!-- Header -->
                         <div
                             class="px-6 py-4 grid gap-3 md:flex md:justify-between md:items-center border-b border-gray-200 dark:border-neutral-700">
@@ -375,7 +410,7 @@
 
                         <!-- Table -->
                         <table class="min-w-full divide-y divide-gray-200 dark:divide-neutral-700">
-                            <thead class="bg-gray-50 dark:bg-neutral-800">
+                            <thead class="bg-[#96816a0a] dark:bg-neutral-800">
                                 <tr>
                                     <th scope="col" class="px-6 py-3 text-start">
                                         <a class="group inline-flex items-center gap-x-2 text-xs font-semibold uppercase text-gray-800 hover:text-gray-500 focus:outline-none focus:text-gray-500 dark:text-neutral-200 dark:hover:text-neutral-500 dark:focus:text-neutral-500"
@@ -454,7 +489,7 @@
                             <tbody class="divide-y divide-gray-200 dark:divide-neutral-700">
                                 @foreach ($activityForWeekend as $item)
                                     <tr
-                                        class="bg-white hover:bg-gray-50 dark:bg-neutral-900 dark:hover:bg-neutral-800">
+                                        class="bg-[#fcdab40a] hover:bg-[#96816a0a] dark:bg-neutral-900 dark:hover:bg-neutral-800">
                                         <td scope="col" class="px-6 py-3">
                                             {{ $item->title }}
 
@@ -469,7 +504,7 @@
                                             {{ $item->status ? '✔️' : '⭕️' }}
                                         </td>
 
-                                         <td scope="col" class="px-6 py-3">
+                                        <td scope="col" class="px-6 py-3">
                                             {{ $item->start_date }}
                                         </td>
 
@@ -530,21 +565,50 @@
     <!-- End Table Section -->
 
     @section('script')
+    
         <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
+        <script>
+            const data = {
+                labels: @json($requestActivityperiode->map(fn($requestActivityperiode) => $requestActivityperiode->date)),
+                datasets: [{
+                    label: 'Periode Creation activites',
+                    backgroundColor: [
+                        'rgba(54, 162, 235, 0.2)', // Blue for men
+                        'rgba(255, 99, 132, 0.2)' // Pink for women
+                    ],
+                    borderColor: [
+                        'rgba(54, 162, 235, 1)', // Blue border for men
+                        'rgba(255, 99, 132, 1)' // Pink border for women
+                    ],
+                    data: @json($requestActivityperiode->map(fn($requestActivityperiode) => $requestActivityperiode->aggregate)),
+                }]
+            };
+            const config = {
+                type: 'line',
+                data: data
+            };
+            const myChart = new Chart(
+                document.getElementById('myChart'),
+                config
+            );
+        </script>
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
         <script>
             const data = {
                 labels: ['Hommes', 'Femmes'],
                 datasets: [{
                     label: 'Participation',
-                    data: [{{ $hommes }}, {{ $femmes }}],
+                    data: [
+                        {{ $hommes }}, // Number of men
+                        {{ $femmes }} // Number of women
+                    ],
                     backgroundColor: [
-                        'rgba(54, 162, 235, 0.2)', // Bleu pour les hommes
-                        'rgba(255, 99, 132, 0.2)' // Rose pour les femmes
+                        'rgba(54, 162, 235, 0.2)', // Blue for men
+                        'rgba(255, 99, 132, 0.2)' // Pink for women
                     ],
                     borderColor: [
-                        'rgba(54, 162, 235, 1)', // Bordure bleue pour les hommes
-                        'rgba(255, 99, 132, 1)' // Bordure rose pour les femmes
+                        'rgba(54, 162, 235, 1)', // Blue border for men
+                        'rgba(255, 99, 132, 1)' // Pink border for women
                     ],
                     borderWidth: 1
                 }]
@@ -571,94 +635,37 @@
                 document.getElementById('myChart2'),
                 config
             );
+        </script>
 
 
 
-            let ctx = document.getElementById("myChart").getContext('2d');
+        <script>
+            function generateYearOptions() {
+                const select = document.getElementById('yearselec'); // Ensure ID is 'year'
 
-            var gradientStroke = ctx.createLinearGradient(500, 0, 100, 0);
-            gradientStroke.addColorStop(0, "#ff6c00");
-            gradientStroke.addColorStop(1, "#ff3b74");
-
-            var gradientBkgrd = ctx.createLinearGradient(0, 100, 0, 400);
-            gradientBkgrd.addColorStop(0, "rgba(244,94,132,0.2)");
-            gradientBkgrd.addColorStop(1, "rgba(249,135,94,0)");
-
-            let draw = Chart.controllers.line.prototype.draw;
-            Chart.controllers.line = Chart.controllers.line.extend({
-                draw: function() {
-                    draw.apply(this, arguments);
-                    let ctx = this.chart.chart.ctx;
-                    let _stroke = ctx.stroke;
-                    ctx.stroke = function() {
-                        ctx.save();
-                        //ctx.shadowColor = 'rgba(244,94,132,0.8)';
-                        ctx.shadowBlur = 8;
-                        ctx.shadowOffsetX = 0;
-                        ctx.shadowOffsetY = 6;
-                        _stroke.apply(this, arguments)
-                        ctx.restore();
-                    }
+                if (!select) {
+                    console.error("yearselec select element with ID 'yearselec' not found.");
+                    return; // Prevent errors if element is missing
                 }
-            });
 
+                const currentYear = new Date().getFullYear();
 
+                // Define range with 7 past and 8 future years (inclusive)
+                const startYear = currentYear - 7;
+                const endYear = currentYear + 8;
 
+                for (let yearselec = startYear; yearselec <= endYear; yearselec++) {
+                    const option = document.createElement('option');
+                    option.value = yearselec;
+                    option.textContent = yearselec;
 
-            var chart = new Chart(ctx, {
-                // The type of chart we want to create
-                type: 'line',
-
-
-                data: {
-                    labels: ["Sep", "Oct", "Nov", "Dec", "Jan", "Feb", "Mar", "Apr"],
-                    datasets: [{
-                        label: "Income",
-                        backgroundColor: gradientBkgrd,
-                        borderColor: gradientStroke,
-                        data: [5500, 2500, 10000, 6000, 14000, 1500, 7000, 20000],
-                        pointBorderColor: "rgba(255,255,255,0)",
-                        pointBackgroundColor: "rgba(255,255,255,0)",
-                        pointBorderWidth: 0,
-                        pointHoverRadius: 8,
-                        pointHoverBackgroundColor: gradientStroke,
-                        pointHoverBorderColor: "rgba(220,220,220,1)",
-                        pointHoverBorderWidth: 4,
-                        pointRadius: 1,
-                        borderWidth: 5,
-                        pointHitRadius: 16,
-                    }]
-                },
-
-                // Configuration options go here
-                options: {
-                    tooltips: {
-                        backgroundColor: '#fff',
-                        displayColors: false,
-                        titleFontColor: '#000',
-                        bodyFontColor: '#000'
-
-                    },
-                    legend: {
-                        display: false
-                    },
-                    scales: {
-                        xAxes: [{
-                            gridLines: {
-                                display: false
-                            }
-                        }],
-                        yAxes: [{
-                            ticks: {
-                                // Include a dollar sign in the ticks
-                                callback: function(value, index, values) {
-                                    return (value / 1000) + 'K';
-                                }
-                            }
-                        }],
+                    if (yearselec === currentYear) {
+                        option.selected = true; // Select the current year by default
                     }
+
+                    select.appendChild(option);
                 }
-            });
+            }
         </script>
     @endsection
 

@@ -36,7 +36,7 @@ return Application::configure(basePath: dirname(__DIR__))
                 return response()->view("admin.errors.403", [], 403);
             }
 
-            if ($exception instanceof QueryException) { 
+            if ($exception instanceof QueryException) {
                 return response()->view(
                     'errors.500',
                     ['message' => "Il y a un problème de connexion à la base de données."],
@@ -48,6 +48,6 @@ return Application::configure(basePath: dirname(__DIR__))
                 return response()->view("errors.503", [], 503);
             }
 
-            return parent::render($request, $exception);
+            
         });
     })->create();

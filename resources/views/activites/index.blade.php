@@ -60,6 +60,63 @@
             <div>
                 <div class="inline-flex gap-x-2">
 
+                    <form class="max-w-md mx-auto">
+                        <label for="default-search"
+                            class="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white">Search</label>
+                        <div class="relative">
+                            <div class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
+                                <svg class="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true"
+                                    xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
+                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                        stroke-width="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z" />
+                                </svg>
+                            </div>
+                            <input type="search" data-modal-target="static-modal" data-modal-toggle="static-modal"
+                                class="block w-full p-4 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                placeholder="Search Mockups, Logos..." required />
+
+                        </div>
+                    </form>
+
+
+
+
+                    <!-- Main modal -->
+                    <div id="static-modal" data-modal-backdrop="static" tabindex="-1" aria-hidden="true"
+                        class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
+                        <div class="relative p-4 w-full max-w-2xl max-h-full">
+                            <!-- Modal content -->
+                            <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
+                                <!-- Modal header -->
+                                <div
+                                    class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
+                                    <input type="search" id="search"
+                                        class="block w-full p-4 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                        placeholder="Search Mockups, Logos..." required />
+                                    <button type="button"
+                                        class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
+                                        data-modal-hide="static-modal">
+                                        <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
+                                            fill="none" viewBox="0 0 14 14">
+                                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                                stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
+                                        </svg>
+                                        <span class="sr-only">Close modal</span>
+                                    </button>
+                                </div>
+                                <!-- Modal body -->
+                                <div class="p-4 md:p-5 space-y-4 relative overflow-x-auto" id="resultsContainer">
+
+
+
+
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+
+
                     <button id="dropdownInformationButton" data-dropdown-toggle="dropdownInformation"
                         class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-gray-200 bg-white text-gray-800 shadow-sm hover:bg-gray-50 focus:outline-none focus:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-800 dark:border-neutral-700 dark:text-white dark:hover:bg-neutral-700 dark:focus:bg-neutral-700"
                         type="button">
@@ -142,71 +199,15 @@
                                 .PDF
                             </a>
                         </div>
-                       
+
                     </div>
 
-
-                    <div class="hs-dropdown [--placement:bottom-right] relative inline-block">
-                        <button id="hs-as-table-table-filter-dropdown" type="button"
-                            class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-gray-200 bg-white text-gray-800 shadow-sm hover:bg-gray-50 focus:outline-none focus:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-800 dark:border-neutral-700 dark:text-white dark:hover:bg-neutral-700 dark:focus:bg-neutral-700"
-                            aria-haspopup="menu" aria-expanded="false" aria-label="Dropdown">
-                            <svg class="shrink-0 size-3.5 text-gray-800 dark:text-neutral-200"
-                                xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
-                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                stroke-linejoin="round">
-                                <path d="M3 6h18" />
-                                <path d="M7 12h10" />
-                                <path d="M10 18h4" />
-                            </svg>
-                            Filter
-                            <span
-                                class="inline-flex items-center gap-1.5 py-0.5 px-1.5 rounded-full text-xs font-medium border border-gray-300 text-gray-800 dark:border-neutral-700 dark:text-neutral-300">
-                                2
-                            </span>
-                        </button>
-                        <div class="hs-dropdown-menu transition-[opacity,margin] duration hs-dropdown-open:opacity-100 opacity-0 hidden divide-y divide-gray-200 min-w-48 z-20 bg-white shadow-md rounded-lg mt-2 dark:divide-neutral-700 dark:bg-neutral-800 dark:border dark:border-neutral-700"
-                            role="menu" aria-orientation="vertical"
-                            aria-labelledby="hs-as-table-table-filter-dropdown">
-                            <div class="divide-y divide-gray-200 dark:divide-neutral-700">
-                                <label for="hs-as-filters-dropdown-frequency" class="flex py-2.5 px-3">
-                                    <input type="checkbox"
-                                        class="shrink-0 mt-0.5 border-gray-300 rounded text-blue-600 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-600 dark:checked:bg-blue-500 dark:checked:border-blue-500 dark:focus:ring-offset-gray-800"
-                                        id="hs-as-filters-dropdown-frequency" checked>
-                                    <span class="ms-3 text-sm text-gray-800 dark:text-neutral-200">Frequency</span>
-                                </label>
-                                <label for="hs-as-filters-dropdown-status" class="flex py-2.5 px-3">
-                                    <input type="checkbox"
-                                        class="shrink-0 mt-0.5 border-gray-300 rounded text-blue-600 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-600 dark:checked:bg-blue-500 dark:checked:border-blue-500 dark:focus:ring-offset-gray-800"
-                                        id="hs-as-filters-dropdown-status" checked>
-                                    <span class="ms-3 text-sm text-gray-800 dark:text-neutral-200">Status</span>
-                                </label>
-                                <label for="hs-as-filters-dropdown-created" class="flex py-2.5 px-3">
-                                    <input type="checkbox"
-                                        class="shrink-0 mt-0.5 border-gray-300 rounded text-blue-600 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-600 dark:checked:bg-blue-500 dark:checked:border-blue-500 dark:focus:ring-offset-gray-800"
-                                        id="hs-as-filters-dropdown-created">
-                                    <span class="ms-3 text-sm text-gray-800 dark:text-neutral-200">Created</span>
-                                </label>
-                                <label for="hs-as-filters-dropdown-due-date" class="flex py-2.5 px-3">
-                                    <input type="checkbox"
-                                        class="shrink-0 mt-0.5 border-gray-300 rounded text-blue-600 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-600 dark:checked:bg-blue-500 dark:checked:border-blue-500 dark:focus:ring-offset-gray-800"
-                                        id="hs-as-filters-dropdown-due-date">
-                                    <span class="ms-3 text-sm text-gray-800 dark:text-neutral-200">Due
-                                        Date</span>
-                                </label>
-                                <label for="hs-as-filters-dropdown-amount" class="flex py-2.5 px-3">
-                                    <input type="checkbox"
-                                        class="shrink-0 mt-0.5 border-gray-300 rounded text-blue-600 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-600 dark:checked:bg-blue-500 dark:checked:border-blue-500 dark:focus:ring-offset-gray-800"
-                                        id="hs-as-filters-dropdown-amount">
-                                    <span class="ms-3 text-sm text-gray-800 dark:text-neutral-200">Amount</span>
-                                </label>
-                            </div>
-                        </div>
-                    </div>
 
                     <button type="button"
                         class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-transparent bg-blue-600 text-white hover:bg-blue-700 focus:outline-none focus:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none">
                         Create Activites
                     </button>
+
                 </div>
             </div>
         </div>
@@ -242,6 +243,73 @@
     <x-delete :name="__('Would you like disable in calendar this activity? ')" />
 
     @section('script')
+        <script>
+            $(document).ready(function() {
+                var typingTimer;
+                var doneTypingInterval = 500;
+
+                $('#search').on('keyup', function() {
+                    clearTimeout(typingTimer);
+                    typingTimer = setTimeout(searchActivites);
+
+                });
+
+                $('#search').on('keydown', function() {
+                    clearTimeout(typingTimer);
+                });
+
+                function searchActivites() {
+                    var formData = $('#search').serialize();
+                    var searchInput = $('#search').val()
+                        .trim();
+
+                    if (searchInput === '') {
+
+                        $('#resultsContainer').html('<p>Veuillez entrer un terme de recherche.</p>');
+                        return;
+                    }
+                    if (searchInput.length < 3) {
+
+                        $('#resultsContainer').html('<p>Veuillez entrer au moins 3 caractères.</p>');
+                        return;
+                    }
+
+                    $.ajax({
+                        url: "{{ route('activites.search') }}",
+                        method: 'GET',
+                        data: { search: searchInput },
+                        success: function(response) {
+                            var resultsContainer = $('#resultsContainer');
+                            resultsContainer.html('');
+
+                            if (response.length == 0) {
+                                resultsContainer.html('<p>Aucun résultat trouvé.</p>');
+                            } else {
+                                var htmlContent = '';
+                                response.forEach(function(activite) {
+                                    htmlContent += `
+                                                    <a href=""
+                                                        class="inline-flex items-center justify-center p-5 text-base font-medium text-gray-500 rounded-lg bg-gray-50 hover:text-gray-900 hover:bg-gray-100 dark:text-gray-400 dark:bg-gray-800 dark:hover:bg-gray-700 dark:hover:text-white">
+
+                                                        <span class="w-full">${activite.title}</span>
+                                                        <svg class="w-4 h-4 ms-2 rtl:rotate-180" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
+                                                            fill="none" viewBox="0 0 14 10">
+                                                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                                d="M1 5h12m0 0L9 1m4 4L9 9" />
+                                                        </svg>
+                                                    </a>
+                    `;
+                                });
+                                resultsContainer.html(htmlContent);
+                            }
+                        },
+                        error: function(xhr) {
+                            console.error('Erreur de la requête AJAX', xhr);
+                        }
+                    });
+                }
+            });
+        </script>
         <script>
             $(document).ready(function() {
                 $(document).on('click', '.btnModal', function() {
