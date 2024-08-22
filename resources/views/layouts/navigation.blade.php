@@ -15,7 +15,7 @@
                         </svg>
                     </button>
                     <a href="https://flowbite.com" class="flex ms-2 md:me-24">
-                        <img src="{{ asset('img/orange.png') }}" class="h-8 me-3" alt="FlowBite Logo" />
+                        <img src="{{ asset('img/orange.webp') }}" class="h-8 me-3" alt="FlowBite Logo" />
                         <span
                             class="self-center font-semibold text-1xl sm:text-1xl whitespace-nowrap dark:text-white">Orange
                             Digital Center</span>
@@ -152,6 +152,7 @@
                             viewBox="0 0 24 24">
                             <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
                                 stroke-width="2"
+
                                 d="M17 9h2V7h-2zm1 14q-2.075 0-3.537-1.463T13 18t1.463-3.537T18 13t3.538 1.463T23 18t-1.463 3.538T18 23m-.5-2h1v-2.5H21v-1h-2.5V15h-1v2.5H15v1h2.5zm5.5-7.875q-.975-1.05-2.275-1.588T18 11q-.275 0-.513.013t-.487.062V10l-7-5.05V3h13zM1 21V11l7-5l7 5v.675q-1.8.85-2.9 2.588T11 18q0 .775.163 1.538T11.675 21H10v-6H6v6z" />
 
 

@@ -404,7 +404,7 @@ class ActiviteController extends Controller
         return view('encours', compact('activites'));
     }
 
-    public function chartActivity()
+    public function chartActivity(Request $request)
     {
         $participationData = Candidat::selectRaw("SUM(CASE WHEN odcusers.gender = 'male' THEN 1 ELSE 0 END) as hommes")
             ->selectRaw("SUM(CASE WHEN odcusers.gender = 'female' THEN 1 ELSE 0 END) as femmes")
@@ -423,8 +423,8 @@ class ActiviteController extends Controller
         $activites = Activite::all();
         $user = Odcuser::all();
 
-        $activityForWeekend = Activite::whereRaw('(start_date BETWEEN ? AND ?) 
-                                  OR (end_date BETWEEN ? AND ?) 
+        $activityForWeekend = Activite::whereRaw('(start_date BETWEEN ? AND ?)
+                                  OR (end_date BETWEEN ? AND ?)
                                   OR (start_date <= ? AND end_date >= ?)', [
             Carbon::now()->subDays(Carbon::now()->dayOfWeek),
             Carbon::now()->addDays(5 - Carbon::now()->dayOfWeek),
@@ -435,12 +435,16 @@ class ActiviteController extends Controller
         ])->get();
 
 
+        $month = 4;
+        $year = 2024;
 
+        $requestActivityperiode = Activite::selectRaw("date_format(createdAt, '%Y-%m-%d') as date, count(*) as aggregate")
+            ->whereMonth('createdAt', $month)
+            ->whereYear('createdAt', $year)
+            ->groupBy('date')
+            ->get();
 
-
-
-
-        return view('dashboard', compact('activites', 'user', 'data', 'hommes', 'femmes', "activityForWeekend"));
+        return view('dashboard', compact('activites', 'user', 'data', 'hommes', 'femmes', "activityForWeekend", 'requestActivityperiode'));
     }
 
     public function coursera_rapport()
@@ -756,5 +760,16 @@ class ActiviteController extends Controller
 
 
         return view('dashboard', compact('week'));
+    }
+
+    public function search(Request $request)
+    {
+        $searchTerm = $request->input('search');
+        $activites = Activite::where('title', 'LIKE', "%{$searchTerm}%")
+        ->take(4)
+        ->latest()
+        ->get();
+
+        return response()->json($activites);
     }
 }
