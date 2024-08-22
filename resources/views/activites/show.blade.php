@@ -173,61 +173,60 @@
             var tr = null;
             var statusCell = null;
 
-            function readMore(event, value) {
+            function readMore(event) {
                 event.preventDefault();
+                let value = event.target.previousElementSibling.innerHTML;
+
                 var td = $(event.target).closest('td');
                 $(td).text(value);
-
             }
 
             $(document).ready(function() {
-
-                $('#candidatTable').on('click', '.btn-menu', function() {
-                    const rel = $(this).attr('rel')
-                    $('.div-dropdown').fadeOut('fast')
-
-                    const lien = $(this).attr('data-target')
-
-                    $('.btn-menu').each(function() {
-                        if (lien != $(this).attr('data-target')) {
-                            $(this).attr('rel', 0)
-                        }
-                    })
-
-                    if (rel == 1) {
-                        $(this).attr('rel', 0)
-                        $('#' + lien).fadeOut('fast')
-                    } else {
-                        $(this).attr('rel', 1)
-                        $('#' + lien).fadeIn('fast')
-                    }
-                    // const lien = $(this).attr('data-target')
-                    // $('#' + lien).fadeToggle('fast')
-                });
-
-                $('body').on('click', function(event) {
-                    if (!event.target.closest('.tdAction')) {
-                        $('.div-dropdown').fadeOut('fast')
-                        $('.btn-menu').each(function() {
-                            $(this).attr('rel', 0)
-                        })
-                    } else {
-                        console.log('td act', $(this).hasClass('tdAction'))
-                    }
-
-
-                });
-
                 let event = @json($activite->title);
+                var id_event = @json($activite->id);
+                var url = "{{ route('getcandidats', $activite->id) }}";
+                let columns = [{
+                        data: 'first_name',
+                        name: 'first_name'
+                    },
+                    {
+                        data: 'last_name',
+                        name: 'last_name'
+                    },
 
+                ];
+                let labels = @json($labels)
 
+                labels.forEach(element => {
+                    columns.push({
+                        data: element,
+                        name: element
+                    });
+
+                });
+                columns.push({
+                    data: 'status',
+                    name: 'status',
+                }, {
+                    data: 'action',
+                    name: 'action'
+                })
                 $('#candidatTable').DataTable({
-                    responsive: true,
-
+                    "processing": true,
+                    "serverSide": true,
+                    "ajax": {
+                        "url": "{{ route('getcandidats', $activite->id) }}",
+                        "dataType": "json",
+                        "type": "GET"
+                    },
+                    createdRow: function(row, data, dataIndex) {
+                        $(row).find('td:eq(' + ($(row).find('td').length - 2) + ')').attr('id',
+                            'statusCell');
+                    },
                     columnDefs: [{
                             visible: false,
-                            targets: [0, 3, 4, 5, 7, 8, 9, 10]
-                        }, // hide columns 1 and 3 by default
+                            targets: '.label'
+                        },
                         {
                             responsivePriority: 1,
                             targets: 0
@@ -237,59 +236,94 @@
                             targets: -1
                         }
                     ],
+
                     layout: {
                         topStart: {
                             pageLength: {
                                 menu: [10, 25, 50, 100, 200]
                             },
                             buttons: [
-                                'colvis',
+                                'copy',
+                                'print',
+
+                                {
+                                    extend: 'spacer',
+                                    style: 'bar',
+                                    text: 'Export files:'
+                                },
+                                'csv',
+                                'excel',
+                                'spacer',
+                                'pdf',
+                                {
+                                    extend: 'spacer',
+                                    style: 'bar',
+                                    text: ':'
+                                },
+
+                                'colvis'
                             ]
                         },
                         topEnd: {
                             search: {
                                 placeholder: 'Type search here'
                             }
-                        }
+                        },
+                        bottomEnd: {
+                            paging: {
+                                numbers: 3
+                            }
+                        },
+
+                    },
+                    columns: columns,
+                    pageLength: 10,
+                    lengthMenu: [
+                        [10, 25, 50, -1],
+                        [10, 25, 50, "All"]
+                    ]
+                });
+
+
+                $(document).on('click', '.btnAction', function(event) {
+                    let id = $(this).data('dropdown-toggle');
+                    $('.modal').not('#' + id).hide();
+                    $('#' + id).toggle();
+                    event.stopPropagation();
+                });
+
+                $('body').on('click', function(event) {
+                    if (!$(event.target).closest('.modal, .btnAction').length) {
+                        $('.modal').hide();
                     }
                 });
+
+
+                $(document).on('click', '.modal', function(event) {
+                    event.stopPropagation();
+                });
+
 
                 $('#candidatTable').css('width', '100%');
 
                 $('.dt-container').addClass('text-lg text-gray-800 dark:text-gray-400 leading-tight')
 
                 $('.dt-buttons').addClass('mt-4')
-                $('.dt-buttons buttons').addClass('cursor-pointer mt-5 bg-slate-600 p-2 rounded-sm font-bold')
+
+                $('.dt-buttons buttons').addClass(
+                    'cursor-pointer mt-5 bg-slate-600 p-2 rounded-sm font-bold')
 
                 $("#dt-length-2").addClass('text-gray-700 dark:text-gray-200 w-24 bg-white');
-                $("label[for='dt-length-2']").addClass('text-gray-700 dark:text-gray-200').text(
+                $(
+                    "label[for='dt-length-2']").addClass('text-gray-700 dark:text-gray-200').text(
                     ' Enregistrements par page');
 
             })
 
-            function changeStatus(event) {
+            function tooltip(event) {
                 event.preventDefault();
-                let status = $(event.target).data('text');
-
-                let id = $(event.target).attr('data')
-                console.log(id)
-                $.ajax({
-                    type: 'POST',
-                    url: '/candidat/' + status,
-                    data: {
-                        id: id,
-                        _token: '{{ csrf_token() }}'
-                    },
-                    success: function(data) {
-                        // Update the UI or display a success message
-                        // Update the table cell with the new status
-                        statusCell[0].textContent = status
-                        console.log('Status updated successfully!');
-                    },
-                    error: function(xhr, status, error) {
-                        console.log('Error updating status: ' + error);
-                    }
-                });
+                const tooltip = document.getElementById('tooltip');
+                $(tooltip).show();
             }
 
             function actionStatus(event, type, id, firstname, lastname) {
@@ -319,6 +353,29 @@
                 }
 
 
+            }
+
+            function changeStatus(event, status) {
+                event.preventDefault();
+
+                let id = $(event.target).attr('data')
+                $.ajax({
+                    type: 'POST',
+                    url: '/candidat/' + status,
+                    data: {
+                        id: id,
+                        _token: '{{ csrf_token() }}'
+                    },
+                    success: function(data) {
+                        // Update the UI or display a success message
+                        // Update the table cell with the new status
+                        $(statusCell[0]).text(status);
+                        console.log('Status updated successfully!');
+                    },
+                    error: function(xhr, status, error) {
+                        console.log('Error updating status: ' + error);
+                    }
+                });
             }
         </script>
 
