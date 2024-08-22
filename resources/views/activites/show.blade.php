@@ -502,5 +502,13 @@
         </script>
 
         </script>
+        {{-- pour choisir le certificat a generer --}}
+        <script>
+            function choix_certificat(event) {
+                event.preventDefault();
+                const lien = event.target.getAttribute("href");
+                document.querySelector("#choixCertificat-modal form").setAttribute("action", lien);
+            }
+        </script>
     @endsection
 </x-app-layout>
