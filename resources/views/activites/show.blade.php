@@ -173,11 +173,12 @@
             var tr = null;
             var statusCell = null;
 
-            function readMore(event, value) {
+            function readMore(event) {
                 event.preventDefault();
+                let value = event.target.previousElementSibling.innerHTML;
+
                 var td = $(event.target).closest('td');
                 $(td).text(value);
-
             }
 
             $(document).ready(function() {
@@ -205,7 +206,7 @@
                 });
                 columns.push({
                     data: 'status',
-                    name: 'status'
+                    name: 'status',
                 }, {
                     data: 'action',
                     name: 'action'
@@ -218,6 +219,23 @@
                         "dataType": "json",
                         "type": "GET"
                     },
+                    createdRow: function(row, data, dataIndex) {
+                        $(row).find('td:eq(' + ($(row).find('td').length - 2) + ')').attr('id',
+                            'statusCell');
+                    },
+                    columnDefs: [{
+                            visible: false,
+                            targets: '.label'
+                        },
+                        {
+                            responsivePriority: 1,
+                            targets: 0
+                        },
+                        {
+                            responsivePriority: 2,
+                            targets: -1
+                        }
+                    ],
 
                     layout: {
                         topStart: {
@@ -267,42 +285,23 @@
                 });
 
 
+                $(document).on('click', '.btnAction', function(event) {
+                    let id = $(this).data('dropdown-toggle');
+                    $('.modal').not('#' + id).hide();
+                    $('#' + id).toggle();
+                    event.stopPropagation();
+                });
 
-                // $('#candidatTable').on('click', '.btn-menu', function() {
-                //     const rel = $(this).attr('rel')
-                //     $('.div-dropdown').fadeOut('fast')
-
-                //     const lien = $(this).attr('data-target')
-
-                //     $('.btn-menu').each(function() {
-                //         if (lien != $(this).attr('data-target')) {
-                //             $(this).attr('rel', 0)
-                //         }
-                //     })
-
-                //     if (rel == 1) {
-                //         $(this).attr('rel', 0)
-                //         $('#' + lien).fadeOut('fast')
-                //     } else {
-                //         $(this).attr('rel', 1)
-                //         $('#' + lien).fadeIn('fast')
-                //     }
-                //     // const lien = $(this).attr('data-target')
-                //     // $('#' + lien).fadeToggle('fast')
-                // });
-
-                // $('body').on('click', function(event) {
-                //     if (!event.target.closest('.tdAction')) {
-                //         $('.div-dropdown').fadeOut('fast')
-                //         $('.btn-menu').each(function() {
-                //             $(this).attr('rel', 0)
-                //         })
-                //     } else {
-                //         console.log('td act', $(this).hasClass('tdAction'))
-                //     }
+                $('body').on('click', function(event) {
+                    if (!$(event.target).closest('.modal, .btnAction').length) {
+                        $('.modal').hide();
+                    }
+                });
 
 
-                // });
+                $(document).on('click', '.modal', function(event) {
+                    event.stopPropagation();
+                });
 
 
                 $('#candidatTable').css('width', '100%');
@@ -321,59 +320,63 @@
 
             })
 
-            // function changeStatus(event) {
-            //     event.preventDefault();
-            //     let status = $(event.target).data('text');
+            function tooltip(event) {
+                event.preventDefault();
+                const tooltip = document.getElementById('tooltip');
+                $(tooltip).show();
+            }
 
-            //     let id = $(event.target).attr('data')
-            //     console.log(id)
-            //     $.ajax({
-            //         type: 'POST',
-            //         url: '/candidat/' + status,
-            //         data: {
-            //             id: id,
-            //             _token: '{{ csrf_token() }}'
-            //         },
-            //         success: function(data) {
-            //             // Update the UI or display a success message
-            //             // Update the table cell with the new status
-            //             statusCell[0].textContent = status
-            //             console.log('Status updated successfully!');
-            //         },
-            //         error: function(xhr, status, error) {
-            //             console.log('Error updating status: ' + error);
-            //         }
-            //     });
-            // }
+            function actionStatus(event, type, id, firstname, lastname) {
+                tr = $(event.target.closest('tr'));
+                statusCell = tr.find('#statusCell');
 
-            // function actionStatus(event, type, id, firstname, lastname) {
-            //     tr = $(event.target.closest('tr'));
-            //     statusCell = tr.find('#statusCell');
-
-            //     switch (type) {
-            //         case 'accept':
-            //             $('#accept-link').attr('data', id)
-            //             $('#popup-title-accept').text(
-            //                 "Confirmez-vous la validation de la candidature de " + firstname + " ?")
-            //             document.getElementById('first-modal').click()
-            //             break;
-            //         case 'decline':
-            //             $('#decline-link').attr('data', id)
-            //             $('#popup-title-decline').text(
-            //                 "Confirmez-vous l'annulation de la candidature de " + firstname + " ?");
-            //             document.getElementById('second-modal').click()
-            //             break;
-            //         case 'wait':
-            //             $('#wait-link').attr('data', id)
-            //             $('#popup-title-wait').text(
-            //                 "Confirmez-vous la mise en attente de " + firstname + " ?")
-            //             document.getElementById('third-modal').click()
-            //         default:
-            //             break;
-            //     }
+                switch (type) {
+                    case 'accept':
+                        $('#accept-link').attr('data', id)
+                        $('#popup-title-accept').text(
+                            "Confirmez-vous la validation de la candidature de " + firstname + " ?")
+                        document.getElementById('first-modal').click()
+                        break;
+                    case 'decline':
+                        $('#decline-link').attr('data', id)
+                        $('#popup-title-decline').text(
+                            "Confirmez-vous l'annulation de la candidature de " + firstname + " ?");
+                        document.getElementById('second-modal').click()
+                        break;
+                    case 'wait':
+                        $('#wait-link').attr('data', id)
+                        $('#popup-title-wait').text(
+                            "Confirmez-vous la mise en attente de " + firstname + " ?")
+                        document.getElementById('third-modal').click()
+                    default:
+                        break;
+                }
 
 
-            // }
+            }
+
+            function changeStatus(event, status) {
+                event.preventDefault();
+
+                let id = $(event.target).attr('data')
+                $.ajax({
+                    type: 'POST',
+                    url: '/candidat/' + status,
+                    data: {
+                        id: id,
+                        _token: '{{ csrf_token() }}'
+                    },
+                    success: function(data) {
+                        // Update the UI or display a success message
+                        // Update the table cell with the new status
+                        $(statusCell[0]).text(status);
+                        console.log('Status updated successfully!');
+                    },
+                    error: function(xhr, status, error) {
+                        console.log('Error updating status: ' + error);
+                    }
+                });
+            }
         </script>
 
         {{-- Script for storing candidates --}}

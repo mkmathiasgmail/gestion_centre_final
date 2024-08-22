@@ -69,8 +69,9 @@ class CandidatController extends Controller
             foreach (array_unique($labels) as $label) {
                 $dataTable->addColumn($label, function ($candidat) use ($label) {
                     $value = isset($candidat[$label]) && $candidat[$label] !== '' ? $candidat[$label] : 'N/A';
-                    return Str::of($value)->limit(40, '...');
-                });
+                    return Str::of($value)->limit(45, '...') . '<span hidden>'. $value .'</span>' . (strlen($value) > 45 ? " <a href='#' onclick='readMore(event)'>Read more</a>" : '');
+                })->escapeColumns([])
+                    ->rawColumns([]);
             }
 
             $dataTable->addColumn('action', function ($candidat) {

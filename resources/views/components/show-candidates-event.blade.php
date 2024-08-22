@@ -36,10 +36,38 @@
                         </th>
                         @foreach (array_unique($labels) as $label)
                             @if (isset($label))
-                                <th scope="col"
-                                    class="px-6 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                    {{ $label }}
-                                </th>
+                                @if (
+                                    $label == 'Civilié' ||
+                                        $label == 'Civilité' ||
+                                        $label == 'Email' ||
+                                        $label == 'E-mail' ||
+                                        $label == 'E-mail(obligatoire)' ||
+                                        $label == 'Adresse Email' ||
+                                        $label == 'Téléphone' ||
+                                        $label == 'Numéro de téléphone' ||
+                                        $label == 'Numéro de l\'encadreur' ||
+                                        $label == 'Tranche d\'âge' ||
+                                        $label == 'Adresse' ||
+                                        $label == 'Adresse de domicile' ||
+                                        $label == 'Adresse de domicile (n°, avenue, Quartier, Commune)' ||
+                                        $label == 'Profession' ||
+                                        $label == 'Spécialité ou domaine (étude ou profession)' ||
+                                        $label == 'Spécialité ou domaine' ||
+                                        $label == 'Niveau d\'étude' ||
+                                        $label == 'Niveau ou année d\'étude' ||
+                                        $label == 'Nom de l\'Etablissement / Université' ||
+                                        $label == 'Université' ||
+                                        $label == 'Université/Etablissement ou Structure')
+                                    <th scope="col"
+                                        class="display-label px-6 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                        {{ $label }}
+                                    </th>
+                                @else
+                                    <th scope="col"
+                                        class="label px-6 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                        {{ $label }}
+                                    </th>
+                                @endif
                             @endif
                         @endforeach
                         <th scope="col"
@@ -101,7 +129,7 @@
                     </h3>
                     <button id="accept-link" data-text="accept" data-modal-hide="popup-accept" type="button"
                         class="text-white bg-red-600 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 dark:focus:ring-red-800 font-medium rounded-lg text-sm inline-flex items-center px-5 py-2.5 text-center"
-                        onclick="changeStatus(event)">
+                        onclick="changeStatus(event, 'accept')">
                         Confirmer
                     </button>
                     <button data-modal-hide="popup-accept" type="button"
@@ -135,7 +163,7 @@
                     </h3>
                     <button id="decline-link" data-text="decline" data-modal-hide="popup-decline" type="button"
                         class="text-white bg-red-600 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 dark:focus:ring-red-800 font-medium rounded-lg text-sm inline-flex items-center px-5 py-2.5 text-center"
-                        onclick="changeStatus(event)">
+                        onclick="changeStatus(event, 'decline')">
                         Confirmer
                     </button>
                     <button data-modal-hide="popup-decline" type="button"
@@ -169,7 +197,7 @@
                     </h3>
                     <button id="wait-link" data-text="wait" data-modal-hide="popup-wait" type="button"
                         class="text-white bg-red-600 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 dark:focus:ring-red-800 font-medium rounded-lg text-sm inline-flex items-center px-5 py-2.5 text-center"
-                        onclick="changeStatus(event)">
+                        onclick="changeStatus(event, 'wait')">
                         Confirmer
                     </button>
                     <button data-modal-hide="popup-wait" type="button"
