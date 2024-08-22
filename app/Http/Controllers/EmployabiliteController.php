@@ -41,15 +41,20 @@ class EmployabiliteController extends Controller
             $usr_empl = Employabilite::where('odcuser_id', $employabilite->odcuser_id)->orderBy('id', 'desc')->take(3)->get();
             $user_postes = [];
             $user_nomboites = [];
+            $user_periodes= [];
             // ici on récupère le nom de la boite et le poste de l'utilisateur
             foreach ($usr_empl as $key => $user_e) {
                 $user_postes[] = $user_e->poste;
                 $user_nomboites[] = $user_e->nomboite;
+                $user_periodes[] = $user_e->periode;
             }
+            // dd($user_postes, $user_nomboites , $employabilites);
             $postes = implode('<br> ', $user_postes,);
             $nomboites = implode('<br> ', $user_nomboites,);
+            $periode = implode('<br> ', $user_periodes,);
             $employabilite['nomboites'] = $nomboites;
             $employabilite['postes'] = $postes;
+            $employabilite['periodes'] = $periode;
         }
 
         // dd($employabilites);
@@ -105,6 +110,9 @@ class EmployabiliteController extends Controller
             'first_name' => 'required|string',
             'type_contrat' => 'required|string',
             'periode' => 'required|date',
+            'poste' => 'required|string',
+            'nomboite' => 'required|string',
+
 
         ]);
 
@@ -164,6 +172,7 @@ class EmployabiliteController extends Controller
         // Recherche de la dernière activité
         $dateFinDerniereActivite = $dernierActivite->end_date;
 
+
         try {
 
             $dateEmployabilite = new DateTime($request->periode);
@@ -222,5 +231,15 @@ class EmployabiliteController extends Controller
     public function destroy($id, Request $request)
     {
 
+        $employabilite = Employabilite::find($id);
+
+
+        if ($employabilite) {
+
+            $employabilite->delete();
+
+            // Rediriger vers la liste des employabilites avec un message de succès
+            return redirect()->route('employabilites.index')->with('success', 'supprimé avec succès.');
+        }
     }
 }

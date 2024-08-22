@@ -23,17 +23,18 @@
             Ajouter
         </button>
     </div> --}}
+@if ($errors->any())
+<div class="flex items-center p-4 mb-4 text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400" role="alert">
+    <ul>
+        @foreach ($errors->all() as $error)
+        <li>{{ $error }}</li>
+        @endforeach
+    </ul>
+</div>
+@endif
 
 
-    @if ($errors->any())
-    <div class="flex items-center p-4 mb-4 text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400" role="alert">
-        <ul>
-            @foreach ($errors->all() as $error)
-            <li>{{ $error }}</li>
-            @endforeach
-        </ul>
-    </div>
-    @endif
+
     @if (session('error'))
     <div id="alert-2" class="flex items-center p-4 mb-4 text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400" role="alert">
         <svg class="flex-shrink-0 w-4 h-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
@@ -61,6 +62,9 @@
         <div class="text-sm font-medium ms-3">
             {{ session('success') }}
         </div>
+
+
+
         <button type="button" class="ms-auto -mx-1.5 -my-1.5 bg-green-50 text-green-500 rounded-lg focus:ring-2 focus:ring-green-400 p-1.5 hover:bg-green-200 inline-flex items-center justify-center h-8 w-8 dark:bg-gray-800 dark:text-green-400 dark:hover:bg-gray-700" data-dismiss-target="#alert-3" aria-label="Close">
             <span class="sr-only">Close</span>
             <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
@@ -111,6 +115,10 @@
                     <th scope="col" class="px-6 py-3 bg-slate-700">
                         Date participation
                     </th>
+                     <th scope="col" class="px-6 py-3 bg-slate-700">
+                         Actions
+                     </th>
+
                 </tr>
             </thead>
             <tbody>
@@ -136,7 +144,8 @@
                         {!! nl2br($item->postes) !!}
                     </td>
                     <td class="px-6 py-4">
-                        {{ $item->periode }}
+                        {!! nl2br($item->periodes) !!}
+
                     </td>
 
                     <td class="px-6 py-4">
@@ -150,6 +159,15 @@
                     <td class="px-6 py-4">
                         {{ $item->date_participation }}
                     </td>
+                       <td class="px-6 py-4">
+
+                               <a href=" {{ route('employabilites.destroy', $item->id) }}" onclick="supprimer(event);" data-modal-target="delete-modal" data-modal-toggle="delete-modal" type="submit">
+                                 <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                                     <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.37,8.91L19.37,10.64L7.24,3.64L8.24,1.91L11.28,3.66L12.64,3.29L16.97,5.79L17.34,7.16L20.37,8.91M6,19V7H11.07L18,11V19A2,2 0 0,1 16,21H8A2,2 0 0,1 6,19Z" />
+                                 </svg>
+                               </a>
+
+                       </td>
                 </tr>
                 @php
                 $id_use += 1;
@@ -158,8 +176,12 @@
             </tbody>
         </table>
     </div>
+<x-DeleteUser1 />
 
     <x-formEmployabilite :typeContrats="$typeContrats" />
+
+
+
 
     @section('script')
     <script src="https://code.jquery.com/ui/1.11.4/jquery-ui.min.js"></script>

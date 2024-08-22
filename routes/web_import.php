@@ -10,5 +10,7 @@ Route::get('import', [ImportControl::class, 'index'])->name('import')->middlewar
 Route::post('import', [ImportControl::class, 'import'])->name('import')->middleware('permissions');;
 Route::get('import', [ImportControl::class, 'indexacti'])->name('import.activite')->middleware('permissions');;
 //Route::post('activites/import', [ImportControl::class, 'importInActivity'])->name('activites.import')->middleware('permissions');;
-Route::get('/download/{filename}', [ImportControl::class, 'download'])->name('file.download');
+//Route::get('/download/{filename}', [ImportControl::class, 'download'])->name('file.download');
+//Route::post('/export', [ImportControl::class, 'download'])->name('export');
+Route::post('/export', [ImportControl::class, 'exportModel'])->name('export');
 

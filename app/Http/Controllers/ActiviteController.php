@@ -282,14 +282,6 @@ class ActiviteController extends Controller
             ->groupBy('activites.title')
             ->get();
 
-
-
-
-
-
-
-
-
         return view('activites.show', compact('participantsData', 'datachart', 'candidatsData', 'labels', 'data', 'activite', 'id', 'candidats', 'activite_Id', 'odcusers', 'fullDates', 'dates', 'countdate', 'presences'));
     }
 
@@ -404,12 +396,16 @@ class ActiviteController extends Controller
         return view('encours', compact('activites'));
     }
 
-    public function chartActivity()
+    public function chartActivity(Request $request)
     {
-        $data1 = Activite::selectRaw("DATE_FORMAT(start_date, '%Y-%m-%d') as date, count(*) as aggregate, title,id")
-            ->whereDate('start_date', '>=', now()->subDays(30))
-            ->groupBy('date', 'title', 'id')
-            ->get();
+        $participationData = Candidat::selectRaw("SUM(CASE WHEN odcusers.gender = 'male' THEN 1 ELSE 0 END) as hommes")
+            ->selectRaw("SUM(CASE WHEN odcusers.gender = 'female' THEN 1 ELSE 0 END) as femmes")
+            ->join('odcusers', 'odcusers.id', '=', 'candidats.odcuser_id')
+            ->whereBetween('candidats.created_at', [Carbon::now()->subDays(7), Carbon::now()])
+            ->first();
+
+        $hommes = $participationData->hommes;
+        $femmes = $participationData->femmes;
 
 
         $data = Activite::selectRaw("DATE_FORMAT(start_date, '%Y-%m-%d') as date, count(*) as aggregate, title,id")
@@ -419,11 +415,28 @@ class ActiviteController extends Controller
         $activites = Activite::all();
         $user = Odcuser::all();
 
+        $activityForWeekend = Activite::whereRaw('(start_date BETWEEN ? AND ?)
+                                  OR (end_date BETWEEN ? AND ?)
+                                  OR (start_date <= ? AND end_date >= ?)', [
+            Carbon::now()->subDays(Carbon::now()->dayOfWeek),
+            Carbon::now()->addDays(5 - Carbon::now()->dayOfWeek),
+            Carbon::now()->subDays(Carbon::now()->dayOfWeek),
+            Carbon::now()->addDays(5 - Carbon::now()->dayOfWeek),
+            Carbon::now()->subDays(Carbon::now()->dayOfWeek),
+            Carbon::now()->addDays(5 - Carbon::now()->dayOfWeek),
+        ])->get();
 
 
+        $month = 4;
+        $year = 2024;
 
+        $requestActivityperiode = Activite::selectRaw("date_format(createdAt, '%Y-%m-%d') as date, count(*) as aggregate")
+            ->whereMonth('createdAt', $month)
+            ->whereYear('createdAt', $year)
+            ->groupBy('date')
+            ->get();
 
-        return view('dashboard', compact('data1', 'activites', 'user', 'data'));
+        return view('dashboard', compact('activites', 'user', 'data', 'hommes', 'femmes', "activityForWeekend", 'requestActivityperiode'));
     }
 
     public function coursera_rapport()
@@ -722,15 +735,47 @@ class ActiviteController extends Controller
     {
         $query = Activite::query();
 
-      
+
         if ($request->has('start_date') && $request->has('end_date')) {
             $query->whereBetween('start_date', [$request->start_date, $request->end_date]);
         }
 
         $activites = $query->get();
 
-    
+
 
         return response()->json($activites);
+    }
+
+    public function weeekActivites()
+    {
+
+
+        return view('dashboard', compact('week'));
+    }
+
+    public function search(Request $request)
+    {
+        $searchTerm = $request->input('search');
+        $activites = Activite::where('title', 'LIKE', "%{$searchTerm}%")
+            ->take(4)
+            ->latest()
+            ->get();
+
+        return response()->json($activites);
+    }
+
+    public function getActivitiesData(Request $request)
+    {
+        $year = $request->input('year');
+        $month = $request->input('month');
+
+        $activities = Activite::selectRaw("date_format(createdAt, '%Y-%m-%d') as date, count(*) as aggregate")
+            ->whereMonth('createdAt', $month)
+            ->whereYear('createdAt', $year)
+            ->groupBy('date')
+            ->get();
+
+        return response()->json($activities);
     }
 }
