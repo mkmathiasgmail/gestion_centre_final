@@ -167,7 +167,7 @@
                             <div>
                                 <select id="month-select"
                                     class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-
+                                 
                                 </select>
                             </div>
 
@@ -238,7 +238,7 @@
                                 </p>
                             </div>
 
-                            
+
                         </div>
                         <!-- End Header -->
 
@@ -406,7 +406,6 @@
             const yearSelect = document.getElementById('year-select');
             const monthSelect = document.getElementById('month-select');
 
-
             for (let year = startYear; year <= currentYear; year++) {
                 const option = document.createElement('option');
                 option.value = year;
@@ -422,8 +421,11 @@
 
 
             function updateMonths(selectedYear) {
-
                 monthSelect.innerHTML = '';
+                const allOption = document.createElement('option');
+                allOption.value = 'all';
+                allOption.text = 'Tous les mois';
+                monthSelect.appendChild(allOption);
                 const maxMonth = (selectedYear == currentYear) ? currentMonth : 12;
 
 
@@ -434,7 +436,6 @@
                     monthSelect.appendChild(option);
                 }
             }
-
 
             yearSelect.addEventListener('change', function() {
                 updateMonths(this.value);
@@ -448,7 +449,6 @@
         <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
         <script>
-
             const data1 = {
                 labels: ['Hommes', 'Femmes'],
                 datasets: [{
@@ -495,13 +495,18 @@
             let myChart;
 
             function fetchChartData(year, month) {
-                fetch(`/api/activities?year=${year}&month=${month}`)
+                let url = `/api/activities?year=${year}`;
+                if (month !== "all") {
+                    url += `&month=${month}`;
+                }
+
+                fetch(url)
                     .then(response => response.json())
                     .then(data => {
                         const dates = data.map(item => item.date);
                         const aggregates = data.map(item => item.aggregate);
 
-
+                        // Mettre à jour le graphique avec les nouvelles données
                         if (myChart) {
                             myChart.data.labels = dates;
                             myChart.data.datasets[0].data = aggregates;
@@ -509,7 +514,7 @@
                         } else {
                             const ctx = document.getElementById('myChart').getContext('2d');
                             myChart = new Chart(ctx, {
-                                type: 'bar',
+                                type: 'line',
                                 data: {
                                     labels: dates,
                                     datasets: [{
