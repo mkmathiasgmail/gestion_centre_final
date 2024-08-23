@@ -28,9 +28,6 @@ use PhpOffice\PhpSpreadsheet\Style\Alignment as cellAlignment;
 
 class CandidatController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index() {}
 
     public function getCandidats(Request $request, $id)
@@ -84,9 +81,59 @@ class CandidatController extends Controller
         }
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
+    public function getParticipants(Request $request, $id)
+    {
+        try {
+            $participants = Candidat::where('activite_id', $id)->where('status', 'accept')->select('id', 'odcuser_id', 'activite_id', 'status')->with(['odcuser', 'candidat_attribute'])->get();
+
+            $etiquettes = [];
+            $participantsData = [];
+
+            if (count($participants) > 0) {
+                foreach ($participants as $participant) {
+                    $participantArray = $participant->toArray();
+
+                    if ($participant->candidat_attribute) {
+                        foreach ($participant->candidat_attribute as $attribute) {
+                            $participantArray[$attribute->label] = $attribute->value;
+                            if (!in_array($attribute->label, $etiquettes)) {
+                                $etiquettes[] = $attribute->label;
+                            }
+                        }
+                    }
+                    $participantsData[] = $participantArray;
+                }
+            } else {
+                $participantsData = null;
+                $etiquettes = null;
+            }
+
+            $dataTable = DataTables::of($participantsData)
+                ->editColumn('first_name', function ($participant) {
+                    return $participant['odcuser']['first_name'];
+                })
+                ->editColumn('last_name', function ($participant) {
+                    return $participant['odcuser']['last_name'];
+                });
+
+            foreach (array_unique($etiquettes) as $etiquette) {
+                $dataTable->addColumn($etiquette, function ($participant) use ($etiquette) {
+                    $value = isset($participant[$etiquette]) && $participant[$etiquette] !== '' ? $participant[$etiquette] : 'N/A';
+                    return Str::of($value)->limit(45, '...') . '<span hidden>' . $value . '</span>' . (strlen($value) > 45 ? " <a href='#' onclick='readMore(event)'>Read more</a>" : '');
+                })->escapeColumns([])
+                    ->rawColumns([]);
+            }
+
+            $dataTable->addColumn('action', function ($participant) {
+                return view('partials.action-btn-participants', ['participant' => $participant])->render();
+            });
+
+            return $dataTable->toJson();
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Une erreur est survenue : ' . $e->getMessage()], 500);
+        }
+    }
+
     public function create() {}
 
     public function generateExcel($id_event)
@@ -406,9 +453,6 @@ class CandidatController extends Controller
         }
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
         FacadesLog::info('storeCandidats called');
@@ -437,33 +481,23 @@ class CandidatController extends Controller
         }
     }
 
-    /**
-     * Display the specified resource.
-     */
+
     public function show(Candidat $candidat)
     {
         return view('candidats.show', compact('candidat'));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
     public function edit(Candidat $candidat)
     {
         //
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
+
     public function update(UpdateCandidatRequest $request, Candidat $candidat)
     {
         //
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
     public function destroy(Candidat $candidat)
     {
         //
