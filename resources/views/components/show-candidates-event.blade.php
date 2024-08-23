@@ -62,7 +62,7 @@
                                         class="display-label px-6 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                                         {{ $label }}
                                     </th>
-                                @else
+                                @elseif($label !== 'Cv de votre parcours (Obligatoire)')
                                     <th scope="col"
                                         class="label px-6 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                                         {{ $label }}
