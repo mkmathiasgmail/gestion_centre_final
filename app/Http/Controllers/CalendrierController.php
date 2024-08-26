@@ -149,36 +149,31 @@ class CalendrierController extends Controller
         }
 
         
-
-// Définir les mois 
-
+  
+        
         $months = [];
         $startMonth = $semestre == 1 ? 1 : 7; // Janvier pour le 1er semestre, Juillet pour le 2ème semestre
         $endMonth = $semestre == 1 ? 6 : 12;
-
+        
         for ($i = $startMonth; $i <= $endMonth; $i++) {
             $dateTime = DateTime::createFromFormat('!m', $i);
             if ($dateTime) {
-                setlocale(LC_TIME, 'fr_FR.UTF-8'); // Définir la locale en français
-                $months[] = strftime('%B', $dateTime->getTimestamp()); // Format français du mois
+                $months[] = $dateTime->format('F');
             } else {
                 throw new Exception("Erreur lors de la création du mois pour l'indice $i");
             }
         }
         
-        // Création des jours sans les dimanches
+        // Création des jours de la semaine
         $daysOfWeek = [];
-        $currentDate = new DateTime("first day of January $annee");
-        $currentDate->setDate($annee, $startMonth, 1);
-        
-        while ($currentDate->format('n') <= $endMonth) {
-            if ($currentDate->format('w') != 0) { // Exclure les dimanches (w = 0 pour Dimanche)
-                setlocale(LC_TIME, 'fr_FR.UTF-8'); // Définir la locale en français
-                $dayName = strftime('%A', $currentDate->getTimestamp()); // Format français du jour
-                $daysOfWeek[] = $dayName . " " . $currentDate->format('j F Y'); // Inclure le jour et la date complète
-            }
-            $currentDate->modify('+1 day');
+        for ($day = 0; $day < 7; $day++) {
+            $dateTime = new DateTime();
+            $dateTime->setISODate(2024, 1, $day + 1); // On utilise la semaine 1 de 2024 comme référence
+            $daysOfWeek[] = $dateTime->format('l'); // Format 'l' renvoie le nom complet du jour de la semaine
         }
+        
+        // ... Le reste de votre code pour créer le calendrier ...
+        
         
         $startRow = 60; // Ligne de départ
         $calendarColumnWidth = 15; // Largeur des colonnes du calendrier
