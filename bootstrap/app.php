@@ -44,6 +44,10 @@ return Application::configure(basePath: dirname(__DIR__))
                 return response()->view("errors.405", [], 405);
             }
 
+            if ($exception instanceof HttpException && $exception->getStatusCode() == 419) {
+                return response()->view("errors.419", [], 419);
+            }
+
             if ($exception instanceof QueryException) {
                 return response()->view(
                     'errors.500',
