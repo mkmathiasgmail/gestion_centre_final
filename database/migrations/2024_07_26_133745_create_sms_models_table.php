@@ -1,3 +1,0 @@
-Unstaged changes after reset:
-D	database/migrations/2024_06_28_104558_create_notifications_table.php
-M	database/migrations/2024_07_26_133745_create_sms_models_table.php

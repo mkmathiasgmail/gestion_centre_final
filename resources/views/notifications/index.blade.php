@@ -169,13 +169,16 @@
                     <th scope="col" class="px-6 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                         Nombre des personnes
                     </th>
+                    {{-- <th scope="col" class="px-6 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                        Nombre des echecs
+                    </th> --}}
                     <th scope="col" class="px-6 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                         Type
                     </th>
                 </tr>
             </thead>
             <tbody>
-                {{-- @foreach ($notifications as $item)
+                @foreach ($notifications as $item)
                     <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
                         <td class="px-6 py-4">{{ $item->name }}</td>
                         <td class="px-6 py-4">{{ $item->title }}</td>
@@ -190,7 +193,7 @@
                             <td class="px-6 py-4">Mail/SMS</td>
                         @endif
                     </tr>
-                @endforeach --}}
+                @endforeach
             </tbody>
         </table>
     </div>
@@ -231,16 +234,32 @@
                 sexe.style.display = 'none';
 
                 activitySelect.addEventListener('change', function() {
+                    const optionToRemove = cibleSelect.querySelector('option[value="accepté"]');
+                    const optionToRemoveDecline = cibleSelect.querySelector('option[value="decline"]');
+                    if (optionToRemove && optionToRemoveDecline) {
+                        cibleSelect.removeChild(optionToRemove);
+                        cibleSelect.removeChild(optionToRemoveDecline);
+                    }
+                    modelMailDiv.style.display = 'none';
+                    // message.value = '';
+                    tinymce.get('message').setContent("");
+
                     if (this.value !== '') {
                         const option = document.createElement('option');
+                        const option2 = document.createElement('option');
                         modelMailDiv.style.display = 'block';
-                        option.text = 'Ceux accepté';
+                        option.text = 'Ceux acceptés';
                         option.value = 'accepté';
+                        option2.text = 'Ceux non acceptés';
+                        option2.value = 'decline';
                         cibleSelect.appendChild(option);
+                        cibleSelect.appendChild(option2);
                     } else {
                         const optionToRemove = cibleSelect.querySelector('option[value="accepté"]');
-                        if (optionToRemove) {
+                        const optionToRemoveDecline = cibleSelect.querySelector('option[value="decline"]');
+                        if (optionToRemove && optionToRemoveDecline) {
                             cibleSelect.removeChild(optionToRemove);
+                            cibleSelect.removeChild(optionToRemoveDecline);
                         }
                         modelMailDiv.style.display = 'none';
                         // message.value = '';
@@ -345,76 +364,76 @@
                 });
             });
         </script> --}}
-        <script type="text/javascript">
-            // $(document).ready(function() {
-            //     $('#nofifTable').DataTable({
-            //         processing: true,
-            //         serverSide: true,
-            //         ajax: {
-            //             url: "{{ route('getNotif') }}",
-            //             type: 'GET',
-            //             dataType: 'json'
-            //         },
-            //         layout: {
-            //             topStart: {
-            //                 pageLength: {
-            //                     menu: [10, 25, 50, 100, 200]
-            //                 },
-            //                 buttons: [
-            //                     'copy',
-            //                     'print',
-            //                     {
-            //                         extend: 'spacer',
-            //                         style: 'bar',
-            //                         text: 'Export files:'
-            //                     },
-            //                     'csv',
-            //                     'excel',
-            //                     'pdf',
-            //                     {
-            //                         extend: 'spacer',
-            //                         style: 'bar',
-            //                         text: ':'
-            //                     },
-            //                     'colvis'
-            //                 ]
-            //             },
-            //             topEnd: {
-            //                 search: {
-            //                     placeholder: 'Type search here'
-            //                 }
-            //             },
-            //             bottomEnd: {
-            //                 paging: {
-            //                     numbers: 3
-            //                 }
-            //             },
-            //         },
-            //         columns: [
-            //             { data: 'name', name: 'name' },
-            //             { data: 'title', name: 'title' },
-            //             { data: 'message', name: 'message' },
-            //             { data: 'send_date', name: 'send_date' },
-            //             { data: 'person_number', name: 'person_number' },
-            //             { data: 'type', name: 'type' }
-            //         ],
-            //         pageLength: 10,
-            //         lengthMenu: [
-            //             [10, 25, 50, -1],
-            //             [10, 25, 50, "All"]
-            //         ]
-            //     });
+        {{-- <script type="text/javascript">
+            $(document).ready(function() {
+                $('#nofifTable').DataTable({
+                    processing: true,
+                    serverSide: true,
+                    ajax: {
+                        url: "{{ route('getNotif') }}",
+                        type: 'GET',
+                        dataType: 'json'
+                    },
+                    layout: {
+                        topStart: {
+                            pageLength: {
+                                menu: [10, 25, 50, 100, 200]
+                            },
+                            buttons: [
+                                'copy',
+                                'print',
+                                {
+                                    extend: 'spacer',
+                                    style: 'bar',
+                                    text: 'Export files:'
+                                },
+                                'csv',
+                                'excel',
+                                'pdf',
+                                {
+                                    extend: 'spacer',
+                                    style: 'bar',
+                                    text: ':'
+                                },
+                                'colvis'
+                            ]
+                        },
+                        topEnd: {
+                            search: {
+                                placeholder: 'Type search here'
+                            }
+                        },
+                        bottomEnd: {
+                            paging: {
+                                numbers: 3
+                            }
+                        },
+                    },
+                    columns: [
+                        { data: 'name', name: 'name' },
+                        { data: 'title', name: 'title' },
+                        { data: 'message', name: 'message' },
+                        { data: 'send_date', name: 'send_date' },
+                        { data: 'person_number', name: 'person_number' },
+                        { data: 'type', name: 'type' }
+                    ],
+                    pageLength: 10,
+                    lengthMenu: [
+                        [10, 25, 50, -1],
+                        [10, 25, 50, "All"]
+                    ]
+                });
         
-            //     // Custom CSS classes
-            //     $('#nofifTable').css('width', '100%');
-            //     $('.dt-container').addClass('text-base text-gray-800 dark:text-gray-400 leading-tight');
-            //     $('.dt-buttons').addClass('mt-4');
-            //     $('.dt-buttons button').addClass('cursor-pointer mt-5 bg-slate-600 p-2 rounded-sm font-bold');
-            //     $("#dt-length-0").addClass('text-gray-700 dark:text-gray-400 w-24 bg-white');
-            //     $("label[for='dt-length-0']").addClass('text-gray-700 dark:text-gray-400').text('Enregistrements par page');
-            //     $('.dt-input').addClass('w-24');
-            // });
-        </script>
+                // Custom CSS classes
+                $('#nofifTable').css('width', '100%');
+                $('.dt-container').addClass('text-base text-gray-800 dark:text-gray-400 leading-tight');
+                $('.dt-buttons').addClass('mt-4');
+                $('.dt-buttons button').addClass('cursor-pointer mt-5 bg-slate-600 p-2 rounded-sm font-bold');
+                $("#dt-length-0").addClass('text-gray-700 dark:text-gray-400 w-24 bg-white');
+                $("label[for='dt-length-0']").addClass('text-gray-700 dark:text-gray-400').text('Enregistrements par page');
+                $('.dt-input').addClass('w-24');
+            });
+        </script> --}}
         
         <script>
             new DataTable('#nofifTable', {
