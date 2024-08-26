@@ -76,73 +76,64 @@
 
 
 <div class="py-11 relative overflow-x-auto">
+    <div class="success"></div>
 
 
     @if (isset($participantsData))
         <table id="participantTable" class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
             <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                 <tr>
-                    @foreach ($labels as $label)
-                        <th scope="col"
-                            class="px-6 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                            {{ $label }}</th>
+                    <th scope="col" class="px-6 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                        Firstname
+                    </th>
+                    <th scope="col" class="px-6 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                        Lastname
+                    </th>
+                    @foreach (array_unique($labels) as $label)
+                        @if (isset($label))
+                            @if (
+                                $label == 'Civilié' ||
+                                    $label == 'Civilité' ||
+                                    $label == 'Email' ||
+                                    $label == 'E-mail' ||
+                                    $label == 'E-mail(obligatoire)' ||
+                                    $label == 'Adresse Email' ||
+                                    $label == 'Téléphone' ||
+                                    $label == 'Numéro de téléphone' ||
+                                    $label == 'Numéro de l\'encadreur' ||
+                                    $label == 'Tranche d\'âge' ||
+                                    $label == 'Adresse' ||
+                                    $label == 'Adresse de domicile' ||
+                                    $label == 'Adresse de domicile (n°, avenue, Quartier, Commune)' ||
+                                    $label == 'Profession' ||
+                                    $label == 'Spécialité ou domaine (étude ou profession)' ||
+                                    $label == 'Spécialité ou domaine' ||
+                                    $label == 'Niveau d\'étude' ||
+                                    $label == 'Niveau ou année d\'étude' ||
+                                    $label == 'Nom de l\'Etablissement / Université' ||
+                                    $label == 'Université' ||
+                                    $label == 'Université/Etablissement ou Structure')
+                                <th scope="col"
+                                    class="display-label px-6 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                    {{ $label }}
+                                </th>
+                            @elseif($label !== 'Cv de votre parcours (Obligatoire)')
+                                <th scope="col"
+                                    class="label px-6 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                    {{ $label }}
+                                </th>
+                            @endif
+                        @endif
                     @endforeach
-
-                    <th scope="col" class="px-6 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                        Gender
-                    </th>
-                    <th scope="col" class="px-6 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                        Profession
-                    </th>
                     <th scope="col" class="px-6 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                         Status
                     </th>
-                    <th>
-                        action
+                    <th scope="col" class="px-6 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                        Actions
                     </th>
                 </tr>
             </thead>
-            <tbody>
-                @foreach ($participantsData as $participant)
-                    <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
-                        @foreach (array_unique($labels) as $label)
-                            <td class="px-6 py-4">
-                                @php
-                                    $value =
-                                        isset($participant[$label]) && $participant[$label] !== ''
-                                            ? $participant[$label]
-                                            : 'N/A';
-                                @endphp
-                                {{ Str::of($value)->limit(40, '...') }}
-                                @if (strlen($value) > 40)
-                                    <a href="#" onclick='readMore(event, `{{ $value }}`)'
-                                        class="dark:text-gray-500 hover:text-gray-600">Read
-                                        more</a>
-                                @endif
-                            </td>
-                        @endforeach
-                        <td class="px-6 py-4">{{ $participant['odcuser']['gender'] }}</td>
-                        <td class="px-6 py-4">
-                            @php
-                                $profession = json_decode($participant['odcuser']['profession'], true);
-
-                            @endphp
-                            {{ $profession['translations']['fr']['profession'] ?? '' }}
-                        </td>
-                        <td class="px-6 py-4">
-                            {{ $participant['status'] }}
-                        </td>
-
-                        <td>
-                            @if ($participant['status'] == 'accept')
-                                <a href="{{ route('certificat', $participant['id']) }}">Générer le Certificat</a>
-                            @else
-                                <button disabled>Non Certifiable</button>
-                            @endif
-                        </td>
-                    </tr>
-                @endforeach
-            </tbody>
+            <tbody></tbody>
         </table>
     @else
         <div class="flex justify-center items-center">

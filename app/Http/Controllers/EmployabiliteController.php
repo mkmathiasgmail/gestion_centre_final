@@ -18,6 +18,7 @@ use App\Http\Requests\UpdateEmployabiliteRequest;
 use App\Models\Entreprise;
 use App\Models\TypeContrat;
 use App\Models\Poste;
+use Yajra\DataTables\Facades\DataTables;
 
 class EmployabiliteController extends Controller
 {
@@ -36,12 +37,12 @@ class EmployabiliteController extends Controller
             )"
         )
             ->get();
-            // ici on récupère les 3 derniers postes de l'utilisateur
+        // ici on récupère les 3 derniers postes de l'utilisateur
         foreach ($employabilites as $key => $employabilite) {
             $usr_empl = Employabilite::where('odcuser_id', $employabilite->odcuser_id)->orderBy('id', 'desc')->take(3)->get();
             $user_postes = [];
             $user_nomboites = [];
-            $user_periodes= [];
+            $user_periodes = [];
             // ici on récupère le nom de la boite et le poste de l'utilisateur
             foreach ($usr_empl as $key => $user_e) {
                 $user_postes[] = $user_e->poste;
@@ -186,7 +187,7 @@ class EmployabiliteController extends Controller
                     Employabilite::create([
                         'name' => $request->first_name,
                         'type_contrat' => $request->type_contrat,
-                        'poste'=> $request->poste,
+                        'poste' => $request->poste,
                         'nomboite' => $request->nomboite,
                         'periode' => $request->periode,
                         'derniere_activite' => $activites->first()->title,
@@ -228,18 +229,46 @@ class EmployabiliteController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy($id, Request $request)
+    public function destroy($id)
     {
+        $data = Employabilite::where('id', $id)->first();
+        $firstEmployabilite = Employabilite::where('poste', $data->poste)->orderBy('id', 'asc')->first();
+        $firstEmployabilite->delete();
+        return redirect()->route('employabilites.index')->with('success', 'employée supprimé avec succès');
+    }
 
-        $employabilite = Employabilite::find($id);
+    public function getEmplois(Request $request, $id)
+    {
+        try {
+            $query = Employabilite::where('odcuser_id', $id)->get();
 
+            return DataTables::of($query)
+                ->editColumn('id', function ($employe) {
+                    return $employe->id;
+                })
+                ->editColumn('name', function ($employe) {
+                    return $employe->name;
+                })
+                ->editColumn('nomboite', function ($employe) {
+                    return $employe->nomboite;
+                })
+                ->editColumn('poste', function ($employe) {
+                    return $employe->poste;
+                })
+                ->editColumn('periode', function ($employe) {
+                    $periode = strtotime($employe->periode);
+                    $periode = date('d-m-Y', $periode);
+                    return $employe->periode;
+                })
 
-        if ($employabilite) {
+                ->addColumn('action', function ($employe) {
+                    return view('partials.action-employabilite', ['employe' => $employe])->render();
+                })
+                ->rawColumns(['action'])
 
-            $employabilite->delete();
-
-            // Rediriger vers la liste des employabilites avec un message de succès
-            return redirect()->route('employabilites.index')->with('success', 'supprimé avec succès.');
+                ->make(true);
+        } catch (\Throwable $th) {
+            return response()->json(['error' => 'Une erreur est survenue : ' . $th->getMessage()], 500);
         }
     }
 }
