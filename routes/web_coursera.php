@@ -2,6 +2,7 @@
 
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\ActiviteController;
 use App\Http\Controllers\CourseraUsageController;
 use App\Http\Controllers\CourseraMemberController;
 use App\Http\Controllers\CourseraSpecialisationController;
@@ -27,3 +28,5 @@ Route::post('import-specialisations-csv',
 
 Route::get('import-usages', [CourseraUsageController::class, 'import_usages'])->name('import.usages');
 Route::post('import-usages-csv', [CourseraUsageController::class, 'import_usages_csv'])->name('import.usages.csv');
+
+Route::get('rapports-coursera',[ActiviteController::class, 'coursera_rapport'])->name('coursera.rapports');

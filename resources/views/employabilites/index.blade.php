@@ -9,13 +9,15 @@
     </x-slot>
 
     <div class="flex justify-end mt-4 mb-4 text-white ">
-        <button type="submit" data-modal-target="crud-modal" data-modal-toggle="crud-modal" class="text-white inline-flex items-center bg-black hover:bg-slate-700 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center ">
+        <button type="submit" data-modal-target="crud-modal1" data-modal-toggle="crud-modal1" class="text-white inline-flex items-center bg-black hover:bg-slate-700 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center ">
             <svg class="w-5 h-5 me-1 -ms-1" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
                 <path fill-rule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clip-rule="evenodd"></path>
             </svg>
             Ajouter
         </button>
+
     </div>
+
     {{-- <div class="flex justify-end my-2">
         <button data-modal-target="authentication-modal" data-modal-toggle="authentication-modal"
             class="px-5 py-2.5 text-sm font-medium text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 rounded-lg text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
@@ -23,8 +25,6 @@
             Ajouter
         </button>
     </div> --}}
-
-
     @if ($errors->any())
     <div class="flex items-center p-4 mb-4 text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400" role="alert">
         <ul>
@@ -34,8 +34,11 @@
         </ul>
     </div>
     @endif
+
+
+
     @if (session('error'))
-    <div id="alert-2" class="flex items-center p-4 mb-4 text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400" role="alert">
+    <div id="alert-2" class="flex items-center p-4 mb-4 text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-700" role="alert">
         <svg class="flex-shrink-0 w-4 h-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
             <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z" />
         </svg>
@@ -43,7 +46,7 @@
         <div class="text-sm font-medium ms-3">
             {{ session('error') }}
         </div>
-        <button type="button" class="ms-auto -mx-1.5 -my-1.5 bg-red-50 text-red-500 rounded-lg focus:ring-2 focus:ring-red-400 p-1.5 hover:bg-red-200 inline-flex items-center justify-center h-8 w-8 dark:bg-gray-800 dark:text-red-400 dark:hover:bg-gray-700" data-dismiss-target="#alert-2" aria-label="Close">
+        <button type="button" class="ms-auto -mx-1.5 -my-1.5 bg-red-50 text-red-700 rounded-lg focus:ring-2 focus:ring-red-400 p-1.5 hover:bg-red-200 inline-flex items-center justify-center h-8 w-8 dark:bg-gray-800 dark:text-red-400 dark:hover:bg-gray-700" data-dismiss-target="#alert-2" aria-label="Close">
             <span class="sr-only">Close</span>
             <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
                 <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
@@ -53,7 +56,7 @@
     @endif
 
     @if (session('success'))
-    <div id="alert-3" class="flex items-center p-4 mb-4 text-green-900 rounded-lg bg-green-50 dark:bg-gray-800 dark:text-green-400" role="alert">
+    <div id="alert-3" class="flex items-center p-4 mb-4 text-green-900 rounded-lg bg-green-50 dark:bg-gray-800 dark:text-green-700" role="alert">
         <svg class="flex-shrink-0 w-4 h-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
             <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z" />
         </svg>
@@ -61,6 +64,9 @@
         <div class="text-sm font-medium ms-3">
             {{ session('success') }}
         </div>
+
+
+
         <button type="button" class="ms-auto -mx-1.5 -my-1.5 bg-green-50 text-green-500 rounded-lg focus:ring-2 focus:ring-green-400 p-1.5 hover:bg-green-200 inline-flex items-center justify-center h-8 w-8 dark:bg-gray-800 dark:text-green-400 dark:hover:bg-gray-700" data-dismiss-target="#alert-3" aria-label="Close">
             <span class="sr-only">Close</span>
             <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
@@ -111,6 +117,9 @@
                     <th scope="col" class="px-6 py-3 bg-slate-700">
                         Date participation
                     </th>
+                    <th scope="col" class="px-6 py-3 bg-slate-700">
+                        Actions
+                    </th>
 
                 </tr>
             </thead>
@@ -125,23 +134,20 @@
                         {{ $id_use }}
                     </td>
                     <td class="px-6 py-4">
-                        <a href="{{ route('odcusers.show', $item->odcuser->id) }}"> {{ $item->name }} </a>
+                        <a href="{{ route('odcusers.show', $item->odcuser_id) }}"> {{ $item->name }} </a>
                     </td>
                     <td class="px-6 py-4">
                         {{ (isset($item->type_contrat->libelle)) ? $item->type_contrat->libelle : '' }}
                     </td>
-                   <td class="px-6 py-4">
-                        @foreach ($item->entreprise as $entre)
-                        {{ $entre->nomboite }} <br>
-                        @endforeach
+                    <td class="px-6 py-4">
+                        {!! nl2br($item->nomboites) !!}
                     </td>
                     <td class="px-6 py-4">
-                        @foreach ($item->poste as $poste)
-                        {{ $poste->libelle }} <br>
-                        @endforeach
+                        {!! nl2br($item->postes) !!}
                     </td>
                     <td class="px-6 py-4">
-                        {{ $item->periode }}
+                        {!! nl2br($item->periodes) !!}
+
                     </td>
 
                     <td class="px-6 py-4">
@@ -155,6 +161,20 @@
                     <td class="px-6 py-4">
                         {{ $item->date_participation }}
                     </td>
+                    <td class="px-6 py-4">
+
+
+                        <a href="#" data-id="{{ $item->id }}" onclick="supprimer(event, {{ $item->odcuser->id }});" data-modal-target="large-employé" data-modal-toggle="large-employé" type="submit">
+                            <svg class="w-10 h-10"
+                            xmlns=" http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                                <path class="bg-teal-500 fill-current"
+                                d="M22,3H5A2,2 0 0,0 3,5V9H5V5H22V19H5V15H3V19A2,2 0 0,0 5,21H22A2,2 0 0,0 24,19V5A2,2 0 0,0 22,3M7,15V13H0V11H7V9L11,12L7,15M20,13H13V11H20V13M20,9H13V7H20V9M17,17H13V15H17V17Z" />
+
+                            </svg>
+
+                        </a>
+
+                    </td>
                 </tr>
                 @php
                 $id_use += 1;
@@ -162,15 +182,80 @@
                 @endforeach
             </tbody>
         </table>
+<div>
+    <x-formEmployabilite :typeContrats="$typeContrats" />
+</div>
+
     </div>
 
-    <x-formEmployabilite :typeContrats="$typeContrats" />
+
+                                            <div class="flex justify-end mt-4 mb-4 text-white">
+                                            <x-listChoice />
+                                            </div>
+
+
 
     @section('script')
     <script src="https://code.jquery.com/ui/1.11.4/jquery-ui.min.js"></script>
     <script src="https://cdn.datatables.net/2.0.8/js/dataTables.js "></script>
 
+    <script>
+        function supprimer(event, id) {
+            let employeId = id
+            event.preventDefault();
 
+            if ($.fn.DataTable.isDataTable('#Mytable')) {
+                $('#Mytable').DataTable().destroy();
+            }
+
+            var url = '{{ route("getdataEmploye", ":id") }}';
+            url = url.replace(':id', employeId);
+
+            $('#Mytable').DataTable({
+                "processing": true
+                , "serverSide": true
+                , "ajax": {
+                    "url": url
+                    , "dataType": "json"
+                    , "type": "GET"
+                }
+
+                , columns: [{
+                        data: 'id'
+                        , name: 'id'
+                    }
+                    , {
+                        data: 'name'
+                        , name: 'name'
+                    }
+                    , {
+                        data: 'nomboite'
+                        , name: 'nomboite'
+                    }
+                    , {
+                        data: 'poste'
+                        , name: 'poste'
+                    }
+                    , {
+                        data: 'periode'
+                        , name: 'periode'
+                    }, {
+                        data: 'action'
+                        , name: 'action'
+                        , orderable: false
+                        , searchable: false
+                    }
+                ]
+
+
+            });
+
+
+
+        }
+
+    </script>
+   
 
     <script>
         //scrpit pour l'autocomplete
@@ -193,8 +278,8 @@
                             let data_user = $.each(data, function(index, item) {
                                 $('#countryList').append(
                                     '<p id="id_odc" class="hidden">' + item.id +
-                                    '</p><ul class= "font-bold"><li class="pl-4 bg-gray-300 hover:bg-gray-400" data-id="'+item.id+'">' +
-                                    item.first_name + '  ' + item.last_name+'</li></ul>');
+                                    '</p><ul class= "font-bold"><li class="pl-4 bg-gray-300 hover:bg-gray-400" data-id="' + item.id + '">' +
+                                    item.first_name + '  ' + item.last_name + '</li></ul>');
 
 
 
@@ -239,7 +324,7 @@
 
     </script>
 
-    <!-- Code JavaScript ajout champs -->
+    <!-- Code JavaScript ajout champs
     <script>
         let postsNomboitesCounter = 1;
         const addButton = document.getElementById('add-button');
@@ -275,7 +360,17 @@
         document.getElementById('add-button').addEventListener('click', addPostesNomboites);
 
     </script>
+-->
 
+
+<script>
+    //faire une reinitialisation de champ
+    $('#resetButton2').click(function() {
+
+
+    });
+
+</script>
 
     @endsection
 </x-app-layout>

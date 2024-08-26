@@ -26,14 +26,14 @@
     </nav>
     <div class=" p-5">
         <h1
-            class ="mb-4 text-4xl font-extrabold tracking-tight leading-none md:text-5xl lg:text-6xl dark:text-orange-400">
+            class ="mb-4 text-4xl font-extrabold tracking-tight leading-none md:text-5xl lg:text-6xl dark:text-white">
             security page</h1>
     </div>
     <div class="p-4 mb-4 text-gray-800 border border-gray-300 rounded-lg  dark:bg-orange-40 dark:border-gray-700 "
         role="alert">
 
         <button class="w-full dark:bg-gray-800 dark:text-orange-400 p-11 mb-6 text-white ">
-             <a href="{{ route('activitencours') }}" > Voir les activites encours</a>>
+             <a href="{{ route('activitencours') }}" > Voir les activites encours</a>
             
         </button>
         <button class="w-full dark:bg-gray-800 dark:text-orange-400 p-11 mb-6 text-white"> 

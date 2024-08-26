@@ -15,7 +15,7 @@ Route::post('store/{id}', [PresenceController::class, 'store'])->name('presences
 Route::post('userlocal', [PresenceController::class, 'userlocal'])->name('userlocal');
 Route::get('security', function () {
     return view('presences.securite');
-});
+})->name('security');
 Route::get('scanner', function () {
     return view('presences.camera');
 })->name('scanner');
