@@ -164,7 +164,7 @@
                     },
                     columnDefs: [{
                             visible: false,
-                            targets: '.label'
+                            targets: [0, 3, 5, 7, 8, 9]
                         },
                         {
                             responsivePriority: 1,
@@ -188,7 +188,7 @@
                                     action: function(e, dt, node, config) {
                                         e.preventDefault();
                                         let id_event = @json($activite->id);
-                                        // Redirection vers la méthode du contrôleur
+
                                         window.location.href = '{{ url('generate_excel') }}/' +
                                             id_event;
                                     }
@@ -554,7 +554,7 @@
             const getChartOptions = () => {
                 return {
                     series: [
-                        @json([$datachart->sum('total_candidats')]),
+
                         @json([$datachart->sum('total_filles')]), // Total des filles
                         @json([$datachart->sum('total_garcons')]),
                         // Total des garçons
@@ -616,7 +616,7 @@
                             bottom: -20,
                         },
                     },
-                    labels: ["Total", "Filles", "Garçons"], // Étiquettes pour les séries
+                    labels: ["Filles", "Garçons"], // Étiquettes pour les séries
                     dataLabels: {
                         enabled: false,
                     },

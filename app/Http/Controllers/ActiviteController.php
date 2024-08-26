@@ -762,6 +762,9 @@ class ActiviteController extends Controller
             ->latest()
             ->get();
 
+
+         
+
         return response()->json($activites);
     }
 
@@ -770,12 +773,17 @@ class ActiviteController extends Controller
         $year = $request->input('year');
         $month = $request->input('month');
 
-        $activities = Activite::selectRaw("date_format(createdAt, '%Y-%m-%d') as date, count(*) as aggregate")
-            ->whereMonth('createdAt', $month)
-            ->whereYear('createdAt', $year)
-            ->groupBy('date')
-            ->get();
+        $query = Activite::selectRaw("date_format(createdAt, '%Y-%m-%d') as date, count(*) as aggregate")
+            ->whereYear('createdAt', $year);
+
+
+        if ($month && $month !== 'all') {
+            $query->whereMonth('createdAt', $month);
+        }
+
+        $activities = $query->groupBy('date')->get();
 
         return response()->json($activities);
     }
+
 }
