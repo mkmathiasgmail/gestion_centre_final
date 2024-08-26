@@ -12,6 +12,7 @@ use App\Models\Presence;
 use App\Models\Categorie;
 use App\Models\TypeEvent;
 use Illuminate\Http\Request;
+use App\Models\CourseraMember;
 use App\Models\CandidatAttribute;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\DB;
@@ -436,6 +437,68 @@ class ActiviteController extends Controller
             ->get();
 
         return view('dashboard', compact('activites', 'user', 'data', 'hommes', 'femmes', "activityForWeekend", 'requestActivityperiode'));
+    }
+
+    public function coursera_rapport()
+    {
+        $membersMonths = CourseraMember::selectRaw('MONTH(join_date) as month, COUNT(*) as count')
+                    ->whereYear('join_date', date('Y'))
+                    ->groupBy('month')->orderBy('month')->get();
+
+                    $labels = [];
+                    $mydata = [];
+                    $colors = ['#FF6384', '#36A2EB', '#c9625b', '#cf72fa','#f83d3d','#fa43cc','#ADD478',
+                    '#fcc737','#ADD813','#36d4fc', '#c92daf', '#FF7890'];
+
+                    for( $i = 1; $i <= 12; $i++ ) {
+                        $month = date('F', mktime(0,0,0,$i,1));
+                        $count = 0;
+                        foreach( $membersMonths as $member ) {
+                            if($member->month == $i){
+                                $count = $member->count;
+                                break;
+                            }
+                        }
+                        
+                        array_push($labels, $month);
+                        array_push($mydata, $count);
+                    }
+
+                    $datasets = [
+                        [
+                            'label'=> "member join by month",
+                            'data'=> $mydata,
+                            'backgroundColor'=> $colors
+                        ]
+                    ];
+
+
+
+                $coursera_members = DB::table('coursera_members')
+                    ->selectRaw('count(*) as total')
+                    ->selectRaw("count(case when member_state = 'MEMBER' then 1 end) as members")
+                    ->selectRaw("count(case when member_state = 'INVITED' then 1 end) as invites")
+                    ->first();
+    
+    
+                $coursera_usages = DB::table('coursera_usages')
+                    ->selectRaw('count(*) as total')
+                    ->selectRaw("count(case when completed = 'Yes' then 1 end) as completed")
+                    ->selectRaw("count(case when completed = 'No' then 1 end) as noCompleted")
+                    ->first();
+            
+    
+            $specialisationsCount = DB::table('coursera_specialisations')->select('specialisaton_name')->count();
+
+
+
+
+            $usagesEncourrs = DB::table('coursera_usages')
+                                            ->where('class_start_time', '<=', now())
+                                            ->where('class_end_time','>=', now())->count();
+
+
+        return view('coursera.coursera_rapports', compact('datasets','labels',"coursera_members", "specialisationsCount","coursera_usages"));
     }
 
 
