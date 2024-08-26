@@ -164,6 +164,7 @@
                     },
                     columnDefs: [{
                             visible: false,
+                            targets: [0, 3, 5, 7, 8, 9]
                             targets: '.label'
                         },
                         {
