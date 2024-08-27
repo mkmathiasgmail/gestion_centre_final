@@ -94,9 +94,7 @@
         </div>
     </div>
 
-    <x-statusactive :name="__('Would you like show in calendar this activity? ')" />
-
-    <x-statusdesactive :name="__('Would you like disable in calendar this activity? ')" />
+   
 
     @php
         $url = env('API_URL');
