@@ -228,9 +228,7 @@
         </table>
     </div>
 
-    <x-statusactive :name="__('Would you like show in calendar this activity? ')" />
 
-    <x-statusdesactive :name="__('Would you like disable in calendar this activity? ')" />
 
     <x-delete :name="__('Would you like disable in calendar this activity? ')" />
 
@@ -277,7 +275,7 @@
                             resultsContainer.html('');
 
                             if (response.length == 0) {
-                                resultsContainer.html('<p>Aucun résultat trouvé.</p>');
+                                resultsContainer.html('<p class=" text-red-500">Aucun résultat trouvé.</p>');
                             } else {
                                 var htmlContent = '';
 
@@ -331,17 +329,18 @@
             });
         </script>
         <script>
-            function activer(event) {
-                document.querySelector(#)
+            function activer(event, id) {
                 event.preventDefault();
                 let link = event.target.getAttribute('href');
-                document.querySelector('#desactiveStatus form').setAttribute('action', link);
+                document.querySelector(`#desactive-${id} form`).setAttribute('action', link);
+                document.querySelector(`#desactive-${id}`).classList.remove('hidden');
             }
 
-            function desactiver(event) {
+            function desactiver(event, id) {
                 event.preventDefault();
                 let link = event.target.getAttribute('href');
-                document.querySelector('#activeStatus form').setAttribute('action', link);
+                document.querySelector(`#active-${id} form`).setAttribute('action', link);
+                document.querySelector(`#active-${id}`).classList.remove('hidden');
             }
         </script>
 
@@ -450,7 +449,6 @@
 
             });
         </script>
-
     @endsection
 
 
