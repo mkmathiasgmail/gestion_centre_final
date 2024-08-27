@@ -2,7 +2,7 @@
     <x-slot name="header">
         <div class="flex justify-content center">
             <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
-                {{ __('Evaluations') }}
+                {{ __('Reportings') }}
             </h2>
         </div>
     </x-slot>
@@ -88,7 +88,7 @@
                                     <div
                                         class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
                                         <h3 class="text-lg font-semibold text-gray-900 dark:text-white">
-                                            Select a month to generate
+                                            Sélectionner un mois à générer
                                         </h3>
                                         <button type="button"
                                             class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
@@ -108,7 +108,7 @@
                                         <div class="flex justify-center">
                                             <div class="col-span-2 sm:col-span-1">
                                                 <label for="month"
-                                                    class="flex justify-center mb-2 text-sm font-medium text-gray-900 dark:text-white">Month</label>
+                                                    class="flex justify-center mb-2 text-sm font-medium text-gray-900 dark:text-white">Mois</label>
                                                 <select id="month" name="month"
                                                     class="justify-center bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
 
@@ -124,7 +124,7 @@
                                                         d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z"
                                                         clip-rule="evenodd"></path>
                                                 </svg>
-                                                Generate
+                                                Générer
                                             </button>
                                         </div>
                                     </form>
@@ -168,7 +168,7 @@
                                     <div
                                         class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
                                         <h3 class="text-lg font-semibold text-gray-900 dark:text-white">
-                                            Select a year to generate
+                                            Sélectionner une année à générer
                                         </h3>
                                         <button type="button"
                                             class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
@@ -189,7 +189,7 @@
                                         <div class="flex justify-center">
                                             <div class="col-span-2 sm:col-span-1">
                                                 <label for="years"
-                                                    class="flex justify-center mb-2 text-sm font-medium text-gray-900 dark:text-white">Year</label>
+                                                    class="flex justify-center mb-2 text-sm font-medium text-gray-900 dark:text-white">Années</label>
                                                 <select id="years" name="years"
                                                     class="justify-center bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
 
@@ -205,7 +205,7 @@
                                                         d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z"
                                                         clip-rule="evenodd"></path>
                                                 </svg>
-                                                Generate
+                                                Générer
                                             </button>
                                         </div>
                                     </form>
@@ -447,7 +447,7 @@
         <script>
             function genererPlanning(event) {
                 event.preventDefault()
-                const lien = document.querySelector('#semester a').getAttribute("href")
+                const lien = event.target.getAttribute("href")
                 document.querySelector("#export-month-planning-modal form").setAttribute("action", lien)
             }
 
@@ -491,7 +491,7 @@
             document.addEventListener('DOMContentLoaded', generateMonthOptions);
 
             function generateYearOption() {
-                const select = document.getElementById('yearselec');
+                const select = document.getElementById('years');
                 const currentDate = new Date().getFullYear();;
 
                 for (let i = 0; i <= 2; i++) {

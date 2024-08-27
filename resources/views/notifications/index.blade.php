@@ -46,7 +46,7 @@
     <!-- Modal toggle -->
     <div class="flex justify-end center mt-6 mr-4">
         <button data-modal-target="mail-modal" data-modal-toggle="mail-modal" class="block text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" type="button">
-            Send Mail
+            Envoie Mail
         </button>
     </div>
 
@@ -58,7 +58,7 @@
                 <!-- Modal header -->
                 <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
                     <h3 class="text-lg font-semibold text-gray-900 dark:text-white">
-                        Send mail
+                        Envoie des mails
                     </h3>
                     <button type="button" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white" data-modal-toggle="mail-modal">
                         <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
@@ -74,9 +74,9 @@
                     @method('GET')
                     <div class="grid gap-4 mb-4 grid-cols-2">
                         <div class="col-span-2">
-                            <label for="activity" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Activity</label>
+                            <label for="activity" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Activité</label>
                             <select id="activity" name="activity" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
-                                <option value="" selected="">Select activity</option>
+                                <option value="" selected="">Sélectionner une activité</option>
                                 {{ $activites }}
                                 @foreach ($activites as $item)
                                     <option value="{{$item->id }}">{{ $item->title }}</option>
@@ -84,9 +84,9 @@
                             </select>
                         </div>
                         <div id="model-mail-div" class="col-span-2">
-                            <label id="label-model-mail" for="model-mail" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Model du mail</label>
+                            <label id="label-model-mail" for="model-mail" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Modèle de mail</label>
                             <select id="model-mail" name="model-mail" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
-                                <option value="" selected="">Select model mail</option>
+                                <option value="" selected="">Sélectionner un modèle de mail</option>
                                 {{ $modelMail }}
                                 @foreach ($modelMail as $item)
                                     <option value="{{ $item->message }}">{{ $item->title }}</option>
@@ -94,8 +94,8 @@
                             </select>
                         </div>
                         <div class="col-span-2 sm:col-span-1">
-                            <label for="subject" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Subject</label>
-                            <input type="text" name="subject" id="subject" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="Enter subject" required="">
+                            <label for="subject" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Sujet</label>
+                            <input type="text" name="subject" id="subject" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="Entrer un sujet de mail" required="">
                         </div>
                         <div class="col-span-2 sm:col-span-1">
                             <label for="cible" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Cible</label>
@@ -103,13 +103,13 @@
                                 <option value="tout-le-monde" selected="">Tous le monde</option>
                                 <option value="activité">Par rapport à une activité</option>
                                 <option value="age-cible">Age</option>
-                                <option value="sexe-cible">Sexe</option>
+                                <option value="sexe-cible">Genre</option>
                                 <option value="personnalise">Personnalisé</option>
                             </select>
                         </div>
                         <div id="per-activity-div" class="col-span-2">
-                            <label for="per-activity" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Per activity</label>
-                            <input type="text" list="activity_name_list" name="per-activity" id="per-activity" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="Enter an activity">
+                            <label for="per-activity" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Par rapport à une activité</label>
+                            <input type="text" list="activity_name_list" name="per-activity" id="per-activity" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="Entrer une activité">
                             <div id="activity_name_list" class="text-black bg-gray-300 rounded-lg "></div>
                         </div>
 
@@ -118,16 +118,17 @@
                         <div id="age-div" class="col-span-2">
                             <label for="age" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Age</label>
                             <select id="age" name="age" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
-                                <option value=">18" selected="">> à 18</option>
+                                <option value="" selected="">Sélectionner un âge</option>
+                                <option value=">18">> à 18</option>
                                 <option value="<18">< à 18</option>
                                 <option value=">25">> à 25</option>
                                 <option value=">30">> à 30</option>
                             </select>
                         </div>
                         <div id="sexe-div" class="col-span-2">
-                            <label for="sexe" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Sexe</label>
+                            <label for="sexe" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Genre</label>
                             <select id="sexe" name="sexe" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
-                                <option value="" selected=""></option>
+                                <option value="" selected="">Sélectionner un genre</option>
                                 <option value="M">Masculin</option>
                                 <option value="F">Feminin</option>
                             </select>
@@ -142,7 +143,7 @@
                         </div>
                     </div>
                     <button type="submit" class="text-white inline-flex w-full justify-center bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
-                        Send
+                        Envoyé
                     </button>
                 </form>
             </div>

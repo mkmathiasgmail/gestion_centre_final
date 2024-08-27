@@ -43,7 +43,8 @@ class MailController extends Controller
         if ($request->input('activity') !== '') {
             if ($request->input('cible') === 'tout-le-monde'){
                 $mailUsersQuery = Odcuser::query()->leftJoin('candidats as ca', 'ca.odcuser_id', '=', 'odcusers.id')
-                    ->where("ca.activite_id", $activiteId);
+                    ->where("ca.activite_id", $activiteId)
+                    ->select('odcusers.email');
 
             } elseif ($request->input('cible') === 'accepté'){
                 $mailUsersQuery->leftJoin('candidats as ca', 'ca.odcuser_id', '=', 'odcusers.id')
@@ -224,17 +225,17 @@ class MailController extends Controller
                 }
                 
                 if ($personNumber !== 0){
-                    return back()->with("success", $personNumber ." mails send successfully and " . $failedNumber . " faileded");
+                    return back()->with("success", $personNumber ." mails envoyé avec succès et " . $failedNumber . " ont échoués");
                 } else {
-                    return back()->with("error", $personNumber ." mails send successfully and " . $failedNumber . " faileded");
+                    return back()->with("error", $personNumber ." mails envoyé avec succès et " . $failedNumber . " ont échoués");
                 }
     
             } else {
-                return back()->with("error", "Mail for this cible not found");            
+                return back()->with("error", "Aucun mail trouvé pour cette cible");            
             }
         } else {
             if ($mailUsersQuery->count() !== 0) {
-                $mailUsersQuery->chunk(100, function ($mailUsers) use ($subject, $message) {
+                $mailUsersQuery->chunk(100, function ($mailUsers) use ($subject, $message, &$successEmails, &$failedEmails) {
                     foreach ($mailUsers as $mailUser) {
                         try {
                             if (filter_var($mailUser->email, FILTER_VALIDATE_EMAIL)) {
@@ -293,13 +294,13 @@ class MailController extends Controller
                 }
                     
                 if ($personNumber !== 0){
-                    return back()->with("success", $personNumber ." mails send successfully and " . $failedNumber . " faileded");
+                    return back()->with("success", $personNumber ." mails envoyé avec succès et " . $failedNumber . " ont échoués");
                 } else {
-                    return back()->with("error", $personNumber ." mails send successfully and " . $failedNumber . " faileded");
+                    return back()->with("error", $personNumber ." mails envoyé avec succès et " . $failedNumber . " ont échoués, veillez verifier ces mails");
                 }    
 
             } else {
-                return back()->with("error", "Mail for this cible not found");            
+                return back()->wit("error", "Aucun mail trouvé pour cette cible");            
             }
         }
     }
