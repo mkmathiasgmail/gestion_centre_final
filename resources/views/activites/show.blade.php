@@ -142,14 +142,14 @@
 
                 });
                 columns.push({
+                    data: 'certificat',
+                    name: 'certificat'
+                }, {
                     data: 'status',
                     name: 'status',
                 }, {
                     data: 'action',
                     name: 'action'
-                }, {
-                    data: 'certificat',
-                    name: 'certificat'
                 })
                 $('#participantTable').DataTable({
                     "processing": true,

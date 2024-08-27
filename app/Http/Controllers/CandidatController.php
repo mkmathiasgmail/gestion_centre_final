@@ -123,14 +123,14 @@ class CandidatController extends Controller
                 })->escapeColumns([])
                     ->rawColumns([]);
             }
+            $dataTable->addColumn('certificat', function ($participant) {
+                return view('partials.generer-certificat', ['participant' => $participant])->render();
+            });
 
             $dataTable->addColumn('action', function ($participant) {
                 return view('partials.action-btn-participants', ['participant' => $participant])->render();
             });
 
-            $dataTable->addColumn('certificat', function ($participant) {
-                return view('partials.generer-certificat', ['participant' => $participant])->render();
-            });
 
             return $dataTable->toJson();
         } catch (\Exception $e) {
