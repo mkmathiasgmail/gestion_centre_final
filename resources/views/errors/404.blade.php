@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
+    <title>Oups ! Page introuvable</title>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 
@@ -15,11 +15,11 @@
         <div class="max-w-md mx-auto text-center bg-white bg-opacity-90 p-8 rounded-lg shadow-lg">
             <div class="text-9xl font-bold text-orange-500 mb-4">404</div>
             <h1 class="text-4xl font-bold text-gray-800 mb-6">Oups ! Page introuvable</h1>
-            <p class="text-lg text-gray-600 mb-8">La page que vous recherchez semble être partie dans une petite
-                aventure. Ne vous inquiétez pas, nous vous aiderons à retrouver votre chemin de retour.</p>
+            <p class="text-lg text-gray-600 mb-8">Oups ! Il semble que cette page a pris un congé sans prévenir.
+                Peut-être qu'elle se cache quelque part ?</p>
             <a href="{{ route('dashboard') }}"
                 class="inline-block bg-orange-500 text-white font-semibold px-6 py-3 rounded-md hover:bg-orange-500 transition-colors duration-300">
-               Retourner à la maison
+                Retourner à la maison
             </a>
         </div>
     </div>

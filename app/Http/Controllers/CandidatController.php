@@ -128,6 +128,10 @@ class CandidatController extends Controller
                 return view('partials.action-btn-participants', ['participant' => $participant])->render();
             });
 
+            $dataTable->addColumn('certificat', function ($participant) {
+                return view('partials.generer-certificat', ['participant' => $participant])->render();
+            });
+
             return $dataTable->toJson();
         } catch (\Exception $e) {
             return response()->json(['error' => 'Une erreur est survenue : ' . $e->getMessage()], 500);

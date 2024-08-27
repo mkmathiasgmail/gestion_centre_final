@@ -442,63 +442,75 @@ class ActiviteController extends Controller
     public function coursera_rapport()
     {
         $membersMonths = CourseraMember::selectRaw('MONTH(join_date) as month, COUNT(*) as count')
-                    ->whereYear('join_date', date('Y'))
-                    ->groupBy('month')->orderBy('month')->get();
+            ->whereYear('join_date', date('Y'))
+            ->groupBy('month')->orderBy('month')->get();
 
-                    $labels = [];
-                    $mydata = [];
-                    $colors = ['#FF6384', '#36A2EB', '#c9625b', '#cf72fa','#f83d3d','#fa43cc','#ADD478',
-                    '#fcc737','#ADD813','#36d4fc', '#c92daf', '#FF7890'];
+        $labels = [];
+        $mydata = [];
+        $colors = [
+            '#FF6384',
+            '#36A2EB',
+            '#c9625b',
+            '#cf72fa',
+            '#f83d3d',
+            '#fa43cc',
+            '#ADD478',
+            '#fcc737',
+            '#ADD813',
+            '#36d4fc',
+            '#c92daf',
+            '#FF7890'
+        ];
 
-                    for( $i = 1; $i <= 12; $i++ ) {
-                        $month = date('F', mktime(0,0,0,$i,1));
-                        $count = 0;
-                        foreach( $membersMonths as $member ) {
-                            if($member->month == $i){
-                                $count = $member->count;
-                                break;
-                            }
-                        }
-                        
-                        array_push($labels, $month);
-                        array_push($mydata, $count);
-                    }
+        for ($i = 1; $i <= 12; $i++) {
+            $month = date('F', mktime(0, 0, 0, $i, 1));
+            $count = 0;
+            foreach ($membersMonths as $member) {
+                if ($member->month == $i) {
+                    $count = $member->count;
+                    break;
+                }
+            }
 
-                    $datasets = [
-                        [
-                            'label'=> "member join by month",
-                            'data'=> $mydata,
-                            'backgroundColor'=> $colors
-                        ]
-                    ];
+            array_push($labels, $month);
+            array_push($mydata, $count);
+        }
 
-
-
-                $coursera_members = DB::table('coursera_members')
-                    ->selectRaw('count(*) as total')
-                    ->selectRaw("count(case when member_state = 'MEMBER' then 1 end) as members")
-                    ->selectRaw("count(case when member_state = 'INVITED' then 1 end) as invites")
-                    ->first();
-    
-    
-                $coursera_usages = DB::table('coursera_usages')
-                    ->selectRaw('count(*) as total')
-                    ->selectRaw("count(case when completed = 'Yes' then 1 end) as completed")
-                    ->selectRaw("count(case when completed = 'No' then 1 end) as noCompleted")
-                    ->first();
-            
-    
-            $specialisationsCount = DB::table('coursera_specialisations')->select('specialisaton_name')->count();
+        $datasets = [
+            [
+                'label' => "member join by month",
+                'data' => $mydata,
+                'backgroundColor' => $colors
+            ]
+        ];
 
 
 
+        $coursera_members = DB::table('coursera_members')
+            ->selectRaw('count(*) as total')
+            ->selectRaw("count(case when member_state = 'MEMBER' then 1 end) as members")
+            ->selectRaw("count(case when member_state = 'INVITED' then 1 end) as invites")
+            ->first();
 
-            $usagesEncourrs = DB::table('coursera_usages')
-                                            ->where('class_start_time', '<=', now())
-                                            ->where('class_end_time','>=', now())->count();
+
+        $coursera_usages = DB::table('coursera_usages')
+            ->selectRaw('count(*) as total')
+            ->selectRaw("count(case when completed = 'Yes' then 1 end) as completed")
+            ->selectRaw("count(case when completed = 'No' then 1 end) as noCompleted")
+            ->first();
 
 
-        return view('coursera.coursera_rapports', compact('datasets','labels',"coursera_members", "specialisationsCount","coursera_usages"));
+        $specialisationsCount = DB::table('coursera_specialisations')->select('specialisaton_name')->count();
+
+
+
+
+        $usagesEncourrs = DB::table('coursera_usages')
+            ->where('class_start_time', '<=', now())
+            ->where('class_end_time', '>=', now())->count();
+
+
+        return view('coursera.coursera_rapports', compact('datasets', 'labels', "coursera_members", "specialisationsCount", "coursera_usages"));
     }
 
 
@@ -521,7 +533,7 @@ class ActiviteController extends Controller
                 $requette = Http::timeout(1000)
                     ->post("$url/events/calendar/$id", $check);
 
-                return response()->json(['success' => true, 'data' => $requette->json()], 201);
+                return redirect()->route('activites.index')->with('success', 'Activite created successfully.');
             } catch (\Exception $th) {
                 return response()->json(['success' => false, 'message' => 'Request failed', 'error' => $th->getMessage()], 500);
             }
@@ -538,8 +550,7 @@ class ActiviteController extends Controller
 
                 $requette = Http::timeout(1000)
                     ->post("$url/events/calendar/$id", $check);
-
-                return response()->json(['success' => true, 'data' => $requette->json()], 201);
+                return redirect()->route('activites.index')->with('success', 'Activite created successfully.');
             } catch (\Exception $th) {
                 return response()->json(['success' => false, 'message' => 'Request failed', 'error' => $th->getMessage()], 500);
             }
@@ -762,6 +773,9 @@ class ActiviteController extends Controller
             ->latest()
             ->get();
 
+
+
+
         return response()->json($activites);
     }
 
@@ -770,11 +784,15 @@ class ActiviteController extends Controller
         $year = $request->input('year');
         $month = $request->input('month');
 
-        $activities = Activite::selectRaw("date_format(createdAt, '%Y-%m-%d') as date, count(*) as aggregate")
-            ->whereMonth('createdAt', $month)
-            ->whereYear('createdAt', $year)
-            ->groupBy('date')
-            ->get();
+        $query = Activite::selectRaw("date_format(createdAt, '%Y-%m-%d') as date, count(*) as aggregate")
+            ->whereYear('createdAt', $year);
+
+
+        if ($month && $month !== 'all') {
+            $query->whereMonth('createdAt', $month);
+        }
+
+        $activities = $query->groupBy('date')->get();
 
         return response()->json($activities);
     }
