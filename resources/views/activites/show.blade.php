@@ -149,6 +149,9 @@
                 }, {
                     data: 'action',
                     name: 'action'
+                }, {
+                    data: 'certificat',
+                    name: 'certificat'
                 })
                 $('#participantTable').DataTable({
                     "processing": true,
