@@ -7,11 +7,14 @@ use App\Models\Odcuser;
 use App\Models\Activite;
 use App\Models\Candidat;
 use App\Mail\SendingMail;
+use App\Models\MailFailed;
 use App\Models\ModelMail;
 use App\Models\Notification;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
+use Yajra\DataTables\Facades\DataTables;
 
 class MailController extends Controller
 {
@@ -47,6 +50,13 @@ class MailController extends Controller
                     ->leftJoin('activites as ac', 'ac.id', '=', 'ca.activite_id')
                     ->where('ac.id', $activiteId)
                     ->where('ca.status', 'accept')
+                    ->select('odcusers.email');
+    
+            } elseif ($request->input('cible') === 'decline'){
+                $mailUsersQuery->leftJoin('candidats as ca', 'ca.odcuser_id', '=', 'odcusers.id')
+                    ->leftJoin('activites as ac', 'ac.id', '=', 'ca.activite_id')
+                    ->where('ac.id', $activiteId)
+                    ->where('ca.status', 'decline')
                     ->select('odcusers.email');
     
             } elseif ($request->input('cible') === 'activité'){
@@ -109,7 +119,12 @@ class MailController extends Controller
                         ->where('ca.status', 'accept')
                         ->select('odcusers.email');
                 }
-            } 
+            } elseif($request->input('cible') === 'personnalise'){
+                $personnalise = $request-> input('person');
+                $personnalise = explode(',', $personnalise);
+                $personnalise = array_map('trim', $personnalise);
+                $mailUsersQuery = $personnalise;
+            }
         } else {
             if ($request->input('cible') === 'tout-le-monde'){
                 $mailUsersQuery = Odcuser::query();
@@ -145,49 +160,147 @@ class MailController extends Controller
             } 
         }
 
+        $failedEmails = [];
+        $successEmails = [];
 
-        if ($mailUsersQuery->count() !== 0) {
-            $mailUsersQuery->chunk(100, function ($mailUsers) use ($subject, $message) {
-                foreach ($mailUsers as $mailUser) {
-                    Mail::to($mailUser->email)->send(new SendingMail($subject, $message));
+        if ($request->input('cible') === 'personnalise') {
+            if (count($mailUsersQuery) !== 0) {
+                $mailUsersQuery = collect($mailUsersQuery);
+                $mailUsersQuery->chunk(100);
+                foreach ($mailUsersQuery as $mailUser) {
+                    try {
+                        if (filter_var($mailUser, FILTER_VALIDATE_EMAIL)) {
+                            Mail::to($mailUser)->send(new SendingMail($subject, $message));    // sending mail
+                            $successEmails[] = $mailUser;
+                        } else {
+                            $failedEmails[] = $mailUser;
+                        }                
+                    } catch (\Exception $e) {
+                        $failedEmails[] = $mailUser;
+                    }
                 }
-            });
 
-            $modelId = ModelMail::select("id")->where('message', $model)->get();
+                $modelId = ModelMail::select("id")->where('message', $model)->get();
+                $mailId = $modelId->first()->id;
+                $personNumber = count($successEmails);
+                $failedNumber = count($failedEmails);
+    
+                // $validatedData = $request->validate([
+                //     'message' => 'required|string',
+                //     'person_number' => 'required|integer',
+                //     'user_id' => 'required|exists:users,id',
+                //     'activite_id' => 'required|exists:activites,id',
+                //     'model_mail_id' => 'required|exists:model_mails,id',
+                //     'sms_model_id' => 'required|exists:sms_models,id',
+                // ]);
+    
+                if ($activiteId){
+                    Notification::create([
+                        'message' => $message,
+                        'type' => 'Mail',
+                        'person_number' => $personNumber,
+                        'user_id' => auth()->user()->id,
+                        'activite_id' => $activiteId,
+                        'model_mail_id' => $mailId,
+                    ]);
+                } else {
+                    Notification::create([
+                        'message' => $message,
+                        'type' => 'Mail',
+                        'person_number' => $personNumber,
+                        'user_id' => auth()->user()->id,
+                    ]);
+                }
 
-            $mailId = $modelId->first()->id;
+                $notifId = Notification::max('id');
 
-            // $validatedData = $request->validate([
-            //     'message' => 'required|string',
-            //     'person_number' => 'required|integer',
-            //     'user_id' => 'required|exists:users,id',
-            //     'activite_id' => 'required|exists:activites,id',
-            //     'model_mail_id' => 'required|exists:model_mails,id',
-            //     'sms_model_id' => 'required|exists:sms_models,id',
-            // ]);
-
-            if ($activiteId){
-                Notification::create([
-                    'message' => $message,
-                    'type' => 'Mail',
-                    'person_number' => $mailUsersQuery->count(),
-                    'user_id' => auth()->user()->id,
-                    'activite_id' => $activiteId,
-                    'model_mail_id' => $mailId,
-                ]);
+                if ($failedEmails){
+                    foreach ($failedEmails as $faid) {
+                        MailFailed::create([
+                            'email' => $faid,
+                            'notification_id' => $notifId
+                        ]);
+                    }    
+                }
+                
+                if ($personNumber !== 0){
+                    return back()->with("success", $personNumber ." mails send successfully and " . $failedNumber . " faileded");
+                } else {
+                    return back()->with("error", $personNumber ." mails send successfully and " . $failedNumber . " faileded");
+                }
+    
             } else {
-                Notification::create([
-                    'message' => $message,
-                    'type' => 'Mail',
-                    'person_number' => $mailUsersQuery->count(),
-                    'user_id' => auth()->user()->id,
-                ]);
+                return back()->with("error", "Mail for this cible not found");            
             }
-
-            return back()->with("success", "Mail send successfully");
-
         } else {
-            return back()->with("error", "Mail for this cible not found");            
+            if ($mailUsersQuery->count() !== 0) {
+                $mailUsersQuery->chunk(100, function ($mailUsers) use ($subject, $message) {
+                    foreach ($mailUsers as $mailUser) {
+                        try {
+                            if (filter_var($mailUser->email, FILTER_VALIDATE_EMAIL)) {
+                                Mail::to($mailUser->email)->send(new SendingMail($subject, $message));    // sending mail
+                                $successEmails[] = $mailUser->email;
+                            } else {
+                                $failedEmails[] = $mailUser->email;
+                            }                
+                        } catch (\Exception $e) {
+                            $failedEmails[] = $mailUser->email;
+                        }
+                    }
+                });
+    
+                $modelId = ModelMail::select("id")->where('message', $model)->get();
+                $mailId = $modelId->first()->id;
+                $personNumber = count($successEmails);
+                $failedNumber = count($failedEmails);
+    
+                // $validatedData = $request->validate([
+                //     'message' => 'required|string',
+                //     'person_number' => 'required|integer',
+                //     'user_id' => 'required|exists:users,id',
+                //     'activite_id' => 'required|exists:activites,id',
+                //     'model_mail_id' => 'required|exists:model_mails,id',
+                //     'sms_model_id' => 'required|exists:sms_models,id',
+                // ]);
+    
+                if ($activiteId){
+                    Notification::create([
+                        'message' => $message,
+                        'type' => 'Mail',
+                        'person_number' => $personNumber,
+                        'user_id' => auth()->user()->id,
+                        'activite_id' => $activiteId,
+                        'model_mail_id' => $mailId,
+                    ]);
+                } else {
+                    Notification::create([
+                        'message' => $message,
+                        'type' => 'Mail',
+                        'person_number' => $personNumber,
+                        'user_id' => auth()->user()->id,
+                    ]);
+                }
+
+                $notifId = Notification::max('id');
+
+                if ($failedEmails){
+                    foreach ($failedEmails as $faid) {
+                        MailFailed::create([
+                            'email' => $faid,
+                            'notification_id' => $notifId
+                        ]);
+                    }    
+                }
+                    
+                if ($personNumber !== 0){
+                    return back()->with("success", $personNumber ." mails send successfully and " . $failedNumber . " faileded");
+                } else {
+                    return back()->with("error", $personNumber ." mails send successfully and " . $failedNumber . " faileded");
+                }    
+
+            } else {
+                return back()->with("error", "Mail for this cible not found");            
+            }
         }
     }
 

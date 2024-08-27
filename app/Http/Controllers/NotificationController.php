@@ -33,6 +33,7 @@ class NotificationController extends Controller
                 'notifications.model_mail_id', 
                 'notifications.sms_model_id'
                 )
+            ->orderBy('notifications.id', 'asc')
             ->get();
 
         return view("notifications.index", compact('activites', 'modelMail', 'notifications'));
