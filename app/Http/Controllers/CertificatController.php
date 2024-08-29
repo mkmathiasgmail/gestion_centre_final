@@ -109,7 +109,7 @@ class CertificatController extends Controller
         $id = Activite::find($activite);
         $idactivite= $id->id;
 
-    
+        set_time_limit(100000);
         $candidats = Candidat::where('activite_id', $idactivite)
                             ->where('status', 'accept')
                             ->select('id', 'odcuser_id', 'activite_id', 'status')

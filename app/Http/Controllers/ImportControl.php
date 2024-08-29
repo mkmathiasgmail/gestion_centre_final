@@ -2,11 +2,17 @@
 
 namespace App\Http\Controllers;
 
+use ZipArchive;
+use Dompdf\Dompdf;
+use Dompdf\Options;
+use DateTimeImmutable;
 use App\Models\Odcuser;
 use App\Models\Activite;
 use App\Models\Candidat;
 use App\Models\Presence;
+use App\Models\Certificat;
 use Illuminate\Http\Request;
+use Barryvdh\DomPDF\Facade\Pdf;
 use App\Models\CandidatAttribute;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
@@ -16,6 +22,7 @@ use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 use PhpOffice\PhpSpreadsheet\Style\Border;
 use PhpOffice\PhpSpreadsheet\Style\Alignment;
+use App\Http\Controllers\CertificatController;
 
 class ImportControl extends Controller
 {
@@ -299,6 +306,133 @@ class ImportControl extends Controller
         header("Content-Disposition: attachment;filename=\"$fileName\"");
         $writer->save("php://output");
         exit();
+
+    }
+
+    public function exportParticipant(Request $request)
+    {
+        $Id = $request->certif;
+        $nameId = $request->certifTitle;
+        //dd($Id);
+        // Get all candidats for the given event
+        $Participants = Candidat::where('activite_id', $Id)
+            ->where('status', 'accept')
+            ->with(['odcuser', 'candidat_attribute',])
+            ->get();
+        //dd($Participants);
+        //generation du xlsx
+
+        //header of our spreadsheet
+        $spreadsheet = new Spreadsheet();
+        $sheet = $spreadsheet->getActiveSheet();
+        $sheet->setTitle('Participant'); // This is where I set the title of my sheet
+        /*here is the header of my sheet*/
+        $sheet->setCellValue('A1', 'first_name')->getStyle('A1')->getFont()->setBold(true);
+        $sheet->setCellValue('B1', 'last_name')->getStyle('B1')->getFont()->setBold(true);
+        $sheet->setCellValue('C1', 'email')->getStyle('C1')->getFont()->setBold(true);
+        $sheet->setCellValue('D1', 'gender')->getStyle('D1')->getFont()->setBold(true);
+        $sheet->setCellValue('E1', 'Evaluation')->getStyle('E1')->getFont()->setBold(true);
+        $row = 2; // Initialize row counter
+
+        foreach ($Participants as $participant) {
+            $sheet->setCellValue('A' . $row, $participant->odcuser->first_name);
+            $sheet->setCellValue('B' . $row, $participant->odcuser->last_name);
+            $sheet->setCellValue('C' . $row, $participant->odcuser->email);
+            $sheet->setCellValue('D' . $row, $participant->odcuser->gender);
+            //dd($sheet->setCellValue('H' . $row, $participant->status));
+            $row++;    
+        }
+
+
+
+        // Save the spreadsheet to a temporary file
+        $writer = new Xlsx($spreadsheet);
+        $fileName = "Participants {$nameId}.xlsx";
+        header("Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+        header("Content-Disposition: attachment;filename=\"$fileName\"");
+        $writer->save("php://output");
+        exit();
+    }
+
+    public function importAndgenerate(Request $request)
+    {
+        $file = $request->file;
+        $Id = $request->activite;
+        $spreadsheet = IOFactory::load($file);
+        $sheets = $spreadsheet->getActiveSheet();
+        //dump($sheets);
+        //$rows = $sheets->toArray();
+        //dd($rows);
+
+        for ($lineexcel = 2; $lineexcel <= $sheets->getHighestRow(); $lineexcel++) {
+            $prenom = $sheets->getcell("A{$lineexcel}")->getvalue();
+            $nom = $sheets->getcell("B{$lineexcel}")->getvalue();
+            $email = $sheets->getcell("C{$lineexcel}")->getvalue();
+            $genre = $sheets->getcell("D{$lineexcel}")->getvalue();
+            $Evaluation = $sheets->getcell("E{$lineexcel}")->getvalue();
+            //dd($Evaluation);
+            if($Evaluation >= 60){
+                $this->generateAllCertificat($Id);
+            }else{
+                continue;
+            }
+            //$gestion = $this->handlecertification($Evaluation, $Id);
+        }
+ 
+        //dd($gestion);
+    }
+
+    public function handlecertification($Evaluation, $Id){
+        //dd($Evaluation);
+        if($Evaluation >= 60){
+            $this->generateAllCertificat($Id);
+        }else{
+            echo 'bonjour';
+        }
+
+    }
+
+    public  function generateAllCertificat($Id)
+    {
+        $id = Activite::find($Id);
+        //dd($Id);
+        $idactivite= $id->id;
+        //dd( $idactivite);
+        set_time_limit(100000);
+        $candidats = Candidat::where('activite_id', $idactivite)
+                            ->where('status', 'accept')
+                            ->select('id', 'odcuser_id', 'activite_id', 'status')
+                            ->with(['odcuser', 'candidat_attribute'])
+                            ->get();
+        //dd($candidats);
+        //extension de la classe ZipArchive pour stocké tous les certificats
+        $zip = new ZipArchive();
+        $zipFilename = 'certificats.zip';
+        $zip->open($zipFilename, ZipArchive::CREATE | ZipArchive::OVERWRITE);
+
+        // Boucler sur chaque candidat et générer le certificat
+        foreach ($candidats as $candidat) {
+
+            $date = new DateTimeImmutable($candidat->activite->start_date);
+            $format = date_format($date, 'jS \o\f F Y');
+
+            $pdf = view('certificat.generateCertificat', compact('candidat', 'format'));
+
+            $options = new Options();
+            $options->set('isHtml5ParserEnabled', true);
+            $options->set('isRemoteEnabled', true);
+            $dompdf = new Dompdf($options);
+            $dompdf->loadHtml($pdf);
+            $dompdf->setPaper('A4', 'landscape');
+            $dompdf->render();
+        
+            $pdfContent = $dompdf->output();
+            $filename = 'certificat_' . $candidat->id . '.pdf';
+            $zip->addFromString($filename, $pdfContent);
+        }
+
+        $zip->close();
+        return response()->download($zipFilename);
 
     }
 }

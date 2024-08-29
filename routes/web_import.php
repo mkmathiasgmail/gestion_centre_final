@@ -13,4 +13,7 @@ Route::get('import', [ImportControl::class, 'indexacti'])->name('import.activite
 //Route::get('/download/{filename}', [ImportControl::class, 'download'])->name('file.download');
 //Route::post('/export', [ImportControl::class, 'download'])->name('export');
 Route::post('/export', [ImportControl::class, 'exportModel'])->name('export');
+Route::post('/exportParticipant', [ImportControl::class, 'exportParticipant'])->name('exportParticipant');
+Route::post('/importAndgenerate', [ImportControl::class, 'importAndgenerate'])->name('importAndgenerate');
+Route::get('/generateAllCertificat/{id}', [ImportControl::class, 'generateAllCertificat'])->name('allCertificat');
 
