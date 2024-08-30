@@ -593,7 +593,7 @@
 
             //code pour le calendrier 
 
-            function genererCalendrier(event) {
+            function genererCalendrier(event) { 
                 event.preventDefault();
                 const newAction = event.currentTarget.href; // Utiliser `currentTarget` pour plus de sécurité
                 const form = document.querySelector("#calendrier-modal #form"); // Utiliser l'ID correct du formulaire dans le modal

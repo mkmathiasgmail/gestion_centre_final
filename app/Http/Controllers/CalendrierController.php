@@ -830,7 +830,7 @@ class CalendrierController extends Controller
 
         ///////////////////////a//////////////////////////
         $sheet->mergeCells('A7:C7')->getRowDimension(1)
-            ->setRowHeight(30);;
+            ->setRowHeight(30); 
 
         $writer = new Xlsx($spreadsheet);
         $spreadsheet->getSheetByName('Feuille 1');
