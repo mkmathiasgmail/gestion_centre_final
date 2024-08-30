@@ -46,7 +46,7 @@
     <!-- Modal toggle -->
     <div class="flex justify-end center mt-6 mr-4">
         <button data-modal-target="mail-modal" data-modal-toggle="mail-modal" class="block text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" type="button">
-            Envoie Mail
+            Send Mail
         </button>
     </div>
 
@@ -58,7 +58,7 @@
                 <!-- Modal header -->
                 <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
                     <h3 class="text-lg font-semibold text-gray-900 dark:text-white">
-                        Envoie des mails
+                        Send mail
                     </h3>
                     <button type="button" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white" data-modal-toggle="mail-modal">
                         <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
@@ -74,9 +74,9 @@
                     @method('GET')
                     <div class="grid gap-4 mb-4 grid-cols-2">
                         <div class="col-span-2">
-                            <label for="activity" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Activité</label>
+                            <label for="activity" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Activity</label>
                             <select id="activity" name="activity" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
-                                <option value="" selected="">Sélectionner une activité</option>
+                                <option value="" selected="">Select activity</option>
                                 {{ $activites }}
                                 @foreach ($activites as $item)
                                     <option value="{{$item->id }}">{{ $item->title }}</option>
@@ -84,9 +84,9 @@
                             </select>
                         </div>
                         <div id="model-mail-div" class="col-span-2">
-                            <label id="label-model-mail" for="model-mail" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Modèle de mail</label>
+                            <label id="label-model-mail" for="model-mail" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Model du mail</label>
                             <select id="model-mail" name="model-mail" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
-                                <option value="" selected="">Sélectionner un modèle de mail</option>
+                                <option value="" selected="">Select model mail</option>
                                 {{ $modelMail }}
                                 @foreach ($modelMail as $item)
                                     <option value="{{ $item->message }}">{{ $item->title }}</option>
@@ -94,8 +94,8 @@
                             </select>
                         </div>
                         <div class="col-span-2 sm:col-span-1">
-                            <label for="subject" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Sujet</label>
-                            <input type="text" name="subject" id="subject" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="Entrer un sujet de mail" required="">
+                            <label for="subject" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Subject</label>
+                            <input type="text" name="subject" id="subject" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="Enter subject" required="">
                         </div>
                         <div class="col-span-2 sm:col-span-1">
                             <label for="cible" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Cible</label>
@@ -103,13 +103,12 @@
                                 <option value="tout-le-monde" selected="">Tous le monde</option>
                                 <option value="activité">Par rapport à une activité</option>
                                 <option value="age-cible">Age</option>
-                                <option value="sexe-cible">Genre</option>
-                                <option value="personnalise">Personnalisé</option>
+                                <option value="sexe-cible">Sexe</option>
                             </select>
                         </div>
                         <div id="per-activity-div" class="col-span-2">
-                            <label for="per-activity" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Par rapport à une activité</label>
-                            <input type="text" list="activity_name_list" name="per-activity" id="per-activity" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="Entrer une activité">
+                            <label for="per-activity" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Per activity</label>
+                            <input type="text" list="activity_name_list" name="per-activity" id="per-activity" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="Enter an activity">
                             <div id="activity_name_list" class="text-black bg-gray-300 rounded-lg "></div>
                         </div>
 
@@ -118,24 +117,18 @@
                         <div id="age-div" class="col-span-2">
                             <label for="age" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Age</label>
                             <select id="age" name="age" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
-                                <option value="" selected="">Sélectionner un âge</option>
-                                <option value=">18">> à 18</option>
+                                <option value=">18" selected="">> à 18</option>
                                 <option value="<18">< à 18</option>
                                 <option value=">25">> à 25</option>
                                 <option value=">30">> à 30</option>
                             </select>
                         </div>
                         <div id="sexe-div" class="col-span-2">
-                            <label for="sexe" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Genre</label>
+                            <label for="sexe" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Sexe</label>
                             <select id="sexe" name="sexe" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
-                                <option value="" selected="">Sélectionner un genre</option>
-                                <option value="M">Masculin</option>
+                                <option value="M" selected="">Masculin</option>
                                 <option value="F">Feminin</option>
                             </select>
-                        </div>
-                        <div id="personnalise-div" class="col-span-2">
-                            <label for="person" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Personnalisé</label>
-                            <input type="text" name="person" id="person" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="exemple@gmail.com, exemple@gmail.com, ...">
                         </div>
                         <div class="col-span-2">
                             <label for="message" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Message</label>
@@ -143,7 +136,7 @@
                         </div>
                     </div>
                     <button type="submit" class="text-white inline-flex w-full justify-center bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
-                        Envoyé
+                        Send
                     </button>
                 </form>
             </div>
@@ -170,9 +163,6 @@
                     <th scope="col" class="px-6 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                         Nombre des personnes
                     </th>
-                    {{-- <th scope="col" class="px-6 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                        Nombre des echecs
-                    </th> --}}
                     <th scope="col" class="px-6 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                         Type
                     </th>
@@ -223,44 +213,26 @@
 
                 const modelMailDiv = document.getElementById('model-mail-div');
                 const perActivity = document.getElementById('per-activity-div');
-                const person = document.getElementById('personnalise-div');
                 const age = document.getElementById('age-div');
                 const sexe = document.getElementById('sexe-div');
                 const message = document.getElementById('message');
 
                 modelMailDiv.style.display = 'none';
                 perActivity.style.display = 'none';
-                person.style.display = 'none';
                 age.style.display = 'none';
                 sexe.style.display = 'none';
 
                 activitySelect.addEventListener('change', function() {
-                    const optionToRemove = cibleSelect.querySelector('option[value="accepté"]');
-                    const optionToRemoveDecline = cibleSelect.querySelector('option[value="decline"]');
-                    if (optionToRemove && optionToRemoveDecline) {
-                        cibleSelect.removeChild(optionToRemove);
-                        cibleSelect.removeChild(optionToRemoveDecline);
-                    }
-                    modelMailDiv.style.display = 'none';
-                    // message.value = '';
-                    tinymce.get('message').setContent("");
-
                     if (this.value !== '') {
                         const option = document.createElement('option');
-                        const option2 = document.createElement('option');
                         modelMailDiv.style.display = 'block';
-                        option.text = 'Ceux acceptés';
+                        option.text = 'Ceux accepté';
                         option.value = 'accepté';
-                        option2.text = 'Ceux non acceptés';
-                        option2.value = 'decline';
                         cibleSelect.appendChild(option);
-                        cibleSelect.appendChild(option2);
                     } else {
                         const optionToRemove = cibleSelect.querySelector('option[value="accepté"]');
-                        const optionToRemoveDecline = cibleSelect.querySelector('option[value="decline"]');
-                        if (optionToRemove && optionToRemoveDecline) {
+                        if (optionToRemove) {
                             cibleSelect.removeChild(optionToRemove);
-                            cibleSelect.removeChild(optionToRemoveDecline);
                         }
                         modelMailDiv.style.display = 'none';
                         // message.value = '';
@@ -291,13 +263,6 @@
                     } else {
                         sexe.style.display = 'none';
                     }
-
-                    if (this.value === 'personnalise') {
-                        person.style.display = 'block';
-                    } else {
-                        person.style.display = 'none';
-                    }
-
                 })
             });
         </script>
@@ -365,77 +330,7 @@
                 });
             });
         </script> --}}
-        {{-- <script type="text/javascript">
-            $(document).ready(function() {
-                $('#nofifTable').DataTable({
-                    processing: true,
-                    serverSide: true,
-                    ajax: {
-                        url: "{{ route('getNotif') }}",
-                        type: 'GET',
-                        dataType: 'json'
-                    },
-                    layout: {
-                        topStart: {
-                            pageLength: {
-                                menu: [10, 25, 50, 100, 200]
-                            },
-                            buttons: [
-                                'copy',
-                                'print',
-                                {
-                                    extend: 'spacer',
-                                    style: 'bar',
-                                    text: 'Export files:'
-                                },
-                                'csv',
-                                'excel',
-                                'pdf',
-                                {
-                                    extend: 'spacer',
-                                    style: 'bar',
-                                    text: ':'
-                                },
-                                'colvis'
-                            ]
-                        },
-                        topEnd: {
-                            search: {
-                                placeholder: 'Type search here'
-                            }
-                        },
-                        bottomEnd: {
-                            paging: {
-                                numbers: 3
-                            }
-                        },
-                    },
-                    columns: [
-                        { data: 'name', name: 'name' },
-                        { data: 'title', name: 'title' },
-                        { data: 'message', name: 'message' },
-                        { data: 'send_date', name: 'send_date' },
-                        { data: 'person_number', name: 'person_number' },
-                        { data: 'type', name: 'type' }
-                    ],
-                    pageLength: 10,
-                    lengthMenu: [
-                        [10, 25, 50, -1],
-                        [10, 25, 50, "All"]
-                    ]
-                });
-        
-                // Custom CSS classes
-                $('#nofifTable').css('width', '100%');
-                $('.dt-container').addClass('text-base text-gray-800 dark:text-gray-400 leading-tight');
-                $('.dt-buttons').addClass('mt-4');
-                $('.dt-buttons button').addClass('cursor-pointer mt-5 bg-slate-600 p-2 rounded-sm font-bold');
-                $("#dt-length-0").addClass('text-gray-700 dark:text-gray-400 w-24 bg-white');
-                $("label[for='dt-length-0']").addClass('text-gray-700 dark:text-gray-400').text('Enregistrements par page');
-                $('.dt-input').addClass('w-24');
-            });
-        </script> --}}
-        
+
         <script>
             new DataTable('#nofifTable', {
                 responsive: true,
