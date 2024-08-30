@@ -94,7 +94,7 @@
         </div>
     </div>
 
-   
+
 
     @php
         $url = env('API_URL');
@@ -165,7 +165,6 @@
                     },
                     columnDefs: [{
                             visible: false,
-                            targets: [0, 3, 5, 7, 8, 9]
                             targets: '.label'
                         },
                         {
