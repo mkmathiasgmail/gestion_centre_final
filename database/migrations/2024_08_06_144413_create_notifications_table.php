@@ -18,8 +18,8 @@ return new class extends Migration
             $table->integer('person_number');
             $table->timestamp('send_date');
             $table->timestamps();
-            $table->foreignId('user_id')->constrained('users')->onUpdate('cascade')->onDelete('cascade');
-            $table->foreignId('activite_id')->nullable()->constrained('activites')->onUpdate('cascade')->onDelete('cascade');
+            $table->foreignUuid('user_id')->constrained('users')->onUpdate('cascade')->onDelete('cascade');
+            $table->foreignUuid('activite_id')->nullable()->constrained('activites')->onUpdate('cascade')->onDelete('cascade');
             $table->foreignId('model_mail_id')->nullable()->constrained('model_mails')->onUpdate('cascade')->onDelete('cascade');
             $table->foreignId('sms_model_id')->nullable()->constrained('sms_models')->onUpdate('cascade')->onDelete('cascade');
         });
