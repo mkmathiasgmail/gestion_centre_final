@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Models\Activite;
 use App\Models\Candidat;
+use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -11,7 +12,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Odcuser extends Model
 {
-    use HasFactory;
+    use HasFactory, HasUuids;
 
     protected $table = "odcusers" ;
     protected $fillable = [
