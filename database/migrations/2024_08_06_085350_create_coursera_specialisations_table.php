@@ -12,10 +12,10 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('coursera_specialisations', function (Blueprint $table) {
-            
+
             $table->id();
             $table->string('email');
-            $table->foreign('email')->references('email')->on('coursera_members')->onDelete('cascade')->onUpdate('cascade');
+            //$table->foreign('email')->references('email')->on('coursera_members')->onDelete('cascade')->onUpdate('cascade');
             $table->string('specialisaton_name')->nullable();
             $table->string('specialisaton_slug')->nullable();
             $table->string('university')->nullable();
