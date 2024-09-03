@@ -198,7 +198,7 @@
 
 
                     <a href="{{ route('activites.create') }}"
-                        class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-transparent bg-[#ff7322] text-white hover:bg-[#ff6822] focus:outline-none focus:bg-[#ff6822] disabled:opacity-50 disabled:pointer-events-none">
+                        class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-transparent bg-[#ff7322] text-white hover:bg-blue-700 focus:outline-none focus:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none">
                         Create Activites
                     </a>
 
@@ -228,7 +228,9 @@
         </table>
     </div>
 
+    <x-statusactive :name="__('Would you like show in calendar this activity? ')" />
 
+    <x-statusdesactive :name="__('Would you like disable in calendar this activity? ')" />
 
     <x-delete :name="__('Would you like disable in calendar this activity? ')" />
 
@@ -275,15 +277,12 @@
                             resultsContainer.html('');
 
                             if (response.length == 0) {
-                                resultsContainer.html('<p class=" text-red-500">Aucun résultat trouvé.</p>');
+                                resultsContainer.html('<p>Aucun résultat trouvé.</p>');
                             } else {
                                 var htmlContent = '';
-
-                                console.log(response);
-
                                 response.forEach(function(activite) {
                                     htmlContent += `
-                                                    <a href="http://127.0.0.1:8000/activites/${activite.id}"
+                                                    <a href=""
                                                         class="inline-flex items-center justify-center p-5 text-base font-medium text-gray-500 rounded-lg bg-gray-50 hover:text-gray-900 hover:bg-gray-100 dark:text-gray-400 dark:bg-gray-800 dark:hover:bg-gray-700 dark:hover:text-white">
 
                                                         <span class="w-full">${activite.title}</span>
@@ -329,18 +328,17 @@
             });
         </script>
         <script>
-            function activer(event, id) {
+            function activer(event) {
+                document.querySelector(#)
                 event.preventDefault();
                 let link = event.target.getAttribute('href');
-                document.querySelector(`#desactive-${id} form`).setAttribute('action', link);
-                document.querySelector(`#desactive-${id}`).classList.remove('hidden');
+                document.querySelector('#desactiveStatus form').setAttribute('action', link);
             }
 
-            function desactiver(event, id) {
+            function desactiver(event) {
                 event.preventDefault();
                 let link = event.target.getAttribute('href');
-                document.querySelector(`#active-${id} form`).setAttribute('action', link);
-                document.querySelector(`#active-${id}`).classList.remove('hidden');
+                document.querySelector('#activeStatus form').setAttribute('action', link);
             }
         </script>
 
@@ -449,6 +447,67 @@
 
             });
         </script>
+
+
+
+        {{-- <script>
+            new DataTable('#table', {
+                responsive: true,
+                columnDefs: [{
+                        responsivePriority: 1,
+                        targets: 0
+                    },
+                    {
+                        responsivePriority: 2,
+                        targets: -1
+                    }
+                ],
+                layout: {
+                    topStart: {
+                        pageLength: {
+                            menu: [10, 25, 50, 100, 200]
+                        },
+                        buttons: [
+                            'copy',
+                            'print',
+
+                            {
+                                extend: 'spacer',
+                                style: 'bar',
+                                text: 'Export files:'
+                            },
+                            'csv',
+                            'excel',
+                            'spacer',
+                            'pdf',
+                            {
+                                extend: 'spacer',
+                                style: 'bar',
+                                text: ':'
+                            },
+
+                            'colvis'
+                        ]
+                    },
+                    topEnd: {
+                        search: {
+                            placeholder: 'Type search here'
+                        }
+                    },
+                    bottomEnd: {
+                        paging: {
+                            numbers: 3
+                        }
+                    },
+
+                },
+
+                lengthMenu: [
+                    [10, 25, 50, -1],
+                    [10, 25, 50, 'All']
+                ],
+            });
+        </script> --}}
     @endsection
 
 

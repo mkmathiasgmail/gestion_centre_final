@@ -94,7 +94,9 @@
         </div>
     </div>
 
-   
+    <x-statusactive :name="__('Would you like show in calendar this activity? ')" />
+
+    <x-statusdesactive :name="__('Would you like disable in calendar this activity? ')" />
 
     @php
         $url = env('API_URL');
@@ -142,9 +144,6 @@
 
                 });
                 columns.push({
-                    data: 'certificat',
-                    name: 'certificat'
-                }, {
                     data: 'status',
                     name: 'status',
                 }, {
@@ -165,7 +164,6 @@
                     },
                     columnDefs: [{
                             visible: false,
-                            targets: [0, 3, 5, 7, 8, 9]
                             targets: '.label'
                         },
                         {
@@ -190,7 +188,7 @@
                                     action: function(e, dt, node, config) {
                                         e.preventDefault();
                                         let id_event = @json($activite->id);
-
+                                        // Redirection vers la méthode du contrôleur
                                         window.location.href = '{{ url('generate_excel') }}/' +
                                             id_event;
                                     }
@@ -556,7 +554,7 @@
             const getChartOptions = () => {
                 return {
                     series: [
-
+                        @json([$datachart->sum('total_candidats')]),
                         @json([$datachart->sum('total_filles')]), // Total des filles
                         @json([$datachart->sum('total_garcons')]),
                         // Total des garçons
@@ -618,7 +616,7 @@
                             bottom: -20,
                         },
                     },
-                    labels: ["Filles", "Garçons"], // Étiquettes pour les séries
+                    labels: ["Total", "Filles", "Garçons"], // Étiquettes pour les séries
                     dataLabels: {
                         enabled: false,
                     },
@@ -648,14 +646,6 @@
             });
         </script>
 
-        </script>
-        {{-- pour choisir le certificat a generer --}}
-        <script>
-            function choix_certificat(event) {
-                event.preventDefault();
-                const lien = event.target.getAttribute("href");
-                document.querySelector("#choixCertificat-modal form").setAttribute("action", lien);
-            }
         </script>
     @endsection
 </x-app-layout>

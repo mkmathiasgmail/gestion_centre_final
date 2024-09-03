@@ -43,8 +43,9 @@
         <button data-modal-target="crud-modal" data-modal-toggle="crud-modal" class="w-full dark:bg-gray-800 dark:text-orange-400 p-11 text-white">
             Créer un compte
         </button>
+        
     </div>
-    <x-userlocal-component :activites="$activites" />
+    <x-userlocal-component />
 
 </body>
 

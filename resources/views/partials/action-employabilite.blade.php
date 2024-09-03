@@ -1,5 +1,5 @@
 
-    <form action="{{ route('employabilites.destroy', $employe->id)  }}" method="post">
+    {{-- <form action="{{ route('employabilites.destroy', $employe->id)  }}" method="post">
         @csrf
         @method('Delete')
 
@@ -10,4 +10,4 @@
     </svg>
 </button>
 
-</form>
+</form> --}}

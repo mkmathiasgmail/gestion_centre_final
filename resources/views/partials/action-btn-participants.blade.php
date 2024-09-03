@@ -1,5 +1,5 @@
 <button id="openModal{{ $participant['id'] }}" data-toggle="simpleModalp{{ $participant['id'] }}"
-    onclick="actionStatus(event, 'decline', {{ $participant['id'] }}, '{{ $participant['odcuser']['first_name'] }}')"
+    data-modal-target="simpleModalp{{ $participant['id'] }}" onclick="actionStatus(event, 'decline', {{ $participant['id'] }}, '{{ $participant['odcuser']['first_name'] }}')"
     class="btnModalp inline-flex items-center p-2 text-sm font-medium text-center text-gray-900 bg-white rounded-lg hover:bg-gray-100 focus:ring-4 focus:outline-none dark:text-white focus:ring-gray-50 dark:bg-gray-800 dark:hover:bg-gray-700 dark:focus:ring-gray-600"
     type="button">
     <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24"

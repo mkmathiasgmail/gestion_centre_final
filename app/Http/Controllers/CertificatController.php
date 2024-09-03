@@ -12,8 +12,6 @@ use App\Models\Candidat;
 use App\Models\Certificat;
 use Illuminate\Http\Request;
 use Barryvdh\DomPDF\Facade\Pdf;
-use App\Models\CandidatAttribute;
-use Illuminate\Support\Facades\DB;
 
 class CertificatController extends Controller
 {
@@ -36,7 +34,9 @@ class CertificatController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request) {}
+    public function store(Request $request)
+    {
+    }
 
     /**
      * Display the specified resource.
@@ -106,29 +106,9 @@ class CertificatController extends Controller
     {
         set_time_limit(100000);
         $candidat = Candidat::find($candidat);
-        //recperation des etablissement 
-        $variables = ['Université', 'Etablissement', 'Structure'];
 
-        $universiteLabelAttribute = DB::table('candidat_attributes')
-            ->where(function ($query) use ($variables) {
-                foreach ($variables as $value) {
-                    $query->orWhere('label', 'LIKE', "%{$value}%");
-                }
-            })
-            ->where('candidat_id', $candidat->id)
-            ->first();
-
-        if ($universiteLabelAttribute) {
-            $universiteValue = $universiteLabelAttribute->value;
-        }
-
-
-        $debut = new DateTimeImmutable($candidat->activite->start_date);
-        $start_date = $debut->format("j F Y");
-
-        $fin = new DateTimeImmutable($candidat->activite->end_date);
-        $end_date = $fin->format("j F Y");
-
+        $date = new DateTimeImmutable($candidat->activite->start_date);
+        $format = $date->format("j F Y");
 
         $pdf = view('Templete_certificat.certificat_super_codeur_24_25', compact('candidat', 'universiteValue' ,'start_date', 'end_date'));
         // echo $pdf;
@@ -145,31 +125,28 @@ class CertificatController extends Controller
         $options->set('isRemoteEnabled', true);
         $dompdf = new Dompdf($options);
         $dompdf->loadHtml($pdf);
-        $dompdf->setPaper('A4', 'landscape',);
+        $dompdf->setPaper('A4', 'landscape');
         $dompdf->render();
-        return $dompdf->stream("Certificat_" . $candidat->odcuser->first_name . "_" . $candidat->odcuser->last_name . ".pdf");
+        return $dompdf->stream('certificat.pdf');
 
         // return view('certificat.generateCertificat',compact('format','candidat'));
     }
 
-    public  function generateAllCertificat(Request $request, $activite)
+    public  function generateAllCertificat($activite)
     {
         $id = Activite::find($activite);
-        $idactivite = $id->id;
-        $selectcerificat = $request->input('certificat');
-        
+        $idactivite= $id->id;
 
-
+    
         $candidats = Candidat::where('activite_id', $idactivite)
-            ->where('status', 'accept')
-            ->select('id', 'odcuser_id', 'activite_id', 'status')
-            ->with(['odcuser', 'candidat_attribute'])
-            ->get();
-
-
+                            ->where('status', 'accept')
+                            ->select('id', 'odcuser_id', 'activite_id', 'status')
+                            ->with(['odcuser', 'candidat_attribute'])
+                            ->get();
+        
         //extension de la classe ZipArchive pour stocké tous les certificats
         $zip = new ZipArchive();
-        $zipFilename = "certificats_" . $id->title . ".zip";
+        $zipFilename = 'certificats.zip';
         $zip->open($zipFilename, ZipArchive::CREATE | ZipArchive::OVERWRITE);
 
         // Boucler sur chaque candidat et générer le certificat
@@ -215,9 +192,9 @@ class CertificatController extends Controller
             $dompdf->loadHtml($pdf);
             $dompdf->setPaper('A4', 'landscape');
             $dompdf->render();
-
+        
             $pdfContent = $dompdf->output();
-            $filename = "Certificat_" . $candidat->odcuser->first_name . "_" . $candidat->odcuser->last_name . ".pdf";
+            $filename = 'certificat_' . $candidat->id . '.pdf';
             $zip->addFromString($filename, $pdfContent);
         }
 
