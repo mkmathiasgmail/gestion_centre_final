@@ -105,6 +105,38 @@ class FetchCandidats extends Command
                         $candidate = Candidat::firstOrCreate($candidatInfo);
                         $this->info("Candidate $e created successfully.");
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
                         // If the candidate has form registration data, loop through it
                         if (isset($candidat->formRegistrationData)) {
                             $att = 0 ;

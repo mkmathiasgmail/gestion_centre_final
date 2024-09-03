@@ -28,24 +28,6 @@
             class ="mb-4 text-4xl font-extrabold tracking-tight leading-none text-gray-900 md:text-5xl lg:text-6xl dark:text-white">
             Lists Of Ongoing Activities</h1>
     </div>
-    
-    @if (session('error'))
-                <div id="alert-2"
-                    class="flex items-center mt-10 p-4 mb-4 text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400"
-                    role="alert">
-                    <svg class="flex-shrink-0 w-4 h-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
-                        fill="currentColor" viewBox="0 0 20 20">
-                        <path
-                            d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z" />
-                    </svg>
-                    <span class="sr-only">Alert</span>
-                    <div class="ms-3 text-sm font-medium">
-                        {{ session('error') }}
-                    </div>
-
-                </div>
-            @endif
-
     <div class=" p-5">
         @if ($activites->isEmpty())
             <div class="p-4 mb-4 mt-4 text-sm text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400"
@@ -64,7 +46,6 @@
                                 d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z" />
                         </svg>
                         <span class="sr-only">Info</span>
-
                         <h3 class="text-lg font-medium">{{ $item->title }}</h3>
                     </div>
                     <div class="mt-2 mb-4 text-sm">
@@ -85,12 +66,3 @@
         @endif
     </div>
 </body>
-@section('script')
-    @if (session()->has('error'))
-        <script>
-            setTimeout(function() {
-                $('.alert-danger').fadeOut();
-            }, 30000);
-        </script>
-    @endif
-@endsection

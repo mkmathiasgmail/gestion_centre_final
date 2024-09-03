@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('presences', function (Blueprint $table) {
             $table->id();
             $table->timestamp('date')->default(now())->format('d-m-Y H:i:s');
-            $table->foreignId('candidat_id')->constrained('candidats')->onUpdate('cascade')->onDelete('cascade');
+            $table->foreignUuid('candidat_id')->constrained('candidats')->onUpdate('cascade')->onDelete('cascade');
 
             $table->timestamps();
         });
@@ -26,6 +26,6 @@ return new class extends Migration
     public function down(): void
     {
         Schema::dropIfExists('presences');
-       
+
     }
 };

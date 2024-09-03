@@ -70,8 +70,8 @@ class RapportSemestrielController extends Controller
                 'ac.end_date',
                 'ac.title',
                 'typecont.libelle as type_contrat',
-                'empl.nomboite as entreprise',
-                'empl.poste',
+                'entrp.nomboite as entreprise',
+                'pst.libelle as poste',
                 DB::raw('(ac.start_date) as startYear'),
                 'cat.name as namecat',
                 'typ.title as titletype',
@@ -393,8 +393,6 @@ class RapportSemestrielController extends Controller
             foreach ($speciality as $key => $odcuser)
                 $detail_profession = json_decode($odcuser->detail_profession, true);
             $specialiteValue = $detail_profession['speciality'] ?? '';
-
-
 
             //calcule d'age du candidats
             $today = new DateTime(); // Date d'aujourd'hui
@@ -737,6 +735,20 @@ class RapportSemestrielController extends Controller
             ->setSize(10)
             ->setBold(true);
 
+
+        /*foreach ($worksheet->getColumnIterator() as $column) {
+            $worksheet->getColumnDimension($column->getColumnIndex())->setAutoSize(true);
+        }
+        $worksheet->getStyle('A1:K1')->getFill()
+        ->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)
+        ->getStartColor()->setARGB('0070C0');*/
+
+
+        //on cree le fichier Excel
+        $writer = new Xlsx($spreadsheet);
+        $fileName = "Rapport_du_Semestre_{$selectSemestre}_{$selectYear}.Xlsx";
+        $tempFile = tempnam(sys_get_temp_dir(), $fileName);
+        $writer->save($tempFile);
 
 
 

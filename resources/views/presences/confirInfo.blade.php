@@ -12,14 +12,24 @@
 </head>
 
 <body class="font-sans antialiased dark:bg-black dark:text-white/50">
-   <x-nav-presence-component :activite="$activite"/>
-    <div class="pt-36 text-center">
+    <nav class="bg-white border-gray-200 dark:bg-gray-900">
+        <div class="flex flex-wrap justify-between items-center mx-auto max-w-screen-xl p-4">
+            <a href="#" class="flex items-center space-x-3 rtl:space-x-reverse">
+                <img src="{{ asset('img/orange.png') }}" class="h-8" alt="Flowbite Logo" />
+                <span class="self-center text-1xl font-semibold whitespace-nowrap dark:text-white">Orange Digital
+                    Center</span>
+            </a>
+            <div class="flex items-center space-x-6 rtl:space-x-reverse">
+            </div>
+        </div>
+    </nav>
+    <div class=" p-5">
         <h1
             class ="mb-4 text-4xl font-extrabold tracking-tight leading-none text-gray-900 md:text-5xl lg:text-6xl dark:text-white">
-            Confirmer</h1>
+            Check</h1>
     </div>
   
-    <form class="max-w-sm mx-auto pt-9" action="{{ route('presences.store', ['id'=>$id])}}" method="post">
+    <form class="max-w-sm mx-auto" action="{{ route('presences.store', ['id'=>$id])}}" method="post">
         @csrf
         @if (isset($nom) && isset($prenom))
             <div id="userInfo">
@@ -37,6 +47,13 @@
                         class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light"
                         readonly />
                 </div>
+                {{-- <div class="mb-5">
+                    <label for="activite_id"
+                        class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Id_Activite</label>
+                    <input type="text" id="activite_id" name="activite_id" value="{{ $activite_id }}"
+                        class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light"
+                        readonly />
+                </div> --}}
                 <button type="submit"
                     class="py-2.5 px-5 me-2 mb-2 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">Valider</button>
             </div>
