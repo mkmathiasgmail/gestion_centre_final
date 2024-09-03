@@ -1,1 +1,1 @@
-<a href="{{ route('certificat', $participant['id'] ) }}">Generer certificat</a>
+<a href="{{ route('certificat', $participant['id']) }}">Generer certificat</a>
