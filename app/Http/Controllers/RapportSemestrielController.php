@@ -28,6 +28,7 @@ class RapportSemestrielController extends Controller
         $selectSemestre = $request->input('semestre');
 
 
+
         // on calclue  les dates de début et de fin du semestre
         if ($selectSemestre == '1') {
             $startDate = date('Y-m-d', strtotime($selectYear . '-01-01'));
@@ -38,8 +39,8 @@ class RapportSemestrielController extends Controller
         }
 
 
-        //DB::enableQueryLog();
 
+        //DB::enableQueryLog();
 
         //On recuper les données depuis le model
         $activites = Activite::all();
@@ -51,8 +52,8 @@ class RapportSemestrielController extends Controller
             ->leftJoin('type_events as typ', 'typ.id', '=', 'acty.type_event_id')
             ->leftJoin('employabilites as empl', 'empl.odcuser_id', '=', 'us.id')
             ->leftJoin('type_contrats as typecont', 'typecont.id', '=', 'empl.type_contrat_id')
-            ->leftJoin('postes as pst', 'pst.employabilite_id', '=', 'empl.id')
-            ->leftJoin('entreprises as entrp', 'entrp.employabilite_id', '=', 'empl.id')
+            // ->leftJoin('postes as pst', 'pst.employabilite_id', '=', 'empl.id')
+            // ->leftJoin('entreprises as entrp', 'entrp.employabilite_id', '=', 'empl.id')
             ->whereNotNull('ac.title')
             ->whereBetween('ac.start_date', [$startDate, $endDate])
             ->orderBy('ac.start_date', 'asc')
@@ -331,6 +332,7 @@ class RapportSemestrielController extends Controller
         $worksheet->freezePane('E4');
 
         foreach ($candidats as $candidat) {
+            ini_set('max_execution_time', 10000);
 
             //recuperation et filtrage des numeros de telephone
             $phoneNumberResult = DB::table('candidat_attributes')
@@ -347,7 +349,7 @@ class RapportSemestrielController extends Controller
             //fin recuperation et filtrage des numeros de telephone
 
             // Récupération de l'université du candidat dans la table candidat_attributes et odcusers
-            $variables = ['Université', 'Etablissement'];
+            $variables = ['Université', 'Etablissement', 'Structure', 'Entreprise', 'Si autre université'];
 
             $universiteLabelAttribute = DB::table('candidat_attributes')
                 ->where(function ($query) use ($variables) {
@@ -747,6 +749,16 @@ class RapportSemestrielController extends Controller
         $fileName = "Rapport_du_Semestre_{$selectSemestre}_{$selectYear}.Xlsx";
         $tempFile = tempnam(sys_get_temp_dir(), $fileName);
         $writer->save($tempFile);
+
+
+
+
+        //on cree le fichier Excel
+        $writer = new Xlsx($spreadsheet);
+        $fileName = "Rapport_du_Semestre_{$selectSemestre}_{$selectYear}.Xlsx";
+        $tempFile = tempnam(sys_get_temp_dir(), $fileName);
+        $writer->save($tempFile);
+
 
         //On renvoie le fichier Excel au navigateur
 
