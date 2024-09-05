@@ -282,14 +282,6 @@ class ActiviteController extends Controller
             ->groupBy('activites.title')
             ->get();
 
-
-
-
-
-
-
-
-
         return view('activites.show', compact('participantsData', 'datachart', 'candidatsData', 'labels', 'data', 'activite', 'id', 'candidats', 'activite_Id', 'odcusers', 'fullDates', 'dates', 'countdate', 'presences'));
     }
 
@@ -766,10 +758,24 @@ class ActiviteController extends Controller
     {
         $searchTerm = $request->input('search');
         $activites = Activite::where('title', 'LIKE', "%{$searchTerm}%")
-        ->take(4)
-        ->latest()
-        ->get();
+            ->take(4)
+            ->latest()
+            ->get();
 
         return response()->json($activites);
+    }
+
+    public function getActivitiesData(Request $request)
+    {
+        $year = $request->input('year');
+        $month = $request->input('month');
+
+        $activities = Activite::selectRaw("date_format(createdAt, '%Y-%m-%d') as date, count(*) as aggregate")
+            ->whereMonth('createdAt', $month)
+            ->whereYear('createdAt', $year)
+            ->groupBy('date')
+            ->get();
+
+        return response()->json($activities);
     }
 }

@@ -14,7 +14,6 @@
         </div>
     </div>
 @endif
-
 <div class="p-4 rounded-lg bg-gray-50 dark:bg-gray-800" id="styled-dashboard" role="tabpanel"
     aria-labelledby="dashboard-tab">
 
@@ -26,26 +25,52 @@
             <table id="candidatTable" class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
                 <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                     <tr>
+
+                        <th scope="col"
+                            class="px-6 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                            Firstname
+                        </th>
+                        <th scope="col"
+                            class="px-6 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                            Lastname
+                        </th>
                         @foreach (array_unique($labels) as $label)
                             @if (isset($label))
-                                @if ($label != 'Cv de votre parcours (Obligatoire)')
-                                    <th scope="col" title="{{ $label }}"
-                                        class="px-6 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                @if (
+                                    $label == 'Civilié' ||
+                                        $label == 'Civilité' ||
+                                        $label == 'Email' ||
+                                        $label == 'E-mail' ||
+                                        $label == 'E-mail(obligatoire)' ||
+                                        $label == 'Adresse Email' ||
+                                        $label == 'Téléphone' ||
+                                        $label == 'Numéro de téléphone' ||
+                                        $label == 'Numéro de l\'encadreur' ||
+                                        $label == 'Tranche d\'âge' ||
+                                        $label == 'Adresse' ||
+                                        $label == 'Adresse de domicile' ||
+                                        $label == 'Adresse de domicile (n°, avenue, Quartier, Commune)' ||
+                                        $label == 'Profession' ||
+                                        $label == 'Spécialité ou domaine (étude ou profession)' ||
+                                        $label == 'Spécialité ou domaine' ||
+                                        $label == 'Niveau d\'étude' ||
+                                        $label == 'Niveau ou année d\'étude' ||
+                                        $label == 'Nom de l\'Etablissement / Université' ||
+                                        $label == 'Université' ||
+                                        $label == 'Université/Etablissement ou Structure')
+                                    <th scope="col"
+                                        class="display-label px-6 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                        {{ $label }}
+                                    </th>
+                                @elseif($label !== 'Cv de votre parcours (Obligatoire)')
+                                    <th scope="col"
+                                        class="label px-6 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                                         {{ $label }}
                                     </th>
                                 @endif
                             @endif
                         @endforeach
-
-                        <th scope="col" data-title="Gender"
-                            class="px-6 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                            Gender
-                        </th>
-                        <th scope="col" title="Profession"
-                            class="px-6 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                            Profession
-                        </th>
-                        <th scope="col" title="Status"
+                        <th scope="col"
                             class="px-6 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                             Status
                         </th>
@@ -53,89 +78,9 @@
                             class="px-6 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                             Actions
                         </th>
-                        <th scope="col" title="checkbox"
-                            class="px-6 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-
-                        </th>
                     </tr>
                 </thead>
-                <tbody>
-                    @foreach ($candidatsData as $key => $candidat)
-                        <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700" id="rowCandidat">
-                            @foreach (array_unique($labels) as $label)
-                                @if (isset($label))
-                                    @if ($label != 'Cv de votre parcours (Obligatoire)')
-                                        <td class="px-6 py-4">
-                                            @php
-                                                $value =
-                                                    isset($candidat[$label]) && $candidat[$label] !== ''
-                                                        ? $candidat[$label]
-                                                        : 'N/A';
-                                            @endphp
-                                            {{ Str::of($value)->limit(40, '...') }}
-                                            @if (strlen($value) > 40)
-                                                <a href="#" onclick='readMore(event, `{{ $value }}`)'
-                                                    class="dark:text-gray-500 hover:text-gray-600">Read
-                                                    more</a>
-                                            @endif
-                                        </td>
-                                    @endif
-                                @endif
-                            @endforeach
-                            <td class="px-6 py-4">{{ $candidat['odcuser']['gender'] }}</td>
-                            <td class="px-6 py-4">
-                                @php
-                                    $profession = json_decode($candidat['odcuser']['profession'], true);
-
-                                @endphp
-                                {{ $profession['translations']['fr']['profession'] ?? '' }}
-                            </td>
-                            <td class="px-6 py-4" id="statusCell">
-                                {{ $candidat['status'] }}
-                            </td>
-                            <td class="tdAction" style="position: relative">
-                                <button id="dropdownMenuIconButton" data-target="dropdownDots{{ $key }}"
-                                    class="btn-menu inline-flex items-center p-2 text-sm font-medium text-center text-gray-900 bg-white rounded-lg hover:bg-gray-100 focus:ring-4 focus:outline-none dark:text-white focus:ring-gray-50 dark:bg-gray-800 dark:hover:bg-gray-700 dark:focus:ring-gray-600"
-                                    type="button">
-                                    <svg class="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
-                                        fill="currentColor" viewBox="0 0 4 15">
-                                        <path
-                                            d="M3.5 1.5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0Zm0 6.041a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0Zm0 5.959a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0Z" />
-                                    </svg>
-                                </button>
-
-                                <!-- Dropdown menu -->
-                                <div id="dropdownDots{{ $key }}"
-                                    style="position: absolute; top:50px; right: 50px;"
-                                    class="div-dropdown z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700 dark:divide-gray-600">
-                                    <ul class="dropdown-menu py-2 text-sm text-gray-700 dark:text-gray-200"
-                                        aria-labelledby="dropdownMenuIconButton">
-                                        <li>
-                                            <a
-                                                class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
-                                                onclick="actionStatus(event, 'accept', {{ $candidat['id'] }}, '{{ $candidat['odcuser']['first_name'] }}')">Accept</a>
-                                        </li>
-                                        <li>
-                                            <a
-                                                class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
-                                                onclick="actionStatus(event, 'decline', {{ $candidat['id'] }}, '{{ $candidat['odcuser']['first_name'] }}')">Decline</a>
-                                        </li>
-                                        <li>
-                                            <a 
-                                                class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
-                                                onclick="actionStatus(event, 'wait', {{ $candidat['id'] }}, '{{ $candidat['odcuser']['first_name'] }}', '{{ $candidat['odcuser']['last_name'] }}')">Wait</a>
-                                        </li>
-                                    </ul>
-                                </div>
-                            </td>
-                            <td class="px-6 py-4" id="statusCell">
-                                <input id="default-checkbox" type="checkbox" value=""
-                                    class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
-                            </td>
-                        </tr>
-                    @endforeach
-
-                </tbody>
+                <tbody></tbody>
             </table>
             <button type="button" data-modal-target="popup-accept" id="first-modal" data-modal-toggle="popup-accept"
                 hidden>
@@ -184,7 +129,7 @@
                     </h3>
                     <button id="accept-link" data-text="accept" data-modal-hide="popup-accept" type="button"
                         class="text-white bg-red-600 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 dark:focus:ring-red-800 font-medium rounded-lg text-sm inline-flex items-center px-5 py-2.5 text-center"
-                        onclick="changeStatus(event)">
+                        onclick="changeStatus(event, 'accept')">
                         Confirmer
                     </button>
                     <button data-modal-hide="popup-accept" type="button"
@@ -218,7 +163,7 @@
                     </h3>
                     <button id="decline-link" data-text="decline" data-modal-hide="popup-decline" type="button"
                         class="text-white bg-red-600 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 dark:focus:ring-red-800 font-medium rounded-lg text-sm inline-flex items-center px-5 py-2.5 text-center"
-                        onclick="changeStatus(event)">
+                        onclick="changeStatus(event, 'decline')">
                         Confirmer
                     </button>
                     <button data-modal-hide="popup-decline" type="button"
@@ -252,7 +197,7 @@
                     </h3>
                     <button id="wait-link" data-text="wait" data-modal-hide="popup-wait" type="button"
                         class="text-white bg-red-600 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 dark:focus:ring-red-800 font-medium rounded-lg text-sm inline-flex items-center px-5 py-2.5 text-center"
-                        onclick="changeStatus(event)">
+                        onclick="changeStatus(event, 'wait')">
                         Confirmer
                     </button>
                     <button data-modal-hide="popup-wait" type="button"

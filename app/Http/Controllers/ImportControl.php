@@ -53,15 +53,15 @@ class ImportControl extends Controller
             //dd($rowData['status']);
             try {
                 $validatedData = $this->validateRowData($rowData);
-                //dd($validatedData);
-                // Chercher l'utilisateur par email 
-                //ump($rowData['email']);
+                //dump($validatedData);
+                // Chercher l'utilisateur par email ou par post-nom
+                //$cond = [$validatedData['email']];
+                /*if(empty($cond)){
+                    $cond = [$validatedData['last_name']];
+                } */
                 $odcuser = Odcuser::where('email', $validatedData['email'])->first();
                 //dd($odcuser);
 
-                /*if(empty($validatedData['email'])){
-                    continue;
-                }*/
             
                 $validatedData['birth_date'] = '1970-02-05';
                 $validatedData['password'] = 'kdjksjfkndjskjd5555';
@@ -74,7 +74,8 @@ class ImportControl extends Controller
                 $validatedData['updatedAt'] = date("Y-m-d h:i:s ");
                 //$validatedData['status']= 0;
 
-
+                //$odcuser = Odcuser::firstOrCreate($cond, $validatedData);
+                
                 if ($odcuser) {
                     // Si l'utilisateur existe déjà, on recupere simplement son id.
                     $odcuser->update($validatedData);
@@ -82,7 +83,7 @@ class ImportControl extends Controller
                     // Sinon, créez un nouvel utilisateur
                     $odcuser = Odcuser::create($validatedData);
                 }
-
+            
                 //dd($odcuser);
                 // Ajouter l'utilisateur à la table 'candidat'
                 $candidat = Candidat::firstOrCreate(
@@ -213,83 +214,6 @@ class ImportControl extends Controller
         return view(/*'components.activite-import'*/'import.import', ['activites' => $activites]);
     }
 
-    public function download($activiteId)
-    {
-        /*$path = storage_path('app/public/modelcsv' . $filename);
-        //dd($path);
-         $filename//a parameter for our function
-
-        if (!file_exists($path)) {
-            abort(404, 'fichier non trouvé');
-        }
-
-        return response()->download($path);
-        */
-        // Valider que l'ID de l'activité existe
-        /*
-        $activite = Activite::findOrFail($activiteId);
-
-        $spreadsheet = new Spreadsheet();
-        $sheet = $spreadsheet->getActiveSheet();
-        $sheet->setTitle('Model 1'); // This is where I set the title of my sheet
-
-        //$header = ['first_name', 'last_name', 'email','gender', 'numero', 'Etablissement/univerisité', 'Date_1977-01-01', 'status'];
-        //$sheet->fromArray($header, null, 'A1');
-
-        /*here is the header of my sheet*/
-        $sheet->setCellValue('A1', 'first_name'); 
-        $sheet->setCellValue('B1', 'last_name'); 
-        $sheet->setCellValue('C1', 'email'); 
-        $sheet->setCellValue('D1', 'gender'); 
-        $sheet->setCellValue('E1', 'numero'); 
-        $sheet->setCellValue('F1', 'Etablissement/univerisité'); 
-        $sheet->setCellValue('G1', 'Date_1977-01-01'); 
-        $sheet->setCellValue('H1', 'status'); // 
-        $row = 2; // Initialize row counter
-
-        //handle datas and fill my model
-        //where('activite_id', $this->activiteId)->
-        dd($activiteId);
-        $participants = Candidat::where('activite_id', $activiteId)->where('status', 'new')->limit(100)->get();
-        dd($participants);
-        // This is the loop to fill datas
-        /*for ($i = 1; $i < 5; $i++) {
-            $sheet->setCellValue('A' . $row, $i);
-            $sheet->setCellValue('B' . $row, "test " . $i);
-            $row++;
-    }*/
-    foreach ($participants as $participant) {
-        $sheet->setCellValue('A' . $row, $participant->first_name);
-        $sheet->setCellValue('B' . $row, $participant->last_name);
-        $sheet->setCellValue('C' . $row, $participant->email);
-        $sheet->setCellValue('D' . $row, $participant->gender);
-        $sheet->setCellValue('E' . $row, $participant->numero);
-        $sheet->setCellValue('F' . $row, $participant->etablissement);
-        $sheet->setCellValue('G' . $row, $participant->date);
-        $sheet->setCellValue('H' . $row, $participant->status);
-        $row++;
-    }
-    
-        /*
-    $writer = new Xlsx($spreadsheet);
-    $fileName = "Model du fichier d'importation.xlsx";
-    header("Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
-    header("Content-Disposition: attachment;filename=\"$fileName\"");
-    $writer->save("php://output");
-    exit();*/
-        // Retourner le fichier comme réponse
-        return response()->stream(
-            function () use ($writer) {
-                $writer->save('php://output');
-            },
-            200,
-            [
-                'Content-Type' => 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-                'Content-Disposition' => 'attachment; filename="Model_du_fichier_d_importation.xlsx"',
-            ]
-        );
-
-}
     public function exportModel(Request $request){
         // Récupérer l'ID de l'activité à partir du formulaire
         $activiteId = $request->activite;
