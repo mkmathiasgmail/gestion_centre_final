@@ -11,10 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('sms_models', function (Blueprint $table) {
+        Schema::create('mail_faileds', function (Blueprint $table) {
             $table->id();
-            $table->string('title');
-            $table->text('message');
+            $table->string('email');
+            $table->foreignId('notification_id')->constrained('notifications')->onUpdate('cascade')->onDelete('cascade');
             $table->timestamps();
         });
     }
@@ -24,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('sms_models');
+        Schema::dropIfExists('mail_faileds');
     }
 };
