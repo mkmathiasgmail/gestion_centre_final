@@ -7,6 +7,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\TypeContratController;
 use App\Http\Controllers\EmployabiliteController;
 
+Route::get('get_emplois/{id}', [EmployabiliteController::class, 'getEmplois'])->name('getdataEmploye');
 
 Route::get('get_emplois/{id}', [EmployabiliteController::class, 'getEmplois'])->name('getdataEmploye');
 
