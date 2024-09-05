@@ -384,36 +384,6 @@
 
             })
 
-            function tooltip(event) {
-                event.preventDefault();
-                const tooltip = document.getElementById('tooltip');
-                $(tooltip).show();
-            }
-
-            function remove(event, id) {
-                alert(4)
-                event.preventDefault();
-                let status = 'decline';
-                $('#popup-title-decline').text(
-                    "Confirmez-vous le retrait de " + firstname + " ?");
-                $.ajax({
-                    type: 'POST',
-                    url: '/candidat/' + status,
-                    data: {
-                        id: id,
-                        _token: '{{ csrf_token() }}'
-                    },
-                    success: function(data) {
-                        // Update the UI or display a success message
-                        // Update the table cell with the new status
-                        $(statusCell[0]).text(status);
-                        console.log('Status updated successfully!');
-                    },
-                    error: function(xhr, status, error) {
-                        console.log('Error updating status: ' + error);
-                    }
-                });
-            }
 
             function actionStatus(event, type, id, firstname, lastname) {
                 tr = $(event.target.closest('tr'));

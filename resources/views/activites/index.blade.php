@@ -25,13 +25,7 @@
 
     </x-slot>
 
-    <div class=" mb-4 mt-4 text-white">
 
-        <a class=" cursor-pointer mt-5 bg-slate-600 p-2 rounded-sm font-bold"
-            href="{{ route('activites.create') }}">Create Activites</a>
-
-
-    </div>
 
     @if (Session('success'))
         <div class="p-4 mb-4 text-sm text-green-800 rounded-lg bg-green-50 dark:bg-gray-800 dark:text-green-400"
@@ -44,16 +38,16 @@
         <x-tableactivites :activites="$activites" />
     </div> --}}
 
-    <div class="container bg-gray-500 darj p-4 rounded-lg bg-opacity-5 relative">
+    <div class="container bg-[#fcdab40a] darj p-4 rounded-lg bg-opacity-5 relative">
         <!-- Header -->
         <div
             class="px-6 py-4 grid gap-3 md:flex md:justify-between md:items-center border-b border-gray-200 dark:border-neutral-700">
             <div>
                 <h2 class="text-xl font-semibold text-gray-800 dark:text-neutral-200">
-                    Teams
+                    Activites
                 </h2>
                 <p class="text-sm text-gray-600 dark:text-neutral-400">
-                    Create teams, edit, download and more.
+                    Créez des activites, modifiez, Exporter et bien plus encore.
                 </p>
             </div>
 
@@ -73,7 +67,7 @@
                             </div>
                             <input type="search" data-modal-target="static-modal" data-modal-toggle="static-modal"
                                 class="block w-full p-4 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                                placeholder="Search Mockups, Logos..." required />
+                                placeholder="Rechercher des Activites ..." required />
 
                         </div>
                     </form>
@@ -203,10 +197,10 @@
                     </div>
 
 
-                    <button type="button"
-                        class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-transparent bg-blue-600 text-white hover:bg-blue-700 focus:outline-none focus:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none">
+                    <a href="{{ route('activites.create') }}"
+                        class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-transparent bg-[#ff7322] text-white hover:bg-blue-700 focus:outline-none focus:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none">
                         Create Activites
-                    </button>
+                    </a>
 
                 </div>
             </div>
@@ -233,8 +227,6 @@
             <tbody></tbody>
         </table>
     </div>
-
-
 
     <x-statusactive :name="__('Would you like show in calendar this activity? ')" />
 
@@ -277,7 +269,9 @@
                     $.ajax({
                         url: "{{ route('activites.search') }}",
                         method: 'GET',
-                        data: { search: searchInput },
+                        data: {
+                            search: searchInput
+                        },
                         success: function(response) {
                             var resultsContainer = $('#resultsContainer');
                             resultsContainer.html('');
@@ -335,6 +329,7 @@
         </script>
         <script>
             function activer(event) {
+                document.querySelector(#)
                 event.preventDefault();
                 let link = event.target.getAttribute('href');
                 document.querySelector('#desactiveStatus form').setAttribute('action', link);
@@ -373,20 +368,11 @@
         </script>
 
         <script src="https://cdn.datatables.net/2.0.8/js/dataTables.js"></script>
-        <script src="https://cdn.datatables.net/buttons/3.0.2/js/buttons.dataTables.js"></script>
-        <script src="https://cdn.datatables.net/buttons/3.0.2/js/buttons.colVis.min.js"></script>
-        <script src="https://cdn.datatables.net/buttons/3.0.2/js/dataTables.buttons.js"></script>
-        <script src="https://cdn.datatables.net/responsive/3.0.2/js/dataTables.responsive.js"></script>
-        <script src="https://cdn.datatables.net/responsive/3.0.2/js/responsive.dataTables.js"></script>
-        <script src="https://cdn.datatables.net/buttons/3.0.2/js/buttons.print.min.js"></script>
-        <script src="https://cdn.datatables.net/buttons/3.0.2/js/buttons.html5.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/vfs_fonts.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/pdfmake.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
 
         <script type="text/javascript">
             $(document).ready(function() {
                 $('#table').DataTable({
+                    searching: false,
                     processing: true,
                     serverSide: true,
                     ajax: {
