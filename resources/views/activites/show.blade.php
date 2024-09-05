@@ -90,9 +90,7 @@
         </div>
     </div>
 
-    <x-statusactive :name="__('Would you like show in calendar this activity? ')" />
 
-    <x-statusdesactive :name="__('Would you like disable in calendar this activity? ')" />
 
     @php
         $url = env('API_URL');
@@ -131,23 +129,23 @@
                 let labels = @json($labels)
 
                 labels.forEach(element => {
-                    if (element && element !== 'Cv de votre parcours (Obligatoire)') {
+                    if (element !== 'Cv de votre parcours (Obligatoire)') {
                         columns.push({
                             data: element,
                             name: element
                         });
                     }
-                });
 
+                });
                 columns.push({
-                    data: 'certificat',
-                    name: 'certificat'
-                }, {
                     data: 'status',
                     name: 'status',
                 }, {
                     data: 'action',
                     name: 'action'
+                }, {
+                    data: 'certificat',
+                    name: 'certificat'
                 })
                 $('#participantTable').DataTable({
                     "processing": true,
@@ -163,6 +161,7 @@
                     },
                     columnDefs: [{
                             visible: false,
+                            targets: [0, 3, 5, 7, 8, 9]
                             targets: '.label'
                         },
                         {
@@ -187,7 +186,7 @@
                                     action: function(e, dt, node, config) {
                                         e.preventDefault();
                                         let id_event = @json($activite->id);
-                                        // Redirection vers la méthode du contrôleur
+
                                         window.location.href = '{{ url('generate_excel') }}/' +
                                             id_event;
                                     }
@@ -260,14 +259,12 @@
                 let labels = @json($labels)
 
                 labels.forEach(element => {
-                    if (element && element !== 'Cv de votre parcours (Obligatoire)') {
-                        columns.push({
-                            data: element,
-                            name: element
-                        });
-                    }
-                });
+                    columns.push({
+                        data: element,
+                        name: element
+                    });
 
+                });
                 columns.push({
                     data: 'status',
                     name: 'status',
@@ -384,6 +381,36 @@
 
             })
 
+            function tooltip(event) {
+                event.preventDefault();
+                const tooltip = document.getElementById('tooltip');
+                $(tooltip).show();
+            }
+
+            function remove(event, id) {
+                alert(4)
+                event.preventDefault();
+                let status = 'decline';
+                $('#popup-title-decline').text(
+                    "Confirmez-vous le retrait de " + firstname + " ?");
+                $.ajax({
+                    type: 'POST',
+                    url: '/candidat/' + status,
+                    data: {
+                        id: id,
+                        _token: '{{ csrf_token() }}'
+                    },
+                    success: function(data) {
+                        // Update the UI or display a success message
+                        // Update the table cell with the new status
+                        $(statusCell[0]).text(status);
+                        console.log('Status updated successfully!');
+                    },
+                    error: function(xhr, status, error) {
+                        console.log('Error updating status: ' + error);
+                    }
+                });
+            }
 
             function actionStatus(event, type, id, firstname, lastname) {
                 tr = $(event.target.closest('tr'));
@@ -525,7 +552,7 @@
             const getChartOptions = () => {
                 return {
                     series: [
-                        @json([$datachart->sum('total_candidats')]),
+
                         @json([$datachart->sum('total_filles')]), // Total des filles
                         @json([$datachart->sum('total_garcons')]),
                         // Total des garçons
@@ -587,7 +614,7 @@
                             bottom: -20,
                         },
                     },
-                    labels: ["Total", "Filles", "Garçons"], // Étiquettes pour les séries
+                    labels: ["Filles", "Garçons"], // Étiquettes pour les séries
                     dataLabels: {
                         enabled: false,
                     },
@@ -617,6 +644,14 @@
             });
         </script>
 
+        </script>
+        {{-- pour choisir le certificat a generer --}}
+        <script>
+            function choix_certificat(event) {
+                event.preventDefault();
+                const lien = event.target.getAttribute("href");
+                document.querySelector("#choixCertificat-modal form").setAttribute("action", lien);
+            }
         </script>
     @endsection
 </x-app-layout>

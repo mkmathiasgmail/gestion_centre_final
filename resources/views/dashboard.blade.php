@@ -17,8 +17,8 @@
     <section class=" flex justify-between p-4 gap-4 w-full md:inset-0 h-[calc(100%-1rem)] max-h-full mb-8">
 
         <div
-            class=" h-36  flex  items-center  p-1 w-full rounded-lg shadow-lg dark:shadow-lg dark:shadow-gray-500/20 backdrop-blur-xl bg-cover bg-[#fcdab40a] dark:bg-gray-800 dark:hover:bg-gray-700  hover:bg-[#f8f0e7] hover:scale-105 transition duration-700 ease-in-out border-l-8 border-[#ff9822] hover:border-l-10 ">
-            <div>
+            class=" h-36 items-center  p-2 w-full rounded-lg shadow-lg dark:shadow-lg dark:shadow-gray-500/20 backdrop-blur-xl bg-cover bg-[#fcdab40a] dark:bg-[#1e293b62] dark:hover:bg-gray-700  hover:bg-[#f8f0e7] hover:scale-105 transition duration-700 ease-in-out border-l-8 border-[#ff9822] hover:border-l-10 ">
+            <div class="flex gap-4 items-center mb-4">
                 <svg class="w-16 h-16 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
                     width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
                     <path
@@ -26,20 +26,46 @@
                     <path d="M11 6.025a1 1 0 0 0-1.065-.998 8.5 8.5 0 1 0 9.038 9.039A1 1 0 0 0 17.975 13H11V6.025Z" />
                 </svg>
 
+                <h3 class="text-xl font-semibold text-gray-800 dark:text-gray-200 ">
+                    Total des activités enregistrées
+                </h3>
+
             </div>
             <div>
-                <h3 class="text-sm font-semibold text-gray-800 dark:text-gray-200 ">
-                    Total des activités enregistrées : <span id="count" class="text-[#ff9822]">
-                        {{ $activites->count() }}</span>
-                </h3>
-                <p class="text-sm font-normal text-gray-400 dark:text-gray-400">
-                    Toutes les activites enregistre</p>
+
+                <p class="text-4xl font-bold text-[#ff9822] dark:text-gray-400">
+                    {{ $activites->count() }}</p>
             </div>
         </div>
         <div
-            class=" flex p-2 h-36 w-full items-center  rounded-lg shadow-lg  dark:shadow-gray-500/20 backdrop-blur-xl bg-[#fcdab40a] dark:bg-gray-800 dark:hover:bg-gray-700  hover:scale-105 transition duration-700 ease-in-out hover:bg-[#f8f0e7] hover:text-black border-l-8 border-[#ff9822] hover:border-l-10 ">
+            class="  p-2 h-36 w-full items-center  rounded-lg shadow-lg  dark:shadow-gray-500/20 backdrop-blur-xl bg-[#fcdab40a] dark:bg-[#1e293b62] dark:hover:bg-gray-700  hover:scale-105 transition duration-700 ease-in-out hover:bg-[#f8f0e7] hover:text-black border-l-8 border-[#ff9822] hover:border-l-10 ">
 
+            <div class="flex gap-4 items-center mb-4">
+                <svg class="w-16 h-16 text-gray-800 dark:text-white" aria-hidden="true"
+                    xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor"
+                    viewBox="0 0 24 24">
+                    <path fill-rule="evenodd"
+                        d="M6 5V4a1 1 0 1 1 2 0v1h3V4a1 1 0 1 1 2 0v1h3V4a1 1 0 1 1 2 0v1h1a2 2 0 0 1 2 2v2H3V7a2 2 0 0 1 2-2h1ZM3 19v-8h18v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2Zm5-6a1 1 0 1 0 0 2h8a1 1 0 1 0 0-2H8Z"
+                        clip-rule="evenodd" />
+                </svg>
+
+                <h3 class="text-xl font-semibold text-gray-800 dark:text-gray-200">
+                    Activités en cours cette semaine (Lundi - Samedi)
+                </h3>
+
+            </div>
             <div>
+
+                <p class="text-4xl font-bold text-[#ff9822] dark:text-gray-400">
+                    {{ $activityForWeekend->count() }}
+                </p>
+            </div>
+
+        </div>
+        <div
+            class="  p-2 h-36 w-full items-center  rounded-lg shadow-lg  dark:shadow-gray-500/20 backdrop-blur-xl bg-[#fcdab40a] dark:bg-gray-800 dark:bg-[#1e293b62] hover:scale-105 transition duration-700 ease-in-out hover:bg-[#f8f0e7] hover:text-black border-l-8 border-[#ff9822] hover:border-l-10 ">
+
+            <div class="flex gap-4 items-center mb-4">
                 <svg class="w-16 h-16 text-gray-800 dark:text-white" aria-hidden="true"
                     xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor"
                     viewBox="0 0 24 24">
@@ -48,12 +74,14 @@
                         clip-rule="evenodd" />
                 </svg>
 
-            </div>
-            <div>
-                <h3 class="text-sm font-semibold text-gray-800 dark:text-gray-200">
+                <h3 class="text-xl font-semibold text-gray-800 dark:text-gray-200">
                     Activité totale enregistrée 30 dernier jours : <span class="text-[#ff9822]">
 
                 </h3>
+
+            </div>
+            <div>
+
                 <p class="text-sm font-normal text-gray-400 dark:text-gray-400">
                     Number of activitity registered in the last 30 days.
                 </p>
@@ -61,33 +89,9 @@
 
         </div>
         <div
-            class=" flex p-2 h-36 w-full items-center  rounded-lg shadow-lg  dark:shadow-gray-500/20 backdrop-blur-xl bg-[#fcdab40a] dark:bg-gray-800 dark:hover:bg-gray-700  hover:scale-105 transition duration-700 ease-in-out hover:bg-[#f8f0e7] hover:text-black border-l-8 border-[#ff9822] hover:border-l-10 ">
+            class="rounded-xl items-center  p-2 h-36 w-full shadow-lg dark:shadow-lg dark:shadow-gray-500/20 backdrop-blur-xl bg-cover bg-[#fcdab40a] dark:bg-[#1e293b62] dark:hover:bg-gray-700   hover:bg-[#f8f0e7]  hover:scale-105 transition duration-700 ease-in-out border-l-8 border-[#ff9822] hover:border-l-10 ">
 
-            <div>
-                <svg class="w-16 h-16 text-gray-800 dark:text-white" aria-hidden="true"
-                    xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor"
-                    viewBox="0 0 24 24">
-                    <path fill-rule="evenodd"
-                        d="M5.617 2.076a1 1 0 0 1 1.09.217L8 3.586l1.293-1.293a1 1 0 0 1 1.414 0L12 3.586l1.293-1.293a1 1 0 0 1 1.414 0L16 3.586l1.293-1.293A1 1 0 0 1 19 3v18a1 1 0 0 1-1.707.707L16 20.414l-1.293 1.293a1 1 0 0 1-1.414 0L12 20.414l-1.293 1.293a1 1 0 0 1-1.414 0L8 20.414l-1.293 1.293A1 1 0 0 1 5 21V3a1 1 0 0 1 .617-.924ZM9 7a1 1 0 0 0 0 2h6a1 1 0 1 0 0-2H9Zm0 4a1 1 0 1 0 0 2h6a1 1 0 1 0 0-2H9Zm0 4a1 1 0 1 0 0 2h6a1 1 0 1 0 0-2H9Z"
-                        clip-rule="evenodd" />
-                </svg>
-
-            </div>
-            <div>
-                <h3 class="text-sm font-semibold text-gray-800 dark:text-gray-200">
-                    Activité totale enregistrée 30 dernier jours : <span class="text-[#ff9822]">
-
-                </h3>
-                <p class="text-sm font-normal text-gray-400 dark:text-gray-400">
-                    Number of activitity registered in the last 30 days.
-                </p>
-            </div>
-
-        </div>
-        <div
-            class="rounded-xl flex gap-1 items-center  p-2 h-36 w-full shadow-lg dark:shadow-lg dark:shadow-gray-500/20 backdrop-blur-xl bg-cover bg-[#fcdab40a] dark:bg-gray-800 dark:hover:bg-gray-700   hover:bg-[#f8f0e7]  hover:scale-105 transition duration-700 ease-in-out border-l-8 border-[#ff9822] hover:border-l-10 ">
-
-            <div class="">
+            <div class=" flex gap-4 items-center mb-4">
                 <svg class=" w-12 h-12 text-gray-800 dark:text-white" aria-hidden="true"
                     xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor"
                     viewBox="0 0 24 24">
@@ -96,14 +100,15 @@
                         clip-rule="evenodd" />
                 </svg>
 
+                <h3 class="text-xl font-semibold text-gray-800 dark:text-gray-200">
+                    Nombre total d'utilisateurs enregistrés
+                </h3>
+
             </div>
             <div class="">
-                <h3 class="text-lg font-semibold text-gray-800 dark:text-gray-200">
-                    Nombre total d'utilisateurs enregistrés : <span id="count"
-                        class="text-[#ff9822]">{{ $user->count() }}</span>
-                </h3>
-                <p class="text-sm font-normal text-gray-400 dark:text-gray-400">
-                    Number of activities registered in the last 3 </p>
+
+                <p class="text-4xl font-bold text-[#ff9822] dark:text-gray-400">
+                    {{ $user->count() }} </p>
             </div>
 
         </div>
@@ -112,7 +117,7 @@
     <section class="flex justify-between p-4 gap-4 w-full md:inset-0 h-[calc(100%-1rem)] max-h-full mb-8">
 
         <div
-            class=" bg-[#fcdab40a] dark:bg-gray-800 p-5 rounded-lg w-1/2 shadow-lg dark:shadow-lg dark:shadow-gray-500/20 ">
+            class=" bg-[#fcdab40a] dark:bg-[#1e293b62] p-5 rounded-lg w-1/2 shadow-lg dark:shadow-lg dark:shadow-gray-500/20 ">
             <div class=" flex justify-between items-center ">
                 <div class=" flex gap-4">
                     <div class=" ">
@@ -225,7 +230,7 @@
             <div class="-m-1.5 overflow-x-auto">
                 <div class="p-1.5 min-w-full inline-block align-middle">
                     <div
-                        class="bg-[#fcdab40a] border border-gray-200 rounded-xl shadow-sm overflow-hidden dark:bg-neutral-900 dark:border-neutral-700">
+                        class="bg-[#fcdab40a] border border-gray-200 rounded-xl shadow-sm overflow-hidden dark:bg-[#1e293b62] dark:border-neutral-700">
                         <!-- Header -->
                         <div
                             class="px-6 py-4 grid gap-3 md:flex md:justify-between md:items-center border-b border-gray-200 dark:border-neutral-700">
@@ -238,13 +243,13 @@
                                 </p>
                             </div>
 
-                            
+
                         </div>
                         <!-- End Header -->
 
                         <!-- Table -->
-                        <table class="min-w-full divide-y divide-gray-200 dark:divide-neutral-700">
-                            <thead class="bg-[#96816a0a] dark:bg-neutral-800">
+                        <table class="min-w-full divide-y divide-gray-700 dark:divide-neutral-200">
+                            <thead class="bg-[#fcdab40a] dark:bg-[#fcdab40a]">
                                 <tr>
                                     <th scope="col" class="px-6 py-3 text-start">
                                         <a class="group inline-flex items-center gap-x-2 text-xs font-semibold uppercase text-gray-800 hover:text-gray-500 focus:outline-none focus:text-gray-500 dark:text-neutral-200 dark:hover:text-neutral-500 dark:focus:text-neutral-500"
@@ -320,10 +325,10 @@
                                 </tr>
                             </thead>
 
-                            <tbody class="divide-y divide-gray-200 dark:divide-neutral-700">
+                            <tbody class="divide-y divide-gray-700 dark:divide-neutral-200">
                                 @foreach ($activityForWeekend as $item)
                                     <tr
-                                        class="bg-[#fcdab40a] hover:bg-[#96816a0a] dark:bg-neutral-900 dark:hover:bg-neutral-800">
+                                        class=" text-gray-700 dark:text-gray-200 bg-[#eaeaebf3] hover:bg-[#96816a0a] dark:bg-[#1e293b62] dark:hover:bg-neutral-800">
                                         <td scope="col" class="px-6 py-3">
                                             {{ $item->title }}
 
@@ -406,7 +411,6 @@
             const yearSelect = document.getElementById('year-select');
             const monthSelect = document.getElementById('month-select');
 
-
             for (let year = startYear; year <= currentYear; year++) {
                 const option = document.createElement('option');
                 option.value = year;
@@ -422,8 +426,11 @@
 
 
             function updateMonths(selectedYear) {
-
                 monthSelect.innerHTML = '';
+                const allOption = document.createElement('option');
+                allOption.value = 'all';
+                allOption.text = 'Tous les mois';
+                monthSelect.appendChild(allOption);
                 const maxMonth = (selectedYear == currentYear) ? currentMonth : 12;
 
 
@@ -434,7 +441,6 @@
                     monthSelect.appendChild(option);
                 }
             }
-
 
             yearSelect.addEventListener('change', function() {
                 updateMonths(this.value);
@@ -448,7 +454,6 @@
         <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
         <script>
-
             const data1 = {
                 labels: ['Hommes', 'Femmes'],
                 datasets: [{
@@ -495,13 +500,18 @@
             let myChart;
 
             function fetchChartData(year, month) {
-                fetch(`/api/activities?year=${year}&month=${month}`)
+                let url = `/api/activities?year=${year}`;
+                if (month !== "all") {
+                    url += `&month=${month}`;
+                }
+
+                fetch(url)
                     .then(response => response.json())
                     .then(data => {
                         const dates = data.map(item => item.date);
                         const aggregates = data.map(item => item.aggregate);
 
-
+                        // Mettre à jour le graphique avec les nouvelles données
                         if (myChart) {
                             myChart.data.labels = dates;
                             myChart.data.datasets[0].data = aggregates;
