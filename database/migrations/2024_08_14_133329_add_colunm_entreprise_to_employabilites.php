@@ -12,8 +12,8 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('employabilites', function (Blueprint $table) {
-            $table->string('nomboite')->after('name');
-            $table->string('poste')->after('nomboite');
+            //$table->string('nomboite')->after('name');
+            //$table->string('poste')->after('nomboite');
 
         });
     }
