@@ -146,10 +146,6 @@
                                 <option value="F">Feminin</option>
                             </select>
                         </div>
-                        <div id="personnalise-div" class="col-span-2">
-                            <label for="person" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Personnalisé</label>
-                            <input type="text" name="person" id="person" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="exemple@gmail.com, exemple@gmail.com, ...">
-                        </div>
                         <div class="col-span-2">
                             <label for="message" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Message</label>
                             <textarea id="message" name="message" rows="6" class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Write your message here"></textarea>                    
@@ -290,6 +286,7 @@
             </thead>
             <tbody>
                 @foreach ($notifications as $item)
+                @foreach ($notifications as $item)
                     <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
                         <td class="px-6 py-4">{{ $item->name }}</td>
                         <td class="px-6 py-4">{{ $item->title }}</td>
@@ -304,6 +301,7 @@
                             <td class="px-6 py-4">Mail/SMS</td>
                         @endif
                     </tr>
+                @endforeach
                 @endforeach
             </tbody>
         </table>
@@ -353,7 +351,6 @@
 
                 modelMailDiv.style.display = 'none';
                 perActivity.style.display = 'none';
-                person.style.display = 'none';
                 age.style.display = 'none';
                 sexe.style.display = 'none';
 
