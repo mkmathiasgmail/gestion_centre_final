@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string('_id');
             $table->string('label');
             $table->string('value');
-            $table->foreignId('candidat_id')->constrained()->onDelete('cascade')->onUpdate('cascade');
+            $table->foreignUuid('candidat_id')->constrained()->onDelete('cascade')->onUpdate('cascade');
             $table->timestamps();
         });
     }
