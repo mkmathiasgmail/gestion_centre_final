@@ -296,6 +296,7 @@
                     </td>
                 </tr>
 
+
                 <!---Calendrier Rapport---->
 
                 <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
@@ -557,9 +558,10 @@
             function genererSemestre(event) {
                 event.preventDefault();
                 const lien = event.target.getAttribute("href");
+
                 document.querySelector("#semetrielrapport-modal form").setAttribute("action", lien);
             }
-            
+
             // Improved function for generating year options
             function generateYearOptions() {
                 const select = document.getElementById('yearselec'); // Ensure ID is 'year'
@@ -571,9 +573,9 @@
 
                 const currentYear = new Date().getFullYear();
 
-                // Define range with 7 past and 8 future years (inclusive)
-                const startYear = currentYear - 7;
-                const endYear = currentYear + 8;
+                // Define range with 1 past and 4 future years (inclusive)
+                const startYear = currentYear - 1;
+                const endYear = currentYear + 4;
 
                 for (let yearselec = startYear; yearselec <= endYear; yearselec++) {
                     const option = document.createElement('option');
