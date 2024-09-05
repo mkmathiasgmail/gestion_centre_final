@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>{{ config('app.name', 'Laravel') }}</title>
+    <title>Gestion Center</title>
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.bunny.net">
@@ -18,17 +18,32 @@
 
 <body class="font-sans text-gray-900 antialiased ">
     <div
-        class="min-h-screen flex flex-col sm:justify-center items-center pt-6 sm:pt-0 bg-[url('https://www.orangedigitalcenters.com:12345/api/v1/odcGlobal/ComingSoon%E2%80%9311652362999309.jpg')]">
-        <div class="backdrop-blur-md w-full min-h-screen flex flex-col  items-center pt-6 sm:justify-center">
-            <div>
-                <a href="{{ route('dashboard') }}">
-                    <x-application-logo class="w-50 h-50 fill-current text-gray-500" />
-                </a>
+        class=" sm:justify-center items-center pt-6 sm:pt-0 bg-[url('https://static.vecteezy.com/ti/vecteur-libre/p1/5091603-gestion-financiere-vector-illustration-consulter-un-comptable-homme-d-affaires-calculer-le-budget-personnel-ou-d-entreprise-gerer-le-revenu-financier-vectoriel.jpg')]">
+        <div class="backdrop-blur-md w-full min-h-screen flex flex-col bg-[#00000073] items-center pt-6 sm:justify-center">
+            {{-- <div>
+
+            </div> --}}
+
+            <div class="">
+
             </div>
 
-            <div
-                class="w-full sm:max-w-md mt-6 p-8 py-8 bg-[#18181821] shadow-md overflow-hidden sm:rounded-lg ">
-                {{ $slot }}
+            <div class=" w-4/5  m-0 sm:m-10 bg-transparent shadow-xl  sm:rounded-lg flex justify-center flex-1">
+                <div class="lg:w-3/5 xl:w-1/2 p-6 sm:p-12">
+                    <div>
+                        <a href="{{ route('dashboard') }}" class=" w-mx-auto items-center justify-center flex">
+                            <x-application-logo class="w-50 h-50 fill-current text-gray-500" />
+                        </a>
+                    </div>
+                    <div class="mt-12 flex flex-col items-center">
+                        <div class="w-full flex-1 mt-8">
+                                {{ $slot }}
+                        </div>
+                    </div>
+                </div>
+                <div class="flex-1 bg-[url('https://cdn.dribbble.com/users/1784878/screenshots/7796443/media/0031c85ef8274ccf77cad2adb3263aa4.gif')] bg-cover bg-center">
+
+                </div>
             </div>
         </div>
     </div>
