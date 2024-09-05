@@ -37,9 +37,11 @@ class EmployabiliteController extends Controller
             )"
         )
             ->get();
+
+
         // ici on récupère les 3 derniers postes de l'utilisateur
         foreach ($employabilites as $key => $employabilite) {
-            $usr_empl = Employabilite::where('odcuser_id', $employabilite->odcuser_id)->orderBy('id', 'desc')->take(3)->get();
+            $usr_empl = Employabilite::query()->where('odcuser_id', $employabilite->odcuser_id)->orderBy('id', 'desc')->take(3)->get();
             $user_postes = [];
             $user_nomboites = [];
             $user_periodes = [];
@@ -49,7 +51,7 @@ class EmployabiliteController extends Controller
                 $user_nomboites[] = $user_e->nomboite;
                 $user_periodes[] = $user_e->periode;
             }
-            // dd($user_postes, $user_nomboites , $employabilites);
+
             $postes = implode('<br> ', $user_postes,);
             $nomboites = implode('<br> ', $user_nomboites,);
             $periode = implode('<br> ', $user_periodes,);
@@ -58,36 +60,10 @@ class EmployabiliteController extends Controller
             $employabilite['periodes'] = $periode;
         }
 
-        // dd($employabilites);
-        // $employabilite = EmployabiliteResource::collection($employabilites);
-        //     dd($employabilite);
-        // $employabilites = Employabilite::all();
-        // $employabilites = Employabilite::select('name')
-        //     ->groupBy('name')
-        //     ->pluck('name')
-        //     ->toArray();
-        // $employabilites = collect([]);
-        // foreach ($names as $name) {
-        //     $employabilite = Employabilite::whereRaw(
-        //         "
-        //     id = (
-        //         SELECT id
-        //         FROM (
-        //             SELECT id
-        //             FROM employabilites
-        //             WHERE name = ?
-        //             ORDER BY id DESC
-        //             LIMIT 1
-        //         ) AS subquery
-        //     )",
-        //         [$name]
-        //     )
-        //         ->get();
 
-        //     $employabilites = $employabilites->merge($employabilite);
         // }
         $typeContrats = TypeContrat::all();
-        $employabilite = Employabilite::all();
+
         return view('employabilites.index', compact('employabilites', 'typeContrats'));
     }
 
@@ -113,8 +89,6 @@ class EmployabiliteController extends Controller
             'periode' => 'required|date',
             'poste' => 'required|string',
             'nomboite' => 'required|string',
-
-
         ]);
 
         // $employabiliteId = Employabilite::query()->latest()->first()->id;
@@ -224,17 +198,18 @@ class EmployabiliteController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateEmployabiliteRequest $request, Employabilite $employabilite) {}
+    public function update(UpdateEmployabiliteRequest $request, Employabilite $employabilite) {
+
+
+
+    }
 
     /**
      * Remove the specified resource from storage.
      */
     public function destroy($id)
     {
-        $data = Employabilite::where('id', $id)->first();
-        $firstEmployabilite = Employabilite::where('poste', $data->poste)->orderBy('id', 'asc')->first();
-        $firstEmployabilite->delete();
-        return redirect()->route('employabilites.index')->with('success', 'employée supprimé avec succès');
+
     }
 
     public function getEmplois(Request $request, $id)
@@ -261,6 +236,10 @@ class EmployabiliteController extends Controller
                     return $employe->periode;
                 })
 
+                // ->editColumn('statut', function ($employe) {
+                //     return $employe->statut;
+                // })
+
                 ->addColumn('action', function ($employe) {
                     return view('partials.action-employabilite', ['employe' => $employe])->render();
                 })
@@ -271,4 +250,5 @@ class EmployabiliteController extends Controller
             return response()->json(['error' => 'Une erreur est survenue : ' . $th->getMessage()], 500);
         }
     }
+
 }

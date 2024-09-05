@@ -87,11 +87,11 @@ class CertificatController extends Controller
         $variables = ['Université', 'Etablissement', 'Structure'];
 
         $universiteLabelAttribute = DB::table('candidat_attributes')
-            ->where(function ($query) use ($variables) {
-                foreach ($variables as $value) {
-                    $query->orWhere('label', 'LIKE', "%{$value}%");
-                }
-            })
+        ->where(function ($query) use ($variables) {
+            foreach ($variables as $value) {
+                $query->orWhere('label', 'LIKE', "%{$value}%");
+            }
+        })
             ->where('candidat_id', $candidat->id)
             ->first();
 
@@ -99,7 +99,7 @@ class CertificatController extends Controller
             $universiteValue = $universiteLabelAttribute->value;
         }
 
-        $pdf = view('Templete_certificat.certificat_maker', compact('candidat', 'universiteValue', 'start_date', 'end_date'));
+        $pdf = view('Templete_certificat.certificat_super_codeur_24_25', compact('candidat', 'universiteValue', 'start_date', 'end_date'));
     }
 
     public function generateCertificat($candidat)
@@ -130,7 +130,7 @@ class CertificatController extends Controller
         $end_date = $fin->format("j F Y");
 
 
-        $pdf = view('Templete_certificat.certificat_maker', compact('candidat', 'universiteValue', 'start_date', 'end_date'));
+        $pdf = view('Templete_certificat.certificat_super_codeur_24_25', compact('candidat', 'universiteValue' ,'start_date', 'end_date'));
         // echo $pdf;
         // exit();
 
@@ -180,18 +180,19 @@ class CertificatController extends Controller
             $variables = ['Université', 'Etablissement', 'Structure'];
 
             $universiteLabelAttribute = DB::table('candidat_attributes')
-                ->where(function ($query) use ($variables) {
-                    foreach ($variables as $value) {
-                        $query->orWhere('label', 'LIKE', "%{$value}%");
-                    }
-                })
-                ->where('candidat_id', $candidat->id)
-                ->first();
-
+            ->where(function ($query) use ($variables) {
+                foreach ($variables as $value) {
+                    $query->orWhere('label', 'LIKE', "%{$value}%");
+                }
+            })
+            ->where('candidat_id', $candidat->id)
+            ->first();
+            
             if ($universiteLabelAttribute) {
                 $universiteValue = $universiteLabelAttribute->value;
             }
-
+            
+        
             $debut = new DateTimeImmutable($candidat->activite->start_date);
 
             $start_date = $debut->format("j F Y");
@@ -201,11 +202,11 @@ class CertificatController extends Controller
 
             if ($selectcerificat == '4') {
 
-                $pdf = view('Templete_certificat.certificat_maker', compact('candidat', 'universiteValue', 'start_date', 'end_date'));
+                $pdf = view('Templete_certificat.certificat_super_codeur_24_25', compact('candidat', 'universiteValue', 'start_date', 'end_date'));
             }
 
 
-            $pdf = view('Templete_certificat.certificat_maker', compact('candidat', 'universiteValue', 'start_date', 'end_date'));
+            $pdf = view('Templete_certificat.certificat_super_codeur_24_25', compact('candidat', 'universiteValue', 'start_date', 'end_date'));
 
             $options = new Options();
             $options->set('isHtml5ParserEnabled', true);
@@ -221,6 +222,6 @@ class CertificatController extends Controller
         }
 
         $zip->close();
-        return response()->download($zipFilename);
+        return response()->download($zipFilename)->deleteFileAfterSend(true);
     }
 }

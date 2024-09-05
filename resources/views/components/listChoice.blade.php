@@ -7,8 +7,10 @@
          <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
              <!-- Modal header -->
              <div class="flex items-center justify-between p-4 border-b rounded-t md:p-5 dark:border-gray-600">
+
+
+
                  <h3 class="text-xl font-medium text-gray-900 dark:text-white">
-                    Vous supprimer le parcour de l'utilisateur ?
                  </h3>
                  <button id="resetButton2" type="button" class="inline-flex items-center justify-center w-8 h-8 text-sm text-gray-400 bg-transparent rounded-lg hover:bg-gray-200 hover:text-gray-900 ms-auto dark:hover:bg-gray-600 dark:hover:text-white" data-modal-hide="large-employé">
 
@@ -54,6 +56,7 @@
 
              </div>
              <!-- Modal footer -->
+
 
          </div>
      </div>

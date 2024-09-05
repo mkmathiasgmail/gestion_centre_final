@@ -29,6 +29,7 @@ class RapportSemestrielController extends Controller
 
 
 
+
         // on calclue  les dates de début et de fin du semestre
         if ($selectSemestre == '1') {
             $startDate = date('Y-m-d', strtotime($selectYear . '-01-01'));
@@ -37,6 +38,7 @@ class RapportSemestrielController extends Controller
             $startDate = date('Y-m-d', strtotime($selectYear . '-07-01'));
             $endDate = date('Y-m-d', strtotime($selectYear . '-12-31'));
         }
+
 
 
 
@@ -52,6 +54,8 @@ class RapportSemestrielController extends Controller
             ->leftJoin('type_events as typ', 'typ.id', '=', 'acty.type_event_id')
             ->leftJoin('employabilites as empl', 'empl.odcuser_id', '=', 'us.id')
             ->leftJoin('type_contrats as typecont', 'typecont.id', '=', 'empl.type_contrat_id')
+            // ->leftJoin('postes as pst', 'pst.employabilite_id', '=', 'empl.id')
+            // ->leftJoin('entreprises as entrp', 'entrp.employabilite_id', '=', 'empl.id')
             // ->leftJoin('postes as pst', 'pst.employabilite_id', '=', 'empl.id')
             // ->leftJoin('entreprises as entrp', 'entrp.employabilite_id', '=', 'empl.id')
             ->whereNotNull('ac.title')
@@ -333,6 +337,7 @@ class RapportSemestrielController extends Controller
 
         foreach ($candidats as $candidat) {
             ini_set('max_execution_time', 10000);
+            ini_set('max_execution_time', 10000);
 
             //recuperation et filtrage des numeros de telephone
             $phoneNumberResult = DB::table('candidat_attributes')
@@ -349,6 +354,7 @@ class RapportSemestrielController extends Controller
             //fin recuperation et filtrage des numeros de telephone
 
             // Récupération de l'université du candidat dans la table candidat_attributes et odcusers
+            $variables = ['Université', 'Etablissement', 'Structure', 'Entreprise', 'Si autre université'];
             $variables = ['Université', 'Etablissement', 'Structure', 'Entreprise', 'Si autre université'];
 
             $universiteLabelAttribute = DB::table('candidat_attributes')
