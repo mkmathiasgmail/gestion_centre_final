@@ -9,6 +9,8 @@ use App\Http\Controllers\EmployabiliteController;
 
 Route::get('get_emplois/{id}', [EmployabiliteController::class, 'getEmplois'])->name('getdataEmploye');
 
+Route::get('get_emplois/{id}', [EmployabiliteController::class, 'getEmplois'])->name('getdataEmploye');
+
 Route::resource('type_Contrats', TypeContratController::class);
 
 Route::resource('/user_role',UserController::class)->middleware('permissions:super-admin');
