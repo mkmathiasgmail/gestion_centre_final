@@ -517,8 +517,8 @@
                 const currentYear = new Date().getFullYear();
 
                 // Define range with 7 past and 8 future years (inclusive)
-                const startYear = currentYear - 7;
-                const endYear = currentYear + 8;
+                const startYear = currentYear - 1;
+                const endYear = currentYear + 4 ;
 
                 for (let yearselec = startYear; yearselec <= endYear; yearselec++) {
                     const option = document.createElement('option');
