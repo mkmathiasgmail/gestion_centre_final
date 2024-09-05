@@ -129,7 +129,7 @@ class CandidatController extends Controller
             });
 
             $dataTable->addColumn('certificat', function ($participant) {
-                return view('partials.action-btn-participants', ['participant' => $participant])->render();
+                return view('partials.generer-certificat', ['participant' => $participant])->render();
             });
 
             return $dataTable->toJson();
