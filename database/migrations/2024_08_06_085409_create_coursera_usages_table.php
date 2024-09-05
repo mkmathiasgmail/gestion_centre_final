@@ -15,7 +15,7 @@ return new class extends Migration
 
             $table->id();
             $table->string('email');
-            $table->foreign('email')->references('email')->on('coursera_members')->constrained()->onDelete('cascade')->onUpdate('cascade');
+            //$table->foreign('email')->references('email')->on('coursera_members')->constrained()->onDelete('cascade')->onUpdate('cascade');
             $table->string('course_name')->nullable();
             $table->string('course_id')->nullable();
             $table->string('course_slug')->nullable();

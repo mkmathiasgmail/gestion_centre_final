@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('activite_hashtag', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('activite_id')->constrained()->onDelete('no action')->onUpdate('no action');
+            $table->foreignUuid('activite_id')->constrained()->onDelete('no action')->onUpdate('no action');
             $table->foreignId('hashtag_id')->constrained()->onDelete('no action')->onUpdate('no action');
             $table->timestamps();
         });
