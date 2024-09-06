@@ -1,6 +1,6 @@
 <div class = "fixed w-full z-30 flex bg-[#eaeaebf3] dark:bg-[#0F172A] p-2 items-center justify-center h-16 px-10">
     <div
-        class = "logo ml-12 dark:text-white  transform ease-in-out duration-500 flex-none h-full flex items-center justify-center">
+        class = "flex items-center justify-center flex-none h-full ml-12 duration-500 ease-in-out transform logo dark:text-white">
         <a href="https://flowbite.com" class="flex ms-2 md:me-24">
             <img src="{{ asset('img/orange.webp') }}" class="h-8 me-3" alt="FlowBite Logo" />
             <span class="self-center font-semibold text-1xl sm:text-1xl whitespace-nowrap dark:text-white">Orange
@@ -8,19 +8,19 @@
         </a>
     </div>
     <!-- SPACER -->
-    <div class = "grow h-full flex items-center justify-center"></div>
-    <div class = "flex-none h-full text-center flex items-center justify-center">
+    <div class = "flex items-center justify-center h-full grow"></div>
+    <div class = "flex items-center justify-center flex-none h-full text-center">
 
-        <div class = "flex space-x-3 items-center px-3" data-dropdown-toggle="dropdown-user">
-            <div class = "flex-none flex justify-center">
-                <div class="w-8 h-8 flex ">
+        <div class = "flex items-center px-3 space-x-3" data-dropdown-toggle="dropdown-user">
+            <div class = "flex justify-center flex-none">
+                <div class="flex w-8 h-8 ">
                     <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcShta_GXR2xdnsxSzj_GTcJHcNykjVKrCBrZ9qouUl0usuJWG2Rpr_PbTDu3sA9auNUH64&usqp=CAU"
-                        alt="profile" class="shadow rounded-full object-cover" />
+                        alt="profile" class="object-cover rounded-full shadow" />
                 </div>
             </div>
 
 
-            <div class = "hidden md:block text-sm md:text-md text-black dark:text-white" aria-expanded="false">
+            <div class = "hidden text-sm text-black md:block md:text-md dark:text-white" aria-expanded="false">
                 {{ Auth::user()->name }}</div>
         </div>
 
@@ -69,7 +69,7 @@
     <div
         class = "max-toolbar translate-x-24 scale-x-0 w-full -right-6 transition transform ease-in duration-300 flex items-center justify-between border-4 border-white dark:border-[#0F172A] bg-[#eaeaebf3] dark:bg-[#1E293B]  absolute top-2 rounded-full h-12">
 
-        <div class="flex pl-4 items-center space-x-2 ">
+        <div class="flex items-center pl-4 space-x-2 ">
             <div>
                 <div onclick="setDark('dark')"
                     class="moon text-gray-700 dark:text-white hover:text-blue-500 dark:hover:text-[#38BDF8]">
@@ -161,11 +161,11 @@
 
                     {{-- d="M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18Zm0 0a8.949 8.949 0 0 0 4.951-1.488A3.987 3.987 0 0 0 13 16h-2a3.987 3.987 0 0 0-3.951 3.512A8.948 8.948 0 0 0 12 21Zm3-11a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" /> --}}
                 </svg>
-                <span>Employabilites</span>
+                <span>Gestion employabilités</span>
             </a>
         </div>
-
-        <div
+        @if (Auth()->user()->hasRole('super-admin'))
+            <div
             class =  "hover:ml-4 w-full dark:text-white text-[#1E293B] hover:text-[#FF7900] dark:hover:text-[#FF7900] bg-[#eeeeee] dark:bg-[#1E293B] p-2 pl-8 rounded-full transform ease-in-out duration-300 flex flex-row items-center space-x-3">
             <a href="{{ route('user_role.index') }}"
                 class= "hover:ml-4 justify-end pr-5 dark:text-white text-[#1E293B] hover:text-[#FF7900] dark:hover:text-[#FF7900] bg-[#eeeeee] dark:bg-[#1E293B] p-3 rounded-full transform ease-in-out duration-300 flex">
@@ -175,10 +175,12 @@
                         d="M12,1L3,5V11C3,16.55 6.84,21.74 12,23C17.16,21.74 21,16.55 21,11V5L12,1M12,7C13.4,7 14.8,8.1 14.8,9.5V11C15.4,11 16,11.6 16,12.3V15.8C16,16.4 15.4,17 14.7,17H9.2C8.6,17 8,16.4 8,15.7V12.2C8,11.6 8.6,11 9.2,11V9.5C9.2,8.1 10.6,7 12,7M12,8.2C11.2,8.2 10.5,8.7 10.5,9.5V11H13.5V9.5C13.5,8.7 12.8,8.2 12,8.2Z" />
                 </svg>
 
-                <span>Gestion De Rôles</span>
+                <span>Gestion D'accées</span>
             </a>
-        </div>
+            </div>
+        @endif
 
+    @if (Auth()->user()->hasRole('super-admin'))
         <div
             class =  "hover:ml-4 w-full dark:text-white text-[#1E293B] hover:text-[#FF7900] dark:hover:text-[#FF7900] bg-[#eeeeee] dark:bg-[#1E293B] p-2 pl-8 rounded-full transform ease-in-out duration-300 flex flex-row items-center space-x-3">
             <a href="{{ route('type_Contrats.index') }}"
@@ -191,6 +193,7 @@
                 <span>Type Contract</span>
             </a>
         </div>
+    @endif
 
         <div
             class =  "hover:ml-4 w-full dark:text-white text-[#1E293B] hover:text-[#FF7900] dark:hover:text-[#FF7900] bg-[#eeeeee] dark:bg-[#1E293B] p-2 pl-8 rounded-full transform ease-in-out duration-300 flex flex-row items-center space-x-3">
