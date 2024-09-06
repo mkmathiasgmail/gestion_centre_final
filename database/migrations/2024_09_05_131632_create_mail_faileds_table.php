@@ -11,16 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('certificats', function (Blueprint $table) {
+        Schema::create('mail_faileds', function (Blueprint $table) {
             $table->id();
-            $table->foreignUuid('activite_id')
-            ->nullable()
-            ->constrained('activites')
-            ->onDelete('cascade');
-            $table->foreignUuid('candidat_id')
-            ->nullable()
-            ->constrained('candidats')
-            ->onDelete('cascade');
+            $table->string('email');
+            $table->foreignId('notification_id')->constrained('notifications')->onUpdate('cascade')->onDelete('cascade');
             $table->timestamps();
         });
     }
@@ -30,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('certificats');
+        Schema::dropIfExists('mail_faileds');
     }
 };

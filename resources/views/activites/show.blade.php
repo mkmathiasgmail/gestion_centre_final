@@ -52,8 +52,6 @@
                     aria-controls="presence" aria-selected="false">Presence</button>
             </li>
             <li class="me-2" role="presentation">
-
-            <li role="presentation">
                 <button
                     class="inline-block p-4 border-b-2 rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300"
                     id="import-styled-tab" data-tabs-target="#import" type="button" role="tab"
@@ -78,8 +76,6 @@
                 :odcusers="$odcusers" :activite_Id="$activite_Id" :id="$id" />
         </div>
 
-
-
         <!-- Presence tab content -->
         <div class="hidden p-4 rounded-lg bg-gray-50 dark:bg-gray-800" id="content-presence" role="tabpanel"
             aria-labelledby="settings-tab">
@@ -88,7 +84,7 @@
         </div>
 
         <!-- import tab content -->
-        <div class="hidden p-4 ro unded-lg bg-gray-50 dark:bg-gray-800" id="import" role="tabpanel"
+        <div class="hidden p-4 rounded-lg bg-gray-50 dark:bg-gray-800" id="import" role="tabpanel"
             aria-labelledby="contacts-tab">
             <p class="text-sm text-gray-500 dark:text-gray-400"><x-activite-import :activite="$activite" /></p>
         </div>

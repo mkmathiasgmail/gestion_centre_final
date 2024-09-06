@@ -9,6 +9,7 @@ use Illuminate\Http\Client\Request;
 use App\Http\Requests\StoreNotificationRequest;
 use App\Http\Requests\UpdateNotificationRequest;
 use App\Models\ModelMail;
+use App\Models\SmsModel;
 
 class NotificationController extends Controller
 {
@@ -19,6 +20,7 @@ class NotificationController extends Controller
     {
         $activites = Activite::where('start_date', '>', Carbon::now())->get();
         $modelMail = ModelMail::all();
+        $modelSms = SmsModel::all();
         $notifications = Notification::query()->leftJoin('users as us', 'us.id', '=', 'notifications.user_id')
             ->leftJoin('activites as ac', 'ac.id', '=', 'notifications.activite_id')
             ->leftJoin('model_mails as mm', 'mm.id', '=', 'notifications.model_mail_id')
@@ -33,9 +35,10 @@ class NotificationController extends Controller
                 'notifications.model_mail_id', 
                 'notifications.sms_model_id'
                 )
+            ->orderBy('notifications.id', 'asc')
             ->get();
 
-        return view("notifications.index", compact('activites', 'modelMail', 'notifications'));
+        return view("notifications.index", compact('activites', 'modelMail', 'modelSms', 'notifications'));
     }
 
     /**
