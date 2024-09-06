@@ -1,4 +1,4 @@
-<div class = "fixed w-full z-30 flex bg-[#eaeaebf3] dark:bg-[#0F172A] p-2 items-center justify-center h-16 px-10">
+<div class = "fixed w-full z-20 flex bg-[#eaeaebf3] dark:bg-[#0F172A] p-2 items-center justify-center h-16 px-10">
     <div
         class = "logo ml-12 dark:text-white  transform ease-in-out duration-500 flex-none h-full flex items-center justify-center">
         <a href="https://flowbite.com" class="flex ms-2 md:me-24">
@@ -24,7 +24,7 @@
                 {{ Auth::user()->name }}</div>
         </div>
 
-        <div class="z-50 hidden my-4 text-base list-none bg-white divide-y divide-gray-100 rounded shadow dark:bg-[#1e293bf3] dark:divide-gray-600"
+        <div class="z-30 hidden my-4 text-base list-none bg-white divide-y divide-gray-100 rounded shadow dark:bg-[#1e293bf3] dark:divide-gray-600"
             id="dropdown-user">
             <div class="px-4 py-3" role="none">
                 <p class="text-sm text-gray-900 dark:text-white" role="none">
@@ -64,7 +64,7 @@
     </div>
 </div>
 <aside
-    class = "w-60 -translate-x-48 fixed transition transform ease-in-out duration-1000 z-50 flex h-screen dark:bg-[#1E293B] bg-[#eeeeee]">
+    class = "w-60 -translate-x-48 fixed transition transform ease-in-out duration-1000 z-20 flex h-screen dark:bg-[#1E293B] bg-[#eeeeee]">
     <!-- open sidebar button -->
     <div
         class = "max-toolbar translate-x-24 scale-x-0 w-full -right-6 transition transform ease-in duration-300 flex items-center justify-between border-4 border-white dark:border-[#0F172A] bg-[#eaeaebf3] dark:bg-[#1E293B]  absolute top-2 rounded-full h-12">

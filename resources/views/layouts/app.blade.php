@@ -25,7 +25,7 @@
     @vite(['resources/css/app.css', 'resources/js/app.js', 'node_modules/select2/dist/js/select2.full.min.js', 'node_modules/select2/dist/css/select2.min.css', 'node_modules/jquery-circle-progress/dist/circle-progress.min.js'])
 </head>
 
-<body class="body bg-white dark:bg-[#0F172A]">
+<body class="body bg-[#eaeaebf3] dark:bg-[#1E293B] ">
     <div class=" bg-gray-100 dark:bg-[#1E293B] ">
         @include('layouts.navigation')
         <div
@@ -56,7 +56,7 @@
                                             d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
                                             clipRule="evenodd"></path>
                                     </svg>
-                                    
+
                                 </div>
                             </li>
                         </ol>
