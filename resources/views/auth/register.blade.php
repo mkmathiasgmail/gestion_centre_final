@@ -19,7 +19,7 @@
         </div>
 
         <!-- Location -->
-        <div class="mt-4">
+        <div class="mt-4 hidden">
             <x-input-label for="location" :value="__('Emplacement')" />
             <input type="text" name="location" id="location"
                 class="block mt-1 w-full rounded-full border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 focus:border-indigo-500 dark:focus:border-indigo-600 focus:ring-indigo-500 dark:focus:ring-indigo-600 shadow-sm"
