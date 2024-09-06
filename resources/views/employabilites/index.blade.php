@@ -187,19 +187,18 @@
                         </td>
 
 
-                        <td class="px-6 py-4">
-                            <a href="#" data-id="{{ $item->id }}"
-                                onclick="supprimer(event, {{ $item->odcuser->id }});"
-                                data-modal-target="large-employé" data-modal-toggle="large-employé" type="submit">
-                                <svg class="w-10 h-10" xmlns=" http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-                                    <path class="bg-teal-500 fill-current"
-                                        d="M22,3H5A2,2 0 0,0 3,5V9H5V5H22V19H5V15H3V19A2,2 0 0,0 5,21H22A2,2 0 0,0 24,19V5A2,2 0 0,0 22,3M7,15V13H0V11H7V9L11,12L7,15M20,13H13V11H20V13M20,9H13V7H20V9M17,17H13V15H17V17Z" />
+                      <td class="px-6 py-4">
+                        <a href="#" data-id="{{ $item->id }}" onclick="supprimer(event, '{{ $item->odcuser->id }}');"
+                            data-modal-target="large-employé" data-modal-toggle="large-employé" type="submit">
+                            <svg class="w-10 h-10" xmlns=" http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                                <path class="bg-teal-500 fill-current"
+                                    d="M22,3H5A2,2 0 0,0 3,5V9H5V5H22V19H5V15H3V19A2,2 0 0,0 5,21H22A2,2 0 0,0 24,19V5A2,2 0 0,0 22,3M7,15V13H0V11H7V9L11,12L7,15M20,13H13V11H20V13M20,9H13V7H20V9M17,17H13V15H17V17Z" />
 
-                                </svg>
+                            </svg>
 
-                            </a>
+                        </a>
 
-                        </td>
+                    </td>
                     </tr>
                     @php
                         $id_use += 1;
@@ -224,88 +223,86 @@
         <script src="https://code.jquery.com/ui/1.11.4/jquery-ui.min.js"></script>
         <script src="https://cdn.datatables.net/2.0.8/js/dataTables.js "></script>
 
-        <script>
+       <script>
             function supprimer(event, id) {
-                let employeId = id;
-                event.preventDefault();
+                        let employeId = id;
+                        event.preventDefault();
 
-                if ($.fn.DataTable.isDataTable('#Mytable')) {
-                    $('#Mytable').DataTable().destroy();
-                }
-
-                var url = '{{ route('getdataEmploye', ':id') }}';
-                url = url.replace(':id', employeId);
-
-                $('#Mytable').DataTable({
-                    "processing": true,
-                    "serverSide": true,
-                    "ajax": {
-                        "url": url,
-                        "dataType": "json",
-                        "type": "GET"
-                    },
-                    "columns": [{
-                        data: 'id',
-                        name: 'id'
-                    }, {
-                        data: 'name',
-                        name: 'name'
-                    }, {
-                        data: 'nomboite',
-                        name: 'nomboite'
-                    }, {
-                        data: 'poste',
-                        name: 'poste'
-                    }, {
-                        data: 'periode',
-                        name: 'periode'
-                    }, {
-                        data: 'action',
-                        name: 'action',
-                        orderable: false,
-                        searchable: false,
-                        render: function(data, type, row) {
-                            return `<button onclick="toggleEnregistrement(${row.id})" class="flex items-center px-2 py-1 text-white bg-black hover:bg-slate-700">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                                </svg>
-                                désactiver
-                            </button>`;
-
-
-
-
-
+                        if ($.fn.DataTable.isDataTable('#Mytable')) {
+                            $('#Mytable').DataTable().destroy();
                         }
-                    }],
-                    "createdRow": function(row, data) {
+                        var url = '{{ route('getdataEmploye', ':id') }}';
+                        url = url.replace(':id', employeId);
 
-                        if (localStorage.getItem(`enregistrement-${data.id}`) === 'true') {
-                            $(row).addClass('bg-teal-500 text-red-500');
+                        $('#Mytable').DataTable({
+                            "processing": true,
+                            "serverSide": true,
+                            "ajax": {
+                                "url": url,
+                                "dataType": "json",
+                                "type": "GET"
+                            },
+                            "columns": [{
+                                data: 'id',
+                                name: 'id'
+                            }, {
+                                data: 'name',
+                                name: 'name'
+                            }, {
+                                data: 'nomboite',
+                                name: 'nomboite'
+                            }, {
+                                data: 'poste',
+                                name: 'poste'
+                            }, {
+                                data: 'periode',
+                                name: 'periode'
+                            }, {
+                                data: 'action',
+                                name: 'action',
+                                orderable: false,
+                                searchable: false,
+                                render: function(data, type, row) {
+                                    return `<button onclick="toggleEnregistrement(${row.id})" class="flex items-center px-2 py-1 text-white bg-black hover:bg-slate-700">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                                        </svg>
+                                        désactiver
+                                    </button>`;
 
-                        }
+
+
+
+
+                                }
+                            }],
+                            "createdRow": function(row, data) {
+
+                                if (localStorage.getItem(`enregistrement-${data.id}`) === 'true') {
+                                    $(row).addClass('bg-teal-500 text-red-500');
+
+                                }
+                            }
+                        });
                     }
-                });
-            }
 
-            function toggleEnregistrement(id) {
-                const key = `enregistrement-${id}`;
-                const currentState = localStorage.getItem(key) === 'true';
+                    function toggleEnregistrement(id) {
+                        const key = `enregistrement-${id}`;
+                        const currentState = localStorage.getItem(key) === 'true';
 
-                // Toggle l'état et met à jour localStorage
-                localStorage.setItem(key, !currentState);
+                        // Toggle l'état et met à jour localStorage
+                        localStorage.setItem(key, !currentState);
 
 
-                $('#Mytable').DataTable().rows().every(function() {
-                    const rowData = this.data();
-                    if (rowData.id === id) {
-                        $(this.node()).toggleClass('bg-teal-500 text-red-500', !currentState);
+                        $('#Mytable').DataTable().rows().every(function() {
+                            const rowData = this.data();
+                            if (rowData.id === id) {
+                                $(this.node()).toggleClass('bg-teal-500 text-red-500', !currentState);
 
+                            }
+                        });
                     }
-                });
-            }
         </script>
-
         {{-- fin de script datatable --}}
 
 
