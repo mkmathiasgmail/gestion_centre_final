@@ -53,6 +53,7 @@ return new class extends Migration
             $table->string('email')->nullable()->change();
             $table->string('password')->nullable()->change();
             $table->string('gender')->nullable()->change();
+            $table->json('profession')->nullable()->change();
         }) ;
     }
 

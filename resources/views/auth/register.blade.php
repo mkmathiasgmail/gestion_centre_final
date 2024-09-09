@@ -18,14 +18,6 @@
             <x-input-error :messages="$errors->get('email')" class="mt-2" />
         </div>
 
-        <!-- Location -->
-        <div class="mt-4 hidden">
-            <x-input-label for="location" :value="__('Emplacement')" />
-            <input type="text" name="location" id="location"
-                class="block mt-1 w-full rounded-full border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 focus:border-indigo-500 dark:focus:border-indigo-600 focus:ring-indigo-500 dark:focus:ring-indigo-600 shadow-sm"
-                :value="old('location')" readonly>
-            <x-input-error :messages="$errors->get('location')" class="mt-2" />
-        </div>
 
         <!-- Password -->
         <div class="mt-4">
@@ -58,35 +50,4 @@
             </x-primary-button>
         </div>
     </form>
-
-    <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            // Check if the browser supports geolocation
-            if (navigator.geolocation) {
-                // Get the user's current position
-                navigator.geolocation.getCurrentPosition(function(position) {
-                        var lat = position.coords.latitude;
-                        var lng = position.coords.longitude;
-
-                        // Use Nominatim API to reverse geocode the coordinates to an address
-                        axios.get('https://nominatim.openstreetmap.org/reverse?format=json&lat=' + lat +
-                                '&lon=' + lng + '&zoom=18&addressdetails=1')
-                            .then(function(res) {
-                                var data = res.data;
-                                var placeName = data.address.state;
-                                document.getElementById("location").value = placeName;
-                            })
-
-                            .catch(function(error) {
-                                console.error('Error during reverse geocoding:', error);
-                            });
-                    },
-                    function(error) {
-                        console.error('Error getting location:', error);
-                    });
-            } else {
-                console.error('Geolocation is not supported by this browser.');
-            }
-        });
-    </script>
 </x-guest-layout>
