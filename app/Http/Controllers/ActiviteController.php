@@ -11,12 +11,14 @@ use App\Models\Candidat;
 use App\Models\Presence;
 use App\Models\Categorie;
 use App\Models\TypeEvent;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Models\CourseraMember;
 use App\Models\CandidatAttribute;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Http;
 use Yajra\DataTables\Facades\DataTables;
 
@@ -412,12 +414,12 @@ class ActiviteController extends Controller
             ->whereDate('start_date', '>=', now()->subDays(30))
             ->groupBy('date', 'title', 'id')
             ->paginate(4);
-        $activites = Activite::all();
-        $user = Odcuser::all();
+        $location = Auth::user()->location;
 
+        $activites = Activite::all();
         $activityForWeekend = Activite::whereRaw('(start_date BETWEEN ? AND ?)
-                                  OR (end_date BETWEEN ? AND ?)
-                                  OR (start_date <= ? AND end_date >= ?)', [
+                                      OR (end_date BETWEEN ? AND ?)
+                                      OR (start_date <= ? AND end_date >= ?)', [
             Carbon::now()->subDays(Carbon::now()->dayOfWeek),
             Carbon::now()->addDays(5 - Carbon::now()->dayOfWeek),
             Carbon::now()->subDays(Carbon::now()->dayOfWeek),
@@ -435,6 +437,9 @@ class ActiviteController extends Controller
             ->whereYear('createdAt', $year)
             ->groupBy('date')
             ->get();
+
+        $user = Odcuser::all();
+
 
         return view('dashboard', compact('activites', 'user', 'data', 'hommes', 'femmes', "activityForWeekend", 'requestActivityperiode'));
     }
