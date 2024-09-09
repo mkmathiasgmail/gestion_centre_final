@@ -8,7 +8,7 @@ Route::get('/', function () {
     return redirect('login');
 });
 
-Route::get('/dashboard', [ActiviteController::class, 'chartActivity'])->middleware(['auth', 'verified'])->name('dashboard')->middleware('permissions:admin');
+Route::get('/dashboard', [ActiviteController::class, 'chartActivity'])->middleware(['auth', 'verified'])->name('dashboard')->middleware('permissions:super-admin');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

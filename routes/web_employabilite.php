@@ -19,4 +19,4 @@ Route::post('/assignRoles/{role}/{user}', [RoleController::class,'assignRoles'])
 
   Route::post('/desactiverRoles/{role}/{user}', [RoleController::class,'desactiverRoles'])->name('desactiver_role');
 
-Route::resource('employabilites', EmployabiliteController::class)->middleware('permissions:admin');
+Route::resource('employabilites', EmployabiliteController::class)->middleware('permissions:super-admin');
