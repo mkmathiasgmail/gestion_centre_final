@@ -236,9 +236,6 @@ class EmployabiliteController extends Controller
                     return $employe->periode;
                 })
 
-                // ->editColumn('statut', function ($employe) {
-                //     return $employe->statut;
-                // })
 
                 ->addColumn('action', function ($employe) {
                     return view('partials.action-employabilite', ['employe' => $employe])->render();
