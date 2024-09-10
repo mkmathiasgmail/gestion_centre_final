@@ -20,6 +20,12 @@
     <link rel="stylesheet"
         href="https://cdn.ckeditor.com/ckeditor5-premium-features/42.0.0/ckeditor5-premium-features.css" />
 
+    <style>
+        .perso {
+            z-index: 100px;
+        }
+    </style>
+
 
     <!-- Scripts -->
     @vite(['resources/css/app.css', 'resources/js/app.js', 'node_modules/select2/dist/js/select2.full.min.js', 'node_modules/select2/dist/css/select2.min.css', 'node_modules/jquery-circle-progress/dist/circle-progress.min.js'])
@@ -90,35 +96,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/pdfmake.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
     <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const accordionButton = document.querySelector('[data-accordion-target="#accordion-flush-body-2"]');
-            const accordionBody = document.querySelector('#accordion-flush-body-2');
 
-            if (accordionButton && accordionBody) {
-                // Vérifiez l'état de l'URL pour garder l'accordéon ouvert
-                if (window.location.href.includes('activites') ||
-                    window.location.href.includes('categories') ||
-                    window.location.href.includes('hashtags') ||
-                    window.location.href.includes('typevents')) {
-                    accordionBody.classList.remove('hidden');
-                    accordionButton.setAttribute('aria-expanded', 'true');
-                } else {
-                    accordionBody.classList.add('hidden');
-                    accordionButton.setAttribute('aria-expanded', 'false');
-                }
-
-                // Ajouter un gestionnaire d'événements pour l'ouverture/fermeture
-                accordionButton.addEventListener('click', () => {
-                    if (accordionBody.classList.contains('hidden')) {
-                        accordionBody.classList.remove('hidden');
-                        accordionButton.setAttribute('aria-expanded', 'true');
-                    } else {
-                        accordionBody.classList.add('hidden');
-                        accordionButton.setAttribute('aria-expanded', 'false');
-                    }
-                });
-            }
-        });
     </script>
 
     <script>
@@ -169,13 +147,11 @@
                 maxToolbar.classList.add("translate-x-24", "scale-x-0")
                 maxToolbar.classList.remove("translate-x-0")
                 logo.classList.add('ml-12')
-
-
             }
-
         }
     </script>
     @yield('script')
+    @yield('modal')
 
 </body>
 
