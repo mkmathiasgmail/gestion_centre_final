@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('regions_activites', function (Blueprint $table) {
-            $table->uuid('id');
+            $table->uuid('id')->primary();
             $table->foreignUuid('activite_id')->constrained()->onDelete('cascade')->onUpdate('cascade');
             $table->foreignUuid('region_id')->constrained()->onDelete('cascade')->onUpdate('cascade');
             $table->timestamps();
