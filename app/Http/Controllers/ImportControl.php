@@ -301,4 +301,49 @@ class ImportControl extends Controller
         exit();
 
     }
+
+    public function exportParticipant(Request $request)
+    {
+        $Id = $request->certif;
+        $nameId = $request->certifTitle;
+        //dd($Id);
+        // Get all candidats for the given event
+        $Participants = Candidat::where('activite_id', $Id)
+            ->where('status', 'accept')
+            ->with(['odcuser', 'candidat_attribute',])
+            ->get();
+        //dd($Participants);
+        //generation du xlsx
+
+        //header of our spreadsheet
+        $spreadsheet = new Spreadsheet();
+        $sheet = $spreadsheet->getActiveSheet();
+        $sheet->setTitle('Participant'); // This is where I set the title of my sheet
+        /*here is the header of my sheet*/
+        $sheet->setCellValue('A1', 'first_name')->getStyle('A1')->getFont()->setBold(true);
+        $sheet->setCellValue('B1', 'last_name')->getStyle('B1')->getFont()->setBold(true);
+        $sheet->setCellValue('C1', 'email')->getStyle('C1')->getFont()->setBold(true);
+        $sheet->setCellValue('D1', 'gender')->getStyle('D1')->getFont()->setBold(true);
+        $sheet->setCellValue('E1', 'Evaluation')->getStyle('E1')->getFont()->setBold(true);
+        $row = 2; // Initialize row counter
+
+        foreach ($Participants as $participant) {
+            $sheet->setCellValue('A' . $row, $participant->odcuser->first_name);
+            $sheet->setCellValue('B' . $row, $participant->odcuser->last_name);
+            $sheet->setCellValue('C' . $row, $participant->odcuser->email);
+            $sheet->setCellValue('D' . $row, $participant->odcuser->gender);
+            //dd($sheet->setCellValue('H' . $row, $participant->status));
+            $row++;    
+        }
+
+
+
+        // Save the spreadsheet to a temporary file
+        $writer = new Xlsx($spreadsheet);
+        $fileName = "Participants {$nameId}.xlsx";
+        header("Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+        header("Content-Disposition: attachment;filename=\"$fileName\"");
+        $writer->save("php://output");
+        exit();
+    }
 }
