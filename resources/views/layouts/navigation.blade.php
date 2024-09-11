@@ -20,7 +20,8 @@
             </div>
 
 
-            <div class="hidden text-sm text-black md:block md:text-md dark:text-white cursor-pointer" aria-expanded="false">
+            <div class="hidden text-sm text-black md:block md:text-md dark:text-white cursor-pointer"
+                aria-expanded="false">
                 {{ Auth::user()->name }}</div>
 
             <div class="hidden text-sm text-black md:block md:text-md dark:text-white cursor-pointer"
