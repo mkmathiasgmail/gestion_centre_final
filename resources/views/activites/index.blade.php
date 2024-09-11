@@ -38,7 +38,7 @@
         <x-tableactivites :activites="$activites" />
     </div> --}}
 
-    <div class="container w-full bg-[#fcdab40a] darj p-4 rounded-lg bg-opacity-5 relative">
+    <div class=" w-full bg-[#fcdab40a] darj p-4 rounded-lg bg-opacity-5 relative">
         <!-- Header -->
         <div
             class="px-6 py-4 grid gap-3 md:flex md:justify-between md:items-center border-b border-gray-200 dark:border-neutral-700">
@@ -77,7 +77,7 @@
                     @section('modal')
                         <!-- Main modal -->
                         <div id="static-modal" data-modal-backdrop="static" tabindex="-1" aria-hidden="true"
-                            class="z-[100] hidden   overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
+                            class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
                             <div class="relative p-4 w-full max-w-2xl max-h-full">
                                 <!-- Modal content -->
                                 <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
