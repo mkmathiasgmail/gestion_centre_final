@@ -416,92 +416,27 @@ class ActiviteController extends Controller
             ->paginate(4);
         $location = Auth::user()->location;
 
-        if (Str::contains($location, 'tadi')) {
-            // Kongo Central / Matadi
-            $activites = DB::table('activites')->where('location', 'like', '%tadi%')->get();
-
-            $activityForWeekend = Activite::where(function ($query) {
-                $query->whereBetween('start_date', [
-                    Carbon::now()->subDays(Carbon::now()->dayOfWeek),
-                    Carbon::now()->addDays(5 - Carbon::now()->dayOfWeek)
-                ])
-                    ->orWhereBetween('end_date', [
-                        Carbon::now()->subDays(Carbon::now()->dayOfWeek),
-                        Carbon::now()->addDays(5 - Carbon::now()->dayOfWeek)
-                    ])
-                    ->orWhere(function ($subquery) {
-                        $subquery->where('start_date', '<=', Carbon::now()->subDays(Carbon::now()->dayOfWeek))
-                            ->where('end_date', '>=', Carbon::now()->addDays(5 - Carbon::now()->dayOfWeek));
-                    });
-            })
-                ->where('location', 'like', '%tadi%')
-                ->get();
-
-            $month = 4;
-            $year = 2024;
-
-            $requestActivityperiode = Activite::selectRaw("date_format(createdAt, '%Y-%m-%d') as date, count(*) as aggregate")
-                ->whereMonth('createdAt', $month)
-                ->where('location', 'like', '%tadi%')
-                ->whereYear('createdAt', $year)
-                ->groupBy('date')
-                ->get();
-        } elseif (Str::contains($location, 'sai')) {
-            // Central Kasai / Kananga
-            $activites = DB::table('activites')->where('location', 'like', '%nanga%')->get();
-
-            $activityForWeekend = Activite::where(function ($query) {
-                $query->whereBetween('start_date', [
-                    Carbon::now()->subDays(Carbon::now()->dayOfWeek),
-                    Carbon::now()->addDays(5 - Carbon::now()->dayOfWeek)
-                ])
-                    ->orWhereBetween('end_date', [
-                        Carbon::now()->subDays(Carbon::now()->dayOfWeek),
-                        Carbon::now()->addDays(5 - Carbon::now()->dayOfWeek)
-                    ])
-                    ->orWhere(function ($subquery) {
-                        $subquery->where('start_date', '<=', Carbon::now()->subDays(Carbon::now()->dayOfWeek))
-                            ->where('end_date', '>=', Carbon::now()->addDays(5 - Carbon::now()->dayOfWeek));
-                    });
-            })
-                ->where('location', 'like', '%nanga%')
-                ->get();
-            $month = 4;
-            $year = 2024;
-
-            $requestActivityperiode = Activite::selectRaw("date_format(createdAt, '%Y-%m-%d') as date, count(*) as aggregate")
-                ->whereMonth('createdAt', $month)
-                ->where('location', 'like', '%nanga%')
-                ->whereYear('createdAt', $year)
-                ->groupBy('date')
-                ->get();
-        } elseif (Str::contains($location, 'tanga')) {
-            // Haut Katanga / Lubumbashi
-            $activites = DB::table('activites')->where('location', 'like', '%bashi%')->get();
-        } else {
-            // Kinshasa
-            $activites = Activite::all();
-            $activityForWeekend = Activite::whereRaw('(start_date BETWEEN ? AND ?)
+        $activites = Activite::all();
+        $activityForWeekend = Activite::whereRaw('(start_date BETWEEN ? AND ?)
                                       OR (end_date BETWEEN ? AND ?)
                                       OR (start_date <= ? AND end_date >= ?)', [
-                Carbon::now()->subDays(Carbon::now()->dayOfWeek),
-                Carbon::now()->addDays(5 - Carbon::now()->dayOfWeek),
-                Carbon::now()->subDays(Carbon::now()->dayOfWeek),
-                Carbon::now()->addDays(5 - Carbon::now()->dayOfWeek),
-                Carbon::now()->subDays(Carbon::now()->dayOfWeek),
-                Carbon::now()->addDays(5 - Carbon::now()->dayOfWeek),
-            ])->get();
+            Carbon::now()->subDays(Carbon::now()->dayOfWeek),
+            Carbon::now()->addDays(5 - Carbon::now()->dayOfWeek),
+            Carbon::now()->subDays(Carbon::now()->dayOfWeek),
+            Carbon::now()->addDays(5 - Carbon::now()->dayOfWeek),
+            Carbon::now()->subDays(Carbon::now()->dayOfWeek),
+            Carbon::now()->addDays(5 - Carbon::now()->dayOfWeek),
+        ])->get();
 
 
-            $month = 4;
-            $year = 2024;
+        $month = 4;
+        $year = 2024;
 
-            $requestActivityperiode = Activite::selectRaw("date_format(createdAt, '%Y-%m-%d') as date, count(*) as aggregate")
-                ->whereMonth('createdAt', $month)
-                ->whereYear('createdAt', $year)
-                ->groupBy('date')
-                ->get();
-        }
+        $requestActivityperiode = Activite::selectRaw("date_format(createdAt, '%Y-%m-%d') as date, count(*) as aggregate")
+            ->whereMonth('createdAt', $month)
+            ->whereYear('createdAt', $year)
+            ->groupBy('date')
+            ->get();
 
         $user = Odcuser::all();
 
