@@ -12,57 +12,75 @@
     <div class="flex items-center justify-center flex-none h-full text-center">
 
         <div class="flex items-center px-3 space-x-3 " data-dropdown-toggle="dropdown-user">
-            <div class="flex justify-center flex-none">
-                <div class="flex w-8 h-8 ">
-                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcShta_GXR2xdnsxSzj_GTcJHcNykjVKrCBrZ9qouUl0usuJWG2Rpr_PbTDu3sA9auNUH64&usqp=CAU"
-                        alt="profile" class="object-cover rounded-full shadow" />
+            <div>
+                <button type="button"
+                    class="flex text-sm bg-white rounded-full focus:ring-4 focus:ring-gray-300 dark:focus:ring-gray-600"
+                    aria-expanded="false" data-dropdown-toggle="dropdown-user">
+                    <span class="sr-only">Open user menu</span>
+                    <img class="w-8 h-8 rounded-full" src="{{ asset('img/profil.jpeg') }}" alt="user photo">
+
+                </button>
+            </div>
+
+
+            <div class="z-50 hidden my-4 text-base list-none bg-white divide-y divide-gray-100 rounded shadow dark:bg-gray-700 dark:divide-gray-600"
+                id="dropdown-user">
+                <div class="px-4 py-3" role="none">
+                    <p class="text-sm text-gray-900 dark:text-white" role="none">
+                        {{ Auth::user()->name }}
+                    </p>
+                    <p class="text-sm font-medium text-gray-900 truncate dark:text-gray-300" role="none">
+                        {{ Auth::user()->email }}
+                    </p>
                 </div>
+                <ul class="py-1" role="none">
+                    <li>
+                        <a href="{{ route('profile.edit') }}"
+                            class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white"
+                            role="menuitem">Profil</a>
+                    </li>
+
+                    <li>
+
+                        <!-- Authentication -->
+                        <form method="POST" action="{{ route('logout') }}">
+                            @csrf
+                            <x-dropdown-link :href="route('logout')"
+                                onclick="event.preventDefault();
+                                this.closest('form').submit();">
+                                {{ __('Deconnexion') }}
+                            </x-dropdown-link>
+                        </form>
+
+
+                    </li>
+                </ul>
             </div>
+            @if (Auth()->user()->hasRole('super-admin'))
+                <div class="hidden  text-sm text-black md:block md:text-md dark:text-white cursor-pointer"
+                    aria-expanded="false">
+                    <a href="{{ route('setting') }}">
+                        <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true"
+                            xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor"
+                            viewBox="0 0 24 24">
+                            <path fill-rule="evenodd"
+                                d="M17 10v1.126c.367.095.714.24 1.032.428l.796-.797 1.415 1.415-.797.796c.188.318.333.665.428 1.032H21v2h-1.126c-.095.367-.24.714-.428 1.032l.797.796-1.415 1.415-.796-.797a3.979 3.979 0 0 1-1.032.428V20h-2v-1.126a3.977 3.977 0 0 1-1.032-.428l-.796.797-1.415-1.415.797-.796A3.975 3.975 0 0 1 12.126 16H11v-2h1.126c.095-.367.24-.714.428-1.032l-.797-.796 1.415-1.415.796.797A3.977 3.977 0 0 1 15 11.126V10h2Zm.406 3.578.016.016c.354.358.574.85.578 1.392v.028a2 2 0 0 1-3.409 1.406l-.01-.012a2 2 0 0 1 2.826-2.83ZM5 8a4 4 0 1 1 7.938.703 7.029 7.029 0 0 0-3.235 3.235A4 4 0 0 1 5 8Zm4.29 5H7a4 4 0 0 0-4 4v1a2 2 0 0 0 2 2h6.101A6.979 6.979 0 0 1 9 15c0-.695.101-1.366.29-2Z"
+                                clip-rule="evenodd" />
+                        </svg>
+
+                    </a>
 
 
-            <div class="hidden text-sm text-black md:block md:text-md dark:text-white cursor-pointer" aria-expanded="false">
-                {{ Auth::user()->name }}</div>
+                </div>
+            @endif
         </div>
-
-        <div class="z-30 hidden my-4 text-base list-none bg-white divide-y divide-gray-100 rounded shadow dark:bg-[#1e293bf3] dark:divide-gray-600"
-            id="dropdown-user cursor">
-            <div class="px-4 py-3" role="none">
-                <p class="text-sm text-gray-900 dark:text-white" role="none">
-                    {{ Auth::user()->name }}
-                </p>
-                <p class="text-sm font-medium text-gray-900 truncate dark:text-gray-300" role="none">
-                    {{ Auth::user()->email }}
-                </p>
-            </div>
-            <ul class="py-1" role="none">
-                <li>
-                    <a href="{{ route('profile.edit') }}"
-                        class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white"
-                        role="menuitem">Profil</a>
-                </li>
-
-                <li>
-
-                    <!-- Authentication -->
-                    <form method="POST" action="{{ route('logout') }}">
-                        @csrf
-                        <x-dropdown-link :href="route('logout')"
-                            onclick="event.preventDefault();
-                                                this.closest('form').submit();">
-                            {{ __('Deconnexion') }}
-                        </x-dropdown-link>
-                    </form>
-
-
-                </li>
-            </ul>
-        </div>
-
 
 
 
     </div>
 </div>
+
+
 <aside
     class="w-60 -translate-x-48 fixed transition transform ease-in-out duration-1000 z-40 flex h-screen dark:bg-[#1E293B] bg-[#eeeeee]">
     <!-- open sidebar button -->
@@ -126,8 +144,8 @@
             class="hover:ml-4 w-full dark:text-white text-[#1E293B] hover:text-[#FF7900] dark:hover:text-[#FF7900] bg-[#eeeeee] dark:bg-[#1E293B] p-2 pl-8 rounded-full transform ease-in-out duration-300 flex flex-row items-center space-x-3">
             <a href="{{ route('activites.index') }}"
                 class="hover:ml-4 justify-end pr-5 dark:text-white text-[#1E293B] hover:text-[#FF7900] dark:hover:text-[#FF7900] bg-[#eeeeee] dark:bg-[#1E293B] p-3 rounded-full transform ease-in-out duration-300 flex">
-                <svg aria-hidden="false" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none"
-                    viewBox="0 0 24 24">
+                <svg aria-hidden="false" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                    fill="none" viewBox="0 0 24 24">
                     <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                         d="M15 4h3a1 1 0 0 1 1 1v15a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1V5a1 1 0 0 1 1-1h3m0 3h6m-3 5h3m-6 0h.01M12 16h3m-6 0h.01M10 3v4h4V3h-4Z" />
                 </svg>
@@ -166,21 +184,7 @@
                 <span>Employabilités</span>
             </a>
         </div>
-        @if (Auth()->user()->hasRole('super-admin'))
-            <div
-                class="hover:ml-4 w-full dark:text-white text-[#1E293B] hover:text-[#FF7900] dark:hover:text-[#FF7900] bg-[#eeeeee] dark:bg-[#1E293B] p-2 pl-8 rounded-full transform ease-in-out duration-300 flex flex-row items-center space-x-3">
-                <a href="{{ route('user_role.index') }}"
-                    class="hover:ml-4 justify-end pr-5 dark:text-white text-[#1E293B] hover:text-[#FF7900] dark:hover:text-[#FF7900] bg-[#eeeeee] dark:bg-[#1E293B] p-3 rounded-full transform ease-in-out duration-300 flex">
-                    <svg class="w-6 h-6 " aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24"
-                        height="24" fill="none" viewBox="0 0 24 24">
-                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M12,1L3,5V11C3,16.55 6.84,21.74 12,23C17.16,21.74 21,16.55 21,11V5L12,1M12,7C13.4,7 14.8,8.1 14.8,9.5V11C15.4,11 16,11.6 16,12.3V15.8C16,16.4 15.4,17 14.7,17H9.2C8.6,17 8,16.4 8,15.7V12.2C8,11.6 8.6,11 9.2,11V9.5C9.2,8.1 10.6,7 12,7M12,8.2C11.2,8.2 10.5,8.7 10.5,9.5V11H13.5V9.5C13.5,8.7 12.8,8.2 12,8.2Z" />
-                    </svg>
 
-                    <span>Gestion D'accées</span>
-                </a>
-            </div>
-        @endif
 
         @if (Auth()->user()->hasRole('super-admin'))
             <div
@@ -271,21 +275,7 @@
                 <span>Coursera</span>
             </a>
         </div>
-        @if (Auth()->user()->hasRole('super-admin'))
-            <div
-                class="hover:ml-4 w-full dark:text-white text-[#1E293B] hover:text-[#FF7900] dark:hover:text-[#FF7900] bg-[#eeeeee] dark:bg-[#1E293B] p-2 pl-8 rounded-full transform ease-in-out duration-300 flex flex-row items-center space-x-3">
-                <a href="{{ route('register') }}"
-                    class="hover:ml-4 justify-end pr-5 dark:text-white text-[#1E293B] hover:text-[#FF7900] dark:hover:text-[#FF7900] bg-[#eeeeee] dark:bg-[#1E293B] p-3 rounded-full transform ease-in-out duration-300 flex">
-                    <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true"
-                        xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 18">
-                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M15,4A4,4 0 0,0 11,8A4,4 0 0,0 15,12A4,4 0 0,0 19,8A4,4 0 0,0 15,4M15,5.9C16.16,5.9 17.1,6.84 17.1,8C17.1,9.16 16.16,10.1 15,10.1A2.1,2.1 0 0,1 12.9,8A2.1,2.1 0 0,1 15,5.9M4,7V10H1V12H4V15H6V12H9V10H6V7H4M15,13C12.33,13 7,14.33 7,17V20H23V17C23,14.33 17.67,13 15,13M15,14.9C17.97,14.9 21.1,16.36 21.1,17V18.1H8.9V17C8.9,16.36 12,14.9 15,14.9Z" />
-                    </svg>
 
-                    <span>Register</span>
-                </a>
-            </div>
-        @endif
 
 
 
@@ -331,25 +321,7 @@
                 16h-2a3.987 3.987 0 0 0-3.951 3.512A8.948 8.948 0 0 0 12 21Zm3-11a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" /> --}}
             </svg>
         </a>
-        @if (Auth()->user()->hasRole('super-admin'))
-            <a href="{{ route('user_role.index') }}"
-                class="hover:ml-4 justify-end pr-5 dark:text-white text-[#1E293B] hover:text-[#FF7900] dark:hover:text-[#FF7900] bg-[#eeeeee] dark:bg-[#1E293B] p-3 rounded-full transform ease-in-out duration-300 flex {{ request()->routeIs('super-admin') ? ' text-[#FF7900] ' : '' }}">
-                <svg class="w-6 h-6 " aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24"
-                    height="24" fill="none" viewBox="0 0 24 24">
-                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                        d="M12,1L3,5V11C3,16.55 6.84,21.74 12,23C17.16,21.74 21,16.55 21,11V5L12,1M12,7C13.4,7 14.8,8.1 14.8,9.5V11C15.4,11 16,11.6 16,12.3V15.8C16,16.4 15.4,17 14.7,17H9.2C8.6,17 8,16.4 8,15.7V12.2C8,11.6 8.6,11 9.2,11V9.5C9.2,8.1 10.6,7 12,7M12,8.2C11.2,8.2 10.5,8.7 10.5,9.5V11H13.5V9.5C13.5,8.7 12.8,8.2 12,8.2Z" />
-                </svg>
-            </a>
 
-            <a href="{{ route('type_Contrats.index') }}"
-                class="hover:ml-4 justify-end pr-5 dark:text-white text-[#1E293B] hover:text-[#FF7900] dark:hover:text-[#FF7900] bg-[#eeeeee] dark:bg-[#1E293B] p-3 rounded-full transform ease-in-out duration-300 flex {{ request()->routeIs('type_Contrats.index') ? ' text-[#FF7900] ' : '' }}">
-                <svg class="w-6 h-6 " aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24"
-                    height="24" fill="none" viewBox="0 0 24 24">
-                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                        d="M10,2H14A2,2 0 0,1 16,4V6H20A2,2 0 0,1 22,8V19A2,2 0 0,1 20,21H4C2.89,21 2,20.1 2,19V8C2,6.89 2.89,6 4,6H8V4C8,2.89 8.89,2 10,2M14,6V4H10V6H14Z" />
-                </svg>
-            </a>
-        @endif
         <a href="{{ route('evaluations.index') }}"
             class="hover:ml-4 justify-end pr-5 dark:text-white text-[#1E293B] hover:text-[#FF7900] dark:hover:text-[#FF7900] bg-[#eeeeee] dark:bg-[#1E293B] p-3 rounded-full transform ease-in-out duration-300 flex {{ request()->routeIs('evaluations.index') ? ' text-[#FF7900] ' : '' }}">
             <svg class="w-6 h-6 " aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24"
@@ -399,16 +371,7 @@
                     d="M5 5h9M5 9h5m8-8H2a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h4l3.5 4 3.5-4h5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1Z" />
             </svg>
         </a>
-        @if (Auth()->user()->hasRole('super-admin'))
-            <a href="{{ route('register') }}"
-                class="hover:ml-4 justify-end pr-5 dark:text-white text-[#1E293B] hover:text-[#FF7900] dark:hover:text-[#FF7900] bg-[#eeeeee] dark:bg-[#1E293B] p-3 rounded-full transform ease-in-out duration-300 flex {{ request()->routeIs('super-admin') ? ' text-[#FF7900] ' : '' }}">
-                <svg class="w-5 h-5 text-gray-800 dark:text-white" aria-hidden="true"
-                    xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 18">
-                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                        d="M15,4A4,4 0 0,0 11,8A4,4 0 0,0 15,12A4,4 0 0,0 19,8A4,4 0 0,0 15,4M15,5.9C16.16,5.9 17.1,6.84 17.1,8C17.1,9.16 16.16,10.1 15,10.1A2.1,2.1 0 0,1 12.9,8A2.1,2.1 0 0,1 15,5.9M4,7V10H1V12H4V15H6V12H9V10H6V7H4M15,13C12.33,13 7,14.33 7,17V20H23V17C23,14.33 17.67,13 15,13M15,14.9C17.97,14.9 21.1,16.36 21.1,17V18.1H8.9V17C8.9,16.36 12,14.9 15,14.9Z" />
-                </svg>
-            </a>
-        @endif
+       
     </div>
 
 </aside>

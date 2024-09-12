@@ -3,6 +3,7 @@
 use App\Http\Controllers\ActiviteController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProfileController;
+use App\Models\User;
 
 Route::get('/', function () {
     return redirect('login');

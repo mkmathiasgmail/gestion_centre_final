@@ -15,6 +15,31 @@
             d="M1 5h12m0 0L9 1m4 4L9 9" />
     </svg>
 </a>
+
+<!--my code for generate certification using the evaluation logic-->
+<div style="display: flex">
+    <!--logic of evaluation-->
+    <form action="{{ route('exportParticipant') }}" method="POST" style="margin-top: 20px">
+        @csrf
+        <input type="hidden" name="certif" value="{{ $activite->id }}">
+        <input type="hidden" name="certifTitle" value="{{ $activite->title }}">
+
+        <div class="mb-5">
+            <button class="text-gray-900 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-100 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700">Exporter pour l'evaluation</button>
+        </div>
+    </form>
+    <form action="{{ route('importAndgenerate') }}" method="POST" enctype="multipart/form-data"  >
+
+        @csrf
+        <input type="hidden" name="activite" value="{{ $activite->id }}">
+        <div>
+            <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white" for="file">Importer et Generer les certificats</label>
+            <input class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400" aria-describedby="user_avatar_help" id="file" type="file" accept=".xlsx" name="file" placeholder="XlSX FILES">
+        </div>
+        <button type="submit" class="text-gray-900 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-100 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700">Importer et generer les certificats</button>
+    </form>
+</div>
+
 <!-- Main modal -->
 
 @section('modal')

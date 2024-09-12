@@ -25,12 +25,12 @@
         <li>
             @if ($activite->show_in_calendar)
                 <a href="{{ route('showInCalendar', $activite->id) }}" data-modal-target="active"
-                    data-modal-toggle="active-{{ $activite->id }}"
+                    data-modal-toggle="active"
                     class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
                     onclick="desactiver(event, {{ $activite->id }}))">Desactiver au calendar</a>
             @else
                 <a href="{{ route('showInCalendar', $activite->id) }}" data-modal-target="desactive"
-                    data-modal-toggle="desactive-{{ $activite->id }}"
+                    data-modal-toggle="desactive"
                     class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
                     onclick="activer(event, {{ $activite->id }}))">Active au calendar</a>
             @endif
@@ -38,11 +38,12 @@
 
         <li>
             @if ($activite->status)
-                <a href="{{ route('send', $activite->id) }}" data-modal-target="active" data-modal-toggle="active-{{ $activite->id }}"
+                <a href="{{ route('send', $activite->id) }}" data-modal-target="active" data-modal-toggle="active"
                     class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
                     onclick="desactiver(event, {{ $activite->id }}))">Desactiver Status</a>
             @else
-                <a href="{{ route('send', $activite->id) }}" data-modal-target="desactive" data-modal-toggle="desactive-{{ $activite->id }}"
+                <a href="{{ route('send', $activite->id) }}" data-modal-target="desactive"
+                    data-modal-toggle="desactive"
                     class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
                     onclick="activer(event, {{ $activite->id }}))">Active Status</a>
             @endif
@@ -50,7 +51,7 @@
 
         <li>
             @if ($activite->show_in_calendar)
-                <a href="{{ route('IsEvent', $activite->id) }}" data-modal-target="active" data-modal-toggle="active-{{ $activite->id }}"
+                <a href="{{ route('IsEvent', $activite->id) }}" data-modal-target="active" data-modal-toggle="active"
                     class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
                     onclick="desactiver(event, {{ $activite->id }}))">Desactiver IsEvent</a>
             @else
@@ -64,6 +65,7 @@
         <li>
             @if ($activite->show_in_calendar)
                 <a href="{{ route('bookInSeat', $activite->id) }}" data-modal-target="#active-{{ $activite->id }}"
+                    data-modal-hide="#active-{{ $activite->id }}"
                     class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
                     onclick="desactiver(event, {{ $activite->id }})">Désactiver bookInSeat</a>
             @else
