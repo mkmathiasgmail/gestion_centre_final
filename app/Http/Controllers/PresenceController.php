@@ -36,12 +36,16 @@ class PresenceController extends Controller
     }
     public function filtrer(Request $request, $id)
     {
-        $email = $request->input('email');
-        $phone = $request->input('phone');
-        $numero = substr($phone, -9);
+        $coordonnee = $request->input('coordonnee');
+
+        $re = '/(^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$)|([0-9]{9})$/m';
+
+        preg_match($re, $coordonnee, $value);
+
         $activity = Activite::find($id);
 
-        if (isset($email)) {
+        if (isset($value[1]) && $value[1] !== "") {
+            $email = $value[1];
             $odcuser = Odcuser::where('email', $email)->first();
             if (!$odcuser) {
                 return [
@@ -56,7 +60,8 @@ class PresenceController extends Controller
                 'id' => $id,
                 'activite' => $activity->title,
             ];
-        } else {
+        } elseif (isset($value[2]) || is_int($value[2])) {
+            $numero = $value[2];
             $candidat = DB::table('candidat_attributes')
                 ->select('candidat_attributes.candidat_id', 'candidats.odcuser_id', 'candidats.id', 'odcusers.first_name', 'odcusers.last_name', 'odcusers.email', 'activites.title')
                 ->join('candidats', 'candidats.id', '=', 'candidat_attributes.candidat_id')
