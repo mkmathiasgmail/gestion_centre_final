@@ -81,7 +81,6 @@ class ImportControl extends Controller
                 //$validatedData['status']= 0;
 
                 //$odcuser = Odcuser::firstOrCreate($cond, $validatedData);
-                
                 if ($odcuser) {
                     // Si l'utilisateur existe déjà, on recupere simplement son id.
                     $odcuser->update($validatedData);
@@ -137,10 +136,20 @@ class ImportControl extends Controller
                 if (empty($date)){
                     continue; // Skip rows with empty date
                 }else{
-                    Presence::create([
+                    /*Presence::create([
                         'date' => $datemodif[1],
                         'candidat_id' => $candidat->id,
-                    ]);
+                    ]);*/
+                    
+                    Presence::firstOrCreate(
+                        [
+                            'candidat_id' => $candidat->id,
+                        ],
+                        [
+                            'date' => $datemodif[1],
+                            'candidat_id' => $candidat->id,
+                        ]
+                    );
                 }
                 //dd($date);
 
@@ -370,7 +379,7 @@ class ImportControl extends Controller
             $Evaluation = $sheets->getcell("E{$lineexcel}")->getvalue();
             //dd($Evaluation);
             if($Evaluation >= 60){
-                $this->generateAllCertificat($Id);
+                $this->generateAllCertificats($Id);
             }else{
                 continue;
             }
@@ -380,7 +389,7 @@ class ImportControl extends Controller
         //dd($gestion);
     }
 
-    public  function generateAllCertificat($Id)
+    public  function generateAllCertificats($Id)
     {
         $id = Activite::find($Id);
         //dd($Id);
