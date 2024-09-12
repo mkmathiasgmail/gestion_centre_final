@@ -14,6 +14,13 @@
     <x-slot name="header">
         <div class="flex justify-between items-center">
             <div>
+                @section('svg')
+                    <svg aria-hidden="false" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none"
+                        viewBox="0 0 24 24">
+                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M15 4h3a1 1 0 0 1 1 1v15a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1V5a1 1 0 0 1 1-1h3m0 3h6m-3 5h3m-6 0h.01M12 16h3m-6 0h.01M10 3v4h4V3h-4Z" />
+                    </svg>
+                @endsection
                 <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
                     {{ __('Gestion Activites') }}
                 </h2>
@@ -278,7 +285,7 @@
 
                             if (response.length == 0) {
                                 resultsContainer.html(
-                                '<p class=" text-red-500">Aucun résultat trouvé.</p>');
+                                    '<p class=" text-red-500">Aucun résultat trouvé.</p>');
                             } else {
                                 var htmlContent = '';
 
@@ -335,12 +342,14 @@
             function activer(event, id) {
                 event.preventDefault();
                 let link = event.target.getAttribute('href');
+                console.log("Activating modal for ID: ", id); // Debugging line
                 document.querySelector(`#desactive-${id} form`).setAttribute('action', link);
                 document.querySelector(`#desactive-${id}`).classList.remove('hidden');
             }
 
             function desactiver(event, id) {
                 event.preventDefault();
+                alert(id);
                 let link = event.target.getAttribute('href');
                 document.querySelector(`#active-${id} form`).setAttribute('action', link);
                 document.querySelector(`#active-${id}`).classList.remove('hidden');
@@ -350,6 +359,7 @@
         <script>
             function destroy(event) {
                 event.preventDefault();
+                alert(id);
                 let link = event.target.getAttribute('href');
                 document.querySelector('.delete').setAttribute('action', link);
             }

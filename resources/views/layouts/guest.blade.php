@@ -37,7 +37,7 @@
                     </div>
                 </div>
                 <div
-                    class="flex-1 bg-[url('https://cdn.dribbble.com/users/1784878/screenshots/7796443/media/0031c85ef8274ccf77cad2adb3263aa4.gif')] bg-cover bg-center">
+                    class="flex-1 bg-[url('https://afriqueitnews.com/wp-content/uploads/Orange-Digital-Center-a-Madagascar.jpg')] bg-cover bg-center">
 
                 </div>
             </div>
