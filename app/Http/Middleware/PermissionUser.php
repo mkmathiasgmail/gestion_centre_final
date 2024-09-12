@@ -16,37 +16,19 @@ class PermissionUser
      *
      * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
      */
-    public function handle(Request $request, Closure $next,$role): Response
+    public function handle(Request $request, Closure $next): Response
     {
-            // ce code permet de recuperer le role de l'utilisateur connecté et de le comparer avec le role passé en parametre
-            $user = $request->user();
-            $roles = $user->getRoleNames();
-            foreach($roles as $item){
-                $getrole[] = $item;
-            }
 
-
+        $user = $request->user();
         try {
-            if(in_array($role,$getrole)){
+            if ($user->hasRole('admin') || $user->hasRole('super-admin')){
                 return $next($request);
-                }
-                else {
-                    if(in_array('admin',$getrole)){
-
-                        return back();
-                    }
-
-                    return redirect()->route('activitencours');
-
-                }
-
+            } else {
+                return redirect()->route('activitencours');
+            }
         } catch (\Throwable $th) {
             return back()->with('error', 'Vous n\'avez pas les droits pour accéder à cette page');
         }
-
-
-
-
-
     }
+
 }
