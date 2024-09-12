@@ -4,12 +4,14 @@ namespace App\Http\Controllers;
 
 use Log;
 use Carbon\Carbon;
+use IntlDateFormatter;
 use App\Models\Odcuser;
 use App\Models\Activite;
 use App\Models\Candidat;
 use App\Models\Presence;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
+use Yajra\DataTables\Facades\DataTables;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 use PhpOffice\PhpSpreadsheet\Style\Border;
@@ -18,6 +20,7 @@ use PhpOffice\PhpSpreadsheet\Cell\DataType;
 use App\Http\Requests\UpdateCandidatRequest;
 use PhpOffice\PhpSpreadsheet\Cell\Coordinate;
 use Illuminate\Support\Facades\Log as FacadesLog;
+use PhpOffice\PhpSpreadsheet\Worksheet\PageSetup;
 use PhpOffice\PhpSpreadsheet\Reader\Xml\Style\Fill;
 use PhpOffice\PhpSpreadsheet\Style\Fill as cellFill;
 use PhpOffice\PhpSpreadsheet\Reader\Xml\Style\Alignment;
@@ -25,22 +28,117 @@ use PhpOffice\PhpSpreadsheet\Style\Alignment as cellAlignment;
 
 class CandidatController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
-    {
-        $candidats = Candidat::has('odcuser')->get();
+    public function index() {}
 
-        return view('candidats.index', compact('candidats'));
+    public function getCandidats(Request $request, $id)
+    {
+        try {
+            $candidats = Candidat::where('activite_id', $id)->with(['odcuser', 'candidat_attribute'])->get();
+
+            if (count($candidats) > 0) {
+                $candidatsData = [];
+                $labels = [];
+                foreach ($candidats as $candidat) {
+                    $candidatArray = $candidat->toArray();
+                    if ($candidat->candidat_attribute) {
+                        foreach ($candidat->candidat_attribute as $attribute) {
+                            $candidatArray[$attribute->label] = $attribute->value;
+                            if (!in_array($attribute->label, $labels)) {
+                                $labels[] = $attribute->label;
+                            }
+                        }
+                    }
+                    $candidatsData[] = $candidatArray;
+                }
+            } else {
+                $candidatsData = null;
+                $labels = null;
+            }
+
+            $dataTable = DataTables::of($candidatsData)
+                ->editColumn('first_name', function ($candidat) {
+                    return $candidat['odcuser']['first_name'];
+                })
+                ->editColumn('last_name', function ($candidat) {
+                    return $candidat['odcuser']['last_name'];
+                });
+
+            foreach (array_unique($labels) as $label) {
+                $dataTable->addColumn($label, function ($candidat) use ($label) {
+                    $value = isset($candidat[$label]) && $candidat[$label] !== '' ? $candidat[$label] : 'N/A';
+                    return Str::of($value)->limit(45, '...') . '<span hidden>' . $value . '</span>' . (strlen($value) > 45 ? " <a href='#' onclick='readMore(event)'>Read more</a>" : '');
+                })->escapeColumns([])
+                    ->rawColumns([]);
+            }
+
+            $dataTable->addColumn('action', function ($candidat) {
+                return view('partials.action-btn-candidats', ['candidat' => $candidat])->render();
+            });
+
+            return $dataTable->toJson();
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Une erreur est survenue : ' . $e->getMessage()], 500);
+        }
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
+    public function getParticipants(Request $request, $id)
     {
+        try {
+            $participants = Candidat::where('activite_id', $id)->where('status', 'accept')->select('id', 'odcuser_id', 'activite_id', 'status')->with(['odcuser', 'candidat_attribute'])->get();
+
+            $etiquettes = [];
+            $participantsData = [];
+
+            if (count($participants) > 0) {
+                foreach ($participants as $participant) {
+                    $participantArray = $participant->toArray();
+
+                    if ($participant->candidat_attribute) {
+                        foreach ($participant->candidat_attribute as $attribute) {
+                            $participantArray[$attribute->label] = $attribute->value;
+                            if (!in_array($attribute->label, $etiquettes)) {
+                                $etiquettes[] = $attribute->label;
+                            }
+                        }
+                    }
+                    $participantsData[] = $participantArray;
+                }
+            } else {
+                $participantsData = null;
+                $etiquettes = null;
+            }
+
+            $dataTable = DataTables::of($participantsData)
+                ->editColumn('first_name', function ($participant) {
+                    return $participant['odcuser']['first_name'];
+                })
+                ->editColumn('last_name', function ($participant) {
+                    return $participant['odcuser']['last_name'];
+                });
+
+            foreach (array_unique($etiquettes) as $etiquette) {
+                $dataTable->addColumn($etiquette, function ($participant) use ($etiquette) {
+                    $value = isset($participant[$etiquette]) && $participant[$etiquette] !== '' ? $participant[$etiquette] : 'N/A';
+                    return Str::of($value)->limit(45, '...') . '<span hidden>' . $value . '</span>' . (strlen($value) > 45 ? " <a href='#' onclick='readMore(event)'>Read more</a>" : '');
+                })->escapeColumns([])
+                    ->rawColumns([]);
+            }
+
+            $dataTable->addColumn('action', function ($participant) {
+                return view('partials.action-btn-participants', ['participant' => $participant])->render();
+            });
+
+            $dataTable->addColumn('certificat', function ($participant) {
+                return view('partials.generer-certificat', ['participant' => $participant])->render();
+            });
+
+            return $dataTable->toJson();
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Une erreur est survenue : ' . $e->getMessage()], 500);
+        }
     }
+
+    public function create() {}
 
     public function generateExcel($id_event)
     {
@@ -54,9 +152,35 @@ class CandidatController extends Controller
         // Generate an array of dates between start and end dates
         for ($date = $start_date; $date->lte($end_date); $date->addDay()) {
             if (!$date->isWeekend()) {
-                $dates[] = $date->format('d-m');
+                $dates[] = $date->format('d');
                 $fullDates[] = $date->format('Y-m-d');
             }
+        }
+        $fmt = new IntlDateFormatter(
+            'FR',
+            IntlDateFormatter::SHORT,
+            IntlDateFormatter::SHORT
+        );
+        $fmt->setPattern('EEEE');
+        $days = [];
+        foreach ($fullDates as $key => $value) {
+            $timestamp = strtotime($value);
+            $day = ucfirst($fmt->format($timestamp));
+            $days[] = $day;
+        }
+
+        $totalDaysOfSheets = [];
+        $daysOfSheet = [];
+
+        foreach ($days as $day) {
+            $daysOfSheet[] = $day;
+            if ($day == 'Vendredi' || count($daysOfSheet) == 5) {
+                $totalDaysOfSheets[] = $daysOfSheet;
+                $daysOfSheet = [];
+            }
+        }
+        if (!empty($daysOfSheet)) {
+            $totalDaysOfSheets[] = $daysOfSheet;
         }
 
         // Get all candidats for the given event
@@ -110,71 +234,6 @@ class CandidatController extends Controller
         // Create a new Spreadsheet object
         $spreadsheet = new Spreadsheet();
 
-        // Set the title and merge cells
-        $spreadsheet->getActiveSheet()
-            ->setCellValue('A1', "FICHE DES CANDIDATS POUR " . strtoupper($activite->title))
-            ->mergeCells('A1:U2')
-            ->getStyle('A1:U2')
-            ->getAlignment()->setVertical(cellAlignment::VERTICAL_CENTER)
-            ->setHorizontal(cellAlignment::HORIZONTAL_CENTER);
-
-        // Set the column headers
-        $spreadsheet->getActiveSheet()
-            ->setCellValue('A3', 'N°')
-            ->setCellValue('B3', 'NOM')
-            ->setCellValue('C3', 'PRENOM')
-            ->setCellValue('D3', 'GENRE')
-            ->setCellValue('E3', 'NUMERO')
-            ->setCellValue('F3', 'EMAIL');
-
-        $daysOfWeek = [
-            'Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi'
-        ];
-        $columnIndex = 7; // Starting column index (H)
-        $index = 7;
-        foreach ($daysOfWeek as $day) {
-            $cellCoordinate = Coordinate::stringFromColumnIndex($columnIndex) . '3';
-            $spreadsheet->getActiveSheet()
-                ->setCellValue($cellCoordinate, $day)
-                ->mergeCells($cellCoordinate . ":" . Coordinate::stringFromColumnIndex($columnIndex + 2) . "3")
-                ->getStyle($cellCoordinate . ":" . Coordinate::stringFromColumnIndex($columnIndex + 2) . "3")
-                ->getAlignment()
-                ->setVertical(cellAlignment::VERTICAL_CENTER)
-                ->setHorizontal(cellAlignment::HORIZONTAL_CENTER);
-            $columnIndex += 3; // Increment column index by 3 (since we're merging 3 cells)
-
-            $cellC = Coordinate::stringFromColumnIndex($index);
-            $spreadsheet->getActiveSheet()
-                ->getColumnDimension(Coordinate::stringFromColumnIndex($index))
-                ->setAutoSize(false)
-                ->setWidth(45, 'px');
-
-            $spreadsheet->getActiveSheet()
-                ->getColumnDimension(Coordinate::stringFromColumnIndex($index + 1))
-                ->setAutoSize(false)
-                ->setWidth(45, 'px');
-
-            $spreadsheet->getActiveSheet()
-                ->getColumnDimension(Coordinate::stringFromColumnIndex($index + 2))
-                ->setAutoSize(false)
-                ->setWidth(45, 'px');
-
-            $spreadsheet->getActiveSheet()
-                ->setCellValue($cellC . "4", "H/E");
-            $spreadsheet->getActiveSheet()
-                ->setCellValue(Coordinate::stringFromColumnIndex($index + 1) . "4", "H/S");
-            $spreadsheet->getActiveSheet()
-                ->setCellValue(Coordinate::stringFromColumnIndex($index + 2) . "4", "Sign");
-
-            $spreadsheet->getActiveSheet()
-                ->getStyle($cellC . "4:" . Coordinate::stringFromColumnIndex($index + 2) . "4")
-                ->getAlignment()
-                ->setVertical(cellAlignment::VERTICAL_CENTER)
-                ->setHorizontal(cellAlignment::HORIZONTAL_CENTER);
-            $index += 3;
-        }
-
-        // Set the style for titles
         $style_for_titles = [
             'font' => [
                 'bold' => true,
@@ -184,90 +243,166 @@ class CandidatController extends Controller
             ],
         ];
 
-        $spreadsheet->getActiveSheet()->getStyle('A3:S3')->applyFromArray($style_for_titles);
+        $columnIndex = 7; // Starting column index (H)
+        $index = 7;
+        foreach ($totalDaysOfSheets as $totalDaysOfSheet) {
+            foreach ($totalDaysOfSheet as $daySheet) {
 
-        // Set the column widths
-        $spreadsheet->getActiveSheet()
-            ->getColumnDimension('A')
-            ->setAutoSize(false)
-            ->setWidth(34, 'px');
-        $spreadsheet->getActiveSheet()
-            ->getColumnDimension('B')
-            ->setAutoSize(false)
-            ->setWidth(184, 'px');
-        $spreadsheet->getActiveSheet()
-            ->getColumnDimension('C')
-            ->setAutoSize(false)
-            ->setWidth(100, 'px');
-        $spreadsheet->getActiveSheet()
-            ->getColumnDimension('D')
-            ->setAutoSize(false)
-            ->setWidth(90, 'px');
-        $spreadsheet->getActiveSheet()
-            ->getColumnDimension('E')
-            ->setAutoSize(false)
-            ->setWidth(94, 'px');
-        $spreadsheet->getActiveSheet()
-            ->getColumnDimension('F')
-            ->setAutoSize(false)
-            ->setWidth(234, 'px');
+                $spreadsheet->getActiveSheet()
+                    ->getPageSetup()
+                    ->setHorizontalCentered(true)
+                    ->setOrientation(PageSetup::ORIENTATION_LANDSCAPE)
+                    ->setPaperSize(PageSetup::PAPERSIZE_A4);
 
-        // Set the fill color for the header row
-        $spreadsheet->getActiveSheet()->getStyle('A4:F4')
-            ->getFill()->setFillType(cellFill::FILL_SOLID);
-        $spreadsheet->getActiveSheet()->getStyle('A4:F4')
-            ->getFill()->getStartColor()->setARGB('000000');
+                $spreadsheet->getActiveSheet()
+                    ->getStyle('A1:' . $spreadsheet->getActiveSheet()->getHighestColumn() . $spreadsheet->getActiveSheet()->getHighestRow())
+                    ->getFont()
+                    ->setName('Arial')
+                    ->setSize(8);
 
-        // Loop through each candidat and set its data
-        $cell_key = 5;
-        $i = 1;
-        foreach ($candidatsData as $candidat) {
-            $spreadsheet->getActiveSheet()
-                ->setCellValue("A$cell_key", "$i");
+                // Set the title and merge cells
+                $spreadsheet->getActiveSheet()
+                    ->setCellValue('A1', "FICHE DES CANDIDATS POUR " . strtoupper($activite->title))
+                    ->mergeCells('A1:U2')
+                    ->getStyle('A1:U2')
+                    ->getAlignment()->setVertical(cellAlignment::VERTICAL_CENTER)
+                    ->setHorizontal(cellAlignment::HORIZONTAL_CENTER);
 
-            $name = isset($candidat['Nom']) ? $candidat['Nom'] : $candidat['odcuser']['last_name'];
-            $spreadsheet->getActiveSheet()
-                ->setCellValue("B$cell_key", $name);
+                $spreadsheet->getActiveSheet()
+                    ->getStyle('A1:' . $spreadsheet->getActiveSheet()->getHighestColumn() . $spreadsheet->getActiveSheet()->getHighestRow())
+                    ->getBorders()
+                    ->getAllBorders()
+                    ->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-            $first_name = isset($candidat['Prénom']) ? $candidat['Prénom'] : $candidat['odcuser']['first_name'];
-            $spreadsheet->getActiveSheet()
-                ->setCellValue("C$cell_key", $first_name);
+                $spreadsheet->getActiveSheet()->getPageMargins()->setTop(0.8);
+                $spreadsheet->getActiveSheet()->getPageMargins()->setRight(0.1);
+                $spreadsheet->getActiveSheet()->getPageMargins()->setLeft(0.1);
 
-            $spreadsheet->getActiveSheet()
-                ->setCellValue("D$cell_key", $candidat['odcuser']['gender']);
+                // Set the column headers
+                $spreadsheet->getActiveSheet()
+                    ->setCellValue('A3', 'N°')
+                    ->setCellValue('B3', 'NOM')
+                    ->setCellValue('C3', 'PRENOM')
+                    ->setCellValue('D3', 'GENRE')
+                    ->setCellValue('E3', 'NUMERO')
+                    ->setCellValue('F3', 'EMAIL');
 
-            $phone = isset($candidat['Téléphone']) ? $candidat['Téléphone'] : '';
-            $spreadsheet->getActiveSheet()
-                ->setCellValue("E$cell_key", $phone)
-                ->getCell("E$cell_key")
-                ->setValueExplicit($phone, DataType::TYPE_STRING)
-                ->getStyle("E$cell_key")
-                ->getAlignment()
-                ->setHorizontal(cellAlignment::HORIZONTAL_RIGHT);
+                $spreadsheet->getActiveSheet()->getStyle('A1:S3')->applyFromArray($style_for_titles);
 
-            $email = isset($candidat['E-mail']) ? $candidat['E-mail'] : $candidat['odcuser']['email'];
-            $spreadsheet->getActiveSheet()
-                ->setCellValue("F$cell_key", $email);
+                // Set the column widths
+                $spreadsheet->getActiveSheet()
+                    ->getColumnDimension('A')
+                    ->setAutoSize(false)
+                    ->setWidth(25, 'px');
+                $spreadsheet->getActiveSheet()
+                    ->getColumnDimension('B')
+                    ->setAutoSize(false)
+                    ->setWidth(120, 'px');
+                $spreadsheet->getActiveSheet()
+                    ->getColumnDimension('C')
+                    ->setAutoSize(false)
+                    ->setWidth(75, 'px');
+                $spreadsheet->getActiveSheet()
+                    ->getColumnDimension('D')
+                    ->setAutoSize(false)
+                    ->setWidth(40, 'px');
+                $spreadsheet->getActiveSheet()
+                    ->getColumnDimension('E')
+                    ->setAutoSize(false)
+                    ->setWidth(80, 'px');
+                $spreadsheet->getActiveSheet()
+                    ->getColumnDimension('F')
+                    ->setAutoSize(false)
+                    ->setWidth(160, 'px');
 
-            $styleArrayForBorders = [
-                'borders' => [
-                    'allBorders' => [
-                        'borderStyle' => Border::BORDER_THIN,
-                        'color' => ['argb ' => '000000'],
-                    ],
-                ],
-            ];
+                // Set the fill color for the header row
+                $spreadsheet->getActiveSheet()->getStyle('A4:F4')
+                    ->getFill()->setFillType(cellFill::FILL_SOLID);
+                $spreadsheet->getActiveSheet()->getStyle('A4:F4')
+                    ->getFill()->getStartColor()->setARGB('000000');
 
-            $spreadsheet->getActiveSheet()
-            ->getStyle('A1:U8')
-            ->applyFromArray($styleArrayForBorders);
+                // Loop through each candidat and set its data
+                $cell_key = 5;
+                $i = 1;
+                foreach ($candidatsData as $candidat) {
+                    $spreadsheet->getActiveSheet()
+                        ->setCellValue("A$cell_key", "$i");
 
-            $i++;
-            $cell_key++;
+                    $name = isset($candidat['Nom']) ? $candidat['Nom'] : $candidat['odcuser']['last_name'];
+                    $spreadsheet->getActiveSheet()
+                        ->setCellValue("B$cell_key", $name);
+
+                    $first_name = isset($candidat['Prénom']) ? $candidat['Prénom'] : $candidat['odcuser']['first_name'];
+                    $spreadsheet->getActiveSheet()
+                        ->setCellValue("C$cell_key", $first_name);
+
+                    $spreadsheet->getActiveSheet()
+                        ->setCellValue("D$cell_key", $candidat['odcuser']['gender']);
+
+                    $phone = isset($candidat['Téléphone']) ? $candidat['Téléphone'] : '';
+                    $spreadsheet->getActiveSheet()
+                        ->setCellValue("E$cell_key", $phone)
+                        ->getCell("E$cell_key")
+                        ->setValueExplicit($phone, DataType::TYPE_STRING)
+                        ->getStyle("E$cell_key")
+                        ->getAlignment()
+                        ->setHorizontal(cellAlignment::HORIZONTAL_RIGHT);
+
+                    $email = isset($candidat['E-mail']) ? $candidat['E-mail'] : $candidat['odcuser']['email'];
+                    $spreadsheet->getActiveSheet()
+                        ->setCellValue("F$cell_key", $email);
+
+                    $i++;
+                    $cell_key++;
+                }
+
+                $cellCoordinate = Coordinate::stringFromColumnIndex($columnIndex) . '3';
+                $spreadsheet->getActiveSheet()
+                    ->setCellValue($cellCoordinate, $daySheet)
+                    ->mergeCells($cellCoordinate . ":" . Coordinate::stringFromColumnIndex($columnIndex + 2) . "3")
+                    ->getStyle($cellCoordinate . ":" . Coordinate::stringFromColumnIndex($columnIndex + 2) . "3")
+                    ->getAlignment()
+                    ->setVertical(cellAlignment::VERTICAL_CENTER)
+                    ->setHorizontal(cellAlignment::HORIZONTAL_CENTER);
+                $columnIndex += 3; // Increment column index by 3 (since we're merging 3 cells)
+
+                $cellC = Coordinate::stringFromColumnIndex($index);
+
+                $spreadsheet->getActiveSheet()
+                    ->getColumnDimension(Coordinate::stringFromColumnIndex($index))
+                    ->setAutoSize(false)
+                    ->setWidth(30, 'px');
+
+                $spreadsheet->getActiveSheet()
+                    ->getColumnDimension(Coordinate::stringFromColumnIndex($index + 1))
+                    ->setAutoSize(false)
+                    ->setWidth(30, 'px');
+
+                $spreadsheet->getActiveSheet()
+                    ->getColumnDimension(Coordinate::stringFromColumnIndex($index + 2))
+                    ->setAutoSize(false)
+                    ->setWidth(30, 'px');
+
+                $spreadsheet->getActiveSheet()
+                    ->setCellValue($cellC . "4", "H/E");
+                $spreadsheet->getActiveSheet()
+                    ->setCellValue(Coordinate::stringFromColumnIndex($index + 1) . "4", "H/S");
+                $spreadsheet->getActiveSheet()
+                    ->setCellValue(Coordinate::stringFromColumnIndex($index + 2) . "4", "Sign");
+
+                $spreadsheet->getActiveSheet()
+                    ->getStyle($cellC . "4:" . Coordinate::stringFromColumnIndex($index + 2) . "4")
+                    ->getAlignment()
+                    ->setVertical(cellAlignment::VERTICAL_CENTER)
+                    ->setHorizontal(cellAlignment::HORIZONTAL_CENTER);
+                $index += 3;
+            }
+            // Create a new sheet for each chunk
+            $spreadsheet->createSheet();
+            $spreadsheet->setActiveSheetIndex($spreadsheet->getActiveSheetIndex() + 1);
+            $columnIndex = 7;
+            $index = 7;
         }
-
-        // Set font for body
-        $spreadsheet->getDefaultStyle()->getFont()->setName('Verdana')->setSize(8);
 
         // Create a writer for the Spreadsheet
         $writer = new Xlsx($spreadsheet);
@@ -293,6 +428,10 @@ class CandidatController extends Controller
         // Get the ID from the request
         $candidat = Candidat::find($request->input('id'));
 
+        if (!$candidat) {
+            // Return an error response if the candidat is not found
+            return response()->json(['error' => 'Candidat not found'], 404);
+        }
         // Perform the necessary action based on the status
         switch ($status) {
             case 'accept':
@@ -318,9 +457,6 @@ class CandidatController extends Controller
         }
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
         FacadesLog::info('storeCandidats called');
@@ -349,33 +485,23 @@ class CandidatController extends Controller
         }
     }
 
-    /**
-     * Display the specified resource.
-     */
+
     public function show(Candidat $candidat)
     {
         return view('candidats.show', compact('candidat'));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
     public function edit(Candidat $candidat)
     {
         //
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
+
     public function update(UpdateCandidatRequest $request, Candidat $candidat)
     {
         //
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
     public function destroy(Candidat $candidat)
     {
         //

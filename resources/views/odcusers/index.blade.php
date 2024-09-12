@@ -105,6 +105,9 @@
                         Gender
                     </th>
                     <th scope="col" class="px-6 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                        BirthDate
+                    </th>
+                    <th scope="col" class="px-6 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                         Profession
                     </th>
                     <th scope="col" class="px-6 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">
@@ -116,136 +119,116 @@
                 </tr>
             </thead>
             <tbody>
-                @foreach ($odcusers as $key => $odcuser)
-                    <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
-                        <td class="px-6 py-4"><a
-                                href="{{ route('odcusers.show', $odcuser->id) }}">{{ $odcuser->first_name }}</a></td>
-                        <td class="px-6 py-4">{{ $odcuser->last_name }}</td>
-                        <td class="px-6 py-4">{{ $odcuser->email }}</td>
-                        <td class="px-6 py-4">{{ $odcuser->gender }}</td>
-                        <td class="px-6 py-4">
-                            @php
-                                $profession = json_decode($odcuser->profession, true);
-                            @endphp
-
-                            {{ $profession['translations']['fr']['profession'] ?? '' }}
-                        </td>
-                        <td class="px-6 py-4">
-                            @php
-                                $detail_profession = json_decode($odcuser->detail_profession, true);
-                            @endphp
-                            {{ $detail_profession['speciality'] ?? '' }}
-                        </td>
-                        <td>
-                            <button id="dropdownMenuIconButton" data-dropdown-toggle="dropdownDots{{ $key }}"
-                                class="inline-flex items-center p-2 text-sm font-medium text-center text-gray-900 bg-white rounded-lg hover:bg-gray-100 focus:ring-4 focus:outline-none dark:text-white focus:ring-gray-50 dark:bg-gray-800 dark:hover:bg-gray-700 dark:focus:ring-gray-600"
-                                type="button">
-                                <svg class="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
-                                    fill="currentColor" viewBox="0 0 4 15">
-                                    <path
-                                        d="M3.5 1.5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0Zm0 6.041a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0Zm0 5.959a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0Z" />
-                                </svg>
-                            </button>
-
-                            <!-- Dropdown menu -->
-                            <div id="dropdownDots{{ $key }}"
-                                class="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700 dark:divide-gray-600">
-                                <ul class="py-2 text-sm text-gray-700 dark:text-gray-200"
-                                    aria-labelledby="dropdownMenuIconButton">
-                                    <li>
-                                        <a href="{{ route('odcusers.show', $odcuser->id) }}"
-                                            class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Voir
-                                            plus de details</a>
-                                    </li>
-                                    <li>
-                                        <a href="{{ route('odcusers.edit', $odcuser->id) }}"
-                                            class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Editer</a>
-                                    </li>
-                                    <li>
-                                        <a href="#"
-                                            class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Desactiver</a>
-                                    </li>
-                                </ul>
-                            </div>
-                        </td>
-                    </tr>
-                @endforeach
             </tbody>
         </table>
     </div>
 
     @section('script')
-        <script>
-            new DataTable('#usersTable', {
-                responsive: true,
-                columnDefs: [{
-                        responsivePriority: 1,
-                        targets: 0
-                    },
-                    {
-                        responsivePriority: 2,
-                        targets: -1
-                    }
-                ],
-                layout: {
-                    topStart: {
-                        pageLength: {
-                            menu: [10, 25, 50, 100, 200]
-                        },
-                        buttons: [
-                            'copy',
-                            'print',
-
-                            {
-                                extend: 'spacer',
-                                style: 'bar',
-                                text: 'Export files:'
-                            },
-                            'csv',
-                            'excel',
-                            'pdf',
-                            {
-                                extend: 'spacer',
-                                style: 'bar',
-                                text: ':'
-                            },
-
-                            'colvis'
-                        ]
-                    },
-                    topEnd: {
-                        search: {
-                            placeholder: 'Type search here'
-                        }
-                    },
-                    bottomEnd: {
-                        paging: {
-                            numbers: 3
-                        }
-                    },
-
-                },
-
-                lengthMenu: [
-                    [10, 25, 50, -1],
-                    [10, 25, 50, 'All']
-                ],
-
-            });
-        </script>
-        <script>
+        <script type="text/javascript">
             $(document).ready(function() {
-                $('#usersTable').css('width', '100%')
-                $('.dt-container').addClass('text-lg text-gray-800 dark:text-gray-400 leading-tight')
+                $('#usersTable').DataTable({
+                    "processing": true,
+                    "serverSide": true,
+                    "ajax": {
+                        "url": "{{ route('getdata') }}",
+                        "dataType": "json",
+                        "type": "GET"
+                    },
+                    layout: {
+                        topStart: {
+                            pageLength: {
+                                menu: [10, 25, 50, 100, 200]
+                            },
+                            buttons: [
+                                'copy',
+                                'print',
+
+                                {
+                                    extend: 'spacer',
+                                    style: 'bar',
+                                    text: 'Export files:'
+                                },
+                                'csv',
+                                'excel',
+                                'spacer',
+                                'pdf',
+                                {
+                                    extend: 'spacer',
+                                    style: 'bar',
+                                    text: ':'
+                                },
+
+                                'colvis'
+                            ]
+                        },
+                        topEnd: {
+                            search: {
+                                placeholder: 'Type search here'
+                            }
+                        },
+                        bottomEnd: {
+                            paging: {
+                                numbers: 3
+                            }
+                        },
+
+                    },
+                    columns: [{
+                            data: 'first_name',
+                            name: 'first_name'
+                        },
+                        {
+                            data: 'last_name',
+                            name: 'last_name'
+                        },
+                        {
+                            data: 'email',
+                            name: 'email'
+                        },
+                        {
+                            data: 'gender',
+                            name: 'gender'
+                        },
+                        {
+                            data: 'birth_date',
+                            name: 'birth_date'
+                        },
+                        {
+                            data: 'profession',
+                            name: 'profession'
+                        },
+                        {
+                            data: 'detail_profession',
+                            name: 'detail_profession'
+                        },
+                        {
+                            data: 'action',
+                            name: 'action',
+                            orderable: false,
+                            searchable: false
+                        }
+                    ],
+                    pageLength: 10,
+                    lengthMenu: [
+                        [10, 25, 50, -1],
+                        [10, 25, 50, "All"]
+                    ]
+                });
+
+                $('#usersTable').css('width', '100%');
+
+                $('.dt-container').addClass('text-base text-gray-800 dark:text-gray-400 leading-tight')
 
                 $('.dt-buttons').addClass('mt-4')
                 $('.dt-buttons buttons').addClass('cursor-pointer mt-5 bg-slate-600 p-2 rounded-sm font-bold')
 
-                $("#dt-length-0").addClass('text-gray-700 dark:text-gray-200 w-24 bg-white');
-                $("label[for='dt-length-0']").addClass('text-gray-700 dark:text-gray-200').text(' Enregistrements par page');
-                $("label[for='dt-search-0']").addClass('text-gray-700 dark:text-gray-200');
-                $('.dt-input').addClass('text-gray-700 dark:text-gray-200');
+                $("#dt-length-0").addClass('text-gray-700 dark:text-gray-400 w-24 bg-white');
+                $("label[for='dt-length-0']").addClass('text-gray-700 dark:text-gray-400').text(
+                    ' Enregistrements par page');
+
+                $('.dt-input').addClass('w-24')
             });
         </script>
+
     @endsection
 </x-app-layout>

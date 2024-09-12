@@ -8,7 +8,7 @@ Route::get('/', function () {
     return redirect('login');
 });
 
-Route::get('/dashboard', [ActiviteController::class, 'chartActivity'])->middleware(['auth', 'verified'])->name('dashboard')->middleware('permissions');
+Route::get('/dashboard', [ActiviteController::class, 'chartActivity'])->middleware(['auth', 'verified'])->name('dashboard')->middleware('permissions:super-admin');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -21,6 +21,7 @@ require __DIR__.'/web_activites.php';
 require __DIR__.'/web_rapport.php';
 require __DIR__.'/web_presence.php';
 require __DIR__.'/web_candidatures.php';
+require __DIR__ . '/web_odcusers.php';
 require __DIR__.'/web_employabilite.php';
 
 require __DIR__.'/web_semestriel_rapport.php';
@@ -29,3 +30,4 @@ require __DIR__.'/web_import.php';
 require __DIR__.'/web_certificat.php';
 
 require __DIR__.'/web_notification.php';
+require __DIR__.'/web_coursera.php';

@@ -353,6 +353,7 @@ class ImportControl extends Controller
         $writer->save("php://output");
         exit();
     }
+<<<<<<< HEAD
 
     public function importAndgenerate(Request $request)
     {
@@ -435,4 +436,6 @@ class ImportControl extends Controller
         return response()->download($zipFilename);
 
     }
+=======
+>>>>>>> adfe6ebf6129fb90b1720fd5ea98c7b1e6164d4c
 }

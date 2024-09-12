@@ -8,15 +8,19 @@ use App\Models\Hashtag;
 use App\Models\Odcuser;
 use App\Models\Activite;
 use App\Models\Candidat;
-use App\Models\CandidatAttribute;
 use App\Models\Presence;
 use App\Models\Categorie;
 use App\Models\TypeEvent;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
+use App\Models\CourseraMember;
+use App\Models\CandidatAttribute;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Http;
+use Yajra\DataTables\Facades\DataTables;
 
 class ActiviteController extends Controller
 {
@@ -191,7 +195,7 @@ class ActiviteController extends Controller
                 $candidatsData[] = $candidatArray;
             }
         } else {
-            $candidatsData = null ;
+            $candidatsData = null;
             $labels = null;
         }
 
@@ -237,7 +241,7 @@ class ActiviteController extends Controller
         // dd($dates);
         $countdate = count($dates);
 
-        $candidats_on_activity = Candidat::where('activite_id', $id)->where('status','accept')->with('odcuser')->get();
+        $candidats_on_activity = Candidat::where('activite_id', $id)->where('status', 'accept')->with('odcuser')->get();
         $data = [];
         $pres = Presence::all()->pluck('candidat_id');
         foreach ($candidats_on_activity as $candidat) {
@@ -263,7 +267,7 @@ class ActiviteController extends Controller
 
 
 
-     
+
 
 
 
@@ -279,14 +283,6 @@ class ActiviteController extends Controller
     ")
             ->groupBy('activites.title')
             ->get();
-
-
-
-       
-
-
-
-
 
         return view('activites.show', compact('participantsData', 'datachart', 'candidatsData', 'labels', 'data', 'activite', 'id', 'candidats', 'activite_Id', 'odcusers', 'fullDates', 'dates', 'countdate', 'presences'));
     }
@@ -402,26 +398,124 @@ class ActiviteController extends Controller
         return view('encours', compact('activites'));
     }
 
-    public function chartActivity()
+    public function chartActivity(Request $request)
     {
-        $data1 = Activite::selectRaw("DATE_FORMAT(start_date, '%Y-%m-%d') as date, count(*) as aggregate, title,id")
-            ->whereDate('start_date', '>=', now()->subDays(30))
-            ->groupBy('date', 'title', 'id')
-            ->get();
+        $participationData = Candidat::selectRaw("SUM(CASE WHEN odcusers.gender = 'male' THEN 1 ELSE 0 END) as hommes")
+            ->selectRaw("SUM(CASE WHEN odcusers.gender = 'female' THEN 1 ELSE 0 END) as femmes")
+            ->join('odcusers', 'odcusers.id', '=', 'candidats.odcuser_id')
+            ->whereBetween('candidats.created_at', [Carbon::now()->subDays(7), Carbon::now()])
+            ->first();
+
+        $hommes = $participationData->hommes;
+        $femmes = $participationData->femmes;
 
 
         $data = Activite::selectRaw("DATE_FORMAT(start_date, '%Y-%m-%d') as date, count(*) as aggregate, title,id")
             ->whereDate('start_date', '>=', now()->subDays(30))
             ->groupBy('date', 'title', 'id')
             ->paginate(4);
+        $location = Auth::user()->location;
+
         $activites = Activite::all();
+        $activityForWeekend = Activite::whereRaw('(start_date BETWEEN ? AND ?)
+                                      OR (end_date BETWEEN ? AND ?)
+                                      OR (start_date <= ? AND end_date >= ?)', [
+            Carbon::now()->subDays(Carbon::now()->dayOfWeek),
+            Carbon::now()->addDays(5 - Carbon::now()->dayOfWeek),
+            Carbon::now()->subDays(Carbon::now()->dayOfWeek),
+            Carbon::now()->addDays(5 - Carbon::now()->dayOfWeek),
+            Carbon::now()->subDays(Carbon::now()->dayOfWeek),
+            Carbon::now()->addDays(5 - Carbon::now()->dayOfWeek),
+        ])->get();
+
+
+        $month = 4;
+        $year = 2024;
+
+        $requestActivityperiode = Activite::selectRaw("date_format(createdAt, '%Y-%m-%d') as date, count(*) as aggregate")
+            ->whereMonth('createdAt', $month)
+            ->whereYear('createdAt', $year)
+            ->groupBy('date')
+            ->get();
+
         $user = Odcuser::all();
 
 
+        return view('dashboard', compact('activites', 'user', 'data', 'hommes', 'femmes', "activityForWeekend", 'requestActivityperiode'));
+    }
+
+    public function coursera_rapport()
+    {
+        $membersMonths = CourseraMember::selectRaw('MONTH(join_date) as month, COUNT(*) as count')
+            ->whereYear('join_date', date('Y'))
+            ->groupBy('month')->orderBy('month')->get();
+
+        $labels = [];
+        $mydata = [];
+        $colors = [
+            '#FF6384',
+            '#36A2EB',
+            '#c9625b',
+            '#cf72fa',
+            '#f83d3d',
+            '#fa43cc',
+            '#ADD478',
+            '#fcc737',
+            '#ADD813',
+            '#36d4fc',
+            '#c92daf',
+            '#FF7890'
+        ];
+
+        for ($i = 1; $i <= 12; $i++) {
+            $month = date('F', mktime(0, 0, 0, $i, 1));
+            $count = 0;
+            foreach ($membersMonths as $member) {
+                if ($member->month == $i) {
+                    $count = $member->count;
+                    break;
+                }
+            }
+
+            array_push($labels, $month);
+            array_push($mydata, $count);
+        }
+
+        $datasets = [
+            [
+                'label' => "member join by month",
+                'data' => $mydata,
+                'backgroundColor' => $colors
+            ]
+        ];
 
 
 
-        return view('dashboard', compact('data1', 'activites', 'user', 'data'));
+        $coursera_members = DB::table('coursera_members')
+            ->selectRaw('count(*) as total')
+            ->selectRaw("count(case when member_state = 'MEMBER' then 1 end) as members")
+            ->selectRaw("count(case when member_state = 'INVITED' then 1 end) as invites")
+            ->first();
+
+
+        $coursera_usages = DB::table('coursera_usages')
+            ->selectRaw('count(*) as total')
+            ->selectRaw("count(case when completed = 'Yes' then 1 end) as completed")
+            ->selectRaw("count(case when completed = 'No' then 1 end) as noCompleted")
+            ->first();
+
+
+        $specialisationsCount = DB::table('coursera_specialisations')->select('specialisaton_name')->count();
+
+
+
+
+        $usagesEncourrs = DB::table('coursera_usages')
+            ->where('class_start_time', '<=', now())
+            ->where('class_end_time', '>=', now())->count();
+
+
+        return view('coursera.coursera_rapports', compact('datasets', 'labels', "coursera_members", "specialisationsCount", "coursera_usages"));
     }
 
 
@@ -444,7 +538,7 @@ class ActiviteController extends Controller
                 $requette = Http::timeout(1000)
                     ->post("$url/events/calendar/$id", $check);
 
-                return response()->json(['success' => true, 'data' => $requette->json()], 201);
+                return redirect()->route('activites.index')->with('success', 'Activite created successfully.');
             } catch (\Exception $th) {
                 return response()->json(['success' => false, 'message' => 'Request failed', 'error' => $th->getMessage()], 500);
             }
@@ -461,8 +555,7 @@ class ActiviteController extends Controller
 
                 $requette = Http::timeout(1000)
                     ->post("$url/events/calendar/$id", $check);
-
-                return response()->json(['success' => true, 'data' => $requette->json()], 201);
+                return redirect()->route('activites.index')->with('success', 'Activite created successfully.');
             } catch (\Exception $th) {
                 return response()->json(['success' => false, 'message' => 'Request failed', 'error' => $th->getMessage()], 500);
             }
@@ -651,5 +744,61 @@ class ActiviteController extends Controller
                 return response()->json(['success' => false, 'message' => 'Request failed', 'error' => $th->getMessage()], 500);
             }
         }
+    }
+
+
+    public function getActivites(Request $request)
+    {
+        $query = Activite::query();
+
+
+        if ($request->has('start_date') && $request->has('end_date')) {
+            $query->whereBetween('start_date', [$request->start_date, $request->end_date]);
+        }
+
+        $activites = $query->get();
+
+
+
+        return response()->json($activites);
+    }
+
+    public function weeekActivites()
+    {
+
+
+        return view('dashboard', compact('week'));
+    }
+
+    public function search(Request $request)
+    {
+        $searchTerm = $request->input('search');
+        $activites = Activite::where('title', 'LIKE', "%{$searchTerm}%")
+            ->take(4)
+            ->latest()
+            ->get();
+
+
+
+
+        return response()->json($activites);
+    }
+
+    public function getActivitiesData(Request $request)
+    {
+        $year = $request->input('year');
+        $month = $request->input('month');
+
+        $query = Activite::selectRaw("date_format(createdAt, '%Y-%m-%d') as date, count(*) as aggregate")
+            ->whereYear('createdAt', $year);
+
+
+        if ($month && $month !== 'all') {
+            $query->whereMonth('createdAt', $month);
+        }
+
+        $activities = $query->groupBy('date')->get();
+
+        return response()->json($activities);
     }
 }

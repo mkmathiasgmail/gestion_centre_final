@@ -28,6 +28,8 @@ class RapportSemestrielController extends Controller
         $selectSemestre = $request->input('semestre');
 
 
+
+
         // on calclue  les dates de début et de fin du semestre
         if ($selectSemestre == '1') {
             $startDate = date('Y-m-d', strtotime($selectYear . '-01-01'));
@@ -38,8 +40,9 @@ class RapportSemestrielController extends Controller
         }
 
 
-        //DB::enableQueryLog();
 
+
+        //DB::enableQueryLog();
 
         //On recuper les données depuis le model
         $activites = Activite::all();
@@ -51,6 +54,10 @@ class RapportSemestrielController extends Controller
             ->leftJoin('type_events as typ', 'typ.id', '=', 'acty.type_event_id')
             ->leftJoin('employabilites as empl', 'empl.odcuser_id', '=', 'us.id')
             ->leftJoin('type_contrats as typecont', 'typecont.id', '=', 'empl.type_contrat_id')
+            // ->leftJoin('postes as pst', 'pst.employabilite_id', '=', 'empl.id')
+            // ->leftJoin('entreprises as entrp', 'entrp.employabilite_id', '=', 'empl.id')
+            // ->leftJoin('postes as pst', 'pst.employabilite_id', '=', 'empl.id')
+            // ->leftJoin('entreprises as entrp', 'entrp.employabilite_id', '=', 'empl.id')
             ->whereNotNull('ac.title')
             ->whereBetween('ac.start_date', [$startDate, $endDate])
             ->orderBy('ac.start_date', 'asc')
@@ -67,7 +74,7 @@ class RapportSemestrielController extends Controller
                 'ac.end_date',
                 'ac.title',
                 'typecont.libelle as type_contrat',
-                'empl.nomboite',
+                'empl.nomboite as entreprise',
                 'empl.poste',
                 DB::raw('(ac.start_date) as startYear'),
                 'cat.name as namecat',
@@ -329,6 +336,8 @@ class RapportSemestrielController extends Controller
         $worksheet->freezePane('E4');
 
         foreach ($candidats as $candidat) {
+            ini_set('max_execution_time', 10000);
+            ini_set('max_execution_time', 10000);
 
             //recuperation et filtrage des numeros de telephone
             $phoneNumberResult = DB::table('candidat_attributes')
@@ -345,7 +354,8 @@ class RapportSemestrielController extends Controller
             //fin recuperation et filtrage des numeros de telephone
 
             // Récupération de l'université du candidat dans la table candidat_attributes et odcusers
-            $variables = ['Université', 'Etablissement'];
+            $variables = ['Université', 'Etablissement', 'Structure', 'Entreprise', 'Si autre université'];
+            $variables = ['Université', 'Etablissement', 'Structure', 'Entreprise', 'Si autre université'];
 
             $universiteLabelAttribute = DB::table('candidat_attributes')
                 ->where(function ($query) use ($variables) {
@@ -358,17 +368,20 @@ class RapportSemestrielController extends Controller
 
             if ($universiteLabelAttribute) {
                 $universiteValue = $universiteLabelAttribute->value;
-            } else {
+            } elseif ($universiteLabelAttribute='') {
                 $odcusers = Odcuser::where('id', $candidat->id)
-                    ->get();
+                ->get();
                 if (request()->expectsJson()) {
                     return response()->json($odcusers);
                 }
                 foreach ($odcusers as $key => $odcuser) {
                     $detail_profession = json_decode($odcuser->detail_profession, true);
                     $universiteValue = $detail_profession['university'] ?? '';
-                }
+                }   
+            }else{
+                $universiteValue = '';
             }
+
 
             //Recuperation des profession et specialités des candidats
             $profSpeciality = Odcuser::where('id', $candidat->odcuser_id)
@@ -396,8 +409,10 @@ class RapportSemestrielController extends Controller
             $interval = $today->diff($birthDay);
             $ages = $interval->y; // Âge en années
 
-            if ($ages >=3 && $ages <= 14){
-                $tranche = "6 - 14 years";
+            $tranche = "";
+
+            if ($ages >= 3 && $ages <= 14) {
+                $tranche = "0 - 14 years";
             }
             if ($ages >= 15 && $ages <= 24) {
                 $tranche = "15 - 24 years";
@@ -433,7 +448,7 @@ class RapportSemestrielController extends Controller
             $worksheet->setCellValue('G' . $row, $specialiteValue)
                 ->getStyle('G' . $row)
                 ->getAlignment()
-                ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_LEFT);
+                ->setHorizontal(Alignment::HORIZONTAL_LEFT);
             $worksheet->setCellValue('H' . $row, $candidat->email)
                 ->getStyle('H' . $row)
                 ->getAlignment()
@@ -491,7 +506,7 @@ class RapportSemestrielController extends Controller
                     ->getAlignment()
                     ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
             }
-            $worksheet->setCellValue('AC' . $row, $candidat->nomboite)
+            $worksheet->setCellValue('AC' . $row, $candidat->entreprise)
                 ->getStyle('AC' . $row)
                 ->getAlignment()
                 ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
@@ -560,7 +575,6 @@ class RapportSemestrielController extends Controller
 
         //Code formule pour avoir le nombre de jours de durée d'une activité
 
-        // Récupérer la feuille de travail
         // Récupérer la feuille de travail
         $worksheet = $spreadsheet->getActiveSheet();
 
@@ -731,12 +745,7 @@ class RapportSemestrielController extends Controller
             ->setBold(true);
 
 
-        /*foreach ($worksheet->getColumnIterator() as $column) {
-            $worksheet->getColumnDimension($column->getColumnIndex())->setAutoSize(true);
-        }
-        $worksheet->getStyle('A1:K1')->getFill()
-        ->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)
-        ->getStartColor()->setARGB('0070C0');*/
+
 
 
         //on cree le fichier Excel
@@ -744,6 +753,7 @@ class RapportSemestrielController extends Controller
         $fileName = "Rapport_du_Semestre_{$selectSemestre}_{$selectYear}.Xlsx";
         $tempFile = tempnam(sys_get_temp_dir(), $fileName);
         $writer->save($tempFile);
+
 
         //On renvoie le fichier Excel au navigateur
 

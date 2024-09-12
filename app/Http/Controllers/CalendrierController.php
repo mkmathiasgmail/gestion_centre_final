@@ -3,8 +3,8 @@
 namespace App\Http\Controllers;
 
 
-use PhpOffice\PhpSpreadsheet\Style\Font;
 use DateTime;
+use Exception;
 use App\Models\Activite;
 use App\Models\Presence;
 use App\Models\Calendrier;
@@ -12,23 +12,30 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\User;
 use PhpOffice\PhpSpreadsheet\Style\Fill;
+use PhpOffice\PhpSpreadsheet\Style\Font;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Style\Color;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 use PhpOffice\PhpSpreadsheet\Style\Border;
 use PhpOffice\PhpSpreadsheet\Cell\Coordinate;
 use PhpOffice\PhpSpreadsheet\Style\Alignment;
+
 class CalendrierController extends Controller
 {
-    public function export()
+    public function export(Request $request)
     {
+        //recuprer les valeurs selectionnée dans le modal
+        $annee = $request->input('anneeSelect');
+        $semestre = $request->input('periode');
 
-        $activites = Activite::all();
         $categorieId = 2;
         $categorId = 1;
         $categorieActivites = Activite::where('categorie_id', $categorieId)->get();
         $categorActivites = Activite::where('categorie_id', $categorId)->get();
-        $mergedActivites = $activites->merge($categorieActivites);
+        $mergedActivites = Activite::whereIn('categorie_id', [$categorieId, $categorId])
+            ->orderBy('start_date', 'asc')
+            ->get();
+
 
         $candidats = Presence::leftJoin('candidats as ca', 'ca.id', '=', 'presences.candidat_id')
             ->leftJoin('odcusers as us', 'us.id', '=', 'ca.odcuser_id')
@@ -45,7 +52,7 @@ class CalendrierController extends Controller
                 'cat.name'
             ])
             ->get();
-
+        
         $spreadsheet = new Spreadsheet();
         $sheet = $spreadsheet->getActiveSheet();
         $sheet->setCellValue('B1', 'STAGES');
@@ -64,33 +71,36 @@ class CalendrierController extends Controller
         $sheet->setCellValue('I5', "SuperCodeurs");
 
         // --------------------------------------------------------------------//
-        function applyCellStyle($sheet, $cell, $fontSize) {
+
+        
+        function applyCellStyle($sheet, $cell, $fontSize)
+        {
             $sheet->getStyle($cell)
                 ->getFont()
                 ->setBold(true)
                 ->setColor(new Color(Color::COLOR_BLACK))
                 ->setName('Arial')
                 ->setSize($fontSize);
-        
+
             $sheet->getStyle($cell)
                 ->getFill()
                 ->setFillType(Fill::FILL_SOLID)
                 ->getStartColor()
                 ->setARGB('cccccc');
-        
+
             $sheet->getStyle($cell)
                 ->getAlignment()
                 ->setHorizontal(Alignment::HORIZONTAL_CENTER)
                 ->setVertical(Alignment::VERTICAL_CENTER);
-        
+
             $sheet->getStyle($cell)
                 ->getBorders()
                 ->getAllBorders()
                 ->setBorderStyle(Border::BORDER_THIN)
                 ->setColor(new Color('000000'));
-        }        
-        
-        
+        }
+
+
         $sheet->setCellValue('D7', "Nom activité");
         $sheet->setCellValue('E7', "Durée de la \nformation \n(jours)");
         $sheet->setCellValue('F7', "Nbre \nd'heures (hr)");
@@ -101,7 +111,7 @@ class CalendrierController extends Controller
         $sheet->setCellValue('K7', "Nombre de\n garçons");
         $sheet->setCellValue('L7', "Emplois\n créés");
         $sheet->setCellValue('M7', "Startups\n accompagné\nes");
-        
+
         applyCellStyle($sheet, 'A7', 18);
         applyCellStyle($sheet, 'D7', 9);
         applyCellStyle($sheet, 'E7', 9);
@@ -113,14 +123,14 @@ class CalendrierController extends Controller
         applyCellStyle($sheet, 'K7', 9);
         applyCellStyle($sheet, 'L7', 9);
         applyCellStyle($sheet, 'M7', 9);
-        
+
         // Activer l'habillage de texte pour les cellules avec des retours à la ligne
         $columns = ['E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M'];
         foreach ($columns as $column) {
             $sheet->getStyle($column . '7')->getAlignment()->setWrapText(true);
         }
-       
-     // Ajuster la largeur des colonnes Fablab
+
+        // Ajuster la largeur des colonnes Fablab
         $sheet->mergeCells('F1:G1')->getColumnDimension('G')->setWidth(20);
         $sheet->mergeCells('F2:G2')->getColumnDimension('F')->setWidth(15);
         $sheet->mergeCells('F3:G3');
@@ -128,7 +138,7 @@ class CalendrierController extends Controller
         function setCalendarColumnWidths($sheet, $months, $startRow, $calendarColumnWidth)
         {
             foreach ($months as $index => $month) {
-                $startColumnIndex = $index * 12 + 1; 
+                $startColumnIndex = $index * 12 + 1;
 
                 // Définir les largeurs de colonnes pour les colonnes du calendrier
                 for ($colIndex = $startColumnIndex; $colIndex < $startColumnIndex + 10; $colIndex++) {
@@ -138,31 +148,130 @@ class CalendrierController extends Controller
             }
         }
 
-
-        $months = [
-            'Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin',
-            'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre'
-        ];
-
-
-        $daysOfWeek = ['Dimanche', 'Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi'];
-
-        $startRow = 60; // Starting row
-        $calendarColumnWidth = 15; // Width for calendar columns
-
-        setCalendarColumnWidths($sheet, $months, $startRow, $calendarColumnWidth);
-
-
+        
+  
+        
+        $months = [];
+        $startMonth = $semestre == 1 ? 1 : 7; // Janvier pour le 1er semestre, Juillet pour le 2ème semestre
+        $endMonth = $semestre == 1 ? 6 : 12;
+        
+        for ($i = $startMonth; $i <= $endMonth; $i++) {
+            $dateTime = DateTime::createFromFormat('!m', $i);
+            if ($dateTime) {
+                $months[] = $dateTime->format('F');
+            } else {
+                throw new Exception("Erreur lors de la création du mois pour l'indice $i");
+            }
+        }
+        
+        // Création des jours de la semaine
+        $daysOfWeek = [];
+        for ($day = 0; $day < 7; $day++) {
+            $dateTime = new DateTime();
+            $dateTime->setISODate(2024, 1, $day + 1); // On utilise la semaine 1 de 2024 comme référence
+            $daysOfWeek[] = $dateTime->format('l'); // Format 'l' renvoie le nom complet du jour de la semaine
+        }
+        
+        // ... Le reste de votre code pour créer le calendrier ...
+        
+        
+        $startRow = 60; // Ligne de départ
+        $calendarColumnWidth = 15; // Largeur des colonnes du calendrier
+        
         $sheet = $spreadsheet->getActiveSheet();
-        $startRow = 60;
-        $currentYear = date('Y');
-
-
+        
+        setCalendarColumnWidths($sheet, $months, $startRow, $calendarColumnWidth);
+        
         foreach ($months as $index => $month) {
-            $startColumnIndex = $index * 12 + 1; // 10 colonnes pour chaque mois plus 2 supplémentaires pour l'espacement
+            $startColumnIndex = $index * 12 + 1;
             $currentColumn = \PhpOffice\PhpSpreadsheet\Cell\Coordinate::stringFromColumnIndex($startColumnIndex);
-
-
+            $date = new DateTime("{$annee}-" . ($index + $startMonth) . "-01");
+            $daysInMonth = $date->format('t');
+            $lastDayRow = $startRow + 1 + $daysInMonth;
+        
+            for ($day = 1; $day <= $daysInMonth; $day++) {
+                $date->setDate($annee, $index + $startMonth, $day);
+                $formattedDate = $date->format('Y-m-d');
+                $dayOfWeek = $daysOfWeek[$date->format('w')];
+                $dateColumn = \PhpOffice\PhpSpreadsheet\Cell\Coordinate::stringFromColumnIndex($startColumnIndex);
+                $dayColumn = \PhpOffice\PhpSpreadsheet\Cell\Coordinate::stringFromColumnIndex($startColumnIndex + 1);
+        
+                // Définir le jour et le jour de la semaine
+                $sheet->setCellValue("{$dateColumn}" . ($day + $startRow + 1), $day);
+                $sheet->setCellValue("{$dayColumn}" . ($day + $startRow + 1), $dayOfWeek);
+        
+                // Rechercher les activités qui commencent ce jour-là
+                $filteredActivities = $mergedActivites->filter(function ($activity) use ($formattedDate) {
+                    return $activity->start_date == $formattedDate;
+                });
+        
+                // Ajouter les activités aux colonnes appropriées
+                foreach ($filteredActivities as $activity) {
+                    $activityStartDate = new DateTime($activity->start_date);
+                    $activityEndDate = new DateTime($activity->end_date);
+                    $duration = $activityEndDate->diff($activityStartDate)->days + 1;
+        
+                    if ($activity->categorie_id == 2) {
+                        $activityColumn = \PhpOffice\PhpSpreadsheet\Cell\Coordinate::stringFromColumnIndex($startColumnIndex + 2);
+                    } elseif ($activity->categorie_id == 1) {
+                        $activityColumn = \PhpOffice\PhpSpreadsheet\Cell\Coordinate::stringFromColumnIndex($startColumnIndex + 4);
+                    }
+        
+                    $startCellCoordinate = "{$activityColumn}" . ($day + $startRow + 1);
+        
+                    if ($duration <= 3) {
+                        $endCellRow = $day + $startRow + $duration - 1;
+                        $endCellCoordinate = "{$activityColumn}{$endCellRow}";
+        
+                        // Fusionner les cellules pour les événements de 3 jours ou moins
+                        $sheet->mergeCells("{$startCellCoordinate}:{$endCellCoordinate}");
+                    } else {
+                        $endCellCoordinate = $startCellCoordinate; // Pas de fusion pour les événements de plus de 3 jours
+                    }
+        
+                    $sheet->setCellValue($startCellCoordinate, $activity->title);
+        
+                    // Centrer le texte verticalement et horizontalement
+                    $sheet->getStyle($startCellCoordinate)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
+                    $sheet->getStyle($startCellCoordinate)->getAlignment()->setVertical(\PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER);
+                    $sheet->getStyle($startCellCoordinate)->getAlignment()->setWrapText(true);
+        
+                    // Ajouter la couleur de fond et la couleur du texte
+                    if ($activity->categorie_id == 2) {
+                        $sheet->getStyle($startCellCoordinate)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)
+                            ->getStartColor()->setARGB('ffb400');
+                    } elseif ($activity->categorie_id == 1) {
+                        $sheet->getStyle($startCellCoordinate)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)
+                            ->getStartColor()->setARGB('efb88f');
+                    }
+                    $sheet->getStyle($startCellCoordinate)->getFont()->getColor()->setARGB('FFFFFFFF');
+                }
+        
+                // Appliquer une mise en forme grasse aux dates et aux jours de la semaine
+                $sheet->getStyle("{$dateColumn}" . ($day + $startRow + 1) . ":" . "{$dayColumn}" . ($day + $startRow + 1))
+                    ->getFont()
+                    ->setBold(true);
+            }
+        
+            // Ajouter des bordures autour de la section du mois entier
+            $sheet->getStyle("{$currentColumn}{$startRow}:" . \PhpOffice\PhpSpreadsheet\Cell\Coordinate::stringFromColumnIndex($startColumnIndex + 9) . "{$lastDayRow}")
+                ->getBorders()
+                ->getAllBorders()
+                ->setBorderStyle(Border::BORDER_THIN);
+        
+            for ($i = $startRow + 2; $i <= $lastDayRow; $i++) {
+                $sheet->getStyle("{$currentColumn}" . $i)
+                    ->getFill()
+                    ->setFillType(Fill::FILL_SOLID)
+                    ->getStartColor()
+                    ->setARGB('ead1dc');
+                $sheet->getStyle(\PhpOffice\PhpSpreadsheet\Cell\Coordinate::stringFromColumnIndex($startColumnIndex + 1) . $i)
+                    ->getFill()
+                    ->setFillType(Fill::FILL_SOLID)
+                    ->getStartColor()
+                    ->setARGB('eeeeee');
+            }
+        
             // Fusionner et définir le titre du mois
             $sheet->mergeCells("{$currentColumn}{$startRow}:" . \PhpOffice\PhpSpreadsheet\Cell\Coordinate::stringFromColumnIndex($startColumnIndex + 9) . "{$startRow}");
             $sheet->setCellValue("{$currentColumn}{$startRow}", $month);
@@ -179,168 +288,37 @@ class CalendrierController extends Controller
                 ->getAlignment()
                 ->setHorizontal(Alignment::HORIZONTAL_CENTER)
                 ->setVertical(Alignment::VERTICAL_CENTER);
-
-
+        
             // Définir des sous-titres
             $sheet->mergeCells("{$currentColumn}" . ($startRow + 1) . ":" . \PhpOffice\PhpSpreadsheet\Cell\Coordinate::stringFromColumnIndex($startColumnIndex + 1) . ($startRow + 1));
             $sheet->mergeCells(\PhpOffice\PhpSpreadsheet\Cell\Coordinate::stringFromColumnIndex($startColumnIndex + 2) . ($startRow + 1) . ":" . \PhpOffice\PhpSpreadsheet\Cell\Coordinate::stringFromColumnIndex($startColumnIndex + 3) . ($startRow + 1));
             $sheet->mergeCells(\PhpOffice\PhpSpreadsheet\Cell\Coordinate::stringFromColumnIndex($startColumnIndex + 4) . ($startRow + 1) . ":" . \PhpOffice\PhpSpreadsheet\Cell\Coordinate::stringFromColumnIndex($startColumnIndex + 5) . ($startRow + 1));
             $sheet->mergeCells(\PhpOffice\PhpSpreadsheet\Cell\Coordinate::stringFromColumnIndex($startColumnIndex + 6) . ($startRow + 1) . ":" . \PhpOffice\PhpSpreadsheet\Cell\Coordinate::stringFromColumnIndex($startColumnIndex + 7) . ($startRow + 1));
             $sheet->mergeCells(\PhpOffice\PhpSpreadsheet\Cell\Coordinate::stringFromColumnIndex($startColumnIndex + 8) . ($startRow + 1) . ":" . \PhpOffice\PhpSpreadsheet\Cell\Coordinate::stringFromColumnIndex($startColumnIndex + 9) . ($startRow + 1));
-
-
-            $sheet->setCellValue("{$currentColumn}" . ($startRow + 1), ' ');
-            $sheet->setCellValue(\PhpOffice\PhpSpreadsheet\Cell\Coordinate::stringFromColumnIndex($startColumnIndex + 2) . ($startRow + 1), 'Ecole du code');
-            $sheet->setCellValue(\PhpOffice\PhpSpreadsheet\Cell\Coordinate::stringFromColumnIndex($startColumnIndex + 4) . ($startRow + 1), 'Université/ODC Club');
-            $sheet->setCellValue(\PhpOffice\PhpSpreadsheet\Cell\Coordinate::stringFromColumnIndex($startColumnIndex + 6) . ($startRow + 1), 'FabLab');
-            $sheet->setCellValue(\PhpOffice\PhpSpreadsheet\Cell\Coordinate::stringFromColumnIndex($startColumnIndex + 8) . ($startRow + 1), 'Orange Fab');
-
-
-            $sheet->getStyle("{$currentColumn}" . ($startRow + 1) . ":" . \PhpOffice\PhpSpreadsheet\Cell\Coordinate::stringFromColumnIndex($startColumnIndex + 1) . ($startRow + 1))
-                ->getFill()
-                ->setFillType(Fill::FILL_SOLID)
-                ->getStartColor()
-                ->setARGB('FF000000');
-            $sheet->getStyle("{$currentColumn}" . ($startRow + 1) . ":" . \PhpOffice\PhpSpreadsheet\Cell\Coordinate::stringFromColumnIndex($startColumnIndex + 1) . ($startRow + 1))
-                ->getFont()
-                ->getColor()
-                ->setARGB('FFFFFFFF');
-            $sheet->getStyle("{$currentColumn}" . ($startRow + 1) . ":" . \PhpOffice\PhpSpreadsheet\Cell\Coordinate::stringFromColumnIndex($startColumnIndex + 1) . ($startRow + 1))
-                ->getAlignment()
-                ->setHorizontal(Alignment::HORIZONTAL_CENTER)
-                ->setVertical(Alignment::VERTICAL_CENTER);
-
-
-            // Appliquer une mise en forme en gras aux en-têtes de section
-            $styles = [1, 2, 4, 6, 8];
-            foreach ($styles as $colIndex) {
-                $sheet->getStyle(\PhpOffice\PhpSpreadsheet\Cell\Coordinate::stringFromColumnIndex($startColumnIndex + $colIndex) . ($startRow + 1) . ":" . \PhpOffice\PhpSpreadsheet\Cell\Coordinate::stringFromColumnIndex($startColumnIndex + $colIndex + 1) . ($startRow + 1))
-                    ->getFont()
-                    ->setBold(true)
-                    ->setName('Arial')
-                    ->setSize(13)
-                    ->getColor()
-                    ->setARGB('FF000000');
-                $sheet->getStyle(\PhpOffice\PhpSpreadsheet\Cell\Coordinate::stringFromColumnIndex($startColumnIndex + $colIndex) . ($startRow + 1) . ":" . \PhpOffice\PhpSpreadsheet\Cell\Coordinate::stringFromColumnIndex($startColumnIndex + $colIndex + 1) . ($startRow + 1))
-                    ->getAlignment()
-                    ->setHorizontal(Alignment::HORIZONTAL_CENTER)
-                    ->setVertical(Alignment::VERTICAL_CENTER);
-            }
-
-
-            // Définir les jours du mois avec un formatage en gras
-            $date = new DateTime("{$currentYear}-" . ($index + 1) . "-01");
-            $daysInMonth = $date->format('t');
-            $lastDayRow = $startRow + 1 + $daysInMonth;
-
-
+        
+            $sheet->setCellValue(\PhpOffice\PhpSpreadsheet\Cell\Coordinate::stringFromColumnIndex($startColumnIndex) . ($startRow + 1), 'J');
+            $sheet->setCellValue(\PhpOffice\PhpSpreadsheet\Cell\Coordinate::stringFromColumnIndex($startColumnIndex + 1) . ($startRow + 1), 'D');
+            $sheet->setCellValue(\PhpOffice\PhpSpreadsheet\Cell\Coordinate::stringFromColumnIndex($startColumnIndex + 2) . ($startRow + 1), 'C');
+            $sheet->setCellValue(\PhpOffice\PhpSpreadsheet\Cell\Coordinate::stringFromColumnIndex($startColumnIndex + 4) . ($startRow + 1), 'E');
+            $sheet->setCellValue(\PhpOffice\PhpSpreadsheet\Cell\Coordinate::stringFromColumnIndex($startColumnIndex + 6) . ($startRow + 1), 'F');
+            $sheet->setCellValue(\PhpOffice\PhpSpreadsheet\Cell\Coordinate::stringFromColumnIndex($startColumnIndex + 8) . ($startRow + 1), 'G');
+        }
+        
+        function setCalendarColumnWidth($sheet, $months, $startRow, $calendarColumnWidth) {
             foreach ($months as $index => $month) {
-                $startColumnIndex = $index * 12 + 1; // 10 columns for each month plus 2 extra for spacing
-                $currentColumn = \PhpOffice\PhpSpreadsheet\Cell\Coordinate::stringFromColumnIndex($startColumnIndex);
-
-                // Fusionner et définir le titre du mois
-                $sheet->mergeCells("{$currentColumn}{$startRow}:" . \PhpOffice\PhpSpreadsheet\Cell\Coordinate::stringFromColumnIndex($startColumnIndex + 9) . "{$startRow}");
-                $sheet->setCellValue("{$currentColumn}{$startRow}", $month);
-                $sheet->getStyle("{$currentColumn}{$startRow}:" . \PhpOffice\PhpSpreadsheet\Cell\Coordinate::stringFromColumnIndex($startColumnIndex + 9) . "{$startRow}")
-                    ->getFill()
-                    ->setFillType(Fill::FILL_SOLID)
-                    ->getStartColor()
-                    ->setARGB('FF000000');
-                $sheet->getStyle("{$currentColumn}{$startRow}:" . \PhpOffice\PhpSpreadsheet\Cell\Coordinate::stringFromColumnIndex($startColumnIndex + 9) . "{$startRow}")
-                    ->getFont()
-                    ->getColor()
-                    ->setARGB('FFFFFFFF');
-                $sheet->getStyle("{$currentColumn}{$startRow}:" . \PhpOffice\PhpSpreadsheet\Cell\Coordinate::stringFromColumnIndex($startColumnIndex + 9) . "{$startRow}")
-                    ->getAlignment()
-                    ->setHorizontal(Alignment::HORIZONTAL_CENTER)
-                    ->setVertical(Alignment::VERTICAL_CENTER);
-
-                // Définir des sous-titres
-                $sheet->mergeCells("{$currentColumn}" . ($startRow + 1) . ":" . \PhpOffice\PhpSpreadsheet\Cell\Coordinate::stringFromColumnIndex($startColumnIndex + 1) . ($startRow + 1));
-                $sheet->mergeCells(\PhpOffice\PhpSpreadsheet\Cell\Coordinate::stringFromColumnIndex($startColumnIndex + 2) . ($startRow + 1) . ":" . \PhpOffice\PhpSpreadsheet\Cell\Coordinate::stringFromColumnIndex($startColumnIndex + 3) . ($startRow + 1));
-                $sheet->mergeCells(\PhpOffice\PhpSpreadsheet\Cell\Coordinate::stringFromColumnIndex($startColumnIndex + 4) . ($startRow + 1) . ":" . \PhpOffice\PhpSpreadsheet\Cell\Coordinate::stringFromColumnIndex($startColumnIndex + 5) . ($startRow + 1));
-                $sheet->mergeCells(\PhpOffice\PhpSpreadsheet\Cell\Coordinate::stringFromColumnIndex($startColumnIndex + 6) . ($startRow + 1) . ":" . \PhpOffice\PhpSpreadsheet\Cell\Coordinate::stringFromColumnIndex($startColumnIndex + 7) . ($startRow + 1));
-                $sheet->mergeCells(\PhpOffice\PhpSpreadsheet\Cell\Coordinate::stringFromColumnIndex($startColumnIndex + 8) . ($startRow + 1) . ":" . \PhpOffice\PhpSpreadsheet\Cell\Coordinate::stringFromColumnIndex($startColumnIndex + 9) . ($startRow + 1));
-
-                $sheet->setCellValue("{$currentColumn}" . ($startRow + 1), 'Date');
-                $sheet->setCellValue(\PhpOffice\PhpSpreadsheet\Cell\Coordinate::stringFromColumnIndex($startColumnIndex + 2) . ($startRow + 1), 'Ecole du code');
-                $sheet->setCellValue(\PhpOffice\PhpSpreadsheet\Cell\Coordinate::stringFromColumnIndex($startColumnIndex + 4) . ($startRow + 1), 'Université/ODC Club');
-                $sheet->setCellValue(\PhpOffice\PhpSpreadsheet\Cell\Coordinate::stringFromColumnIndex($startColumnIndex + 6) . ($startRow + 1), 'FabLab');
-                $sheet->setCellValue(\PhpOffice\PhpSpreadsheet\Cell\Coordinate::stringFromColumnIndex($startColumnIndex + 8) . ($startRow + 1), 'Orange Fab');
-
-                $sheet->getStyle("{$currentColumn}" . ($startRow + 1) . ":" . \PhpOffice\PhpSpreadsheet\Cell\Coordinate::stringFromColumnIndex($startColumnIndex + 1) . ($startRow + 1))
-                    ->getFill()
-                    ->setFillType(Fill::FILL_SOLID)
-                    ->getStartColor()
-                    ->setARGB('FF000000');
-                $sheet->getStyle("{$currentColumn}" . ($startRow + 1) . ":" . \PhpOffice\PhpSpreadsheet\Cell\Coordinate::stringFromColumnIndex($startColumnIndex + 1) . ($startRow + 1))
-                    ->getFont()
-                    ->getColor()
-                    ->setARGB('FFFFFFFF');
-                $sheet->getStyle("{$currentColumn}" . ($startRow + 1) . ":" . \PhpOffice\PhpSpreadsheet\Cell\Coordinate::stringFromColumnIndex($startColumnIndex + 1) . ($startRow + 1))
-                    ->getAlignment()
-                    ->setHorizontal(Alignment::HORIZONTAL_CENTER)
-                    ->setVertical(Alignment::VERTICAL_CENTER);
-
-                // Appliquer une mise en forme en gras aux en-têtes de sectio
-                $styles = [2, 4, 6, 8];
-                foreach ($styles as $colIndex) {
-                    $sheet->getStyle(\PhpOffice\PhpSpreadsheet\Cell\Coordinate::stringFromColumnIndex($startColumnIndex + $colIndex) . ($startRow + 1) . ":" . \PhpOffice\PhpSpreadsheet\Cell\Coordinate::stringFromColumnIndex($startColumnIndex + $colIndex + 1) . ($startRow + 1))
-                        ->getFont()
-                        ->setBold(true)
-                        ->setName('Arial')
-                        ->setSize(13)
-                        ->getColor()
-                        ->setARGB('FF000000');
-                    $sheet->getStyle(\PhpOffice\PhpSpreadsheet\Cell\Coordinate::stringFromColumnIndex($startColumnIndex + $colIndex) . ($startRow + 1) . ":" . \PhpOffice\PhpSpreadsheet\Cell\Coordinate::stringFromColumnIndex($startColumnIndex + $colIndex + 1) . ($startRow + 1))
-                        ->getAlignment()
-                        ->setHorizontal(Alignment::HORIZONTAL_CENTER)
-                        ->setVertical(Alignment::VERTICAL_CENTER);
-                }
-
-                // Définir les jours du mois avec un formatage en gras
-                $date = new DateTime("{$currentYear}-" . ($index + 1) . "-01");
-                $daysInMonth = $date->format('t');
-                $lastDayRow = $startRow + 1 + $daysInMonth;
-
-                for ($day = 1; $day <= $daysInMonth; $day++) {
-                    $date->setDate($currentYear, $index + 1, $day);
-                    $dayOfWeek = $daysOfWeek[$date->format('w')];
-                    $dateColumn = \PhpOffice\PhpSpreadsheet\Cell\Coordinate::stringFromColumnIndex($startColumnIndex);
-                    $dayColumn = \PhpOffice\PhpSpreadsheet\Cell\Coordinate::stringFromColumnIndex($startColumnIndex + 1);
-                    $sheet->setCellValue("{$dateColumn}" . ($day + $startRow + 1), $day); // seulement le jour
-                    $sheet->setCellValue("{$dayColumn}" . ($day + $startRow + 1), $dayOfWeek);
-
-                    // Appliquer une mise en forme grasse aux dates et aux jours de la semaine
-                    $sheet->getStyle("{$dateColumn}" . ($day + $startRow + 1) . ":" . "{$dayColumn}" . ($day + $startRow + 1))
-                        ->getFont()
-                        ->setBold(true);
-                }
-
-                // Ajoutez des bordures uniquement autour de la section du mois entier
-
-                $sheet->getStyle("{$currentColumn}{$startRow}:" . \PhpOffice\PhpSpreadsheet\Cell\Coordinate::stringFromColumnIndex($startColumnIndex + 9) . "{$lastDayRow}")
-                    ->getBorders()
-                    ->getAllBorders()
-                    ->setBorderStyle(Border::BORDER_THIN);
-
-                for ($i = $startRow + 2; $i <= $lastDayRow; $i++) {
-                    $sheet->getStyle("{$currentColumn}" . $i)
-                        ->getFill()
-                        ->setFillType(Fill::FILL_SOLID)
-                        ->getStartColor()
-                        ->setARGB('ead1dc');
-                    $sheet->getStyle(\PhpOffice\PhpSpreadsheet\Cell\Coordinate::stringFromColumnIndex($startColumnIndex + 1) . $i)
-                        ->getFill()
-                        ->setFillType(Fill::FILL_SOLID)
-                        ->getStartColor()
-                        ->setARGB('eeeeee');
+                $startColumnIndex = $index * 12 + 1;
+                for ($col = 0; $col < 12; $col++) {
+                    $sheet->getColumnDimension(\PhpOffice\PhpSpreadsheet\Cell\Coordinate::stringFromColumnIndex($startColumnIndex + $col))->setWidth($calendarColumnWidth);
                 }
             }
         }
+        
+        
 
 
-        function mergeAndFormatCells($sheet, $cellRange, $text, $backgroundColor, $textColor = null, $bold = true, $horizontalAlign = Alignment::HORIZONTAL_CENTER, $verticalAlign = Alignment::VERTICAL_CENTER) {
+
+        function fusionCell($sheet, $cellRange, $text, $backgroundColor, $textColor = null, $bold = true, $horizontalAlign = Alignment::HORIZONTAL_CENTER, $verticalAlign = Alignment::VERTICAL_CENTER)
+        {
             $sheet->mergeCells($cellRange);
             $startCell = explode(':', $cellRange)[0];
             $sheet->setCellValue($startCell, $text);
@@ -355,19 +333,17 @@ class CalendrierController extends Controller
             $sheet->getStyle($cellRange)->getBorders()->getBottom()->setBorderStyle(Border::BORDER_THIN);
             $sheet->getStyle($cellRange)->getBorders()->getRight()->setBorderStyle(Border::BORDER_THIN);
         }
-        
 
-        mergeAndFormatCells($sheet, 'A8:C13', 'OpenLab (FabLab)', 'FF6D01');
-        mergeAndFormatCells($sheet, 'A14:C15', 'Atelier RoboKID (Ecole Numérique)', 'ff9a4f');
-        mergeAndFormatCells($sheet, 'A16:C17', 'Workshop FabLab', 'efb88f');
-        mergeAndFormatCells($sheet, 'A18:C38', 'Formations en ligne/ODC/Univérsités', 'ffb400');
-        mergeAndFormatCells($sheet, 'A18:C38', 'Formations en ligne/ODC/Univérsités', 'ffb400');
-        mergeAndFormatCells($sheet, 'A39:C39', '', '0a6e31');
-        mergeAndFormatCells($sheet, 'A40:C41', 'ODC talks', '0a6e31');
-        mergeAndFormatCells($sheet, 'A42:C49', 'Evènements', 'ff7900');
-        mergeAndFormatCells($sheet, 'A50:C52', 'SuperCodeurs', '085ebd');
-        mergeAndFormatCells($sheet, 'A53:C56', 'Stages', '000000', 'FFFFFF');
-
+        fusionCell($sheet, 'A8:C13', 'OpenLab (FabLab)', 'FF6D01');
+        fusionCell($sheet, 'A14:C15', 'Atelier RoboKID (Ecole Numérique)', 'ff9a4f');
+        fusionCell($sheet, 'A16:C17', 'Workshop FabLab', 'efb88f');
+        fusionCell($sheet, 'A18:C38', 'Formations en ligne/ODC/Univérsités', 'ffb400');
+        fusionCell($sheet, 'A18:C38', 'Formations en ligne/ODC/Univérsités', 'ffb400');
+        fusionCell($sheet, 'A39:C39', '', '0a6e31');
+        fusionCell($sheet, 'A40:C41', 'ODC talks', '0a6e31');
+        fusionCell($sheet, 'A42:C49', 'Evènements', 'ff7900');
+        fusionCell($sheet, 'A50:C52', 'SuperCodeurs', '085ebd');
+        fusionCell($sheet, 'A53:C56', 'Stages', '000000', 'FFFFFF');
 
         // Définir les styles titre
         $sheet->getStyle('B1')
@@ -727,7 +703,6 @@ class CalendrierController extends Controller
             ->setName('Arial')
             ->setSize(18);
 
-
         // Ajuster la largeur des colonnes contenant les titres
         $sheet->mergeCells('B1:D1')->getColumnDimension('B')->setWidth(20);
         $sheet->mergeCells('B2:D2')->getColumnDimension('C')->setWidth(20);
@@ -743,14 +718,14 @@ class CalendrierController extends Controller
             $sheet->getColumnDimension($column)->setWidth(15);
         }
 
-        $columnWidths = [];
+        $largCol = [];
         for ($column = 'B'; $column <= 'D'; $column++) {
-            $columnWidths[$column] = $sheet->getColumnDimension($column)->getWidth();
+            $largCol[$column] = $sheet->getColumnDimension($column)->getWidth();
         }
 
         // Réinitialiser la largeur de chaque colonne fusionnée
         for ($column = 'B'; $column <= 'D'; $column++) {
-            $sheet->getColumnDimension($column)->setWidth($columnWidths[$column]);
+            $sheet->getColumnDimension($column)->setWidth($largCol[$column]);
         }
 
         // Ajuster la largeur des colonnes Fablab
@@ -759,14 +734,14 @@ class CalendrierController extends Controller
         $sheet->mergeCells('F3:G3');
         $sheet->mergeCells('F4:G4');
 
-        $columnWidths = [];
+        $hautCol = [];
         for ($column = 'F'; $column <= 'G'; $column++) {
-            $columnWidths[$column] = $sheet->getColumnDimension($column)->getWidth();
+            $hautCol[$column] = $sheet->getColumnDimension($column)->getWidth();
         }
 
         // Réinitialiser la largeur de chaque colonne fusionnée
         for ($column = 'F'; $column <= 'G'; $column++) {
-            $sheet->getColumnDimension($column)->setWidth($columnWidths[$column]);
+            $sheet->getColumnDimension($column)->setWidth($hautCol[$column]);
         }
 
         // Ajuster la largeur des colonnes CIBLE : EXTERNE
@@ -777,7 +752,7 @@ class CalendrierController extends Controller
         $sheet->mergeCells('I5:M5');
         $sheet->mergeCells('M8:M56');
 
-        $styleArray = [
+        $bordure = [
             'borders' => [
                 'outline' => [
                     'borderStyle' => Border::BORDER_THIN,
@@ -785,14 +760,14 @@ class CalendrierController extends Controller
                 ],
             ],
         ];
-        
-        $sheet->getStyle('M8:M56')->applyFromArray($styleArray);
-        // ------------------------------------------------------------// 
 
-        $styleArray = [
+        $sheet->getStyle('M8:M56')->applyFromArray($bordure);
+
+        // -------- Definir des bordures bas -------------// 
+        $bordure = [
             'borders' => [
                 'bottom' => [
-                    'borderStyle' =>Border::BORDER_THIN,
+                    'borderStyle' => Border::BORDER_THIN,
                     'color' => ['argb' => 'FF000000'],
                 ],
             ],
@@ -801,21 +776,20 @@ class CalendrierController extends Controller
         $startRow = 8;
         $endColumn = 'L';
         $endRow = 56;
-        
+
         // Parcourir chaque cellule dans la plage
         for ($row = $startRow; $row <= $endRow; $row++) {
             for ($col = ord($startColumn); $col <= ord($endColumn); $col++) {
                 $cell = chr($col) . $row;
-                $sheet->getStyle($cell)->applyFromArray($styleArray);
+                $sheet->getStyle($cell)->applyFromArray($bordure);
             }
         }
 
-        //-----------------------------------------------------------//
-       
-        $styleArray = [
+        // Definir des bordures gauches
+        $bordure = [
             'borders' => [
                 'left' => [
-                    'borderStyle' =>Border::BORDER_THIN,
+                    'borderStyle' => Border::BORDER_THIN,
                     'color' => ['argb' => 'FF000000'],
                 ],
             ],
@@ -824,38 +798,39 @@ class CalendrierController extends Controller
         $startRow = 8;
         $endColumn = 'L';
         $endRow = 56;
-        
+
         // Parcourir chaque cellule dans la plage
         for ($row = $startRow; $row <= $endRow; $row++) {
             for ($col = ord($startColumn); $col <= ord($endColumn); $col++) {
                 $cell = chr($col) . $row;
-                $sheet->getStyle($cell)->applyFromArray($styleArray);
+                $sheet->getStyle($cell)->applyFromArray($bordure);
             }
         }
-        //-----------------------------------------------------------//
 
-        $styleArray = [
+        //---- Definir la couleur des bordures--------------//
+
+        $bordure = [
             'fill' => [
                 'fillType' => Fill::FILL_SOLID,
                 'startColor' => ['argb' => 'FF000000'],
             ],
         ];
-        
-        $sheet->getStyle('D57:M57')->applyFromArray($styleArray);
+
+        $sheet->getStyle('D57:M57')->applyFromArray($bordure);
         //-----------------------------------------------------------//
-        $columnWidths = [];
+        $largCol = [];
         for ($column = 'I'; $column <= 'M'; $column++) {
-            $columnWidths[$column] = $sheet->getColumnDimension($column)->getWidth();
+            $largCol[$column] = $sheet->getColumnDimension($column)->getWidth();
         }
 
         // Réinitialiser la largeur de chaque colonne fusionnée
         for ($column = 'I'; $column <= 'M'; $column++) {
-            $sheet->getColumnDimension($column)->setWidth($columnWidths[$column]);
+            $sheet->getColumnDimension($column)->setWidth($largCol[$column]);
         }
 
-        /////////////////////////////////////////////////
+        ///////////////////////a//////////////////////////
         $sheet->mergeCells('A7:C7')->getRowDimension(1)
-            ->setRowHeight(30);;
+            ->setRowHeight(30); 
 
         $writer = new Xlsx($spreadsheet);
         $spreadsheet->getSheetByName('Feuille 1');
