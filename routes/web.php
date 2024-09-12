@@ -9,6 +9,11 @@ Route::get('/', function () {
     return redirect('login');
 });
 
+Route::get('/settings', function () {
+    $users = User::all();
+    return view('settings.setting', compact('users'));
+})->name('setting');
+
 Route::get('/dashboard', [ActiviteController::class, 'chartActivity'])->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
