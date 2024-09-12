@@ -3,10 +3,16 @@
 use App\Http\Controllers\ActiviteController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProfileController;
+use App\Models\User;
 
 Route::get('/', function () {
     return redirect('login');
 });
+
+Route::get('/settings', function () {
+    $users = User::all();
+    return view('settings.setting',compact('users'));
+})->name('setting');
 
 Route::get('/dashboard', [ActiviteController::class, 'chartActivity'])->middleware(['auth', 'verified'])->name('dashboard')->middleware('permissions:super-admin');
 
