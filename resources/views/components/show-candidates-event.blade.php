@@ -28,11 +28,11 @@
 
                         <th scope="col"
                             class="px-6 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                            Firstname
+                            Prénom
                         </th>
                         <th scope="col"
                             class="px-6 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                            Lastname
+                            Nom
                         </th>
                         @foreach (array_unique($labels) as $label)
                             @if (isset($label))
