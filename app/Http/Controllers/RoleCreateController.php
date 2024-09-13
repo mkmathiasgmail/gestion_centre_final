@@ -3,7 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\Role;
+use Spatie\Permission\Models\Role;
+
 
 class RoleCreateController extends Controller
 {
@@ -30,12 +31,12 @@ class RoleCreateController extends Controller
     {
         $request->validate([
             'name' => 'required|string|max:255',
-            'guard_name' => 'required|string|max:255',
+
         ]);
 
-        $role = Role::create([
+        Role::create([
             'name' => $request->name,
-            'guard_name' => $request->guard_name,
+            
         ]);
         return redirect()->route('user_role.index')->with('success', 'Role created successfully.');
     }
