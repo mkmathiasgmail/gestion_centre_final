@@ -13,6 +13,7 @@ use App\Models\Categorie;
 use App\Models\TypeEvent;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
+use App\Models\CourseraUsage;
 use App\Models\CourseraMember;
 use App\Models\CandidatAttribute;
 use Illuminate\Routing\Controller;
@@ -20,6 +21,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Http;
+use App\Models\CourseraSpecialisation;
 use Yajra\DataTables\Facades\DataTables;
 
 class ActiviteController extends Controller
@@ -504,10 +506,16 @@ class ActiviteController extends Controller
             ->selectRaw("count(case when completed = 'No' then 1 end) as noCompleted")
             ->first();
 
+    
 
-        $specialisationsCount = DB::table('coursera_specialisations')->select('specialisaton_name')->count();
+        $specialisations = CourseraSpecialisation::where('specialization_completion_time', '<', now())->count();
 
+        $specialisationsCount = DB::table('coursera_specialisations')                    
+                    ->select('specialisaton_name')->count();
 
+        $completedSpecialisations = CourseraSpecialisation::where('completed', 'yes')->count();
+        $uncompletedSpecialisations = CourseraSpecialisation::where('completed', 'NO')->count();
+        $deletedUsages = CourseraUsage::where('removed_from_program', 'Yes')->count();
 
 
         $usagesEncourrs = DB::table('coursera_usages')
@@ -515,7 +523,15 @@ class ActiviteController extends Controller
             ->where('class_end_time', '>=', now())->count();
 
 
-        return view('coursera.coursera_rapports', compact('datasets', 'labels', "coursera_members", "specialisationsCount", "coursera_usages"));
+        return view('coursera.coursera_rapports', compact('datasets', 
+                                                            'labels', "coursera_members", 
+                                                            "specialisationsCount", 
+                                                            "coursera_usages", 
+                                                            "specialisations",
+                                                            "completedSpecialisations",
+                                                            "uncompletedSpecialisations",
+                                                            "deletedUsages"
+                                                            ));
     }
 
 
