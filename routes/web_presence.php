@@ -11,16 +11,13 @@ Route::post('storeqrcode/{id}', [QrCodeController::class, 'store'])->name('store
 // Route::resource('presences', PresenceController::class)->middleware('permissions');
 Route::get('create/{id}', [PresenceController::class, 'create'])->name('create');
 Route::get('presences', [PresenceController::class, 'index'])->name('presences.index');
-Route::post('store/{id}', [PresenceController::class, 'store'])->name('presences.store');
+Route::post('store/', [PresenceController::class, 'store'])->name('presences.store');
 Route::post('userlocal', [PresenceController::class, 'userlocal'])->name('userlocal');
-Route::get('security', function () {
-    return view('presences.securite');
-})->name('security');
+Route::get('security', [PresenceController::class, 'security'])->name('security');
 Route::get('scanner', function () {
     return view('presences.camera');
 })->name('scanner');
-
-
+Route::get('autocompleted/{id}',[PresenceController::class,'searchQuery'])->name('autocompleted');
 // client routes
 Route::post('/filtrer/{id}', [PresenceController::class, 'filtrer'])->name('filtrer');
 Route::get('/activitencours', [PresenceController::class, 'encours'])->name('activitencours');

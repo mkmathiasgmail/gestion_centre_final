@@ -5,20 +5,24 @@ namespace App\Http\Controllers;
 
 
 
-use App\Http\Resources\EmployabiliteResource;
 use DateTime;
+use App\Models\Poste;
 use App\Models\Odcuser;
 use App\Models\Activite;
+use App\Models\Candidat;
+use App\Models\Entreprise;
+use App\Models\TypeContrat;
 use Illuminate\Http\Request;
 use App\Models\Employabilite;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\DB;
+use Yajra\DataTables\Facades\DataTables;
+use Illuminate\Support\Facades\Validator;
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
+use App\Http\Resources\EmployabiliteResource;
 use App\Http\Requests\StoreEmployabiliteRequest;
 use App\Http\Requests\UpdateEmployabiliteRequest;
-use App\Models\Entreprise;
-use App\Models\TypeContrat;
-use App\Models\Poste;
-use Yajra\DataTables\Facades\DataTables;
 
 class EmployabiliteController extends Controller
 {
@@ -168,7 +172,11 @@ class EmployabiliteController extends Controller
                         'derniere_service' => $activites->first()->name,
                         'date_participation' => $activites->first()->start_date,
                         'odcuser_id' => $request->id_user,
-                        'type_contrat_id' => $request->type_contrat
+                        'type_contrat_id' => $request->type_contrat,
+                        'genre' => $request->genre,
+                        'tranche_age' => $request->tranche_age,
+                        'niveau_academique' => $request->niveau_academique,
+
                     ]);
                     return redirect()->route('employabilites.index')->with('success', 'Employé ajouté avec succès');
                 } else {
@@ -198,19 +206,12 @@ class EmployabiliteController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateEmployabiliteRequest $request, Employabilite $employabilite) {
-
-
-
-    }
+    public function update(UpdateEmployabiliteRequest $request, Employabilite $employabilite) {}
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy($id)
-    {
-
-    }
+    public function destroy($id) {}
 
     public function getEmplois(Request $request, $id)
     {
@@ -248,4 +249,97 @@ class EmployabiliteController extends Controller
         }
     }
 
+    public function import(Request $request)
+    {
+        $request->validate([
+            'file' => 'required'
+        ]);
+
+        $file = $request->file('file');
+        $fileContents = file($file->getPathname());
+        $header = str_getcsv(array_shift($fileContents));
+        foreach ($fileContents as $line) {
+            $data = str_getcsv($line);
+            $rowData = array_combine($header, $data);
+            try {
+                $validatedData = $this->validateRowData($rowData);
+
+                $id = TypeContrat::select('id')->where('libelle', $validatedData['type_contrat'])->first();
+
+                $validatedData['type_contrat_id'] = $id->id; // Ajouter la nouvelle clé
+                unset($validatedData['type_contrat']);
+
+                $odcuser = Odcuser::select('id')->where('first_name', $validatedData['name'])->where('last_name', $validatedData['last_name'])->first();
+                unset($validatedData['last_name']);
+
+                if ($odcuser) {
+                    $validatedData['odcuser_id'] = $odcuser->id; // Ajouter la nouvelle clé
+                    Employabilite::create($validatedData);
+                } else {
+                    Employabilite::create($validatedData);
+                }
+            } catch (\Throwable $th) {
+                return response()->json(['error' => 'Une erreur est survenue : ' . $th->getMessage()], 500);
+            }
+        }
+        return redirect()->back()->with('success', 'Importation exécutée avec succès');
+    }
+
+    private function validateRowData($rowData)
+    {
+
+        // Définir les règles de validation spécifiques
+        $validator = Validator::make($rowData, [
+            'name' => '',
+            'last_name' => '',
+            'nomboite' => '',
+            'poste' => '',
+            'type_contrat' => '',
+            'periode' => '',
+            'derniere_activite' => '',
+            'derniere_service' => '',
+            'date_participation' => '',
+            'genre' => '',
+            'tranche_age' => '',
+            'niveau_academique' => '',
+
+        ]);
+
+        // Si la validation échoue, lever une exception
+        if ($validator->fails()) {
+            throw new \Illuminate\Validation\ValidationException($validator);
+        }
+
+        return $validator->validated();
+    }
+
+    public function exportModelEmploye(Request $request)
+    {
+
+        //header of our spreadsheet
+        $spreadsheet = new Spreadsheet();
+        $sheet = $spreadsheet->getActiveSheet();
+        $sheet->setTitle('Model 1'); // This is where I set the title of my sheet
+        /*here is the header of my sheet*/
+        $sheet->setCellValue('A1', 'name');
+        $sheet->setCellValue('B1', 'last_name');
+        $sheet->setCellValue('C1', 'niveau_academique');
+        $sheet->setCellValue('D1', 'poste');
+        $sheet->setCellValue('E1', 'type_contrat');
+        $sheet->setCellValue('F1', 'periode');
+        $sheet->setCellValue('G1', 'genre');
+        $sheet->setCellValue('H1', 'tranche_age');
+        $sheet->setCellValue('I1', 'derniere_activite');
+        $sheet->setCellValue('J1', 'derniere_service');
+        $sheet->setCellValue('K1', 'date_participation');
+
+
+        // Save the spreadsheet to a temporary file
+        $writer = new Xlsx($spreadsheet);
+        $fileName = "Model du fichier d'importation_employabilite.xlsx";
+        header("Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+        header("Content-Disposition: attachment;filename=\"$fileName\"");
+        $writer->save("php://output");
+        exit();
+    }
 }

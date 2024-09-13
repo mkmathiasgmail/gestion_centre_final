@@ -15,9 +15,10 @@ export default {
             fontFamily: {
                 sans: ["Figtree", ...defaultTheme.fontFamily.sans],
             },
-            zIndex: {
-                '100': '100',
-              }
+            colors: {
+                odcolor: "#ff7900",
+
+            }
         },
     },
 

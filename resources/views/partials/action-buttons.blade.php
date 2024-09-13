@@ -24,80 +24,95 @@
 
         <li>
             @if ($activite->show_in_calendar)
-                <a href="{{ route('showInCalendar', $activite->id) }}" data-modal-target="active"
-                    data-modal-toggle="active"
-                    class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
-                    onclick="desactiver(event, {{ $activite->id }}))">Desactiver au calendar</a>
+                <a href="{{ route('showInCalendar', $activite->id) }}"
+                    onclick="return confirmAction(event, '{{ $activite->id }}', 'Désactiver')"
+                    class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Désactiver au
+                    calendrier</a>
             @else
-                <a href="{{ route('showInCalendar', $activite->id) }}" data-modal-target="desactive"
-                    data-modal-toggle="desactive"
-                    class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
-                    onclick="activer(event, {{ $activite->id }}))">Active au calendar</a>
+                <a href="{{ route('showInCalendar', $activite->id) }}"
+                    onclick="return confirmAction(event, '{{ $activite->id }}', 'Activer')"
+                    class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Activer au
+                    calendrier</a>
             @endif
+
         </li>
 
         <li>
             @if ($activite->status)
-                <a href="{{ route('send', $activite->id) }}" data-modal-target="active" data-modal-toggle="active"
-                    class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
-                    onclick="desactiver(event, {{ $activite->id }}))">Desactiver Status</a>
+                <a href="{{ route('send', $activite->id) }}"
+                    onclick="return confirmAction(event, '{{ $activite->id }}', 'Désactiver')"
+                    class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Desactiver
+                    Status</a>
             @else
-                <a href="{{ route('send', $activite->id) }}" data-modal-target="desactive"
-                    data-modal-toggle="desactive"
-                    class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
-                    onclick="activer(event, {{ $activite->id }}))">Active Status</a>
+                <a href="{{ route('send', $activite->id) }}"
+                    onclick="return confirmAction(event, '{{ $activite->id }}', 'Activer')"
+                    class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Active
+                    Status</a>
             @endif
         </li>
 
         <li>
             @if ($activite->show_in_calendar)
-                <a href="{{ route('IsEvent', $activite->id) }}" data-modal-target="active" data-modal-toggle="active"
-                    class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
-                    onclick="desactiver(event, {{ $activite->id }}))">Desactiver IsEvent</a>
+                <a href="{{ route('IsEvent', $activite->id) }}"
+                    onclick="return confirmAction(event, '{{ $activite->id }}', 'Désactiver')"
+                    class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Desactiver
+                    IsEvent</a>
             @else
-                <a href="{{ route('IsEvent', $activite->id) }}" data-modal-target="desactive"
-                    data-modal-toggle="desactive"
-                    class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
-                    onclick="activer(event, {{ $activite->id }}))">Active IsEvent</a>
+                <a href="{{ route('IsEvent', $activite->id) }}"
+                    onclick="return confirmAction(event, '{{ $activite->id }}', 'Activer')"
+                    class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Active
+                    IsEvent</a>
             @endif
         </li>
 
         <li>
             @if ($activite->show_in_calendar)
-                <a href="{{ route('bookInSeat', $activite->id) }}" data-modal-target="#active-{{ $activite->id }}"
-                    data-modal-hide="#active-{{ $activite->id }}"
-                    class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
-                    onclick="desactiver(event, {{ $activite->id }})">Désactiver bookInSeat</a>
+                <a href="{{ route('bookInSeat', $activite->id) }}"
+                    onclick="return confirmAction(event, '{{ $activite->id }}', 'Désactiver')"
+                    class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Désactiver
+                    bookInSeat</a>
             @else
-                <a href="{{ route('bookInSeat', $activite->id) }}" data-modal-target="#active-{{ $activite->id }}"
-                    class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
-                    onclick="activer(event, {{ $activite->id }})">Activer bookInSeat</a>
+                <a href="{{ route('bookInSeat', $activite->id) }}" data-modal-target="active-{{ $activite->id }}"
+                    onclick="return confirmAction(event, '{{ $activite->id }}', 'Activer')"
+                    class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Activer
+                    bookInSeat</a>
             @endif
         </li>
 
         <li>
             @if ($activite->show_in_slider)
-                <a href="{{ route('showInSlider', $activite->id) }}" data-modal-target="#active-{{ $activite->id }}"
-                    class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
-                    onclick="desactiver(event, {{ $activite->id }})">Désactiver showInSlider</a>
+                <a href="{{ route('showInSlider', $activite->id) }}" data-modal-target="active-{{ $activite->id }}"
+                    onclick="return confirmAction(event, '{{ $activite->id }}', 'Désactiver')"
+                    class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Désactiver
+                    showInSlider</a>
             @else
-                <a href="{{ route('showInSlider', $activite->id) }}" data-modal-target="#active-{{ $activite->id }}"
-                    class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
-                    onclick="activer(event, {{ $activite->id }})">Activer showInSlider</a>
+                <a href="{{ route('showInSlider', $activite->id) }}" data-modal-target="active-{{ $activite->id }}"
+                    onclick="return confirmAction(event, '{{ $activite->id }}', 'Activer')"
+                    class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Activer
+                    showInSlider</a>
             @endif
         </li>
 
     </ul>
     <div class="py-2">
         <li>
-            <a onclick="destroy(event)" href="{{ route('activites.destroy', $activite->id) }}"
+            <a onclick="return destroy(event, '{{ route('activites.destroy', $activite->id) }}')" href="#"
                 class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
                 data-modal-target="delete" data-modal-toggle="delete">Delete</a>
         </li>
     </div>
+
 </div>
+
+<button data-modal-target="timeline-modal" data-modal-toggle="timeline-modal"
+    class="hidden text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+    type="button">
+    Toggle modal
+</button>
 
 
 <x-statusactive :activiteid="$activite->id" :name="__('Would you like show in calendar this activity? ')" />
 
 <x-statusdesactive :activiteid="$activite->id" :name="__('Would you like disable in calendar this activity? ')" />
+
+<x-delete :activiteid="$activite->id" :name="__('Would you like disable in calendar this activity? ')" />
