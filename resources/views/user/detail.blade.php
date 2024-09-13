@@ -124,6 +124,9 @@
                 </svg>
             </a>
         </div>
-<x-checkboxAddRole />
-<x-checkboxDesRole />
+        @section('modal')
+        <x-checkboxAddRole />
+        <x-checkboxDesRole />
+        @endsection
+
 </x-app-layout>
