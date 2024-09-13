@@ -2,13 +2,10 @@
 
 namespace App\Http\Controllers;
 
-
-
-use auth;
 use Carbon\Carbon;
-
 use App\Models\Odcuser;
 use App\Models\Activite;
+use App\Models\Candidat;
 use App\Models\Presence;
 use App\Models\Userlocal;
 use Illuminate\Http\Request;
@@ -26,68 +23,133 @@ class PresenceController extends Controller
 
         return view('presences.presence', compact('presences'));
     }
-    public function create($id)
+    public function create($id, Request $request)
     {
-        return view('presences.selection', compact('id'));
+        $selected = $request->query('selected');
+        $selectedids = explode(',', $id);
+        $events = [];
+        foreach ($selectedids as $key => $value) {
+            $events[] = Activite::find($value);
+        }
+        $activite = Activite::find($id);
+        return view('presences.selection', compact('id', 'activite', 'events'));
     }
     public function filtrer(Request $request, $id)
     {
-        $request->validate([
-            'email' => 'required|max:50|min:6',
-        ]);
+        $coordonnee = $request->input('coordonnee');
 
-        $email = $request->input('email');
-        $filtre = Odcuser::where('email', $email)->first();
+        $re = '/(^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$)|([0-9]{9})$/m';
 
-        if ($filtre) {
-            $candidat = $filtre->candidat()->where('status', 'accept')->where('activite_id', $id)->first();
-            if ($candidat) {
-                $activiteCandidat = $candidat->where('activite_id', $id);
+        preg_match($re, $coordonnee, $value);
 
-                if ($activiteCandidat) {
-                    return view('presences.confirInfo', [
-                        'prenom' => $filtre->first_name,
-                        'nom' => $filtre->last_name,
-                        'id' => $id,
-                    ]);
-                } else {
-                    return back()->with('errorinactif', 'vous n\'êtes de cette activité!');
-                }
-            } else {
-                return back()->with('error', 'Vous n\'êtes pas un participant de cette activite!');
+        $activity = Activite::find($id);
+
+        if (isset($value[1]) && $value[1] !== "") {
+            $email = $value[1];
+            $odcuser = Odcuser::where('email', $email)->first();
+            if (!$odcuser) {
+                return [
+                    'error' => 'Désole, vous n\'avez pas de compte. Contactez un agent de la sécurité pour vous créer un compte. Merci !',
+                    'title' => $activity->title
+                ];
             }
-        } else {
-            return back()->with('error', 'Utilisateur n\'existe pas!');
+            return [
+                'prenom' => $odcuser->first_name,
+                'nom' => $odcuser->last_name,
+                'email' => $odcuser->email,
+                'id' => $id,
+                'activite' => $activity->title,
+            ];
+        } elseif (isset($value[2]) || is_int($value[2])) {
+            $numero = $value[2];
+            $candidat = DB::table('candidat_attributes')
+                ->select('candidat_attributes.candidat_id', 'candidats.odcuser_id', 'candidats.id', 'odcusers.first_name', 'odcusers.last_name', 'odcusers.email', 'activites.title')
+                ->join('candidats', 'candidats.id', '=', 'candidat_attributes.candidat_id')
+                ->join('activites', 'activites.id', '=', 'candidats.activite_id')
+                ->join('odcusers', 'odcusers.id', '=', 'candidats.odcuser_id')
+                ->where('candidat_attributes.value', 'like', "%$numero%")
+                ->where('candidats.activite_id', $id)
+                ->where('candidats.status', 'accept')
+                ->first();
+
+
+            if (!isset($candidat)) {
+                return [
+                    'error' => 'Désolé, vous n\'êtes pas enregistré sur cette activité. Merci !',
+                    'title' => $activity->title
+                ];
+            }
+
+            return [
+                'prenom' => $candidat->first_name,
+                'nom' => $candidat->last_name,
+                'email' => $candidat->email,
+                'id' => $id,
+                'activite' => $activity->title
+            ];
         }
     }
-    public function store(Request $request, $id)
-    {
-        // Valider les données entrantes
-       
-        $validatedData = $request->validate([
-            'firstname' => 'required|string',
-            'lastname' => 'required|string',
-        ]);
 
-        $prenom = $validatedData['firstname'];
-        $nom = $validatedData['lastname'];
-        // Rechercher l'ID du candidat correspondant
-        $candidatId = DB::table('candidats')
-            ->join('odcusers', 'candidats.odcuser_id', '=', 'odcusers.id')
-            ->join('activites', 'candidats.activite_id', '=', 'activites.id')
-            ->where('odcusers.first_name', $prenom)
-            ->where('odcusers.last_name', $nom)
-            ->where('activites.id',$id)
-            ->select('candidats.id')
+    public function store(Request $request)
+    {
+        $prenom = $request->input('firstname');
+        $nom = $request->input('lastname');
+        $email = $request->input('email');
+        $idactivite = $request->input('id');
+
+        $odcuser = DB::table('odcusers')
+            ->where('first_name', $prenom)
+            ->where('last_name', $nom)
+            ->where('email', $email)
+            ->select('id')
             ->first();
-        if ($candidatId->id) {
-            $presence = new Presence;
-            $presence->candidat_id = $candidatId->id;
-            $presence->date = now();
-            $presence->save();
-            return view('presences.confirmation');
+
+        if ($odcuser) {
+            $candidat = DB::table('candidats')
+                ->where('candidats.activite_id', $idactivite)
+                ->where('candidats.odcuser_id', $odcuser->id)
+                ->select('candidats.id', 'candidats.activite_id')
+                ->first();
+
+            $date = now()->format('Y-m-d');
+
+            if (!$candidat) {
+                $createdCandidat = Candidat::firstOrCreate([
+                    'odcuser_id' => $odcuser->id,
+                    'activite_id' => $idactivite,
+                    'status' => 'accept'
+                ]);
+
+                $presenceExists = Presence::where('candidat_id', $createdCandidat->id)
+                    ->whereDate('date', $date)
+                    ->exists();
+
+                if (!$presenceExists) {
+                    Presence::create([
+                        'candidat_id' => $createdCandidat->id,
+                        'date' => $date
+                    ]);
+                    return view('presences.confirmation');
+                } else {
+                    return redirect('activitencours')->with('error', 'Votre presence pour cette journée existe déjà');
+                }
+            }
+
+            $presenceExists = Presence::where('candidat_id', $candidat->id)
+                ->whereDate('date', $date)
+                ->exists();
+
+            if (!$presenceExists) {
+                Presence::create([
+                    'candidat_id' => $candidat->id,
+                    'date' => $date
+                ]);
+                return view('presences.confirmation');
+            } else {
+                return redirect('activitencours')->with('error', 'Votre presence pour cette journée existe déjà');
+            }
         } else {
-            return redirect()->back()->with('error', 'Aucun candidat trouvé pour cet utilisateur.');
+            return back()->with('error', 'Désole, vous n\'avez pas de compte. Contactez un agent de la sécurité pour vous créer un compte. Merci !');
         }
     }
 
@@ -96,25 +158,77 @@ class PresenceController extends Controller
     {
         $today = Carbon::today();
         $activites = Activite::where('start_date', '<=', $today)->where('end_date', '>=', $today)->get();
+
         return view('presences.activiteEncours', compact('activites'));
     }
 
 
     public function userlocal(Request $request)
     {
+        // Validate incoming data
         $validated = $request->validate([
             'first_name' => 'required|string',
             'last_name' => 'required|string',
-            'email' => 'required|string',
-            'password' => 'required|string',
-            
+            'email' => 'required|string|email|unique:odcusers,email',
+            'password' => 'required|string|min:8|confirmed',
+            'activite' => 'required|exists:activites,id'
+        ], [
+            'first_name.required' => 'Le prénom est obligatoire.',
+            'last_name.required' => 'Veuillez renseigner le nom.',
+            'email.unique' => 'Cette adresse est déjà prise !',
+            'password.min' => 'Le mot de passe doit contenir au moins 8 caractères.',
+            'password.confirmed' => 'Les mots de passe doivent correspondre !',
         ]);
-        $userlocal = new Odcuser;
-        $userlocal->first_name = $validated['first_name'];
-        $userlocal->last_name = $validated['last_name'];
-        $userlocal->email = $validated['email'];
-        $userlocal->password = $validated['password'];
-        return back();
+
+        // Create or update ODC user
+        $userlocal = Odcuser::firstOrCreate([
+            'first_name' => $validated['first_name'],
+            'last_name' => $validated['last_name'],
+            'email' => $validated['email'],
+            'password' => bcrypt($validated['password']),
+        ]);
+
+        // Create candidat
+        $candidat = Candidat::firstOrCreate([
+            'odcuser_id' => $userlocal->id,
+            'activite_id' => $validated['activite'],
+            'status' => 'accept',
+        ]);
+
+        // Check if presence already exists
+        $date = now()->format('Y-m-d');
+        $presenceExists = Presence::where('candidat_id', $candidat->id)
+            ->whereDate('date', $date)
+            ->exists();
+
+        if (!$presenceExists) {
+            // Create new presence
+            Presence::create([
+                'candidat_id' => $candidat->id,
+                'date' => $date
+            ]);
+        } else {
+            return redirect()->route('presences.activitencours')->with('error', 'La présence de ce candidat pour ce jour existe déjà');
+        }
+
+        return view('presences.confirmation')->with('success', 'Utilisateur créé avec succès.');
     }
-    
+
+    public function security()
+    {
+        $today = Carbon::today();
+        $activites = Activite::where('start_date', '<=', $today)->where('end_date', '>=', $today)->get();
+
+        return view('presences.securite', compact('activites'));
+    }
+    public function searchQuery(Request $request, $activite_id)
+    {
+        $data = Odcuser::select("email")
+            ->join("candidats", "candidats.odcuser_id", "=", "odcusers.id")
+            ->where("candidats.activite_id", $activite_id)
+            ->where("email", "LIKE", "%{$request->input('query')}%")
+            ->take(10)
+            ->get();
+        return response()->json($data);
+    }
 }
