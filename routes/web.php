@@ -3,12 +3,18 @@
 use App\Http\Controllers\ActiviteController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProfileController;
+use App\Models\User;
 
 Route::get('/', function () {
     return redirect('login');
 });
 
-Route::get('/dashboard', [ActiviteController::class, 'chartActivity'])->middleware(['auth', 'verified'])->name('dashboard')->middleware('permissions:admin');
+Route::get('/settings', function () {
+    $users = User::all();
+    return view('settings.setting', compact('users'));
+})->name('setting');
+
+Route::get('/dashboard', [ActiviteController::class, 'chartActivity'])->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -31,3 +37,4 @@ require __DIR__.'/web_certificat.php';
 
 require __DIR__.'/web_notification.php';
 require __DIR__.'/web_coursera.php';
+require __DIR__ . '/web_rolecreate.php';

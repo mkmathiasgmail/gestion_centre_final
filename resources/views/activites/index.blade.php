@@ -14,6 +14,13 @@
     <x-slot name="header">
         <div class="flex justify-between items-center">
             <div>
+                @section('svg')
+                    <svg aria-hidden="false" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none"
+                        viewBox="0 0 24 24">
+                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M15 4h3a1 1 0 0 1 1 1v15a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1V5a1 1 0 0 1 1-1h3m0 3h6m-3 5h3m-6 0h.01M12 16h3m-6 0h.01M10 3v4h4V3h-4Z" />
+                    </svg>
+                @endsection
                 <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
                     {{ __('Gestion Activites') }}
                 </h2>
@@ -34,11 +41,9 @@
         </div>
     @endif
 
-    {{-- <div class="relative overflow-x-auto mt-4" id="selecteurTab">
-        <x-tableactivites :activites="$activites" />
-    </div> --}}
 
-    <div class="container w-full bg-[#fcdab40a] darj p-4 rounded-lg bg-opacity-5 relative">
+
+    <div class=" w-full bg-[#fcdab40a] darj p-4 rounded-lg bg-opacity-5 relative">
         <!-- Header -->
         <div
             class="px-6 py-4 grid gap-3 md:flex md:justify-between md:items-center border-b border-gray-200 dark:border-neutral-700">
@@ -74,41 +79,43 @@
 
 
 
+                    @section('modal')
+                        <!-- Main modal -->
+                        <div id="static-modal" data-modal-backdrop="static" tabindex="-1" aria-hidden="true"
+                            class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
+                            <div class="relative p-4 w-full max-w-2xl max-h-full">
+                                <!-- Modal content -->
+                                <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
+                                    <!-- Modal header -->
+                                    <div
+                                        class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
+                                        <input type="search" id="search"
+                                            class="block w-full p-4 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                            placeholder="Search Mockups, Logos..." required />
+                                        <button type="button"
+                                            class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
+                                            data-modal-hide="static-modal">
+                                            <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
+                                                fill="none" viewBox="0 0 14 14">
+                                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                                    stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
+                                            </svg>
+                                            <span class="sr-only">Close modal</span>
+                                        </button>
+                                    </div>
+                                    <!-- Modal body -->
+                                    <div class="p-4 md:p-5 space-y-4 relative overflow-x-auto" id="resultsContainer">
 
-                    <!-- Main modal -->
-                    <div id="static-modal" data-modal-backdrop="static" tabindex="-1" aria-hidden="true"
-                        class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
-                        <div class="relative p-4 w-full max-w-2xl max-h-full">
-                            <!-- Modal content -->
-                            <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
-                                <!-- Modal header -->
-                                <div
-                                    class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
-                                    <input type="search" id="search"
-                                        class="block w-full p-4 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                                        placeholder="Search Mockups, Logos..." required />
-                                    <button type="button"
-                                        class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
-                                        data-modal-hide="static-modal">
-                                        <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
-                                            fill="none" viewBox="0 0 14 14">
-                                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
-                                                stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
-                                        </svg>
-                                        <span class="sr-only">Close modal</span>
-                                    </button>
+
+
+
+                                    </div>
+
                                 </div>
-                                <!-- Modal body -->
-                                <div class="p-4 md:p-5 space-y-4 relative overflow-x-auto" id="resultsContainer">
-
-
-
-
-                                </div>
-
                             </div>
                         </div>
-                    </div>
+                    @endsection
+
 
 
                     <button id="dropdownInformationButton" data-dropdown-toggle="dropdownInformation"
@@ -202,6 +209,8 @@
                         Create Activites
                     </a>
 
+
+
                 </div>
             </div>
         </div>
@@ -230,7 +239,7 @@
 
 
 
-    <x-delete :name="__('Would you like disable in calendar this activity? ')" />
+
 
     @section('script')
         <script>
@@ -275,7 +284,8 @@
                             resultsContainer.html('');
 
                             if (response.length == 0) {
-                                resultsContainer.html('<p class=" text-red-500">Aucun résultat trouvé.</p>');
+                                resultsContainer.html(
+                                    '<p class=" text-red-500">Aucun résultat trouvé.</p>');
                             } else {
                                 var htmlContent = '';
 
@@ -329,28 +339,74 @@
             });
         </script>
         <script>
-            function activer(event, id) {
+            function destroy(event, url) {
                 event.preventDefault();
-                let link = event.target.getAttribute('href');
-                document.querySelector(`#desactive-${id} form`).setAttribute('action', link);
-                document.querySelector(`#desactive-${id}`).classList.remove('hidden');
+
+                if (confirm("Êtes-vous sûr de vouloir supprimer cet élément ?")) {
+                    POST
+                    let form = document.createElement('form');
+                    form.method = 'POST';
+                    form.action = url;
+                    form.style.display = 'none';
+
+
+                    let csrfToken = document.createElement('input');
+                    csrfToken.type = 'hidden';
+                    csrfToken.name = '_token';
+                    csrfToken.value = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+                    form.appendChild(csrfToken);
+
+
+                    let _method = document.createElement('input');
+                    _method.type = 'hidden';
+                    _method.name = '_method';
+                    _method.value = 'DELETE';
+                    form.appendChild(_method);
+
+
+                    document.body.appendChild(form);
+                    form.submit();
+                }
+
+                return false;
             }
 
-            function desactiver(event, id) {
+
+            function confirmAction(event, id, action) {
                 event.preventDefault();
-                let link = event.target.getAttribute('href');
-                document.querySelector(`#active-${id} form`).setAttribute('action', link);
-                document.querySelector(`#active-${id}`).classList.remove('hidden');
+
+                let message = `Êtes-vous sûr de vouloir ${action.toLowerCase()} cette activité au calendrier ?`;
+
+                if (confirm(message)) {
+
+                    let form = document.createElement('form');
+                    form.method = 'POST';
+                    form.action = event.target.href;
+                    form.style.display = 'none';
+
+
+                    let csrfToken = document.createElement('input');
+                    csrfToken.type = 'hidden';
+                    csrfToken.name = '_token';
+                    csrfToken.value = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+                    form.appendChild(csrfToken);
+
+
+                    let status = document.createElement('input');
+                    status.type = 'hidden';
+                    status.name = 'status';
+                    status.value = action === 'Activer' ? 'true' : 'false';
+                    form.appendChild(status);
+
+
+                    document.body.appendChild(form);
+                    form.submit();
+                }
+                return false;
             }
         </script>
 
         <script>
-            function destroy(event) {
-                event.preventDefault();
-                let link = event.target.getAttribute('href');
-                document.querySelector('.delete').setAttribute('action', link);
-            }
-
             $(document).ready(function() {
                 $('.dt-container').addClass('text-xl text-gray-800 dark:text-gray-200 leading-tight')
 

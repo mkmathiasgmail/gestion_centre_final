@@ -20,12 +20,18 @@
     <link rel="stylesheet"
         href="https://cdn.ckeditor.com/ckeditor5-premium-features/42.0.0/ckeditor5-premium-features.css" />
 
+    <style>
+        .perso {
+            z-index: 100px;
+        }
+    </style>
+
 
     <!-- Scripts -->
     @vite(['resources/css/app.css', 'resources/js/app.js', 'node_modules/select2/dist/js/select2.full.min.js', 'node_modules/select2/dist/css/select2.min.css', 'node_modules/jquery-circle-progress/dist/circle-progress.min.js'])
 </head>
 
-<body class="body bg-white dark:bg-[#0F172A]">
+<body class="body bg-[#eaeaebf3] dark:bg-[#1E293B] ">
     <div class=" bg-gray-100 dark:bg-[#1E293B] ">
         @include('layouts.navigation')
         <div
@@ -39,12 +45,7 @@
                             <li class = "inline-flex items-center">
                                 <a href="#"
                                     class = "inline-flex items-center text-sm font-medium text-gray-700 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white">
-                                    <svg class = "w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20"
-                                        xmlns="http://www.w3.org/2000/svg">
-                                        <path
-                                            d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z">
-                                        </path>
-                                    </svg>
+                                    @yield('svg')
                                     {{ $header }}
                                 </a>
                             </li>
@@ -91,35 +92,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/pdfmake.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
     <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const accordionButton = document.querySelector('[data-accordion-target="#accordion-flush-body-2"]');
-            const accordionBody = document.querySelector('#accordion-flush-body-2');
 
-            if (accordionButton && accordionBody) {
-                // Vérifiez l'état de l'URL pour garder l'accordéon ouvert
-                if (window.location.href.includes('activites') ||
-                    window.location.href.includes('categories') ||
-                    window.location.href.includes('hashtags') ||
-                    window.location.href.includes('typevents')) {
-                    accordionBody.classList.remove('hidden');
-                    accordionButton.setAttribute('aria-expanded', 'true');
-                } else {
-                    accordionBody.classList.add('hidden');
-                    accordionButton.setAttribute('aria-expanded', 'false');
-                }
-
-                // Ajouter un gestionnaire d'événements pour l'ouverture/fermeture
-                accordionButton.addEventListener('click', () => {
-                    if (accordionBody.classList.contains('hidden')) {
-                        accordionBody.classList.remove('hidden');
-                        accordionButton.setAttribute('aria-expanded', 'true');
-                    } else {
-                        accordionBody.classList.add('hidden');
-                        accordionButton.setAttribute('aria-expanded', 'false');
-                    }
-                });
-            }
-        });
     </script>
 
     <script>
@@ -170,13 +143,11 @@
                 maxToolbar.classList.add("translate-x-24", "scale-x-0")
                 maxToolbar.classList.remove("translate-x-0")
                 logo.classList.add('ml-12')
-
-
             }
-
         }
     </script>
     @yield('script')
+    @yield('modal')
 
 </body>
 

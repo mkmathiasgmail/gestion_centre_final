@@ -15,8 +15,42 @@
             d="M1 5h12m0 0L9 1m4 4L9 9" />
     </svg>
 </a>
+
+<!--my code for generate certification using the evaluation logic-->
+<div class="flex mt-10">
+    <!--logic of evaluation-->
+    <form action="{{ route('exportParticipant') }}" method="POST">
+        @csrf
+        <input type="hidden" name="certif" value="{{ $activite->id }}">
+        <input type="hidden" name="certifTitle" value="{{ $activite->title }}">
+
+        <div class="flex">
+            <button type="submit" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800 flex">
+                <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e8eaed"><path d="M440-160v-326L336-382l-56-58 200-200 200 200-56 58-104-104v326h-80ZM160-600v-120q0-33 23.5-56.5T240-800h480q33 0 56.5 23.5T800-720v120h-80v-120H240v120h-80Z"/></svg>  
+                Exporter pour l'evaluation
+            </button>
+        </div>
+    </form>
+
+    <form action="{{ route('importAndgenerate') }}" method="POST" enctype="multipart/form-data" class="flex">
+
+        @csrf
+        <input type="hidden" name="activite" value="{{ $activite->id }}">
+        <div>
+            <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white" for="file">Importer et Generer les certificats</label>
+            <input class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400" aria-describedby="user_avatar_help" id="file" type="file" accept=".xlsx" name="file" placeholder="XlSX FILES">
+            <button type="submit" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800 text-center flex">
+                <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e8eaed"><path d="M480-320 280-520l56-58 104 104v-326h80v326l104-104 56 58-200 200ZM240-160q-33 0-56.5-23.5T160-240v-120h80v120h480v-120h80v120q0 33-23.5 56.5T720-160H240Z"/></svg>
+                Importer et generer les certificats
+            </button>
+        </div>
+
+    </form>
+</div>
+
 <!-- Main modal -->
 
+@section('modal')
 <div id="choixCertificat-modal" tabindex="-1" aria-hidden="true"
     class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
     <div class="relative p-4 w-full max-w-md max-h-full">
@@ -72,6 +106,7 @@
         </div>
     </div>
 </div>
+@endsection
 
 
 <div class="py-11 relative overflow-x-auto">
