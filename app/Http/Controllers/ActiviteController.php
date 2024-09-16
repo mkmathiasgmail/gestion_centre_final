@@ -300,67 +300,27 @@ class ActiviteController extends Controller
 
     public function update(Request $request, Activite $activite)
     {
-        $validatedData = $request->validate(
-            [
-                'title' => 'required|string|max:255',
-                'categories' => 'required|exists:categories,id',
-                'contents' => 'required|string',
-                'startDate' => 'required|date',
-                'endDate' => 'required|date|after_or_equal:startDate',
-                'form_id' => 'nullable|exists:forms,id',
-                'location' => 'nullable|string|max:255',
-                'hashtags' => 'nullable|array',
-                'hashtags.*' => 'exists:hashtags,id',
-                'typeEvent' => 'nullable|array',
-                'typeEvent.*' => 'exists:type_events,id',
-                'thumbnailURL' => 'nullable|url',
 
-
-            ],
-
-            [
-                'title.required' => 'The title is required.',
-                'title.string' => 'The title must be a string.',
-                'title.max' => 'The title may not be greater than 255 characters.',
-                'categories.required' => 'The category is required.',
-                'categories.exists' => 'The selected category is invalid.',
-                'contents.required' => 'The content is required.',
-                'contents.string' => 'The content must be a string.',
-                'startDate.required' => 'The start date is required.',
-                'startDate.date' => 'The start date must be a valid date.',
-                'endDate.required' => 'The end date is required.',
-                'endDate.date' => 'The end date must be a valid date.',
-                'endDate.after_or_equal' => 'The end date must be a date after or equal to the start date.',
-                'form_id.exists' => 'The selected form is invalid.',
-                'creator.max' => 'The creator may not be greater than 255 characters.',
-                'location.string' => 'The location must be a string.',
-                'location.max' => 'The location may not be greater than 255 characters.',
-                'hashtags.array' => 'The hashtags must be an array.',
-                'hashtags.*.exists' => 'The selected hashtag is invalid.',
-                'typeEvent.array' => 'The type events must be an array.',
-                'typeEvent.*.exists' => 'The selected type event is invalid.',
-            ]
-        );
 
         try {
             $activite->update([
-                'title' => $validatedData['title'],
-                'categorie_id' => $validatedData['categories'],
-                'contents' => $validatedData['contents'],
-                'start_date' => $validatedData['startDate'],
-                'end_date' => $validatedData['endDate'],
-                'location' => $validatedData['location'],
+                'title' => $request->title,
+                'categorie_id' => $request->categories,
+                'contents' => $request->contents,
+                'start_date' => $request->startDate,
+                'end_date' => $request->endDate,
+                'location' => $request->location,
                 "thumbnail_url" => $request->thumbnailURL,
             ]);
 
 
 
             if ($request->has('hashtags')) {
-                $activite->hashtag()->sync($validatedData['hashtags']);
+                $activite->hashtag()->sync($request->hashtags);
             }
 
             if ($request->has('typeEvent')) {
-                $activite->typEvent()->sync($validatedData['typeEvent']);
+                $activite->typEvent()->sync($request->typeEvent);
             }
 
 
@@ -506,11 +466,11 @@ class ActiviteController extends Controller
             ->selectRaw("count(case when completed = 'No' then 1 end) as noCompleted")
             ->first();
 
-    
+
 
         $specialisations = CourseraSpecialisation::where('specialization_completion_time', '<', now())->count();
 
-        $specialisationsCount = DB::table('coursera_specialisations')                    
+        $specialisationsCount = DB::table('coursera_specialisations')
                     ->select('specialisaton_name')->count();
 
         $completedSpecialisations = CourseraSpecialisation::where('completed', 'yes')->count();
@@ -523,10 +483,10 @@ class ActiviteController extends Controller
             ->where('class_end_time', '>=', now())->count();
 
 
-        return view('coursera.coursera_rapports', compact('datasets', 
-                                                            'labels', "coursera_members", 
-                                                            "specialisationsCount", 
-                                                            "coursera_usages", 
+        return view('coursera.coursera_rapports', compact('datasets',
+                                                            'labels', "coursera_members",
+                                                            "specialisationsCount",
+                                                            "coursera_usages",
                                                             "specialisations",
                                                             "completedSpecialisations",
                                                             "uncompletedSpecialisations",
