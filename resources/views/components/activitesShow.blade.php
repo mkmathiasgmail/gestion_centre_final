@@ -2,7 +2,7 @@
 
 
 
-<div class="hidden p-4 rounded-lg bg-gray-50 dark:bg-gray-800" id="styled-profile" role="tabpanel"
+<div class="hidden p-4 rounded-lg bg-[#eaeaebf3] dark:bg-gray-800" id="styled-profile" role="tabpanel"
     aria-labelledby="profile-tab">
 
 
@@ -432,6 +432,69 @@
                                     </td>
                                 </tr>
                                 <tr>
+                                    <td class="py-2">Send</td>
+                                    <td class="text-gray-500">
+                                        {{ $show->send ? '✔️' : '⭕️' }}
+                                    </td>
+                                    <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true"
+                                        xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                        fill="currentColor" viewBox="0 0 24 24">
+                                        <path fill-rule="evenodd"
+                                            d="M12 2c-.791 0-1.55.314-2.11.874l-.893.893a.985.985 0 0 1-.696.288H7.04A2.984 2.984 0 0 0 4.055 7.04v1.262a.986.986 0 0 1-.288.696l-.893.893a2.984 2.984 0 0 0 0 4.22l.893.893a.985.985 0 0 1 .288.696v1.262a2.984 2.984 0 0 0 2.984 2.984h1.262c.261 0 .512.104.696.288l.893.893a2.984 2.984 0 0 0 4.22 0l.893-.893a.985.985 0 0 1 .696-.288h1.262a2.984 2.984 0 0 0 2.984-2.984V15.7c0-.261.104-.512.288-.696l.893-.893a2.984 2.984 0 0 0 0-4.22l-.893-.893a.985.985 0 0 1-.288-.696V7.04a2.984 2.984 0 0 0-2.984-2.984h-1.262a.985.985 0 0 1-.696-.288l-.893-.893A2.984 2.984 0 0 0 12 2Zm3.683 7.73a1 1 0 1 0-1.414-1.413l-4.253 4.253-1.277-1.277a1 1 0 0 0-1.415 1.414l1.985 1.984a1 1 0 0 0 1.414 0l4.96-4.96Z"
+                                            clip-rule="evenodd" />
+                                    </svg>
+
+
+                                </tr>
+                                <tr>
+                                    <td class="py-2">Status</td>
+                                    <td class="text-gray-500">
+                                        {{ $show->status ? '✔️' : '⭕️' }}
+                                    </td>
+                                    <td>
+                                        <svg class="w-16 ml-auto text-gray-800 dark:text-white" aria-hidden="true"
+                                            xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                            fill="currentColor" viewBox="0 0 24 24">
+                                            <path fill-rule="evenodd"
+                                                d="M9 2.221V7H4.221a2 2 0 0 1 .365-.5L8.5 2.586A2 2 0 0 1 9 2.22ZM11 2v5a2 2 0 0 1-2 2H4v11a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2h-7ZM8 16a1 1 0 0 1 1-1h6a1 1 0 1 1 0 2H9a1 1 0 0 1-1-1Zm1-5a1 1 0 1 0 0 2h6a1 1 0 1 0 0-2H9Z"
+                                                clip-rule="evenodd" />
+                                        </svg>
+
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="py-2">Show in slider</td>
+                                    <td class="text-gray-500">
+                                        {{ $show->show_in_slider ? '✔️' : '⭕️' }}
+                                    </td>
+                                    <td>
+                                        <svg class="w-16 ml-auto text-gray-800 dark:text-white" aria-hidden="true"
+                                            xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                            fill="currentColor" viewBox="0 0 24 24">
+                                            <path fill-rule="evenodd"
+                                                d="M9 2.221V7H4.221a2 2 0 0 1 .365-.5L8.5 2.586A2 2 0 0 1 9 2.22ZM11 2v5a2 2 0 0 1-2 2H4v11a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2h-7ZM8 16a1 1 0 0 1 1-1h6a1 1 0 1 1 0 2H9a1 1 0 0 1-1-1Zm1-5a1 1 0 1 0 0 2h6a1 1 0 1 0 0-2H9Z"
+                                                clip-rule="evenodd" />
+                                        </svg>
+
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="py-2">Show in calendar</td>
+                                    <td class="text-gray-500">
+                                        {{ $show->show_in_calendar ? '✔️' : '⭕️' }}
+                                    </td>
+                                    <td>
+                                        <svg class="w-16 ml-auto text-gray-800 dark:text-white" aria-hidden="true"
+                                            xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                            fill="currentColor" viewBox="0 0 24 24">
+                                            <path fill-rule="evenodd"
+                                                d="M9 2.221V7H4.221a2 2 0 0 1 .365-.5L8.5 2.586A2 2 0 0 1 9 2.22ZM11 2v5a2 2 0 0 1-2 2H4v11a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2h-7ZM8 16a1 1 0 0 1 1-1h6a1 1 0 1 1 0 2H9a1 1 0 0 1-1-1Zm1-5a1 1 0 1 0 0 2h6a1 1 0 1 0 0-2H9Z"
+                                                clip-rule="evenodd" />
+                                        </svg>
+
+                                    </td>
+                                </tr>
+                                <tr>
                                     <td class="py-2">Lieu Activite</td>
                                     <td class="text-gray-500 dark:text-gray-200">{{ $show->location }}</td>
                                     <td>
@@ -448,7 +511,7 @@
                             </tbody>
                         </table>
 
-                        <div class="flex w-full md:max-w-xl  rounded shadow mt-5">
+                        {{-- <div class="flex w-full md:max-w-xl  rounded shadow mt-5">
 
                             @if ($show->status == true)
                                 <a href="{{ route('send', $show->id) }}" onclick="desactiver(event)"
@@ -484,7 +547,7 @@
                                 Active Slider
 
                             </a>
-                        </div>
+                        </div> --}}
 
 
                     </div>
