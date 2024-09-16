@@ -350,7 +350,8 @@
                                     if (query != '') {
                                         var _token = $('input[name="_token"]').val();
                                         $.ajax({
-                                            url: "{{ route('autocompleted') }}",
+                                            url: "{{ route('autocompleteUser') }}",
+
                                             method: "GET",
                                             data: {
                                                 query: query,
