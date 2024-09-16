@@ -103,15 +103,6 @@
             <option value="7">derniere service</option>
             <option value="8">date de participation</option>
         </select>
-        
-        <button id="dropdownCheckboxButton" data-dropdown-toggle="dropdownDefaultCheckbox"
-            class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-            type="button">Dropdown checkbox <svg class="w-2.5 h-2.5 ms-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
-                fill="none" viewBox="0 0 10 6">
-                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4" />
-            </svg>
-        </button>
-
         <table class="w-full text-sm text-left text-gray-500 rtl:text-right dark:text-gray-400 display "
             style="width: 100%" id="table">
             <thead class="text-xs text-white uppercase bg-gray-50 dark:bg-gray-700 dark:text-white">
@@ -230,7 +221,7 @@
                 <input type="file" name="file" accept=".csv,.xls,.xlsx" required
                     class="block w-full mt-4 text-sm text-gray-900 bg-white border border-gray-300 rounded-lg focus:ring-green-500 focus:border-black dark:bg-gray-800 dark:text-gray-200 dark:border-gray-600">
                 <button
-                    class="px-2 mt-4 text-white bg-black rounded hover:bg-green-700 dark:bg-yellow-600 dark:hover:bg-yellow-500"
+                    class="px-2 mt-4 text-white bg-black rounded hover:bg-green-700 dark:bg-black dark:hover:bg-green-700"
                     type="submit">
                    <svg class="inline-block w-5 h-5 mr-1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
                     <path fill="white"
@@ -240,7 +231,7 @@
                 </button>
 
                 <a href="{{route ('exportModelEmploye') }}"
-                    class="px-2 mt-4 text-white bg-red-500 rounded hover:bg-red-600 dark:bg-yellow-600 dark:hover:bg-yellow-500">
+                    class="px-2 mt-4 text-white bg-red-500 rounded hover:bg-red-600 dark:bg-black dark:hover:bg-red-600">
                     <svg class="inline-block w-5 h-5 mr-1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
                         <path
                             d="M14 2H6C4.9 2 4 2.9 4 4V20C4 21.1 4.9 22 6 22H18C19.1 22 20 21.1 20 20V8L14 2M18 20H6V4H13V9H18V20M16 11V18.1L13.9 16L11.1 18.8L8.3 16L11.1 13.2L8.9 11H16Z" />
@@ -252,10 +243,7 @@
 
     </div>
 
-    {{-- @section('modal')
-    <x-formEmployabilite :typeContrats="$typeContrats" />
-    <x-listchoice />
-    @endsection --}}
+
 
 
     @section('script')
