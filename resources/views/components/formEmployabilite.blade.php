@@ -9,7 +9,7 @@
 
 
                     <h3 class="text-lg font-semibold text-gray-900 dark:text-black">
-                        INSERER UN EMPLOYE
+                        FORMULAIRE D'ENREGISTREMENT
                     </h3>
 
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-briefcase-business">
@@ -123,7 +123,7 @@
                             <svg class="w-5 h-5 me-1 -ms-1" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
                                 <path fill-rule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clip-rule="evenodd"></path>
                             </svg>
-                            inserer
+                          Enregistrer
                         </button>
 
                         {{-- insererbtn --}}
