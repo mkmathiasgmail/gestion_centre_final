@@ -24,10 +24,10 @@
 
 
     <!-- Scripts -->
-    @vite(['resources/css/app.css', 'resources/js/app.js', 'node_modules/jquery-circle-progress/dist/circle-progress.min.js'])
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 
-<body class="body bg-[#eaeaebf3] dark:bg-[#1E293B] ">
+<body class="body bg-[#eaeaebf3] dark:bg-[#1E293B] text-black">
     <div class=" bg-gray-100 dark:bg-[#1E293B] ">
         @include('layouts.navigation')
         <div
