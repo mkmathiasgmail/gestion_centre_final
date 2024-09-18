@@ -13,7 +13,7 @@ use Ramsey\Uuid\Uuid;
 
 class Odcuser extends Model
 {
-    use HasFactory, HasUuids;
+    use HasFactory;
 
     protected $table = "odcusers" ;
     protected $fillable = [
