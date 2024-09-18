@@ -235,7 +235,8 @@
                 </button>
 
                 <a href="{{route ('exportModelEmploye') }}"
-                    class="px-2 mt-4 text-white bg-[#ff7322] hover:bg-[#ff7920] focus:bg-[#ff7910] disabled:opacity-50">
+                    class="px-2 mt-4 text-white bg-blue-700 hover:bg-blue-800 focus:bg-[#ff7910] disabled:opacity-50">
+
 
 
                     <svg class="inline-block w-5 h-5 mr-1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
