@@ -14,7 +14,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Activite extends Model
 {
-    use HasFactory, HasUuids;
+    use HasFactory;
 
 
 
