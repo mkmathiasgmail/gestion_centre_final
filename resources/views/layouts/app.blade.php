@@ -24,15 +24,15 @@
 
 
     <!-- Scripts -->
-    @vite(['resources/css/app.css', 'resources/js/app.js', 'node_modules/jquery-circle-progress/dist/circle-progress.min.js'])
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 
-<body class="body bg-[#eaeaebf3] dark:bg-[#1E293B] ">
+<body class="body bg-white dark:bg-[#1E293B] text-black">
     <div class=" bg-gray-100 dark:bg-[#1E293B] ">
         @include('layouts.navigation')
         <div
-            class="content  transform ease-in-out duration-500 bg-[url('https://wallpapers.com/images/high/dark-mode-3840-x-2160-background-6xrac361hd277x12.webp')] ">
-            <div class=" dark:bg-[#1e293bf3] bg-[#eaeaebf3] pt-20 px-2 md:px-5 pb-4 ml-12  backdrop-blur-2xl">
+            class="content  transform ease-in-out duration-500  ">
+            <div class=" dark:bg-[#1e293bf3] bg-white pt-20 px-2 md:px-5 pb-4 ml-12  backdrop-blur-2xl">
                 <!-- Page Heading -->
                 @if (isset($header))
                     <nav class = "flex px-5 py-3 text-gray-700  rounded-lg bg-[#eaeaebf3] dark:bg-[#1E293B] "

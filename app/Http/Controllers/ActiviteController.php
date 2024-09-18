@@ -22,7 +22,8 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Http;
 use App\Models\CourseraSpecialisation;
-use Yajra\DataTables\Facades\DataTables;
+use Ramsey\Uuid\Uuid;
+
 
 class ActiviteController extends Controller
 {
@@ -74,7 +75,6 @@ class ActiviteController extends Controller
 
     public function store(Request $request)
     {
-
         $validatedData = $request->validate(
             [
                 'title' => 'required|string|max:255',
@@ -87,38 +87,25 @@ class ActiviteController extends Controller
                 'hashtags' => 'nullable|array',
                 'hashtags.*' => 'exists:hashtags,id',
                 'typeEvent' => 'nullable|array',
-
-
                 'typeEvent.*' => 'exists:type_events,id',
-                'day' => 'required',
+                'day' => 'required|integer',
             ],
-
             [
                 'title.required' => 'The title is required.',
-                'day.required' => 'The title is required.',
                 'title.string' => 'The title must be a string.',
                 'title.max' => 'The title may not be greater than 255 characters.',
                 'categories.required' => 'The category is required.',
                 'categories.exists' => 'The selected category is invalid.',
                 'contents.required' => 'The content is required.',
-                'contents.string' => 'The content must be a string.',
                 'startDate.required' => 'The start date is required.',
-                'startDate.date' => 'The start date must be a valid date.',
                 'endDate.required' => 'The end date is required.',
-                'endDate.date' => 'The end date must be a valid date.',
-                'endDate.after_or_equal' => 'The end date must be a date after or equal to the start date.',
-                'form_id.exists' => 'The selected form is invalid.',
-                'creator.max' => 'The creator may not be greater than 255 characters.',
-                'location.string' => 'The location must be a string.',
-                'location.max' => 'The location may not be greater than 255 characters.',
-                'hashtags.array' => 'The hashtags must be an array.',
+                'endDate.after_or_equal' => 'The end date must be after or equal to the start date.',
                 'hashtags.*.exists' => 'The selected hashtag is invalid.',
-                'typeEvent.array' => 'The type events must be an array.',
                 'typeEvent.*.exists' => 'The selected type event is invalid.',
             ]
         );
 
-
+        $uuid = Uuid::uuid4()->toString();
 
         try {
             $activites = Activite::create([
@@ -129,8 +116,8 @@ class ActiviteController extends Controller
                 'end_date' => $validatedData['endDate'],
                 'publishStatus' => false,
                 'showInSlider' => false,
-                "form" => $request->form,
-                "thumbnail_url" => $request->thumbnailURL,
+                'form' => $request->form,
+                'thumbnail_url' => $request->thumbnailURL, // Ensure this field is validated or set as nullable
                 'miniatureColor' => false,
                 'showInCalendar' => false,
                 'liveStatus' => false,
@@ -138,14 +125,9 @@ class ActiviteController extends Controller
                 'isEvents' => false,
                 'creator' => false,
                 'location' => $validatedData['location'],
-                'number_day ' => $validatedData['day'],
+                'number_day' => $validatedData['day'],
+                'uuid' => $uuid
             ]);
-
-
-
-
-
-
 
             if ($request->has('hashtags')) {
                 $activites->hashtag()->attach($validatedData['hashtags']);
@@ -157,7 +139,8 @@ class ActiviteController extends Controller
 
             return redirect()->route('activites.index')->with('success', 'Activite created successfully.');
         } catch (\Exception $e) {
-            return back()->withErrors(['error' => "An error occurred while creating the activity. $e"])->withInput();
+            Log::error("Error creating activity: " . $e->getMessage());
+            return back()->withErrors(['error' => 'An error occurred while creating the activity. Please try again later.'])->withInput();
         }
     }
 
@@ -471,7 +454,7 @@ class ActiviteController extends Controller
         $specialisations = CourseraSpecialisation::where('specialization_completion_time', '<', now())->count();
 
         $specialisationsCount = DB::table('coursera_specialisations')
-                    ->select('specialisaton_name')->count();
+            ->select('specialisaton_name')->count();
 
         $completedSpecialisations = CourseraSpecialisation::where('completed', 'yes')->count();
         $uncompletedSpecialisations = CourseraSpecialisation::where('completed', 'NO')->count();
@@ -483,15 +466,17 @@ class ActiviteController extends Controller
             ->where('class_end_time', '>=', now())->count();
 
 
-        return view('coursera.coursera_rapports', compact('datasets',
-                                                            'labels', "coursera_members",
-                                                            "specialisationsCount",
-                                                            "coursera_usages",
-                                                            "specialisations",
-                                                            "completedSpecialisations",
-                                                            "uncompletedSpecialisations",
-                                                            "deletedUsages"
-                                                            ));
+        return view('coursera.coursera_rapports', compact(
+            'datasets',
+            'labels',
+            "coursera_members",
+            "specialisationsCount",
+            "coursera_usages",
+            "specialisations",
+            "completedSpecialisations",
+            "uncompletedSpecialisations",
+            "deletedUsages"
+        ));
     }
 
 
