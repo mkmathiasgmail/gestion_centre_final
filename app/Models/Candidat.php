@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Models;
-
+use Ramsey\Uuid\Uuid;
 use App\Models\Odcuser;
 use App\Models\Activite;
 use App\Models\Presence;
@@ -19,8 +19,18 @@ class Candidat extends Model
         'odcuser_id',
         'activite_id',
         'status',
-        'createdAt'
+        'createdAt',
+        'uuid'
     ];
+
+
+    protected static function boot()
+    {
+        parent::boot();
+        static::creating(function ($model) {
+            $model->uuid = Uuid::uuid4()->toString();
+        });
+    }
     protected $table = "candidats";
 
     public function odcuser(): BelongsTo

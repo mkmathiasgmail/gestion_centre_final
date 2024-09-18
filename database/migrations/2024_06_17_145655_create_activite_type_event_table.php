@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('activite_type_event', function (Blueprint $table) {
             $table->id();
-            $table->foreignUuid('activite_id')->constrained()->onDelete('no action')->onUpdate('no action');
+            $table->foreignId('activite_id')->constrained()->onDelete('no action')->onUpdate('no action');
             $table->foreignId('type_event_id')->constrained()->onDelete('no action')->onUpdate('no action');
             $table->timestamps();
         });
