@@ -511,10 +511,13 @@ class ActiviteController extends Controller
         $specialisations = CourseraSpecialisation::where('specialization_completion_time', '<', now())->count();
 
         $specialisationsCount = DB::table('coursera_specialisations')                    
-                    ->select('specialisaton_name')->count();
+                     ->select('specialisaton_name')->count();
 
-        $completedSpecialisations = CourseraSpecialisation::where('completed', 'yes')->count();
+        $completedSpecialisations = CourseraSpecialisation::where('completed', 'Yes')->count();
+        $completedUsages = CourseraUsage::where('completed', 'Yes')->count();
+        $getCompletedUsages = CourseraUsage::where('completed', 'Yes')->paginate(25);
         $uncompletedSpecialisations = CourseraSpecialisation::where('completed', 'NO')->count();
+        $uncompletedUsages = CourseraUsage::where('completed', 'NO')->count();
         $deletedUsages = CourseraUsage::where('removed_from_program', 'Yes')->count();
 
 
@@ -530,8 +533,13 @@ class ActiviteController extends Controller
                                                             "specialisations",
                                                             "completedSpecialisations",
                                                             "uncompletedSpecialisations",
-                                                            "deletedUsages"
+                                                            "deletedUsages",
+                                                            "completedUsages",
+                                                            "uncompletedUsages",
+                                                            "getCompletedUsages"
                                                             ));
+
+        
     }
 
 
