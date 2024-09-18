@@ -13,14 +13,17 @@ class Employabilite extends Model
     protected $table = 'employabilites';
     protected $fillable = [
         'name',
-        'type_contrat_id',
-        'poste',
         'nomboite',
+        'poste',
         'periode',
-        'odcuser_id',
         'derniere_activite',
         'derniere_service',
         'date_participation',
+        'genre',
+        'tranche_age',
+        'niveau_academique',
+        'odcuser_id',
+        'type_contrat_id'
     ];
 
 
