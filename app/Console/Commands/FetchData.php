@@ -118,5 +118,5 @@ class FetchData extends Command
     }
 
 
-    
+
 }

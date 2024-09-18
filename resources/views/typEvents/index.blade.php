@@ -56,7 +56,7 @@
     </div>
 @endsection
     <!-- Main modal -->
- 
+
 
 
 
@@ -151,14 +151,13 @@
         </table>
     </div>
 
-    <x-delete :name="__('Are you sure you want to delete this product? ')" />
 
     @section('script')
     <script>
         function delete(event) {
 
             event.preventDefault()
-            
+
         }
     </script>
         <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4="

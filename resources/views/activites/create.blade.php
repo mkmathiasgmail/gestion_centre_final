@@ -11,10 +11,29 @@
         @endforeach
     @endif
 
+    <x-slot name="header">
+        <div class="flex justify-between items-center">
+            <div>
+                @section('svg')
+                    <svg aria-hidden="false" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none"
+                        viewBox="0 0 24 24">
+                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M15 4h3a1 1 0 0 1 1 1v15a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1V5a1 1 0 0 1 1-1h3m0 3h6m-3 5h3m-6 0h.01M12 16h3m-6 0h.01M10 3v4h4V3h-4Z" />
+                    </svg>
+                @endsection
+                <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
+                    {{ __('Formulaire Creation Activites') }}
+                </h2>
+            </div>
 
-    <div class=" p-5  text-lg font-normal text-gray-800 lg:text-xl  dark:text-gray-400">
-        <h2 class="  text-3xl mb-5">Formulaire Creation Activites</h2>
-    </div>
+
+
+        </div>
+
+
+    </x-slot>
+
+
     <div class=" border-b border-gray-200 dark:border-gray-700">
         <ul class="flex flex-wrap -mb-px text-sm font-medium text-center" id="default-tab"
             data-tabs-toggle="#default-tab-content" role="tablist">
@@ -34,7 +53,7 @@
 
 
     <div id="default-tab-content">
-        <div class="hidden p-4 rounded-lg bg-gray-50 dark:bg-gray-800" id="profile" role="tabpanel"
+        <div class="hidden p-4 rounded-lg bg-[#eaeaebf3] dark:bg-gray-800" id="profile" role="tabpanel"
             aria-labelledby="profile-tab">
 
             <form action="{{ route('activites.store') }}" method="post">
@@ -61,14 +80,18 @@
                         </div>
 
                         <div class=" mb-4">
-                            <label for="date_fin" class="mb-6 text-lg font-normal text-gray-500 lg:text-xl  dark:text-gray-400">Date Fin</label>
+                            <label for="date_fin"
+                                class="mb-6 text-lg font-normal text-gray-500 lg:text-xl  dark:text-gray-400">Date
+                                Fin</label>
                             <input type="date" name="endDate" id="datepickers"
                                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                                 required>
                         </div>
                         <div class="flex gap-4 w-full mb-4">
                             <div class="w-1/2">
-                                <label for="typeEvent" class="mb-6 text-lg font-normal text-gray-500 lg:text-xl  dark:text-gray-400">Type Evenement</label>
+                                <label for="typeEvent"
+                                    class="mb-6 text-lg font-normal text-gray-500 lg:text-xl  dark:text-gray-400">Type
+                                    Evenement</label>
                                 <select name="typeEvent[]" id="typeEvents"
                                     class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 js-example-basic-multiple"
                                     multiple="multiple">
@@ -80,7 +103,8 @@
                                 </select>
                             </div>
                             <div class="w-1/2">
-                                <label for="categorie_id" class="mb-6 text-lg font-normal text-gray-500 lg:text-xl  dark:text-gray-400">Categorie</label>
+                                <label for="categorie_id"
+                                    class="mb-6 text-lg font-normal text-gray-500 lg:text-xl  dark:text-gray-400">Categorie</label>
                                 <select name="categories" id="categorie_id"
                                     class=" bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
 
@@ -93,7 +117,8 @@
 
 
                         <div class=" mb-4 mt-4">
-                            <label for="lieu" class="mb-6 text-lg font-normal text-gray-500 lg:text-xl  dark:text-gray-400">Lieu</label>
+                            <label for="lieu"
+                                class="mb-6 text-lg font-normal text-gray-500 lg:text-xl  dark:text-gray-400">Lieu</label>
                             <select name="location" id="lieu"
                                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                                 <option value="ODC Kinshasa">ODC Kinshasa</option>
@@ -109,7 +134,8 @@
 
                         <div class=" mb-4">
 
-                            <label for="date_debut" class="mb-6 text-lg font-normal text-gray-500 lg:text-xl  dark:text-gray-400">Image</label>
+                            <label for="date_debut"
+                                class="mb-6 text-lg font-normal text-gray-500 lg:text-xl  dark:text-gray-400">Image</label>
                             <div class=" flex items-center gap-4">
 
                                 <input type="file" id="file" accept="image/png,image/jpeg"
@@ -128,7 +154,8 @@
                         </div>
 
                         <div class=" mb-4">
-                            <label for="" class="mb-6 text-lg font-normal text-gray-500 lg:text-xl  dark:text-gray-400">Formulaire</label>
+                            <label for=""
+                                class="mb-6 text-lg font-normal text-gray-500 lg:text-xl  dark:text-gray-400">Formulaire</label>
                             <select
                                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                                 name="form">
@@ -139,7 +166,9 @@
                         </div>
 
                         <div class=" mb-4">
-                            <div><label for="tags" class="mb-6 text-lg font-normal text-gray-500 lg:text-xl  dark:text-gray-400">Hashtags</label></div>
+                            <div><label for="tags"
+                                    class="mb-6 text-lg font-normal text-gray-500 lg:text-xl  dark:text-gray-400">Hashtags</label>
+                            </div>
                             <div>
                                 <select name="hashtags[]" id="tags" multiple
                                     class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 js-example-basic-multiple">
@@ -154,8 +183,12 @@
 
                         </div>
                         <div class=" mb-4">
-                            <label for="tags" class="mb-6 text-lg font-normal text-gray-500 lg:text-xl  dark:text-gray-400">Nombre des Jours</label>
-                            <input type="number" name="day" id="day" class=" bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="1h" required="" min="1">
+                            <label for="tags"
+                                class="mb-6 text-lg font-normal text-gray-500 lg:text-xl  dark:text-gray-400">Nombre
+                                des Jours</label>
+                            <input type="number" name="day" id="day"
+                                class=" bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                placeholder="1h" required="" min="1">
                         </div>
 
 
@@ -169,17 +202,18 @@
                     </div>
                 </div>
 
-                <div class="flex items-center p-4 gap-10 md:p-5 border-t border-gray-200 rounded-b dark:border-gray-600">
+                <div
+                    class="flex items-center p-4 gap-10 md:p-5 border-t border-gray-200 rounded-b dark:border-gray-600">
                     <button type="submit"
-                        class="cursor-pointer mt-5 bg-slate-600 p-2 rounded-sm font-bold hover:bg-slate-700">
+                        class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-transparent bg-[#ff7322] text-white hover:bg-[#ff6822] focus:outline-none focus:bg-[#ff6822] disabled:opacity-50 disabled:pointer-events-none">
                         Creer une Activites</button>
-                   
+
                 </div>
             </form>
 
         </div>
 
-        <div class="hidden p-4 rounded-lg bg-gray-50 dark:bg-gray-800" id="dashboard" role="tabpanel"
+        <div class="hidden p-4 rounded-lg bg-[#eaeaebf3] dark:bg-gray-800" id="dashboard" role="tabpanel"
             aria-labelledby="dashboard-tab">
             <form action="{{ route('activite.store') }}" method="post">
                 @csrf
@@ -316,7 +350,7 @@
 
                 <div class="flex items-center p-4 md:p-5 border-t border-gray-200 rounded-b dark:border-gray-600">
                     <button type="submit"
-                        class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5">I
+                        class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-transparent bg-[#ff7322] text-white hover:bg-[#ff6822] focus:outline-none focus:bg-[#ff6822] disabled:opacity-50 disabled:pointer-events-none">I
                         Creer une Activites</button>
                     <button type="reset"
                         class="py-2.5 px-5 ms-3 text-sm font-medium text-gray-900 bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100">Decline</button>
@@ -475,7 +509,7 @@
             })
 
 
-             document.addEventListener('DOMContentLoaded', function() {
+            document.addEventListener('DOMContentLoaded', function() {
                 var today = new Date().toISOString().split('T')[0];
                 document.getElementById('datepickers').setAttribute('min', today);
             })
@@ -579,11 +613,11 @@
                                             stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
                                     </svg>
                                 </button>
-                    </div>         
+                    </div>
                     <input type="hidden" name="content[${contentIndex}][type]" value="socialMedia">
                     <input type="text" id="socialMediaLink_${contentIndex}" name="content[${contentIndex}][link]" required  class=" bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
 
-                </div>    
+                </div>
             `;
                 document.getElementById('socialmedia').insertAdjacentHTML('beforeend', block);
             }
@@ -616,7 +650,7 @@
                                             stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
                                     </svg>
                                 </button>
-                    </div>        
+                    </div>
                     <input type="hidden" name="content[${contentIndex}][type]" value="paragraph">
                     <textarea id="paragraph" name="content[${contentIndex}][item]" required class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"></textarea>
 
