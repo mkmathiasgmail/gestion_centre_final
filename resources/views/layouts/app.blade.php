@@ -141,6 +141,7 @@
     </script>
     @yield('script')
     @yield('modal')
+    @yield('modal2')
 
 </body>
 
