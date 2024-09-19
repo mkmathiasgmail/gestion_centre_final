@@ -86,14 +86,7 @@ class EmployabiliteController extends Controller
     public function store(StoreEmployabiliteRequest $request)
     {
 
-        $request->validate([
 
-            'first_name' => 'required|string',
-            'type_contrat' => 'required|string',
-            'periode' => 'required|date',
-            'poste' => 'required|string',
-            'nomboite' => 'required|string',
-        ]);
 
         // $employabiliteId = Employabilite::query()->latest()->first()->id;
 
@@ -160,23 +153,20 @@ class EmployabiliteController extends Controller
 
             // Vérifier si la date d'employabilité est supérieure à la dernière activité
             if ($dateEmployabilite > $dateFinDerniereActivite) {
-
                 if ($dateEmployabilite <= $dateAujourdhui) {
                     Employabilite::create([
                         'name' => $request->first_name,
-                        'type_contrat' => $request->type_contrat,
                         'poste' => $request->poste,
                         'nomboite' => $request->nomboite,
                         'periode' => $request->periode,
                         'derniere_activite' => $activites->first()->title,
                         'derniere_service' => $activites->first()->name,
                         'date_participation' => $activites->first()->start_date,
-                        'odcuser_id' => $request->id_user,
-                        'type_contrat_id' => $request->type_contrat,
                         'genre' => $request->genre,
                         'tranche_age' => $request->tranche_age,
                         'niveau_academique' => $request->niveau_academique,
-
+                        'odcuser_id' => $request->id_user,
+                        'type_contrat_id' => $request->type_contrat
                     ]);
                     return redirect()->route('employabilites.index')->with('success', 'Employé ajouté avec succès');
                 } else {

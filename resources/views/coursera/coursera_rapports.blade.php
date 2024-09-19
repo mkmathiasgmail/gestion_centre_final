@@ -2,7 +2,7 @@
     
     <div class=" mt-4">
         <h4
-            class="mb-4 text-4xl font-extrabold leading-none tracking-tight text-gray-700 md:text-5xl lg:text-6xl dark:text-white text-center">
+            class="mb-8 text-3xl font-extrabold leading-none tracking-tight text-gray-700 md:text-5xl lg:text-6xl dark:text-white text-center">
             Les rapports des activités coursera
         </h4>
         {{-- <p class="mb-6 text-lg font-normal text-gray-500 lg:text-xl  dark:text-gray-400">
@@ -10,7 +10,7 @@
             générer de la valeur à long terme et stimuler la croissance économique.</p> --}}
     </div>
 
-    <section class=" flex justify-between p-4 gap-4 w-full md:inset-0 h-[calc(100%-1rem)] max-h-full mb-8">
+    {{-- <section class=" flex justify-between p-4 gap-4 w-full md:inset-0 h-[calc(100%-1rem)] max-h-full mb-8">
 
         <div
             class=" h-36  flex  items-center  p-1 w-full rounded-lg shadow-lg dark:shadow-lg dark:shadow-gray-500/20 backdrop-blur-xl bg-cover bg-[#fcdab40a] dark:bg-gray-800 dark:hover:bg-gray-700  hover:bg-[#f8f0e7] hover:scale-105 transition duration-700 ease-in-out border-l-8 border-[#ff9822] hover:border-l-10 ">
@@ -25,7 +25,7 @@
             </div>
             <div>
                 <h3 class="text-sm font-semibold text-gray-800 dark:text-gray-200 ">
-                    Total des participants : <span id="count" class="text-[#fcdf3f]">{{$coursera_members->total}}
+                    Membres coursera : <span id="count" class="text-[#fcdf3f]">{{$coursera_members->total}}
                         </span>
                 </h3>
                 <p class="text-sm font-normal text-gray-400 dark:text-gray-400">
@@ -79,7 +79,7 @@
             </div>
 
         </div>
-    </section>
+    </section> --}}
 
     <section class="flex justify-between p-4 gap-4 w-full md:inset-0 h-[calc(100%-1rem)] max-h-full mb-8">
 
@@ -119,7 +119,7 @@
         <div class="m-4 flex justify-between gap-4 rounded-lg w-1/2">
             <div class=" w-1/2">
                  <div>
-                    <h3 class="mb-6 text-lg font-normal text-gray-500 lg:text-xl  dark:text-gray-400">Statistiques des membres</h3>
+                    <h4 class="mb-6 text-lg font-normal text-gray-500 lg:text-2xl  dark:text-gray-400">Statistiques coursera</h4>
                 </div>
                 <div>
                         <div class=" h-16 flex shadow-lg dark:shadow-lg dark:shadow-gray-500/20   w-full gap-1 items-center p-2 mb-2 rounded-xl bg-[#fcdab40a] dark:bg-gray-800 dark:hover:bg-gray-600 hover:bg-[#f8f0e7] hover:scale-105 transition duration-700 ease-in-out">
@@ -132,10 +132,47 @@
                         <div class=" h-16 flex shadow-lg dark:shadow-lg dark:shadow-gray-500/20   w-full gap-1 items-center p-2 mb-2 rounded-xl bg-[#fcdab40a] dark:bg-gray-800 dark:hover:bg-gray-600 hover:bg-[#f8f0e7] hover:scale-105 transition duration-700 ease-in-out">
                             <div>
                                 <p href="" class="text-xs font-normal text-gray-800 lg:text-sm  dark:text-gray-400">
-                                    Nombres de ceux qui n'ont pas accepté l'invitation: <span class="text-[#6270f3]">{{$coursera_members->invites}}</span>
+                                    Nombres de ceux qui n'ont pas accepté l'invitation: <span class="text-[#36d4fc]">{{$coursera_members->invites}}</span>
                                 </p>
                             </div>
                         </div>
+
+                        <div class=" h-16 flex shadow-lg dark:shadow-lg dark:shadow-gray-500/20   w-full gap-1 items-center p-2 mb-2 rounded-xl bg-[#fcdab40a] dark:bg-gray-800 dark:hover:bg-gray-600 hover:bg-[#f8f0e7] hover:scale-105 transition duration-700 ease-in-out">
+                            <div>
+                                <p href="" class="text-xs font-normal text-gray-800 lg:text-sm  dark:text-gray-400">
+                                    Nombres des personnes qui n'ont pas fini leur specialisation : <span class="text-[#36d4fc]">{{$uncompletedSpecialisations}}</span>
+                                </p>
+                            </div>
+                        </div>
+                        <div class=" h-16 flex shadow-lg dark:shadow-lg dark:shadow-gray-500/20   w-full gap-1 items-center p-2 mb-2 rounded-xl bg-[#fcdab40a] dark:bg-gray-800 dark:hover:bg-gray-600 hover:bg-[#f8f0e7] hover:scale-105 transition duration-700 ease-in-out">
+                            <div>
+                                <p href="" class="text-xs font-normal text-gray-800 lg:text-sm  dark:text-gray-400">
+                                    Nombres des personnes qui ont fini leur specialisation : <span class="text-[#36d4fc]">{{$completedSpecialisations}}</span>
+                                </p>
+                            </div>
+                        </div>
+                        <div class=" h-16 flex shadow-lg dark:shadow-lg dark:shadow-gray-500/20   w-full gap-1 items-center p-2 mb-2 rounded-xl bg-[#fcdab40a] dark:bg-gray-800 dark:hover:bg-gray-600 hover:bg-[#f8f0e7] hover:scale-105 transition duration-700 ease-in-out">
+                            <div>
+                                <p href="" class="text-xs font-normal text-gray-800 lg:text-sm  dark:text-gray-400">
+                                    Nombres des personnes supprimées des formations : <span class="text-[#36d4fc]">{{$deletedUsages}}</span>
+                                </p>
+                            </div>
+                        </div>
+                        <div class=" h-16 flex shadow-lg dark:shadow-lg dark:shadow-gray-500/20   w-full gap-1 items-center p-2 mb-2 rounded-xl bg-[#fcdab40a] dark:bg-gray-800 dark:hover:bg-gray-600 hover:bg-[#f8f0e7] hover:scale-105 transition duration-700 ease-in-out">
+                            <div>
+                                <p href="" class="text-xs font-normal text-gray-800 lg:text-sm  dark:text-gray-400">
+                                    Membres coursera : <span class="text-[#36d4fc]">{{$coursera_members->total}}</span>
+                                </p>
+                            </div>
+                        </div>
+                        <div class=" h-16 flex shadow-lg dark:shadow-lg dark:shadow-gray-500/20   w-full gap-1 items-center p-2 mb-2 rounded-xl bg-[#fcdab40a] dark:bg-gray-800 dark:hover:bg-gray-600 hover:bg-[#f8f0e7] hover:scale-105 transition duration-700 ease-in-out">
+                            <div>
+                                <p href="" class="text-xs font-normal text-gray-800 lg:text-sm  dark:text-gray-400">
+                                    Total des specialisations : <span class="text-[#36d4fc]">{{$specialisationsCount}}</span>
+                                </p>
+                            </div>
+                        </div>
+                       
                 </div>
 
             </div>

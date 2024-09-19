@@ -1,9 +1,9 @@
-<div class="fixed w-full z-30 flex bg-[#eaeaebf3] dark:bg-[#0F172A] p-2 items-center justify-center h-16 px-10">
+<div class="fixed w-full z-30 flex bg-gray-900 dark:bg-[#0F172A] p-2 items-center justify-center h-16 px-10">
     <div
         class="flex items-center justify-center flex-none h-full ml-12 duration-500 ease-in-out transform logo dark:text-white">
         <a href="{{ route('dashboard') }}" class="flex ms-2 md:me-24">
             <img src="{{ asset('img/orange.webp') }}" class="h-8 me-3" alt="FlowBite Logo" />
-            <span class="self-center font-semibold text-1xl sm:text-1xl whitespace-nowrap dark:text-white">Orange
+            <span class="self-center font-semibold text-1xl sm:text-1xl whitespace-nowrap text-white">Orange
                 Digital Center</span>
         </a>
     </div>
@@ -57,10 +57,10 @@
                 </ul>
             </div>
             @if (Auth()->user()->hasRole('super-admin'))
-                <div class="hidden  text-sm text-black md:block md:text-md dark:text-white cursor-pointer"
+                <div class="hidden  text-sm  md:block md:text-md text-white cursor-pointer"
                     aria-expanded="false">
                     <a href="{{ route('setting') }}">
-                        <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true"
+                        <svg class="w-6 h-6 text-white" aria-hidden="true"
                             xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor"
                             viewBox="0 0 24 24">
                             <path fill-rule="evenodd"
@@ -82,7 +82,7 @@
 
 
 <aside
-    class="w-60 -translate-x-48 fixed transition transform ease-in-out duration-1000 z-40 flex h-screen dark:bg-[#1E293B] bg-[#eeeeee]">
+    class="w-60 -translate-x-48 fixed transition transform ease-in-out duration-1000 z-40 flex h-screen dark:bg-[#1E293B] bg-gray-900">
     <!-- open sidebar button -->
     <div
         class="max-toolbar translate-x-24 scale-x-0 w-full -right-6 transition transform ease-in duration-300 flex items-center justify-between border-4 border-white dark:border-[#0F172A] bg-[#eaeaebf3] dark:bg-[#1E293B]  absolute top-2 rounded-full h-12">
@@ -128,10 +128,10 @@
     <!-- MAX SIDEBAR-->
     <div class="max hidden text-white mt-20 flex-col space-y-2 w-full h-[calc(100vh)]">
         <div
-            class="hover:ml-4 w-full dark:text-white text-[#1E293B] hover:text-[#FF7900] dark:hover:text-[#FF7900] bg-[#eeeeee] dark:bg-[#1E293B] p-2 pl-8 rounded-full transform ease-in-out duration-300 flex flex-row items-center space-x-3">
+            class="hover:ml-4 w-full text-white  hover:text-[#FF7900] dark:hover:text-[#FF7900]  p-2 pl-8 rounded-full transform ease-in-out duration-300 flex flex-row items-center space-x-3">
 
             <a href="{{ route('dashboard') }}"
-                class="hover:ml-4 justify-end pr-5 dark:text-white text-[#1E293B] hover:text-[#FF7900] dark:hover:text-[#FF7900] bg-[#eeeeee] dark:bg-[#1E293B] p-3 rounded-full transform ease-in-out duration-300 flex">
+                class="hover:ml-4 justify-end pr-5  hover:text-[#FF7900] dark:hover:text-[#FF7900]  p-3 rounded-full transform ease-in-out duration-300 flex {{ request()->routeIs('dashboard') ? ' text-[#FF7900] ' : 'text-white' }}">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                     stroke="currentColor" class="w-6 h-6">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 6a7.5 7.5 0 107.5 7.5h-7.5V6z" />
@@ -141,9 +141,9 @@
             </a>
         </div>
         <div
-            class="hover:ml-4 w-full dark:text-white text-[#1E293B] hover:text-[#FF7900] dark:hover:text-[#FF7900] bg-[#eeeeee] dark:bg-[#1E293B] p-2 pl-8 rounded-full transform ease-in-out duration-300 flex flex-row items-center space-x-3">
+            class="hover:ml-4 w-full   hover:text-[#FF7900] dark:hover:text-[#FF7900]  p-2 pl-8 rounded-full transform ease-in-out duration-300 flex flex-row items-center space-x-3">
             <a href="{{ route('activites.index') }}"
-                class="hover:ml-4 justify-end pr-5 dark:text-white text-[#1E293B] hover:text-[#FF7900] dark:hover:text-[#FF7900] bg-[#eeeeee] dark:bg-[#1E293B] p-3 rounded-full transform ease-in-out duration-300 flex">
+                class="hover:ml-4 justify-end pr-5   hover:text-[#FF7900] dark:hover:text-[#FF7900]  p-3 rounded-full transform ease-in-out duration-300 flex {{ request()->routeIs('activites.index') ? ' text-[#FF7900] ' : 'text-white' }}">
                 <svg aria-hidden="false" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
                     fill="none" viewBox="0 0 24 24">
                     <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -153,9 +153,9 @@
             </a>
         </div>
         <div
-            class="hover:ml-4 w-full dark:text-white text-[#1E293B] hover:text-[#FF7900] dark:hover:text-[#FF7900] bg-[#eeeeee] dark:bg-[#1E293B] p-2 pl-8 rounded-full transform ease-in-out duration-300 flex flex-row items-center space-x-3">
+            class="hover:ml-4 w-full hover:text-[#FF7900] dark:hover:text-[#FF7900]  p-2 pl-8 rounded-full transform ease-in-out duration-300 flex flex-row items-center space-x-3">
             <a href="{{ route('odcusers.index') }}"
-                class="hover:ml-4 justify-end pr-5 dark:text-white text-[#1E293B] hover:text-[#FF7900] dark:hover:text-[#FF7900] bg-[#eeeeee] dark:bg-[#1E293B] p-3 rounded-full transform ease-in-out duration-300 flex">
+                class="hover:ml-4 justify-end pr-5   hover:text-[#FF7900] dark:hover:text-[#FF7900]  p-3 rounded-full transform ease-in-out duration-300 flex {{ request()->routeIs('odcusers.index') ? ' text-[#FF7900] ' : 'text-white' }}">
                 <svg class="w-6 h-6 " aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24"
                     height="24" fill="currentColor" viewBox="0 0 24 24">
                     <path fill-rule="evenodd"
@@ -167,9 +167,9 @@
         </div>
 
         <div
-            class="hover:ml-4 w-full dark:text-white text-[#1E293B] hover:text-[#FF7900] dark:hover:text-[#FF7900] bg-[#eeeeee] dark:bg-[#1E293B] p-2 pl-8 rounded-full transform ease-in-out duration-300 flex flex-row items-center space-x-3">
+            class="hover:ml-4 w-full   hover:text-[#FF7900] dark:hover:text-[#FF7900]  p-2 pl-8 rounded-full transform ease-in-out duration-300 flex flex-row items-center space-x-3">
             <a href="{{ route('employabilites.index') }}"
-                class="hover:ml-4 justify-end pr-5 dark:text-white text-[#1E293B] hover:text-[#FF7900] dark:hover:text-[#FF7900] bg-[#eeeeee] dark:bg-[#1E293B] p-3 rounded-full transform ease-in-out duration-300 flex">
+                class="hover:ml-4 justify-end pr-5   hover:text-[#FF7900] dark:hover:text-[#FF7900]  p-3 rounded-full transform ease-in-out duration-300 flex {{ request()->routeIs('employabilites.index') ? ' text-[#FF7900] ' : 'text-white' }}">
                 <svg class="w-6 h-6 " aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24"
                     height="24" fill="none" viewBox="0 0 24 24">
                     <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -188,9 +188,9 @@
 
         @if (Auth()->user()->hasRole('super-admin'))
             <div
-                class="hover:ml-4 w-full dark:text-white text-[#1E293B] hover:text-[#FF7900] dark:hover:text-[#FF7900] bg-[#eeeeee] dark:bg-[#1E293B] p-2 pl-8 rounded-full transform ease-in-out duration-300 flex flex-row items-center space-x-3">
+                class="hover:ml-4 w-full hover:text-[#FF7900] dark:hover:text-[#FF7900]  p-2 pl-8 rounded-full transform ease-in-out duration-300 flex flex-row items-center space-x-3">
                 <a href="{{ route('type_Contrats.index') }}"
-                    class="hover:ml-4 justify-end pr-5 dark:text-white text-[#1E293B] hover:text-[#FF7900] dark:hover:text-[#FF7900] bg-[#eeeeee] dark:bg-[#1E293B] p-3 rounded-full transform ease-in-out duration-300 flex">
+                    class="hover:ml-4 justify-end pr-5  hover:text-[#FF7900] dark:hover:text-[#FF7900]  p-3 rounded-full transform ease-in-out duration-300 flex {{ request()->routeIs('type_Contrats.index') ? ' text-[#FF7900] ' : 'text-white' }}">
                     <svg class="w-6 h-6 " aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24"
                         height="24" fill="none" viewBox="0 0 24 24">
                         <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -202,9 +202,9 @@
         @endif
 
         <div
-            class="hover:ml-4 w-full dark:text-white text-[#1E293B] hover:text-[#FF7900] dark:hover:text-[#FF7900] bg-[#eeeeee] dark:bg-[#1E293B] p-2 pl-8 rounded-full transform ease-in-out duration-300 flex flex-row items-center space-x-3">
+            class="hover:ml-4 w-full   hover:text-[#FF7900] dark:hover:text-[#FF7900]  p-2 pl-8 rounded-full transform ease-in-out duration-300 flex flex-row items-center space-x-3">
             <a href="{{ route('evaluations.index') }}"
-                class="hover:ml-4 justify-end pr-5 dark:text-white text-[#1E293B] hover:text-[#FF7900] dark:hover:text-[#FF7900] bg-[#eeeeee] dark:bg-[#1E293B] p-3 rounded-full transform ease-in-out duration-300 flex">
+                class="hover:ml-4 justify-end pr-5   hover:text-[#FF7900] dark:hover:text-[#FF7900]  p-3 rounded-full transform ease-in-out duration-300 flex {{ request()->routeIs('evaluations.index') ? ' text-[#FF7900] ' : 'text-white' }}">
                 <svg class="w-6 h-6 " aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24"
                     height="24" fill="none" viewBox="0 0 24 24">
                     <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -217,9 +217,9 @@
         </div>
 
         <div
-            class="hover:ml-4 w-full dark:text-white text-[#1E293B] hover:text-[#FF7900] dark:hover:text-[#FF7900] bg-[#eeeeee] dark:bg-[#1E293B] p-2 pl-8 rounded-full transform ease-in-out duration-300 flex flex-row items-center space-x-3">
+            class="hover:ml-4 w-full  hover:text-[#FF7900] dark:hover:text-[#FF7900]  p-2 pl-8 rounded-full transform ease-in-out duration-300 flex flex-row items-center space-x-3">
             <a href="{{ route('notifications.index') }}"
-                class="hover:ml-4 justify-end pr-5 dark:text-white text-[#1E293B] hover:text-[#FF7900] dark:hover:text-[#FF7900] bg-[#eeeeee] dark:bg-[#1E293B] p-3 rounded-full transform ease-in-out duration-300 flex">
+                class="hover:ml-4 justify-end pr-5 hover:text-[#FF7900] dark:hover:text-[#FF7900]  p-3 rounded-full transform ease-in-out duration-300 flex {{ request()->routeIs('evaluations.index') ? ' text-[#FF7900] ' : 'text-white' }}">
                 <svg class="w-6 h-6 " aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24"
                     height="24" fill="none" viewBox="0 0 24 24">
                     <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -232,9 +232,9 @@
         </div>
 
         <div
-            class="hover:ml-4 w-full dark:text-white text-[#1E293B] hover:text-[#FF7900] dark:hover:text-[#FF7900] bg-[#eeeeee] dark:bg-[#1E293B] p-2 pl-8 rounded-full transform ease-in-out duration-300 flex flex-row items-center space-x-3">
+            class="hover:ml-4 w-full text-white  hover:text-[#FF7900] dark:hover:text-[#FF7900]  p-2 pl-8 rounded-full transform ease-in-out duration-300 flex flex-row items-center space-x-3">
             <a href="{{ route('presences.index') }}"
-                class="hover:ml-4 justify-end pr-5 dark:text-white text-[#1E293B] hover:text-[#FF7900] dark:hover:text-[#FF7900] bg-[#eeeeee] dark:bg-[#1E293B] p-3 rounded-full transform ease-in-out duration-300 flex">
+                class="hover:ml-4 justify-end pr-5 text-white  hover:text-[#FF7900] dark:hover:text-[#FF7900]  p-3 rounded-full transform ease-in-out duration-300 flex">
                 <svg class="w-6 h-6" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24"
                     height="24" fill="currentColor" viewBox="0 0 24 24">
                     <path d="M9 7V2.221a2 2 0 0 0-.5.365L4.586 6.5a2 2 0 0 0-.365.5H9Z" />
@@ -248,9 +248,9 @@
         </div>
 
         <div
-            class="hover:ml-4 w-full dark:text-white text-[#1E293B] hover:text-[#FF7900] dark:hover:text-[#FF7900] bg-[#eeeeee] dark:bg-[#1E293B] p-2 pl-8 rounded-full transform ease-in-out duration-300 flex flex-row items-center space-x-3">
+            class="hover:ml-4 w-full text-white  hover:text-[#FF7900] dark:hover:text-[#FF7900] p-2 pl-8 rounded-full transform ease-in-out duration-300 flex flex-row items-center space-x-3">
             <a href="{{ route('security') }}"
-                class="hover:ml-4 justify-end pr-5 dark:text-white text-[#1E293B] hover:text-[#FF7900] dark:hover:text-[#FF7900] bg-[#eeeeee] dark:bg-[#1E293B] p-3 rounded-full transform ease-in-out duration-300 flex">
+                class="hover:ml-4 justify-end pr-5 text-white  hover:text-[#FF7900] dark:hover:text-[#FF7900] p-3 rounded-full transform ease-in-out duration-300 flex">
                 <svg class="w-6 h-6" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24"
                     height="24" fill="currentColor" viewBox="0 0 24 24">
                     <path fill-rule="evenodd"
@@ -263,10 +263,10 @@
         </div>
 
         <div
-            class="hover:ml-4 w-full dark:text-white text-[#1E293B] hover:text-[#FF7900] dark:hover:text-[#FF7900] bg-[#eeeeee] dark:bg-[#1E293B] p-2 pl-8 rounded-full transform ease-in-out duration-300 flex flex-row items-center space-x-3">
+            class="hover:ml-4 w-full text-white  hover:text-[#FF7900] dark:hover:text-[#FF7900]  p-2 pl-8 rounded-full transform ease-in-out duration-300 flex flex-row items-center space-x-3">
             <a href="{{ route('coursera.rapports') }}"
-                class="hover:ml-4 justify-end pr-5 dark:text-white text-[#1E293B] hover:text-[#FF7900] dark:hover:text-[#FF7900] bg-[#eeeeee] dark:bg-[#1E293B] p-3 rounded-full transform ease-in-out duration-300 flex">
-                <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true"
+                class="hover:ml-4 justify-end pr-5 text-white  hover:text-[#FF7900] dark:hover:text-[#FF7900]  p-3 rounded-full transform ease-in-out duration-300 flex">
+                <svg class="w-6 h-6" aria-hidden="true"
                     xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 18">
                     <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                         d="M5 5h9M5 9h5m8-8H2a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h4l3.5 4 3.5-4h5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1Z" />
@@ -283,7 +283,7 @@
     <!-- MINI SIDEBAR-->
     <div class="mini mt-20 flex flex-col space-y-2 w-full h-[calc(100vh)]">
         <a href="{{ route('dashboard') }}"
-            class="hover:ml-4 justify-end pr-5 dark:text-white text-[#1E293B] hover:text-[#FF7900] dark:hover:text-[#FF7900] bg-[#eeeeee] dark:bg-[#1E293B] p-3 rounded-full transform ease-in-out duration-300 flex {{ request()->routeIs('dashboard') ? ' text-[#FF7900] ' : '' }}">
+            class="hover:ml-4 justify-end pr-5   hover:text-[#FF7900] dark:hover:text-[#FF7900]  p-3 rounded-full transform ease-in-out duration-300 flex {{ request()->routeIs('dashboard') ? ' text-[#FF7900] ' : 'text-white' }}">
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                 stroke="currentColor" class="w-6 h-6">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 6a7.5 7.5 0 107.5 7.5h-7.5V6z" />
@@ -291,7 +291,7 @@
             </svg>
         </a>
         <a href="{{ route('activites.index') }}"
-            class="hover:ml-4 justify-end pr-5 dark:text-white text-[#1E293B] hover:text-[#FF7900] dark:hover:text-[#FF7900] bg-[#eeeeee] dark:bg-[#1E293B] p-3 rounded-full transform ease-in-out duration-300 flex {{ request()->routeIs('activites.index') ? ' text-[#FF7900] ' : '' }}">
+            class="hover:ml-4 justify-end pr-5  hover:text-[#FF7900] dark:hover:text-[#FF7900]  p-3 rounded-full transform ease-in-out duration-300 flex {{ request()->routeIs('activites.index') ? ' text-[#FF7900] ' : 'text-white' }}">
             <svg aria-hidden="false" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
                 fill="none" viewBox="0 0 24 24">
                 <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -299,7 +299,7 @@
             </svg>
         </a>
         <a href="{{ route('odcusers.index') }}"
-            class="hover:ml-4 justify-end pr-5 dark:text-white text-[#1E293B] hover:text-[#FF7900] dark:hover:text-[#FF7900] bg-[#eeeeee] dark:bg-[#1E293B] p-3 rounded-full transform ease-in-out duration-300 flex {{ request()->routeIs('odcusers.index') ? ' text-[#FF7900] ' : '' }}">
+            class="hover:ml-4 justify-end pr-5   hover:text-[#FF7900] dark:hover:text-[#FF7900]  p-3 rounded-full transform ease-in-out duration-300 flex {{ request()->routeIs('odcusers.index') ? ' text-[#FF7900] ' : 'text-white' }}">
             <svg class="w-6 h-6 " aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24"
                 height="24" fill="currentColor" viewBox="0 0 24 24">
                 <path fill-rule="evenodd"
@@ -309,7 +309,7 @@
         </a>
 
         <a href="{{ route('employabilites.index') }}"
-            class="hover:ml-4 justify-end pr-5 dark:text-white text-[#1E293B] hover:text-[#FF7900] dark:hover:text-[#FF7900] bg-[#eeeeee] dark:bg-[#1E293B] p-3 rounded-full transform ease-in-out duration-300 flex {{ request()->routeIs('employabilites.index') ? ' text-[#FF7900] ' : '' }}">
+            class="hover:ml-4 justify-end pr-5  hover:text-[#FF7900] dark:hover:text-[#FF7900]  p-3 rounded-full transform ease-in-out duration-300 flex {{ request()->routeIs('employabilites.index') ? ' text-[#FF7900] ' : 'text-white' }}">
             <svg class="w-6 h-6 " aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24"
                 height="24" fill="none" viewBox="0 0 24 24">
                 <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -323,7 +323,7 @@
         </a>
 
         <a href="{{ route('evaluations.index') }}"
-            class="hover:ml-4 justify-end pr-5 dark:text-white text-[#1E293B] hover:text-[#FF7900] dark:hover:text-[#FF7900] bg-[#eeeeee] dark:bg-[#1E293B] p-3 rounded-full transform ease-in-out duration-300 flex {{ request()->routeIs('evaluations.index') ? ' text-[#FF7900] ' : '' }}">
+            class="hover:ml-4 justify-end pr-5   hover:text-[#FF7900] dark:hover:text-[#FF7900]  p-3 rounded-full transform ease-in-out duration-300 flex {{ request()->routeIs('evaluations.index') ? ' text-[#FF7900] ' : 'text-white' }}">
             <svg class="w-6 h-6 " aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24"
                 height="24" fill="none" viewBox="0 0 24 24">
                 <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -333,7 +333,7 @@
         </a>
 
         <a href="{{ route('notifications.index') }}"
-            class="hover:ml-4 justify-end pr-5 dark:text-white text-[#1E293B] hover:text-[#FF7900] dark:hover:text-[#FF7900] bg-[#eeeeee] dark:bg-[#1E293B] p-3 rounded-full transform ease-in-out duration-300 flex {{ request()->routeIs('notifications.index') ? ' text-[#FF7900] ' : '' }}">
+            class="hover:ml-4 justify-end pr-5   hover:text-[#FF7900] dark:hover:text-[#FF7900]  p-3 rounded-full transform ease-in-out duration-300 flex {{ request()->routeIs('notifications.index') ? ' text-[#FF7900] ' : 'text-white' }}">
             <svg class="w-6 h-6 " aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24"
                 height="24" fill="none" viewBox="0 0 24 24">
                 <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -343,7 +343,7 @@
         </a>
 
         <a href="{{ route('presences.index') }}"
-            class="hover:ml-4 justify-end pr-5 dark:text-white text-[#1E293B] hover:text-[#FF7900] dark:hover:text-[#FF7900] bg-[#eeeeee] dark:bg-[#1E293B] p-3 rounded-full transform ease-in-out duration-300 flex {{ request()->routeIs('presences.index') ? ' text-[#FF7900] ' : '' }}">
+            class="hover:ml-4 justify-end pr-5  hover:text-[#FF7900] dark:hover:text-[#FF7900]  p-3 rounded-full transform ease-in-out duration-300 flex {{ request()->routeIs('presences.index') ? ' text-[#FF7900] ' : 'text-white' }}">
             <svg class="w-6 h-6" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24"
                 height="24" fill="currentColor" viewBox="0 0 24 24">
                 <path d="M9 7V2.221a2 2 0 0 0-.5.365L4.586 6.5a2 2 0 0 0-.365.5H9Z" />
@@ -354,7 +354,7 @@
         </a>
 
         <a href="{{ route('security') }}"
-            class="hover:ml-4 justify-end pr-5 dark:text-white text-[#1E293B] hover:text-[#FF7900] dark:hover:text-[#FF7900] bg-[#eeeeee] dark:bg-[#1E293B] p-3 rounded-full transform ease-in-out duration-300 flex {{ request()->routeIs('security') ? ' text-[#FF7900] ' : '' }}">
+            class="hover:ml-4 justify-end pr-5   hover:text-[#FF7900] dark:hover:text-[#FF7900]  p-3 rounded-full transform ease-in-out duration-300 flex {{ request()->routeIs('security') ? ' text-[#FF7900] ' : 'text-white' }}">
             <svg class="w-6 h-6" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24"
                 height="24" fill="currentColor" viewBox="0 0 24 24">
                 <path fill-rule="evenodd"
@@ -364,14 +364,14 @@
         </a>
 
         <a href="{{ route('coursera.rapports') }}"
-            class="hover:ml-4 justify-end pr-5 dark:text-white text-[#1E293B] hover:text-[#FF7900] dark:hover:text-[#FF7900] bg-[#eeeeee] dark:bg-[#1E293B] p-3 rounded-full transform ease-in-out duration-300 flex {{ request()->routeIs('coursera.rapports') ? ' text-[#FF7900] ' : '' }}">
-            <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
+            class="hover:ml-4 justify-end pr-5   hover:text-[#FF7900] dark:hover:text-[#FF7900]  p-3 rounded-full transform ease-in-out duration-300 flex {{ request()->routeIs('coursera.rapports') ? ' text-[#FF7900] ' : 'text-white' }}">
+            <svg class="w-6 h-6 " aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
                 fill="none" viewBox="0 0 20 18">
                 <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                     d="M5 5h9M5 9h5m8-8H2a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h4l3.5 4 3.5-4h5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1Z" />
             </svg>
         </a>
-       
+
     </div>
 
 </aside>

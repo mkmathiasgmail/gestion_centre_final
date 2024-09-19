@@ -12,7 +12,8 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('odcusers', function (Blueprint $table) {
-            $table->uuid('id')->primary();
+            $table->id();
+            $table->uuid('uuid')->unique();
             $table->string('firstname');
             $table->string('lastname');
             $table->string('email')->unique();

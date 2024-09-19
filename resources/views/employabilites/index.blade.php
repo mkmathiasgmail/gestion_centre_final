@@ -9,7 +9,11 @@
 
     <div class="flex justify-end mt-4 mb-4 text-white ">
         <button type="submit" data-modal-target="crud-modal" data-modal-toggle="crud-modal"
-            class="text-white inline-flex items-center bg-black hover:bg-green-700 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center ">
+            class="text-white inline-flex items-center bg-[#ff7322] hover:bg-[#ff7920] focus:bg-[#ff7910] disabled:opacity-50 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center ">
+
+
+
+
             <svg class="w-5 h-5 me-1 -ms-1" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
                 <path fill-rule="evenodd"
                     d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z"
@@ -103,8 +107,6 @@
             <option value="7">derniere service</option>
             <option value="8">date de participation</option>
         </select>
-        {{-- fin section --}}
-
         <table class="w-full text-sm text-left text-gray-500 rtl:text-right dark:text-gray-400 display "
             style="width: 100%" id="table">
             <thead class="text-xs text-white uppercase bg-gray-50 dark:bg-gray-700 dark:text-white">
@@ -186,8 +188,6 @@
                     <td class="px-6 py-4">
                         {{ $item->date_participation }}
                     </td>
-
-
                     <td class="px-6 py-4">
                         <a href="#" data-id="{{ $item->id }}" onclick="supprimer(event, '{{ $item->odcuser->id }}');"
                             data-modal-target="large-employe-modal" data-modal-toggle="large-employe-modal" >
@@ -196,9 +196,7 @@
                                     d="M22,3H5A2,2 0 0,0 3,5V9H5V5H22V19H5V15H3V19A2,2 0 0,0 5,21H22A2,2 0 0,0 24,19V5A2,2 0 0,0 22,3M7,15V13H0V11H7V9L11,12L7,15M20,13H13V11H20V13M20,9H13V7H20V9M17,17H13V15H17V17Z" />
 
                             </svg>
-
                         </a>
-
                     </td>
                 </tr>
                 @php
@@ -223,17 +221,24 @@
                 <input type="file" name="file" accept=".csv,.xls,.xlsx" required
                     class="block w-full mt-4 text-sm text-gray-900 bg-white border border-gray-300 rounded-lg focus:ring-green-500 focus:border-black dark:bg-gray-800 dark:text-gray-200 dark:border-gray-600">
                 <button
-                    class="px-2 mt-4 text-white bg-yellow-500 rounded hover:bg-green-600 dark:bg-yellow-600 dark:hover:bg-yellow-500"
+                    class="px-2 mt-4 text-white bg-[#ff7322] hover:bg-[#ff7920] focus:bg-[#ff7910] disabled:opacity-50"
+
+
+
+
                     type="submit">
-                    <svg class="inline-block w-5 h-5 mr-1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-                        <path
-                            d="M14 2H6C4.89 2 4 2.9 4 4V20C4 21.11 4.89 22 6 22H18C19.11 22 20 21.11 20 20V8L14 2M18 20H6V4H13V9H18V20M15 11.93V19H7.93L10.05 16.88L7.22 14.05L10.05 11.22L12.88 14.05L15 11.93Z" />
-                    </svg>
+                   <svg class="inline-block w-5 h-5 mr-1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                    <path fill="white"
+                        d="M14 2H6C4.89 2 4 2.9 4 4V20C4 21.11 4.89 22 6 22H18C19.11 22 20 21.11 20 20V8L14 2M18 20H6V4H13V9H18V20M15 11.93V19H7.93L10.05 16.88L7.22 14.05L10.05 11.22L12.88 14.05L15 11.93Z" />
+                </svg>
                     Importer
                 </button>
 
                 <a href="{{route ('exportModelEmploye') }}"
-                    class="px-2 mt-4 text-white bg-blue-700 rounded hover:bg-teal-600 dark:bg-yellow-600 dark:hover:bg-yellow-500">
+                    class="px-2 mt-4 text-white bg-blue-700 hover:bg-blue-800 focus:bg-[#ff7910] disabled:opacity-50">
+
+
+
                     <svg class="inline-block w-5 h-5 mr-1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
                         <path
                             d="M14 2H6C4.9 2 4 2.9 4 4V20C4 21.1 4.9 22 6 22H18C19.1 22 20 21.1 20 20V8L14 2M18 20H6V4H13V9H18V20M16 11V18.1L13.9 16L11.1 18.8L8.3 16L11.1 13.2L8.9 11H16Z" />
@@ -245,10 +250,7 @@
 
     </div>
 
-    {{-- @section('modal')
-    <x-formEmployabilite :typeContrats="$typeContrats" />
-    <x-listchoice />
-    @endsection --}}
+
 
 
     @section('script')
@@ -304,7 +306,7 @@
                                                 orderable: false,
                                                 searchable: false,
                                                 render: function(data, type, row) {
-                                                    return `<button onclick="toggleEnregistrement(${row.id})" class="flex items-center px-2 py-1 text-white bg-black hover:bg-slate-700">
+                                                    return `<button onclick="toggleEnregistrement(${row.id})" class="flex items-center px-2 py-1 text-white bg-black hover:bg-red-700">
                                                         <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
                                                         </svg>
@@ -355,7 +357,8 @@
                                     if (query != '') {
                                         var _token = $('input[name="_token"]').val();
                                         $.ajax({
-                                            url: "{{ route('autocompleted') }}",
+                                            url: "{{ route('autocompleteUser') }}",
+
                                             method: "GET",
                                             data: {
                                                 query: query,

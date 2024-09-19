@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Models;
-
+use Ramsey\Uuid\Uuid;
 use App\Models\Odcuser;
 use App\Models\Activite;
 use App\Models\Presence;
@@ -13,14 +13,24 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Candidat extends Model
 {
-    use HasFactory, HasUuids;
+    use HasFactory;
 
     protected $fillable = [
         'odcuser_id',
         'activite_id',
         'status',
-        'createdAt'
+        'createdAt',
+        'uuid'
     ];
+
+
+    protected static function boot()
+    {
+        parent::boot();
+        static::creating(function ($model) {
+            $model->uuid = Uuid::uuid4()->toString();
+        });
+    }
     protected $table = "candidats";
 
     public function odcuser(): BelongsTo
