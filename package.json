@@ -28,6 +28,7 @@
         "jquery-circle-progress": "^1.2.2",
         "jsqr": "^1.4.0",
         "quill": "^2.0.2",
-        "select2": "^4.1.0-rc.0"
+        "select2": "^4.1.0-rc.0",
+        "simple-datatables": "^9.1.0"
     }
 }

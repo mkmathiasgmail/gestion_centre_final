@@ -72,6 +72,7 @@
     </div>
     <script src="{{ Vite::asset('node_modules/jquery/dist/jquery.min.js') }}"></script>
     <script src="{{ Vite::asset('node_modules/select2/dist/js/select2.full.min.js') }}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/simple-datatables@9.0.3"></script>
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
     <script src="https://cdn.datatables.net/2.0.8/js/dataTables.js"></script>
     <script src="https://cdn.datatables.net/buttons/3.0.2/js/buttons.dataTables.js"></script>
