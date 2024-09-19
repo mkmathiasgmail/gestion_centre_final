@@ -10,13 +10,10 @@
         <div class="mx-5 my-3 text-sm">
             <a href="" class=" text-red-600 font-bold tracking-widest">{{ $show->categorie->name }}</a>
         </div>
-        <div class="w-full text-gray-800 text-4xl px-5 font-bold leading-none dark:text-gray-100">
-            {{ $show->title }}
-        </div>
 
-        <div class="w-full text-gray-500 px-5 pb-5 pt-2">
-            The war of words comes after the governor sued the Atlanta mayor over her city’s mask mandate.
-        </div>
+
+
+
 
         @if ($show->candidat->count() == 0)
             <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
@@ -55,7 +52,7 @@
                             <tbody>
                                 <tr>
                                     <td class="py-2">Total Candidat</td>
-                                    <td class="text-gray-500">no data</td>
+                                    <td class="text-gray-500">Pas des donnees</td>
                                     <td>
                                         <svg class="w-16 ml-auto" viewBox="0 0 68 21" fill="none"
                                             xmlns="http://www.w3.org/2000/svg">
@@ -83,8 +80,8 @@
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td class="py-2">Total Garcon</td>
-                                    <td class="text-gray-500">no data</td>
+                                    <td class="py-2">Total Homme</td>
+                                    <td class="text-gray-500">Pas des donnees</td>
                                     <td>
                                         <svg class="w-16 ml-auto" viewBox="0 0 68 21" fill="none"
                                             xmlns="http://www.w3.org/2000/svg">
@@ -112,8 +109,8 @@
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td class="py-2">Total Filles</td>
-                                    <td class="text-gray-500">no data</td>
+                                    <td class="py-2">Total Femme</td>
+                                    <td class="text-gray-500">Pas des donnees</td>
                                     <td>
                                         <svg class="w-16 ml-auto" viewBox="0 0 68 21" fill="none"
                                             xmlns="http://www.w3.org/2000/svg">
@@ -270,7 +267,7 @@
                         <table class="w-full text-gray-600 dark:text-gray-200">
                             <tbody>
                                 <tr>
-                                    <td class="py-2">Total Candidat</td>
+                                    <td class="py-2">Total Homme</td>
                                     <td class="text-gray-500 dark:text-gray-200">
                                         {{ $datachart->first()->total_candidats }}</td>
                                     <td>
@@ -300,7 +297,7 @@
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td class="py-2">Total Garcon</td>
+                                    <td class="py-2">Total Femme</td>
                                     <td class="text-gray-500 dark:text-gray-200">
                                         {{ $datachart->first()->total_garcons }}</td>
                                     <td>

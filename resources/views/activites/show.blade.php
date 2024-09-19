@@ -615,7 +615,7 @@
                             bottom: -20,
                         },
                     },
-                    labels: ["Filles", "Garçons"], // Étiquettes pour les séries
+                    labels: ["Femme", "Homme"], // Étiquettes pour les séries
                     dataLabels: {
                         enabled: false,
                     },
