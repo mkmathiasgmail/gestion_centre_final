@@ -17,12 +17,22 @@ use App\Http\Requests\UpdateOdcuserRequest;
 
 class OdcuserController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
         return view('odcusers.index');
+    }
+
+    public function search(Request $request)
+    {
+        $searchTerm = $request->input('search');
+        $odcusers = Odcuser::where('first_name', 'LIKE', "%{$searchTerm}%")
+            ->orWhere('last_name', 'LIKE', "%{$searchTerm}%")
+            ->orWhere('email', 'LIKE', "%{$searchTerm}%")
+            ->take(4)
+            ->latest()
+            ->get();
+
+        return response()->json($odcusers);
     }
 
 
@@ -72,25 +82,7 @@ class OdcuserController extends Controller
         }
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(StoreOdcuserRequest $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     */
     public function show(Odcuser $odcuser)
     {
         $nbrEvents = Candidat::where('odcuser_id', $odcuser->id)->count();
@@ -158,17 +150,12 @@ class OdcuserController extends Controller
         return view('odcusers.show', compact('taux_presence', 'activitespAll', 'nbrParticipation', 'activitesC', 'activitesP', 'odcuser', 'candidats', 'nbrEvents', 'odcuserDatas', 'labels'));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
     public function edit(Odcuser $odcuser)
     {
         return view('odcusers.edit', compact('odcuser'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
+
     public function update(UpdateOdcuserRequest $request, Odcuser $odcuser)
     {
         $odcuser->update([
@@ -188,13 +175,5 @@ class OdcuserController extends Controller
         ]);
 
         return redirect()->route('odcusers.index')->with('success', 'Odcuser updated successfully');
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Odcuser $odcuser)
-    {
-        //
     }
 }
