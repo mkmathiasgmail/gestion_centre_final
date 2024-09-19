@@ -8,6 +8,7 @@ use Carbon\Carbon;
 use Dompdf\Dompdf;
 use Dompdf\Options;
 use DateTimeImmutable;
+use App\Models\Odcuser;
 use App\Models\Activite;
 use App\Models\Candidat;
 use App\Models\Certificat;
@@ -139,7 +140,7 @@ class CertificatController extends Controller
         $dateFormatee = $dateActuelle->isoFormat('D MMMM YYYY');
 
 
-        $pdf = view('Templete_certificat.cerificat_supeur_codeur_stand', compact('candidat', 'universiteValue' ,'start_date', 'end_date', 'dateFormatee'));
+        $pdf = view('Templete_certificat.certificat_maker_junior_stand', compact('candidat', 'universiteValue' ,'start_date', 'end_date', 'dateFormatee'));
         // echo $pdf;
         // exit();
 
@@ -185,8 +186,8 @@ class CertificatController extends Controller
         foreach ($candidats as $candidat) {
 
             set_time_limit(100000);
-            //recperation des etablissement 
-            $variables = ['Université', 'Etablissement', 'Structure'];
+            // Récupération de l'université du candidat dans la table candidat_attributes et odcusers
+            $variables = ['Université', 'Etablissement', 'Structure', 'Entreprise', 'Si autre université'];
 
             $universiteLabelAttribute = DB::table('candidat_attributes')
             ->where(function ($query) use ($variables) {
@@ -194,11 +195,24 @@ class CertificatController extends Controller
                     $query->orWhere('label', 'LIKE', "%{$value}%");
                 }
             })
-            ->where('candidat_id', $candidat->id)
-            ->first();
-            
+                ->where('candidat_id', $candidat->id)
+                ->first();
+                
+            $universiteValue = '';
             if ($universiteLabelAttribute) {
                 $universiteValue = $universiteLabelAttribute->value;
+            } elseif ($universiteValue === null) {
+                $odcusers = Odcuser::where('id', $candidat->id)
+                    ->get();
+                if (request()->expectsJson()) {
+                    return response()->json($odcusers);
+                }
+                foreach ($odcusers as $key => $odcuser) {
+                    $detail_profession = json_decode($odcuser->detail_profession, true);
+                    $universiteValue = $detail_profession['university'] ?? '';
+                }
+            } else {
+                $universiteValue = '';
             }
 
             // Définir la locale en français
