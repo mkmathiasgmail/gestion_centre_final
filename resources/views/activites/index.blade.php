@@ -207,7 +207,7 @@
 
                     <a href="{{ route('activites.create') }}"
                         class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-transparent bg-[#ff7322] text-white hover:bg-[#ff6822] focus:outline-none focus:bg-[#ff6822] disabled:opacity-50 disabled:pointer-events-none">
-                        Create Activites
+                        Créer une activité
                     </a>
 
 
@@ -221,14 +221,14 @@
             <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                 <tr>
                     <th scope="col" class="px-6 py-3">Id</th>
-                    <th scope="col" class="px-6 py-3">Title</th>
+                    <th scope="col" class="px-6 py-3">Titre</th>
                     <th scope="col" class="px-6 py-3">Categories</th>
                     <th scope="col" class="px-6 py-3">Type Event</th>
                     <th scope="col" class="px-6 py-3">Lieu</th>
-                    <th scope="col" class="px-6 py-3">Teming</th>
+                    <th scope="col" class="px-6 py-3">dureé</th>
                     <th scope="col" class="px-6 py-3">Status</th>
                     <th scope="col" class="px-6 py-3">Book In seat</th>
-                    <th scope="col" class="px-6 py-3">Number Hours</th>
+                    <th scope="col" class="px-6 py-3">nombre d'heure</th>
                     <th scope="col" class="px-6 py-3">Date Début</th>
                     <th scope="col" class="px-6 py-3">Date Fin</th>
                     <th scope="col" class="px-6 py-3">Action</th>
@@ -454,7 +454,7 @@
                         },
                         {
                             data: 'title',
-                            name: 'title'
+                            name: 'titre'
                         },
                         {
                             data: 'categories',
@@ -466,7 +466,7 @@
                         },
                         {
                             data: 'location',
-                            name: 'location'
+                            name: 'lieu'
                         },
                         {
                             data: 'message',

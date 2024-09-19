@@ -4,7 +4,7 @@
 
     <!-- Modal toggle -->
     <button data-modal-target="authentication-modal" data-modal-toggle="authentication-modal"
-        class="cursor-pointer mt-5 bg-slate-600 p-2 rounded-sm font-bold"
+        class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-transparent bg-[#FF7322] text-white hover:bg-[#FF6822] focus:outline-none focus:bg-[#FF6822] disabled:opacity-50 disabled:pointer-events-none"
         type="button">
        Creation type Event
     </button>
