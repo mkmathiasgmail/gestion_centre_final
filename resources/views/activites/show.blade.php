@@ -258,10 +258,12 @@
                 let labels = @json($labels)
 
                 labels.forEach(element => {
-                    columns.push({
-                        data: element,
-                        name: element
-                    });
+                    if (element !== 'Cv de votre parcours (Obligatoire)') {
+                        columns.push({
+                            data: element,
+                            name: element
+                        });
+                    }
 
                 });
                 columns.push({

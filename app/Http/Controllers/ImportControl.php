@@ -16,6 +16,7 @@ use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 use PhpOffice\PhpSpreadsheet\Style\Border;
 use PhpOffice\PhpSpreadsheet\Style\Alignment;
+use App\Http\Controllers\CertificatController;
 use ZipArchive;
 use Dompdf\Dompdf;
 use Dompdf\Options;
@@ -413,7 +414,7 @@ class ImportControl extends Controller
             $date = new DateTimeImmutable($candidat->activite->start_date);
             $format = date_format($date, 'jS \o\f F Y');
 
-            $pdf = view('certificat.generateCertificat', compact('candidat', 'format'));
+            $pdf = view('Templete_certificat.cerificat_supeur_codeur_stand', compact('candidat', 'format'));
 
             $options = new Options();
             $options->set('isHtml5ParserEnabled', true);

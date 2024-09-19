@@ -170,6 +170,10 @@ class CertificatController extends Controller
 
 
 
+<<<<<<< HEAD
+        set_time_limit(100000);
+=======
+>>>>>>> adfe6ebf6129fb90b1720fd5ea98c7b1e6164d4c
         $candidats = Candidat::where('activite_id', $idactivite)
             ->where('status', 'accept')
             ->select('id', 'odcuser_id', 'activite_id', 'status')
