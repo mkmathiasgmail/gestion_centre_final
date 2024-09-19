@@ -22,7 +22,7 @@
                     </svg>
                 @endsection
                 <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
-                    {{ __('Gestion Activites') }}
+                    {{ __('Gestion Activités') }}
                 </h2>
             </div>
 
@@ -50,10 +50,10 @@
             class="px-6 py-4 grid gap-3 md:flex md:justify-between md:items-center border-b border-gray-200 dark:border-neutral-700">
             <div>
                 <h2 class="text-xl font-semibold text-gray-800 dark:text-neutral-200">
-                    Activites
+                    Activités
                 </h2>
                 <p class="text-sm text-gray-600 dark:text-neutral-400">
-                    Créez des activites, modifiez, Exporter et bien plus encore.
+                    Créez des activités, modifiez, exportez et bien plus encore.
                 </p>
             </div>
 
@@ -73,7 +73,7 @@
                             </div>
                             <input type="search" data-modal-target="static-modal" data-modal-toggle="static-modal"
                                 class="block w-full p-4 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                                placeholder="Rechercher des Activites ..." required />
+                                placeholder="Rechercher des Activites ..."  />
 
                         </div>
                     </form>
@@ -92,7 +92,7 @@
                                         class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
                                         <input type="search" id="search"
                                             class="block w-full p-4 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                                            placeholder="Search Mockups, Logos..." required />
+                                            placeholder="Rechercher des Activites ..." required />
                                         <button type="button"
                                             class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
                                             data-modal-hide="static-modal">
@@ -105,7 +105,7 @@
                                         </button>
                                     </div>
                                     <!-- Modal body -->
-                                    <div class="p-4 md:p-5 space-y-4 relative overflow-x-auto" id="resultsContainer">
+                                    <div class="p-4 md:p-5 space-y-4 relative overflow-x-auto block" id="resultsContainer">
 
 
 
@@ -129,7 +129,7 @@
                                 d="M4 15v2a3 3 0 0 0 3 3h10a3 3 0 0 0 3-3v-2m-8 1V4m0 12-4-4m4 4 4-4" />
                         </svg>
 
-                        Export
+                        Exporter
                     </button>
 
                     <!-- Dropdown menu -->
@@ -294,8 +294,9 @@
 
                                 response.forEach(function(activite) {
                                     htmlContent += `
+                                       <div class=" block items-center justify-center p-5 text-base font-medium text-gray-500 rounded-lg bg-gray-50 hover:text-gray-900 hover:bg-gray-100 dark:text-gray-400 dark:bg-gray-800 dark:hover:bg-gray-700 dark:hover:text-white">
                                                     <a href="http://127.0.0.1:8000/activites/${activite.id}"
-                                                        class="inline-flex items-center justify-center p-5 text-base font-medium text-gray-500 rounded-lg bg-gray-50 hover:text-gray-900 hover:bg-gray-100 dark:text-gray-400 dark:bg-gray-800 dark:hover:bg-gray-700 dark:hover:text-white">
+                                                        class="inline-flex">
 
                                                         <span class="w-full">${activite.title}</span>
                                                         <svg class="w-4 h-4 ms-2 rtl:rotate-180" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
@@ -304,8 +305,10 @@
                                                                 d="M1 5h12m0 0L9 1m4 4L9 9" />
                                                         </svg>
                                                         <br>
-                                                        <p>${activite.start_date}</p>
+
                                                     </a>
+                                                     <p>${activite.start_date}</p>
+                                                       </div>
                     `;
                                 });
                                 resultsContainer.html(htmlContent);
@@ -432,10 +435,15 @@
 
         <script type="text/javascript">
             $(document).ready(function() {
+                $('dt-length-0').addClass('w-24')
                 $('#table').DataTable({
                     searching: false,
                     processing: true,
                     serverSide: true,
+                    language: {
+                        lengthMenu: 'Afficher les entrées _MENU_',
+                        info: 'Affichage de la page _PAGE_ sur _PAGES_'
+                    },
                     ajax: {
                         url: "{{ route('get') }}",
                         type: "GET",
@@ -505,6 +513,17 @@
                         [10, 25, 50, "All"]
                     ]
                 });
+
+
+                $('.dt-container').addClass('text-base text-gray-800 dark:text-gray-400 leading-tight')
+
+                $('.dt-buttons').addClass('mt-4')
+                $('.dt-buttons buttons').addClass('cursor-pointer mt-5 bg-slate-600 p-2 rounded-sm font-bold')
+
+                $("#dt-length-0").addClass('text-gray-700 dark:text-gray-400 w-24 bg-white');
+
+                $('.dt-input').addClass('w-20')
+
 
             });
         </script>
