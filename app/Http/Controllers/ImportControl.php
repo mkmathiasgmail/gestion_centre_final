@@ -2,17 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use ZipArchive;
-use Dompdf\Dompdf;
-use Dompdf\Options;
-use DateTimeImmutable;
 use App\Models\Odcuser;
 use App\Models\Activite;
 use App\Models\Candidat;
 use App\Models\Presence;
-use App\Models\Certificat;
 use Illuminate\Http\Request;
-use Barryvdh\DomPDF\Facade\Pdf;
 use App\Models\CandidatAttribute;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
@@ -420,7 +414,7 @@ class ImportControl extends Controller
             $date = new DateTimeImmutable($candidat->activite->start_date);
             $format = date_format($date, 'jS \o\f F Y');
 
-            $pdf = view('certificat.generateCertificat', compact('candidat', 'format'));
+            $pdf = view('Templete_certificat.cerificat_supeur_codeur_stand', compact('candidat', 'format'));
 
             $options = new Options();
             $options->set('isHtml5ParserEnabled', true);
