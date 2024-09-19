@@ -15,37 +15,39 @@
     <div class=" mt-4">
         <h1
             class="mb-4 text-4xl font-extrabold leading-none tracking-tight text-gray-700 md:text-5xl lg:text-6xl dark:text-white">
-            Tableau de Bord Administratif
+            Tableau de Bord
         </h1>
         <p class="mb-6 text-lg font-normal text-gray-500 lg:text-xl  dark:text-gray-400">
             Supervision Complète : Activités, Apprenants, Employabilité et Présence</p>
     </div>
 
     <section class=" flex justify-between p-4 gap-4 w-full md:inset-0 h-[calc(100%-1rem)] max-h-full mb-8">
+        <a href="{{ route('activites.index') }}"
+            class="h-36 items-center  p-2 w-full rounded-lg shadow-lg dark:shadow-lg dark:shadow-gray-500/20 backdrop-blur-xl bg-cover bg-[#fcdab40a] dark:bg-[#1e293b62] dark:hover:bg-gray-700  hover:bg-[#f8f0e7] hover:scale-105 transition duration-700 ease-in-out border-l-8 border-[#ff9822] hover:border-l-10 ">
+            <div class=" ">
+                <div class="flex gap-4 items-center mb-4">
+                    <svg class="w-16 h-16 text-gray-800 dark:text-white" aria-hidden="true"
+                        xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor"
+                        viewBox="0 0 24 24">
+                        <path
+                            d="M13.5 2c-.178 0-.356.013-.492.022l-.074.005a1 1 0 0 0-.934.998V11a1 1 0 0 0 1 1h7.975a1 1 0 0 0 .998-.934l.005-.074A7.04 7.04 0 0 0 22 10.5 8.5 8.5 0 0 0 13.5 2Z" />
+                        <path
+                            d="M11 6.025a1 1 0 0 0-1.065-.998 8.5 8.5 0 1 0 9.038 9.039A1 1 0 0 0 17.975 13H11V6.025Z" />
+                    </svg>
 
-        <div
-            class=" h-36 items-center  p-2 w-full rounded-lg shadow-lg dark:shadow-lg dark:shadow-gray-500/20 backdrop-blur-xl bg-cover bg-[#fcdab40a] dark:bg-[#1e293b62] dark:hover:bg-gray-700  hover:bg-[#f8f0e7] hover:scale-105 transition duration-700 ease-in-out border-l-8 border-[#ff9822] hover:border-l-10 ">
-            <div class="flex gap-4 items-center mb-4">
-                <svg class="w-16 h-16 text-gray-800 dark:text-white" aria-hidden="true"
-                    xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor"
-                    viewBox="0 0 24 24">
-                    <path
-                        d="M13.5 2c-.178 0-.356.013-.492.022l-.074.005a1 1 0 0 0-.934.998V11a1 1 0 0 0 1 1h7.975a1 1 0 0 0 .998-.934l.005-.074A7.04 7.04 0 0 0 22 10.5 8.5 8.5 0 0 0 13.5 2Z" />
-                    <path d="M11 6.025a1 1 0 0 0-1.065-.998 8.5 8.5 0 1 0 9.038 9.039A1 1 0 0 0 17.975 13H11V6.025Z" />
-                </svg>
+                    <h3 class="text-xl font-semibold text-gray-800 dark:text-gray-200 ">
+                        Total des activités enregistrées
+                    </h3>
 
-                <h3 class="text-xl font-semibold text-gray-800 dark:text-gray-200 ">
-                    Total des activités enregistrées
-                </h3>
+                </div>
+                <div>
 
+                    <p class="text-4xl font-bold text-[#ff9822] dark:text-gray-400">
+                        {{ $activites->count() }}</p>
+                </div>
             </div>
-            <div>
-
-                <p class="text-4xl font-bold text-[#ff9822] dark:text-gray-400">
-                    {{ $activites->count() }}</p>
-            </div>
-        </div>
-        <div
+        </a>
+        <div onclick="openModal()"
             class="  p-2 h-36 w-full items-center  rounded-lg shadow-lg  dark:shadow-gray-500/20 backdrop-blur-xl bg-[#fcdab40a] dark:bg-[#1e293b62] dark:hover:bg-gray-700  hover:scale-105 transition duration-700 ease-in-out hover:bg-[#f8f0e7] hover:text-black border-l-8 border-[#ff9822] hover:border-l-10 ">
 
             <div class="flex gap-4 items-center mb-4">
@@ -58,7 +60,7 @@
                 </svg>
 
                 <h3 class="text-xl font-semibold text-gray-800 dark:text-gray-200">
-                    Activités en cours cette semaine (Lundi - Samedi)
+                    Activités de la semaine (Lundi - Samedi)
                 </h3>
 
             </div>
@@ -83,7 +85,7 @@
                 </svg>
 
                 <h3 class="text-xl font-semibold text-gray-800 dark:text-gray-200">
-                    Activité totale enregistrée 30 dernier jours : <span class="text-[#ff9822]">
+
 
                 </h3>
 
@@ -91,35 +93,38 @@
             <div>
 
                 <p class="text-sm font-normal text-gray-400 dark:text-gray-400">
-                    Number of activitity registered in the last 30 days.
+
                 </p>
             </div>
 
         </div>
-        <div
-            class="rounded-xl items-center  p-2 h-36 w-full shadow-lg dark:shadow-lg dark:shadow-gray-500/20 backdrop-blur-xl bg-cover bg-[#fcdab40a] dark:bg-[#1e293b62] dark:hover:bg-gray-700   hover:bg-[#f8f0e7]  hover:scale-105 transition duration-700 ease-in-out border-l-8 border-[#ff9822] hover:border-l-10 ">
+        <a href="{{route('odcusers.index')}}" class="rounded-xl items-center  p-2 h-36 w-full shadow-lg dark:shadow-lg dark:shadow-gray-500/20 backdrop-blur-xl bg-cover bg-[#fcdab40a] dark:bg-[#1e293b62] dark:hover:bg-gray-700   hover:bg-[#f8f0e7]  hover:scale-105 transition duration-700 ease-in-out border-l-8 border-[#ff9822] hover:border-l-10 ">
+            <div
+                >
 
-            <div class=" flex gap-4 items-center mb-4">
-                <svg class=" w-12 h-12 text-gray-800 dark:text-white" aria-hidden="true"
-                    xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor"
-                    viewBox="0 0 24 24">
-                    <path fill-rule="evenodd"
-                        d="M12 6a3.5 3.5 0 1 0 0 7 3.5 3.5 0 0 0 0-7Zm-1.5 8a4 4 0 0 0-4 4 2 2 0 0 0 2 2h7a2 2 0 0 0 2-2 4 4 0 0 0-4-4h-3Zm6.82-3.096a5.51 5.51 0 0 0-2.797-6.293 3.5 3.5 0 1 1 2.796 6.292ZM19.5 18h.5a2 2 0 0 0 2-2 4 4 0 0 0-4-4h-1.1a5.503 5.503 0 0 1-.471.762A5.998 5.998 0 0 1 19.5 18ZM4 7.5a3.5 3.5 0 0 1 5.477-2.889 5.5 5.5 0 0 0-2.796 6.293A3.501 3.501 0 0 1 4 7.5ZM7.1 12H6a4 4 0 0 0-4 4 2 2 0 0 0 2 2h.5a5.998 5.998 0 0 1 3.071-5.238A5.505 5.505 0 0 1 7.1 12Z"
-                        clip-rule="evenodd" />
-                </svg>
+                <div class=" flex gap-4 items-center mb-4">
+                    <svg class=" w-12 h-12 text-gray-800 dark:text-white" aria-hidden="true"
+                        xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor"
+                        viewBox="0 0 24 24">
+                        <path fill-rule="evenodd"
+                            d="M12 6a3.5 3.5 0 1 0 0 7 3.5 3.5 0 0 0 0-7Zm-1.5 8a4 4 0 0 0-4 4 2 2 0 0 0 2 2h7a2 2 0 0 0 2-2 4 4 0 0 0-4-4h-3Zm6.82-3.096a5.51 5.51 0 0 0-2.797-6.293 3.5 3.5 0 1 1 2.796 6.292ZM19.5 18h.5a2 2 0 0 0 2-2 4 4 0 0 0-4-4h-1.1a5.503 5.503 0 0 1-.471.762A5.998 5.998 0 0 1 19.5 18ZM4 7.5a3.5 3.5 0 0 1 5.477-2.889 5.5 5.5 0 0 0-2.796 6.293A3.501 3.501 0 0 1 4 7.5ZM7.1 12H6a4 4 0 0 0-4 4 2 2 0 0 0 2 2h.5a5.998 5.998 0 0 1 3.071-5.238A5.505 5.505 0 0 1 7.1 12Z"
+                            clip-rule="evenodd" />
+                    </svg>
 
-                <h3 class="text-xl font-semibold text-gray-800 dark:text-gray-200">
-                    Nombre total d'utilisateurs enregistrés
-                </h3>
+                    <h3 class="text-xl font-semibold text-gray-800 dark:text-gray-200">
+                        Nombre total d'utilisateurs enregistrés
+                    </h3>
+
+                </div>
+                <div class="">
+
+                    <p class="text-4xl font-bold text-[#ff9822] dark:text-gray-400">
+                        {{ $user->count() }} </p>
+                </div>
 
             </div>
-            <div class="">
+        </a>
 
-                <p class="text-4xl font-bold text-[#ff9822] dark:text-gray-400">
-                    {{ $user->count() }} </p>
-            </div>
-
-        </div>
     </section>
 
     <section class="flex justify-between p-4 gap-4 w-full md:inset-0 h-[calc(100%-1rem)] max-h-full mb-8">
@@ -201,8 +206,7 @@
         <div class=" flex justify-between gap-4 rounded-lg w-1/2">
             <div class=" w-1/2">
                 <div>
-                    <h3 class="mb-6 text-lg font-normal text-gray-500 lg:text-xl  dark:text-gray-400">Recent activite
-                        storage</h3>
+                    <h3 class="mb-6 text-lg font-normal text-gray-500 lg:text-xl  dark:text-gray-400">Dernière activité enregistrée</h3>
                 </div>
                 <div>
                     @foreach ($data as $i => $item)
@@ -244,7 +248,7 @@
                             class="px-6 py-4 grid gap-3 md:flex md:justify-between md:items-center border-b border-gray-200 dark:border-neutral-700">
                             <div>
                                 <h2 class="text-xl font-semibold text-gray-800 dark:text-neutral-200">
-                                    Activités en cours cette semaine (Lundi - Samedi)
+                                    Activités de la semaine (Lundi - Samedi)
                                 </h2>
                                 <p class="text-sm text-gray-600 dark:text-neutral-400">
                                     Découvrez les événements et activités prévus du lundi au samedi
@@ -376,31 +380,7 @@
                                 </p>
                             </div>
 
-                            <div>
-                                <div class="inline-flex gap-x-2">
-                                    <button type="button"
-                                        class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-gray-200 bg-white text-gray-800 shadow-sm hover:bg-gray-50 focus:outline-none focus:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-800 dark:border-neutral-700 dark:text-white dark:hover:bg-neutral-700 dark:focus:bg-neutral-700">
-                                        <svg class="shrink-0 size-4" xmlns="http://www.w3.org/2000/svg"
-                                            width="24" height="24" viewBox="0 0 24 24" fill="none"
-                                            stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                            stroke-linejoin="round">
-                                            <path d="m15 18-6-6 6-6" />
-                                        </svg>
-                                        Prev
-                                    </button>
 
-                                    <button type="button"
-                                        class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-gray-200 bg-white text-gray-800 shadow-sm hover:bg-gray-50 focus:outline-none focus:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-800 dark:border-neutral-700 dark:text-white dark:hover:bg-neutral-700 dark:focus:bg-neutral-700">
-                                        Next
-                                        <svg class="shrink-0 size-4" xmlns="http://www.w3.org/2000/svg"
-                                            width="24" height="24" viewBox="0 0 24 24" fill="none"
-                                            stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                            stroke-linejoin="round">
-                                            <path d="m9 18 6-6-6-6" />
-                                        </svg>
-                                    </button>
-                                </div>
-                            </div>
                         </div>
                         <!-- End Footer -->
                     </div>
@@ -410,8 +390,65 @@
         <!-- End Card -->
     </div>
 
+    @section('modal')
+        <div id="myModal" data-modal-backdrop="static" tabindex="-1" aria-hidden="true"
+            class="hidden fixed top-0 left-0 w-full h-full bg-gray-900 bg-opacity-50 flex justify-center items-center">
+            <div class="relative p-4 w-full max-w-2xl max-h-full">
+                <!-- Modal content -->
+                <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
+                    <!-- Modal header -->
+                    <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
+                        <h2 class="text-xl font-semibold text-gray-800 dark:text-neutral-200">
+                            Activités de la semaine (Lundi - Samedi)
+                        </h2>
+                        <button type="button" onclick="closeModal()"
+                            class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
+                            data-modal-hide="static-modal">
+                            <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
+                                viewBox="0 0 14 14">
+                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                    stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
+                            </svg>
+                            <span class="sr-only">Close modal</span>
+                        </button>
+                    </div>
+                    <!-- Modal body -->
+                    <div class="p-4 md:p-5 space-y-4 relative overflow-x-auto" id="resultsContainer">
+                        @foreach ($activityForWeekend as $item)
+                            <a href="http://127.0.0.1:8000/activites/${activite.id}"
+                                class="inline-flex items-center justify-center p-5 text-base font-medium text-gray-500 rounded-lg bg-gray-50 hover:text-gray-900 hover:bg-gray-100 dark:text-gray-400 dark:bg-gray-800 dark:hover:bg-gray-700 dark:hover:text-white">
+
+                                <span class="w-full">{{ $item->title }}</span>
+                                <svg class="w-4 h-4 ms-2 rtl:rotate-180" aria-hidden="true"
+                                    xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 10">
+                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                        stroke-width="2" d="M1 5h12m0 0L9 1m4 4L9 9" />
+                                </svg>
+                                <br>
+
+                            </a>
+                        @endforeach
+
+
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    @endsection
+
 
     @section('script')
+        <script>
+            function openModal() {
+                document.getElementById('myModal').classList.remove('hidden');
+            }
+
+            function closeModal() {
+                document.getElementById('myModal').classList.add('hidden');
+            }
+        </script>
         <script>
             const currentYear = new Date().getFullYear();
             const currentMonth = new Date().getMonth() + 1;

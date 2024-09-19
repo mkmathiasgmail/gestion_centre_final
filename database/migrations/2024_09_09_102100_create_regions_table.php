@@ -11,10 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('employabilites', function (Blueprint $table) {
-            //$table->string('nomboite')->after('name');
-            //$table->string('poste')->after('nomboite');
-
+        Schema::create('regions', function (Blueprint $table) {
+            $table->id();
+            $table->uuid('uuid')->unique();
+            $table->string('name');
+            $table->timestamps();
         });
     }
 
@@ -23,8 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('employabilites', function (Blueprint $table) {
-            //
-        });
+        Schema::dropIfExists('regions');
     }
 };

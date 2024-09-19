@@ -13,6 +13,7 @@ use App\Models\Categorie;
 use App\Models\TypeEvent;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
+use App\Models\CourseraUsage;
 use App\Models\CourseraMember;
 use App\Models\CandidatAttribute;
 use Illuminate\Routing\Controller;
@@ -20,7 +21,9 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Http;
-use Yajra\DataTables\Facades\DataTables;
+use App\Models\CourseraSpecialisation;
+use Ramsey\Uuid\Uuid;
+
 
 class ActiviteController extends Controller
 {
@@ -72,7 +75,6 @@ class ActiviteController extends Controller
 
     public function store(Request $request)
     {
-
         $validatedData = $request->validate(
             [
                 'title' => 'required|string|max:255',
@@ -85,38 +87,25 @@ class ActiviteController extends Controller
                 'hashtags' => 'nullable|array',
                 'hashtags.*' => 'exists:hashtags,id',
                 'typeEvent' => 'nullable|array',
-
-
                 'typeEvent.*' => 'exists:type_events,id',
-                'day' => 'required',
+                'day' => 'required|integer',
             ],
-
             [
                 'title.required' => 'The title is required.',
-                'day.required' => 'The title is required.',
                 'title.string' => 'The title must be a string.',
                 'title.max' => 'The title may not be greater than 255 characters.',
                 'categories.required' => 'The category is required.',
                 'categories.exists' => 'The selected category is invalid.',
                 'contents.required' => 'The content is required.',
-                'contents.string' => 'The content must be a string.',
                 'startDate.required' => 'The start date is required.',
-                'startDate.date' => 'The start date must be a valid date.',
                 'endDate.required' => 'The end date is required.',
-                'endDate.date' => 'The end date must be a valid date.',
-                'endDate.after_or_equal' => 'The end date must be a date after or equal to the start date.',
-                'form_id.exists' => 'The selected form is invalid.',
-                'creator.max' => 'The creator may not be greater than 255 characters.',
-                'location.string' => 'The location must be a string.',
-                'location.max' => 'The location may not be greater than 255 characters.',
-                'hashtags.array' => 'The hashtags must be an array.',
+                'endDate.after_or_equal' => 'The end date must be after or equal to the start date.',
                 'hashtags.*.exists' => 'The selected hashtag is invalid.',
-                'typeEvent.array' => 'The type events must be an array.',
                 'typeEvent.*.exists' => 'The selected type event is invalid.',
             ]
         );
 
-
+        $uuid = Uuid::uuid4()->toString();
 
         try {
             $activites = Activite::create([
@@ -127,8 +116,8 @@ class ActiviteController extends Controller
                 'end_date' => $validatedData['endDate'],
                 'publishStatus' => false,
                 'showInSlider' => false,
-                "form" => $request->form,
-                "thumbnail_url" => $request->thumbnailURL,
+                'form' => $request->form,
+                'thumbnail_url' => $request->thumbnailURL, // Ensure this field is validated or set as nullable
                 'miniatureColor' => false,
                 'showInCalendar' => false,
                 'liveStatus' => false,
@@ -136,14 +125,9 @@ class ActiviteController extends Controller
                 'isEvents' => false,
                 'creator' => false,
                 'location' => $validatedData['location'],
-                'number_day ' => $validatedData['day'],
+                'number_day' => $validatedData['day'],
+                'uuid' => $uuid
             ]);
-
-
-
-
-
-
 
             if ($request->has('hashtags')) {
                 $activites->hashtag()->attach($validatedData['hashtags']);
@@ -155,7 +139,8 @@ class ActiviteController extends Controller
 
             return redirect()->route('activites.index')->with('success', 'Activite created successfully.');
         } catch (\Exception $e) {
-            return back()->withErrors(['error' => "An error occurred while creating the activity. $e"])->withInput();
+            Log::error("Error creating activity: " . $e->getMessage());
+            return back()->withErrors(['error' => 'An error occurred while creating the activity. Please try again later.'])->withInput();
         }
     }
 
@@ -298,67 +283,27 @@ class ActiviteController extends Controller
 
     public function update(Request $request, Activite $activite)
     {
-        $validatedData = $request->validate(
-            [
-                'title' => 'required|string|max:255',
-                'categories' => 'required|exists:categories,id',
-                'contents' => 'required|string',
-                'startDate' => 'required|date',
-                'endDate' => 'required|date|after_or_equal:startDate',
-                'form_id' => 'nullable|exists:forms,id',
-                'location' => 'nullable|string|max:255',
-                'hashtags' => 'nullable|array',
-                'hashtags.*' => 'exists:hashtags,id',
-                'typeEvent' => 'nullable|array',
-                'typeEvent.*' => 'exists:type_events,id',
-                'thumbnailURL' => 'nullable|url',
 
-
-            ],
-
-            [
-                'title.required' => 'The title is required.',
-                'title.string' => 'The title must be a string.',
-                'title.max' => 'The title may not be greater than 255 characters.',
-                'categories.required' => 'The category is required.',
-                'categories.exists' => 'The selected category is invalid.',
-                'contents.required' => 'The content is required.',
-                'contents.string' => 'The content must be a string.',
-                'startDate.required' => 'The start date is required.',
-                'startDate.date' => 'The start date must be a valid date.',
-                'endDate.required' => 'The end date is required.',
-                'endDate.date' => 'The end date must be a valid date.',
-                'endDate.after_or_equal' => 'The end date must be a date after or equal to the start date.',
-                'form_id.exists' => 'The selected form is invalid.',
-                'creator.max' => 'The creator may not be greater than 255 characters.',
-                'location.string' => 'The location must be a string.',
-                'location.max' => 'The location may not be greater than 255 characters.',
-                'hashtags.array' => 'The hashtags must be an array.',
-                'hashtags.*.exists' => 'The selected hashtag is invalid.',
-                'typeEvent.array' => 'The type events must be an array.',
-                'typeEvent.*.exists' => 'The selected type event is invalid.',
-            ]
-        );
 
         try {
             $activite->update([
-                'title' => $validatedData['title'],
-                'categorie_id' => $validatedData['categories'],
-                'contents' => $validatedData['contents'],
-                'start_date' => $validatedData['startDate'],
-                'end_date' => $validatedData['endDate'],
-                'location' => $validatedData['location'],
+                'title' => $request->title,
+                'categorie_id' => $request->categories,
+                'contents' => $request->contents,
+                'start_date' => $request->startDate,
+                'end_date' => $request->endDate,
+                'location' => $request->location,
                 "thumbnail_url" => $request->thumbnailURL,
             ]);
 
 
 
             if ($request->has('hashtags')) {
-                $activite->hashtag()->sync($validatedData['hashtags']);
+                $activite->hashtag()->sync($request->hashtags);
             }
 
             if ($request->has('typeEvent')) {
-                $activite->typEvent()->sync($validatedData['typeEvent']);
+                $activite->typEvent()->sync($request->typeEvent);
             }
 
 
@@ -505,9 +450,18 @@ class ActiviteController extends Controller
             ->first();
 
 
-        $specialisationsCount = DB::table('coursera_specialisations')->select('specialisaton_name')->count();
 
+        $specialisations = CourseraSpecialisation::where('specialization_completion_time', '<', now())->count();
 
+        $specialisationsCount = DB::table('coursera_specialisations')
+            ->select('specialisaton_name')->count();
+
+        $completedSpecialisations = CourseraSpecialisation::where('completed', 'Yes')->count();
+        $completedUsages = CourseraUsage::where('completed', 'Yes')->count();
+        $getCompletedUsages = CourseraUsage::where('completed', 'Yes')->paginate(25);
+        $uncompletedSpecialisations = CourseraSpecialisation::where('completed', 'NO')->count();
+        $uncompletedUsages = CourseraUsage::where('completed', 'NO')->count();
+        $deletedUsages = CourseraUsage::where('removed_from_program', 'Yes')->count();
 
 
         $usagesEncourrs = DB::table('coursera_usages')
@@ -515,7 +469,20 @@ class ActiviteController extends Controller
             ->where('class_end_time', '>=', now())->count();
 
 
-        return view('coursera.coursera_rapports', compact('datasets', 'labels', "coursera_members", "specialisationsCount", "coursera_usages"));
+        return view('coursera.coursera_rapports', compact('datasets', 
+                                                            'labels', "coursera_members", 
+                                                            "specialisationsCount", 
+                                                            "coursera_usages", 
+                                                            "specialisations",
+                                                            "completedSpecialisations",
+                                                            "uncompletedSpecialisations",
+                                                            "deletedUsages",
+                                                            "completedUsages",
+                                                            "uncompletedUsages",
+                                                            "getCompletedUsages"
+                                                            ));
+
+        
     }
 
 

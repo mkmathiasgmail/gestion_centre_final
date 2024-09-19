@@ -337,7 +337,6 @@ class RapportSemestrielController extends Controller
 
         foreach ($candidats as $candidat) {
             ini_set('max_execution_time', 10000);
-            ini_set('max_execution_time', 10000);
 
             //recuperation et filtrage des numeros de telephone
             $phoneNumberResult = DB::table('candidat_attributes')
@@ -355,7 +354,6 @@ class RapportSemestrielController extends Controller
 
             // Récupération de l'université du candidat dans la table candidat_attributes et odcusers
             $variables = ['Université', 'Etablissement', 'Structure', 'Entreprise', 'Si autre université'];
-            $variables = ['Université', 'Etablissement', 'Structure', 'Entreprise', 'Si autre université'];
 
             $universiteLabelAttribute = DB::table('candidat_attributes')
                 ->where(function ($query) use ($variables) {
@@ -365,10 +363,10 @@ class RapportSemestrielController extends Controller
                 })
                 ->where('candidat_id', $candidat->id)
                 ->first();
-
+                $universiteValue ='';
             if ($universiteLabelAttribute) {
                 $universiteValue = $universiteLabelAttribute->value;
-            } elseif ($universiteLabelAttribute='') {
+            } elseif ($universiteValue === null) {
                 $odcusers = Odcuser::where('id', $candidat->id)
                 ->get();
                 if (request()->expectsJson()) {
@@ -383,26 +381,62 @@ class RapportSemestrielController extends Controller
             }
 
 
-            //Recuperation des profession et specialités des candidats
-            $profSpeciality = Odcuser::where('id', $candidat->odcuser_id)
-                ->get();
-            if (request()->expectsJson()) {
-                return response()->json($profSpeciality);
-            }
-            foreach ($profSpeciality as $key => $odcuser) {
-                $profession = json_decode($odcuser->profession, true);
-                $professionValue = $profession['translations']['fr']['profession'] ?? '';
+            //Recuperation des profession et specialités des 
+            $profess = ['Profession'];
+
+            $professLabelAttribute = DB::table('candidat_attributes')
+            ->where(function ($query) use ($profess) {
+                foreach ($profess as $value) {
+                    $query->orWhere('label', 'LIKE BINARY', "%{$value}%");
+                }
+            })
+            ->where('candidat_id', $candidat->id)
+            ->first();
+
+            // Initialisation de la variable
+            $professionValue = ''; 
+
+            if ($professLabelAttribute) {
+                $professionValue = $professLabelAttribute->value;
+            } elseif ($professionValue === null) { // Vérifie si la variable est nulle
+                $profSpeciality = Odcuser::where('id', $candidat->odcuser_id)->get();
+                if (request()->expectsJson()) {
+                    return response()->json($profSpeciality);
+                }
+                foreach ($profSpeciality as $key => $odcuser) {
+                    $profession = json_decode($odcuser->profession, true);
+                    $professionValue = $profession['translations']['fr']['profession'] ?? '';
+                }
+            } else {
+                $professionValue = ''; // Option par défaut si aucune condition n'est remplie
             }
             //recuperation des speciality
-            $speciality = Odcuser::where('id', $candidat->odcuser_id)
-                ->get();
-            if (request()->expectsJson()) {
-                return response()->json($speciality);
-            }
-            foreach ($speciality as $key => $odcuser)
-                $detail_profession = json_decode($odcuser->detail_profession, true);
-            $specialiteValue = $detail_profession['speciality'] ?? '';
+            $special = ['Spécialité ou domaine (étude ou profession)', 'Spécialité ou domaine'];
+            $specialLabelAttribute = DB::table('candidat_attributes')
+            ->where(function ($query) use ($special) {
+                foreach ($special as $value) {
+                    $query->orWhere('label', 'LIKE', "%{$value}%");
+                }
+            })
+            ->where('candidat_id', $candidat->id)
+            ->first();
 
+            $specialiteValue = '';
+
+            if ($specialLabelAttribute) {
+                $specialiteValue = $specialLabelAttribute->value; // Correction ici
+            } elseif ($specialiteValue === null) { // Utilisation de === pour la comparaison
+                $speciality = Odcuser::where('id', $candidat->odcuser_id)->get();
+                if (request()->expectsJson()) {
+                    return response()->json($speciality);
+                }
+                foreach ($speciality as $key => $odcuser) {
+                    $detail_profession = json_decode($odcuser->detail_profession, true);
+                    $specialiteValue = $detail_profession['speciality'] ?? '';
+                }
+            } else {
+                $specialiteValue = ''; // Option par défaut si aucune condition n'est remplie
+            }
             //calcule d'age du candidats
             $today = new DateTime(); // Date d'aujourd'hui
             $birthDay = new DateTime($candidat->birth_date); // Date de naissance du candidat

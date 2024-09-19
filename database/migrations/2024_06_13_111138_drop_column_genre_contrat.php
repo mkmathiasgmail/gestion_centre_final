@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::table('employabilites', function (Blueprint $table) {
             $table->dropColumn('genre_contrat');
-            $table->foreignUuid('odcuser_id')
+            $table->foreignId('odcuser_id')
                     ->nullable()
                     ->constrained('odcusers')
                     ->onDelete('cascade');

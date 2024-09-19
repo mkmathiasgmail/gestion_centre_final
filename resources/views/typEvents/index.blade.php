@@ -4,13 +4,12 @@
 
     <!-- Modal toggle -->
     <button data-modal-target="authentication-modal" data-modal-toggle="authentication-modal"
-        class="cursor-pointer mt-5 bg-slate-600 p-2 rounded-sm font-bold"
+        class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-transparent bg-[#FF7322] text-white hover:bg-[#FF6822] focus:outline-none focus:bg-[#FF6822] disabled:opacity-50 disabled:pointer-events-none"
         type="button">
        Creation type Event
     </button>
-
-    <!-- Main modal -->
-    <div id="authentication-modal" tabindex="-1" aria-hidden="true"
+@section('modal')
+<div id="authentication-modal" tabindex="-1" aria-hidden="true"
         class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
         <div class="relative p-4 w-full max-w-md max-h-full">
             <!-- Modal content -->
@@ -55,6 +54,9 @@
             </div>
         </div>
     </div>
+@endsection
+    <!-- Main modal -->
+
 
 
 
@@ -149,14 +151,13 @@
         </table>
     </div>
 
-    <x-delete :name="__('Are you sure you want to delete this product? ')" />
 
     @section('script')
     <script>
         function delete(event) {
 
             event.preventDefault()
-            
+
         }
     </script>
         <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4="

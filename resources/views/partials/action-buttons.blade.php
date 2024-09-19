@@ -14,12 +14,12 @@
     <ul class="py-2 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdownMenuIconButton">
         <li>
             <a href="{{ route('activites.show', $activite->id) }}"
-                class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">View</a>
+                class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Voir</a>
         </li>
 
         <li>
             <a href="{{ route('activites.edit', $activite->id) }}"
-                class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Update</a>
+                class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Modifier</a>
         </li>
 
         <li>
@@ -97,8 +97,8 @@
     <div class="py-2">
         <li>
             <a onclick="return destroy(event, '{{ route('activites.destroy', $activite->id) }}')" href="#"
-                class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
-                data-modal-target="delete" data-modal-toggle="delete">Delete</a>
+                class="block px-4 py-2 text-red-600 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
+                data-modal-target="delete" data-modal-toggle="delete">Supprimer</a>
         </li>
     </div>
 
@@ -111,8 +111,4 @@
 </button>
 
 
-<x-statusactive :activiteid="$activite->id" :name="__('Would you like show in calendar this activity? ')" />
 
-<x-statusdesactive :activiteid="$activite->id" :name="__('Would you like disable in calendar this activity? ')" />
-
-<x-delete :activiteid="$activite->id" :name="__('Would you like disable in calendar this activity? ')" />

@@ -12,7 +12,8 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('coursera_members', function (Blueprint $table) {
-            $table->string('email')->primary()->unique();
+            $table->id();
+            $table->string('email');
             $table->string('name');
             $table->string('external_id')->nullable();
             $table->integer('enrolled_courses')->nullable();
