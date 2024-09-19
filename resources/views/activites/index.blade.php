@@ -30,6 +30,7 @@
 
         </div>
 
+
     </x-slot>
 
 
@@ -41,9 +42,7 @@
         </div>
     @endif
 
-    {{-- <div class="relative overflow-x-auto mt-4" id="selecteurTab">
-        <x-tableactivites :activites="$activites" />
-    </div> --}}
+
 
     <div class=" w-full bg-[#fcdab40a] darj p-4 rounded-lg bg-opacity-5 relative">
         <!-- Header -->
@@ -211,6 +210,8 @@
                         Create Activites
                     </a>
 
+
+
                 </div>
             </div>
         </div>
@@ -239,7 +240,7 @@
 
 
 
-    <x-delete :name="__('Would you like disable in calendar this activity? ')" />
+
 
     @section('script')
         <script>
@@ -302,6 +303,8 @@
                                                             <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                                                 d="M1 5h12m0 0L9 1m4 4L9 9" />
                                                         </svg>
+                                                        <br>
+                                                        <p>${activite.start_date}</p>
                                                     </a>
                     `;
                                 });
@@ -339,31 +342,74 @@
             });
         </script>
         <script>
-            function activer(event, id) {
+            function destroy(event, url) {
                 event.preventDefault();
-                let link = event.target.getAttribute('href');
-                console.log("Activating modal for ID: ", id); // Debugging line
-                document.querySelector(`#desactive-${id} form`).setAttribute('action', link);
-                document.querySelector(`#desactive-${id}`).classList.remove('hidden');
+
+                if (confirm("Êtes-vous sûr de vouloir supprimer cet élément ?")) {
+                    POST
+                    let form = document.createElement('form');
+                    form.method = 'POST';
+                    form.action = url;
+                    form.style.display = 'none';
+
+
+                    let csrfToken = document.createElement('input');
+                    csrfToken.type = 'hidden';
+                    csrfToken.name = '_token';
+                    csrfToken.value = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+                    form.appendChild(csrfToken);
+
+
+                    let _method = document.createElement('input');
+                    _method.type = 'hidden';
+                    _method.name = '_method';
+                    _method.value = 'DELETE';
+                    form.appendChild(_method);
+
+
+                    document.body.appendChild(form);
+                    form.submit();
+                }
+
+                return false;
             }
 
-            function desactiver(event, id) {
+
+            function confirmAction(event, id, action) {
                 event.preventDefault();
-                alert(id);
-                let link = event.target.getAttribute('href');
-                document.querySelector(`#active-${id} form`).setAttribute('action', link);
-                document.querySelector(`#active-${id}`).classList.remove('hidden');
+
+                let message = `Êtes-vous sûr de vouloir ${action.toLowerCase()} cette activité au calendrier ?`;
+
+                if (confirm(message)) {
+
+                    let form = document.createElement('form');
+                    form.method = 'POST';
+                    form.action = event.target.href;
+                    form.style.display = 'none';
+
+
+                    let csrfToken = document.createElement('input');
+                    csrfToken.type = 'hidden';
+                    csrfToken.name = '_token';
+                    csrfToken.value = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+                    form.appendChild(csrfToken);
+
+
+                    let status = document.createElement('input');
+                    status.type = 'hidden';
+                    status.name = 'status';
+                    status.value = action === 'Activer' ? 'true' : 'false';
+                    form.appendChild(status);
+
+
+                    document.body.appendChild(form);
+                    form.submit();
+                }
+                return false;
             }
         </script>
 
         <script>
-            function destroy(event) {
-                event.preventDefault();
-                alert(id);
-                let link = event.target.getAttribute('href');
-                document.querySelector('.delete').setAttribute('action', link);
-            }
-
             $(document).ready(function() {
                 $('.dt-container').addClass('text-xl text-gray-800 dark:text-gray-200 leading-tight')
 

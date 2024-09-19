@@ -1,4 +1,7 @@
 <x-app-layout>
+@if (Auth()->user()->hasRole('super-admin'))
+
+
     <x-slot name="header">
         @section('svg')
             <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
@@ -7,7 +10,7 @@
                     d="M10.83 5a3.001 3.001 0 0 0-5.66 0H4a1 1 0 1 0 0 2h1.17a3.001 3.001 0 0 0 5.66 0H20a1 1 0 1 0 0-2h-9.17ZM4 11h9.17a3.001 3.001 0 0 1 5.66 0H20a1 1 0 1 1 0 2h-1.17a3.001 3.001 0 0 1-5.66 0H4a1 1 0 1 1 0-2Zm1.17 6H4a1 1 0 1 0 0 2h1.17a3.001 3.001 0 0 0 5.66 0H20a1 1 0 1 0 0-2h-9.17a3.001 3.001 0 0 0-5.66 0Z" />
             </svg>
         @endsection
-        <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
+        <h2 class="text-xl font-semibold leading-tight text-gray-800 dark:text-gray-200">
             {{ __('Paramétrer') }}
         </h2>
     </x-slot>
@@ -31,14 +34,9 @@
                     class="inline-block p-4 border-b-2 rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300"
                     id="dashboard-styled-tab" data-tabs-target="#styled-dashboard" type="button" role="tab"
                     aria-controls="dashboard" aria-selected="false">
-                    Gestions Utlisatuer</button>
+                    Gestions Utlisateur</button>
             </li>
-            <li class="me-2" role="presentation">
-                <button
-                    class="inline-block p-4 border-b-2 rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300"
-                    id="settings-styled-tab" data-tabs-target="#styled-settings" type="button" role="tab"
-                    aria-controls="settings" aria-selected="false">Settings</button>
-            </li>
+
             <li role="presentation">
                 <button
                     class="inline-block p-4 border-b-2 rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300"
@@ -48,9 +46,16 @@
         </ul>
     </div>
     <div id="default-styled-tab-content">
+
         <div class="hidden p-4 rounded-lg bg-[#eaeaebf3] dark:bg-[#0F172A]" id="styled-profile" role="tabpanel"
             aria-labelledby="profile-tab">
             <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
+                <div class="flex justify-end mt-4 mb-4 text-white">
+                    <button type="submit" class="p-2 text-white bg-[#ff7322] hover:bg-[#ff7920] focus:bg-[#ff7910] disabled:opacity-50 rounded-md" data-modal-target="authentication-modal"
+
+                        data-modal-toggle="authentication-modal">Créer un rôle
+                    </button>
+                </div>
                 <table class="w-full text-sm text-left text-gray-500 rtl:text-right dark:text-gray-400">
                     <thead class="text-xs text-white uppercase bg-[#eaeaebf3] dark:bg-gray-700 dark:text-white">
                         <tr>
@@ -182,18 +187,24 @@
                 </div>
             </div>
         </div>
-        <div class="hidden p-4 rounded-lg bg-gray-50 dark:bg-gray-800" id="styled-settings" role="tabpanel"
-            aria-labelledby="settings-tab">
 
-        </div>
+
         <div class="hidden p-4 rounded-lg bg-gray-50 dark:bg-gray-800" id="styled-contacts" role="tabpanel"
             aria-labelledby="contacts-tab">
-            <p class="text-sm text-gray-500 dark:text-gray-400">This is some placeholder content the <strong
-                    class="font-medium text-gray-800 dark:text-white">Contacts tab's associated content</strong>.
-                Clicking another tab will toggle the visibility of this one for the next. The tab JavaScript swaps
-                classes to control the content visibility and styling.</p>
+            <p class="text-sm text-gray-500 dark:text-gray-400"> les informations des developpeurs qui concut   l'apllication. Vous pouvez
+                nous joindre au numéro suivant e cas de panne ou de bug.</p>
+                <strong class="font-medium text-gray-800 dark:text-white">Carlo Musongela : +33 1 23 45 67 89 </strong>.</p>
+                <p class="font-medium text-gray-800 dark:text-white">Idriss elba :+33 1 23 45 67 89</p>
+                <p class="font-medium text-gray-800 dark:text-white">Manasse Thims :+33 1 23 45 67 89</p>
+                <p class="font-medium text-gray-800 dark:text-white">Francine Magbia :+33 1 23 45 67 89</p>
+                <p class="font-medium text-gray-800 dark:text-white">Vincent thips :+33 1 23 45 67 89</p>
+                <p class="font-medium text-gray-800 dark:text-white">Junior Walker :+33 1 23 45 67 89</p>
+
         </div>
     </div>
 
-
+    @section('modal')
+    <x-roleCreate />
+    @endsection
+@endif
 </x-app-layout>

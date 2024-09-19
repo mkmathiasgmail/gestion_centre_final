@@ -9,10 +9,11 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Ramsey\Uuid\Uuid;
 
 class Odcuser extends Model
 {
-    use HasFactory, HasUuids;
+    use HasFactory;
 
     protected $table = "odcusers" ;
     protected $fillable = [
@@ -43,13 +44,22 @@ class Odcuser extends Model
         'updatedAt',
         '__v',
         'picture',
-        'user_cv'
+        'user_cv',
+        'uuid'
     ] ;
 
     protected $casts = [
         'profession' => 'array',
         'detail_profession' => 'array'
     ];
+
+    protected static function boot()
+    {
+        parent::boot();
+        static::creating(function ($model) {
+            $model->uuid = Uuid::uuid4()->toString();
+        });
+    }
 
     public function activite(): BelongsToMany
     {

@@ -13,11 +13,11 @@ return new class extends Migration
     {
         Schema::create('certificats', function (Blueprint $table) {
             $table->id();
-            $table->foreignUuid('activite_id')
+            $table->foreignId('activite_id')
             ->nullable()
             ->constrained('activites')
             ->onDelete('cascade');
-            $table->foreignUuid('candidat_id')
+            $table->foreignId('candidat_id')
             ->nullable()
             ->constrained('candidats')
             ->onDelete('cascade');

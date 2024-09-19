@@ -88,7 +88,6 @@ class ImportControl extends Controller
                 //$validatedData['status']= 0;
 
                 //$odcuser = Odcuser::firstOrCreate($cond, $validatedData);
-                
                 if ($odcuser) {
                     // Si l'utilisateur existe déjà, on recupere simplement son id.
                     $odcuser->update($validatedData);
@@ -144,10 +143,20 @@ class ImportControl extends Controller
                 if (empty($date)){
                     continue; // Skip rows with empty date
                 }else{
-                    Presence::create([
+                    /*Presence::create([
                         'date' => $datemodif[1],
                         'candidat_id' => $candidat->id,
-                    ]);
+                    ]);*/
+                    
+                    Presence::firstOrCreate(
+                        [
+                            'candidat_id' => $candidat->id,
+                        ],
+                        [
+                            'date' => $datemodif[1],
+                            'candidat_id' => $candidat->id,
+                        ]
+                    );
                 }
                 //dd($date);
 
@@ -359,4 +368,76 @@ class ImportControl extends Controller
         $writer->save("php://output");
         exit();
     }
+    public function importAndgenerate(Request $request)
+    {
+        $file = $request->file;
+        $Id = $request->activite;
+        $spreadsheet = IOFactory::load($file);
+        $sheets = $spreadsheet->getActiveSheet();
+        //dump($sheets);
+        //$rows = $sheets->toArray();
+        //dd($rows);
+
+        for ($lineexcel = 2; $lineexcel <= $sheets->getHighestRow(); $lineexcel++) {
+            $prenom = $sheets->getcell("A{$lineexcel}")->getvalue();
+            $nom = $sheets->getcell("B{$lineexcel}")->getvalue();
+            $email = $sheets->getcell("C{$lineexcel}")->getvalue();
+            $genre = $sheets->getcell("D{$lineexcel}")->getvalue();
+            $Evaluation = $sheets->getcell("E{$lineexcel}")->getvalue();
+            //dd($Evaluation);
+            if($Evaluation >= 60){
+                $this->generateAllCertificats($Id);
+            }else{
+                continue;
+            }
+            //$gestion = $this->handlecertification($Evaluation, $Id);
+        }
+ 
+        //dd($gestion);
+    }
+
+    public  function generateAllCertificats($Id)
+    {
+        $id = Activite::find($Id);
+        //dd($Id);
+        $idactivite= $id->id;
+        //dd( $idactivite);
+        set_time_limit(100000);
+        $candidats = Candidat::where('activite_id', $idactivite)
+                            ->where('status', 'accept')
+                            ->select('id', 'odcuser_id', 'activite_id', 'status')
+                            ->with(['odcuser', 'candidat_attribute'])
+                            ->get();
+        //dd($candidats);
+        //extension de la classe ZipArchive pour stocké tous les certificats
+        $zip = new ZipArchive();
+        $zipFilename = 'certificats.zip';
+        $zip->open($zipFilename, ZipArchive::CREATE | ZipArchive::OVERWRITE);
+
+        // Boucler sur chaque candidat et générer le certificat
+        foreach ($candidats as $candidat) {
+
+            $date = new DateTimeImmutable($candidat->activite->start_date);
+            $format = date_format($date, 'jS \o\f F Y');
+
+            $pdf = view('certificat.generateCertificat', compact('candidat', 'format'));
+
+            $options = new Options();
+            $options->set('isHtml5ParserEnabled', true);
+            $options->set('isRemoteEnabled', true);
+            $dompdf = new Dompdf($options);
+            $dompdf->loadHtml($pdf);
+            $dompdf->setPaper('A4', 'landscape');
+            $dompdf->render();
+        
+            $pdfContent = $dompdf->output();
+            $filename = 'certificat_' . $candidat->id . '.pdf';
+            $zip->addFromString($filename, $pdfContent);
+        }
+
+        $zip->close();
+        return response()->download($zipFilename);
+
+    }
+
 }

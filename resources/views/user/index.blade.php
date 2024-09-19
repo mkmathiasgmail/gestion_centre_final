@@ -5,7 +5,12 @@
             {{ __('Role') }}
             </h2>
             </x-slot>
-    </div>
+<div class="flex justify-end mt-4 mb-4 text-white">
+    <button type="submit" class="p-2 text-white bg-blue-500 rounded-md" data-modal-target="authentication-modal"
+        data-modal-toggle="authentication-modal">Créer un rôle
+    </button>
+</div>
+
     <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
         <table class="w-full text-sm text-left text-gray-500 rtl:text-right dark:text-gray-400">
             <thead class="text-xs text-white uppercase bg-gray-50 dark:bg-gray-700 dark:text-white">
@@ -48,6 +53,9 @@
             </tbody>
         </table>
     </div>
+    @section('modal')
+    <x-roleCreate />
+    @endsection
 </x-app-layout>
 
 

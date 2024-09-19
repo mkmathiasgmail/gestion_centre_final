@@ -12,9 +12,10 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('employabilites', function (Blueprint $table) {
-            //$table->string('nomboite')->after('name');
-            //$table->string('poste')->after('nomboite');
-
+            $table->string('genre')->after('date_participation');
+            $table->string('tranche_age')->after('genre');
+            $table->string('niveau_academique')->after('tranche_age');
+           
         });
     }
 

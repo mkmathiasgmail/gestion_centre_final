@@ -3,8 +3,9 @@
 namespace App\Http\Controllers;
 
 use ZipArchive;
-use Dompdf\Dompdf;
+use Carbon\Carbon;
 
+use Dompdf\Dompdf;
 use Dompdf\Options;
 use DateTimeImmutable;
 use App\Models\Activite;
@@ -99,7 +100,7 @@ class CertificatController extends Controller
             $universiteValue = $universiteLabelAttribute->value;
         }
 
-        $pdf = view('Templete_certificat.certificat_super_codeur_24_25', compact('candidat', 'universiteValue', 'start_date', 'end_date'));
+        $pdf = view('Templete_certificat.certificat_super_codeur_31_02', compact('candidat', 'universiteValue', 'start_date', 'end_date'));
     }
 
     public function generateCertificat($candidat)
@@ -123,14 +124,22 @@ class CertificatController extends Controller
         }
 
 
-        $debut = new DateTimeImmutable($candidat->activite->start_date);
-        $start_date = $debut->format("j F Y");
+        // Définir la locale en français
+        Carbon::setLocale('fr');
 
-        $fin = new DateTimeImmutable($candidat->activite->end_date);
-        $end_date = $fin->format("j F Y");
+        $debut = new Carbon($candidat->activite->start_date);
+        $start_date = $debut->isoFormat('D MMMM'); // Formatage en français
+
+        $fin = new Carbon($candidat->activite->end_date);
+        $end_date = $fin->isoFormat('D MMMM YYYY'); // Formatage en français
+ 
+        $dateActuelle = Carbon::now();
+
+        // Formater la date
+        $dateFormatee = $dateActuelle->isoFormat('D MMMM YYYY');
 
 
-        $pdf = view('Templete_certificat.certificat_super_codeur_24_25', compact('candidat', 'universiteValue' ,'start_date', 'end_date'));
+        $pdf = view('Templete_certificat.cerificat_supeur_codeur_stand', compact('candidat', 'universiteValue' ,'start_date', 'end_date', 'dateFormatee'));
         // echo $pdf;
         // exit();
 
@@ -195,22 +204,25 @@ class CertificatController extends Controller
             if ($universiteLabelAttribute) {
                 $universiteValue = $universiteLabelAttribute->value;
             }
-            
-        
-            $debut = new DateTimeImmutable($candidat->activite->start_date);
 
-            $start_date = $debut->format("j F Y");
+            // Définir la locale en français
+            Carbon::setLocale('fr');
 
-            $fin = new DateTimeImmutable($candidat->activite->end_date);
-            $end_date = $fin->format("j F Y");
+            // Créer un objet Carbon pour la date de début
+            $debut = new Carbon($candidat->activite->start_date);
+            $start_date = $debut->isoFormat('LLLL'); // Formatage en français
+
+            // Créer un objet Carbon pour la date de fin
+            $fin = new Carbon($candidat->activite->end_date);
+            $end_date = $fin->isoFormat('LLLL'); // Formatage en français
 
             if ($selectcerificat == '4') {
 
-                $pdf = view('Templete_certificat.certificat_super_codeur_24_25', compact('candidat', 'universiteValue', 'start_date', 'end_date'));
+                $pdf = view('Templete_certificat.certificat_super_codeur_31_02', compact('candidat', 'universiteValue', 'start_date', 'end_date'));
             }
 
 
-            $pdf = view('Templete_certificat.certificat_super_codeur_24_25', compact('candidat', 'universiteValue', 'start_date', 'end_date'));
+            $pdf = view('Templete_certificat.certificat_super_codeur_31_02', compact('candidat', 'universiteValue', 'start_date', 'end_date'));
 
             $options = new Options();
             $options->set('isHtml5ParserEnabled', true);

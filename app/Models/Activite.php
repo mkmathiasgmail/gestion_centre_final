@@ -3,7 +3,7 @@
 namespace App\Models;
 
 use App\Models\Candidat;
-use App\Models\Presence;
+use Ramsey\Uuid\Uuid;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -14,12 +14,22 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Activite extends Model
 {
-    use HasFactory, HasUuids;
+    use HasFactory;
 
-    protected $fillable = ['title', 'content', 'location',  'status',  'start_date', 'end_date', 'categorie_id', '_id', 'show_in_slider', 'thumbnail_url' ,'publish_status', 'send', 'form_id', 'miniature_color', 'show_in_calendar', 'live_status', 'book_a_seat', 'is_events', 'createdAt', 'updatedAt', 'creator'];
+
+
+    protected $fillable = ['title', 'content','uuid', 'location',  'status',  'start_date', 'end_date', 'categorie_id', '_id', 'show_in_slider', 'thumbnail_url' ,'publish_status', 'send', 'form_id', 'miniature_color', 'show_in_calendar', 'live_status', 'book_a_seat', 'is_events', 'createdAt', 'updatedAt', 'creator'];
     protected $casts = [
         'categories' => 'array'
     ];
+
+    protected static function boot()
+    {
+        parent::boot();
+        static::creating(function ($model) {
+            $model->uuid = Uuid::uuid4()->toString();
+        });
+    }
 
     public function hashtag(): BelongsToMany
     {
