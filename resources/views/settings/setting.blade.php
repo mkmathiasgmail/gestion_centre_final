@@ -83,7 +83,8 @@
                                 </td>
                                 <td class="px-6 py-4">
                                     <a href="{{ route('user_role.show', $item->id) }}"
-                                        class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
+                                        class="inline-flex items-center px-3 py-2 text-sm font-medium text-gray-800 bg-white border border-gray-200 rounded-lg shadow-sm gap-x-2 hover:bg-gray-50 focus:outline-none focus:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-800 dark:border-neutral-700 dark:text-white dark:hover:bg-neutral-700 dark:focus:bg-neutral-700">
+
                                         <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true"
                                             xmlns="http://www.w3.org/2000/svg" width="24" height="24"
                                             fill="none" viewBox="0 0 24 24">
@@ -108,6 +109,7 @@
                             <div class="text-gray-800 bg-transparent dark:text-gray-200">
                                 <div class="flex flex-col bg-transparent md:flex-row">
                                     <div class="p-6 lg:w-3/5 xl:w-1/2 sm:p-12">
+                                        <h1 class="text-3xl font-semibold text-gray-800 dark:text-gray-200">S'enregistrer</h1>
                                         <div class="flex flex-col items-center mt-12">
                                             <div class="flex-1 w-full mt-8">
                                                 <form method="POST" action="{{ route('register') }}">
@@ -164,13 +166,10 @@
                                                     </div>
 
                                                     <div class="flex items-center justify-end mt-4">
-                                                        <a class="text-sm text-gray-600 underline rounded-md dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-gray-800"
-                                                            href="{{ route('login') }}">
-                                                            {{ __('Déjà enregistré?') }}
-                                                        </a>
+
 
                                                         <x-primary-button class="ms-4">
-                                                            {{ __('S\'enregistrer') }}
+                                                            {{ __('Enregistrer') }}
                                                         </x-primary-button>
                                                     </div>
                                                 </form>
@@ -178,7 +177,9 @@
                                         </div>
                                     </div>
                                     <div
-                                        class="flex-1 bg-[url('https://afriqueitnews.com/wp-content/uploads/Orange-Digital-Center-a-Madagascar.jpg')] bg-cover bg-center">
+                                     class="flex-1 bg-center bg-cover" style="background-image: url('/img/logo.jpg');">
+
+
                                     </div>
                                 </div>
                             </div>
