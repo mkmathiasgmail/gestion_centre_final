@@ -18,27 +18,26 @@
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 
-<body class="font-sans text-gray-900 antialiased ">
+<body class="font-sans antialiased text-gray-900 ">
     <div
         class=" sm:justify-center items-center pt-6 sm:pt-0 bg-[url('https://static.vecteezy.com/ti/vecteur-libre/p1/5091603-gestion-financiere-vector-illustration-consulter-un-comptable-homme-d-affaires-calculer-le-budget-personnel-ou-d-entreprise-gerer-le-revenu-financier-vectoriel.jpg')]">
         <div
             class="backdrop-blur-md w-full min-h-screen flex flex-col bg-[#00000073] items-center pt-6 sm:justify-center">
-            <div class=" w-4/5  m-0 sm:m-10 bg-transparent shadow-xl  sm:rounded-lg flex justify-center flex-1">
-                <div class="lg:w-3/5 xl:w-1/2 p-6 sm:p-12">
+            <div class="flex justify-center flex-1 w-4/5 m-0 bg-transparent shadow-xl sm:m-10 sm:rounded-lg">
+                <div class="p-6 lg:w-3/5 xl:w-1/2 sm:p-12">
                     <div>
-                        <a href="{{ route('dashboard') }}" class=" w-mx-auto items-center justify-center flex">
-                            <x-application-logo class="w-50 h-50 fill-current text-gray-500" />
+                        <a href="{{ route('dashboard') }}" class="flex items-center justify-center w-mx-auto">
+                            <x-application-logo class="text-gray-500 fill-current w-50 h-50" />
                         </a>
                     </div>
-                    <div class="mt-12 flex flex-col items-center">
-                        <div class="w-full flex-1 mt-8">
+                    <div class="flex flex-col items-center mt-12">
+                        <div class="flex-1 w-full mt-8">
                             {{ $slot }}
                         </div>
                     </div>
                 </div>
                 <div
-                    class="flex-1 bg-[url('https://afriqueitnews.com/wp-content/uploads/Orange-Digital-Center-a-Madagascar.jpg')] bg-cover bg-center">
-
+                     class="flex-1 bg-center bg-cover" style="background-image: url('/img/logo.jpg');">
                 </div>
             </div>
         </div>
