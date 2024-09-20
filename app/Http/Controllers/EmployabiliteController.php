@@ -242,28 +242,37 @@ class EmployabiliteController extends Controller
     public function import(Request $request)
     {
         $request->validate([
-            'file' => 'required'
+            'file' => 'required|file|mimes:csv,txt|',
+        ], [
+            'file.required' => 'Un fichier est requis.',
+            'file.file' => 'Le fichier doit être un fichier valide.',
+            'file.mimes' => 'Le fichier doit être au format CSV.',
+
         ]);
 
         $file = $request->file('file');
         $fileContents = file($file->getPathname());
         $header = str_getcsv(array_shift($fileContents));
+
         foreach ($fileContents as $line) {
             $data = str_getcsv($line);
             $rowData = array_combine($header, $data);
+
             try {
+                $typeContrat = TypeContrat::select('id')->where('libelle', $rowData['type_contrat'])->first();
+                unset($rowData['type_contrat']);
+                $rowData['type_contrat_id'] = $typeContrat->id;
+
                 $validatedData = $this->validateRowData($rowData);
-
-                $id = TypeContrat::select('id')->where('libelle', $validatedData['type_contrat'])->first();
-
-                $validatedData['type_contrat_id'] = $id->id; // Ajouter la nouvelle clé
-                unset($validatedData['type_contrat']);
 
                 $odcuser = Odcuser::select('id')->where('first_name', $validatedData['name'])->where('last_name', $validatedData['last_name'])->first();
                 unset($validatedData['last_name']);
 
+
                 if ($odcuser) {
-                    $validatedData['odcuser_id'] = $odcuser->id; // Ajouter la nouvelle clé
+                    $validatedData['odcuser_id'] = $odcuser->id;
+                
+
                     Employabilite::create($validatedData);
                 } else {
                     Employabilite::create($validatedData);
@@ -284,7 +293,6 @@ class EmployabiliteController extends Controller
             'last_name' => '',
             'nomboite' => '',
             'poste' => '',
-            'type_contrat' => '',
             'periode' => '',
             'derniere_activite' => '',
             'derniere_service' => '',
@@ -292,6 +300,7 @@ class EmployabiliteController extends Controller
             'genre' => '',
             'tranche_age' => '',
             'niveau_academique' => '',
+            'type_contrat_id' => '',
 
         ]);
 
@@ -313,15 +322,45 @@ class EmployabiliteController extends Controller
         /*here is the header of my sheet*/
         $sheet->setCellValue('A1', 'name');
         $sheet->setCellValue('B1', 'last_name');
-        $sheet->setCellValue('C1', 'niveau_academique');
-        $sheet->setCellValue('D1', 'poste');
-        $sheet->setCellValue('E1', 'type_contrat');
+        $sheet->setCellValue('C1', 'nomboite');
+        $sheet->setCellValue('D1', 'type_contrat');
+        $sheet->setCellValue('E1', 'poste');
         $sheet->setCellValue('F1', 'periode');
-        $sheet->setCellValue('G1', 'genre');
-        $sheet->setCellValue('H1', 'tranche_age');
-        $sheet->setCellValue('I1', 'derniere_activite');
-        $sheet->setCellValue('J1', 'derniere_service');
-        $sheet->setCellValue('K1', 'date_participation');
+        $sheet->setCellValue('G1', 'derniere_activite');
+        $sheet->setCellValue('H1', 'derniere_service');
+        $sheet->setCellValue('I1', 'date_participation');
+        $sheet->setCellValue('J1', 'genre');
+        $sheet->setCellValue('K1', 'tranche_age');
+        $sheet->setCellValue('L1', 'niveau_academique');
+
+
+        $sheet->fromArray([['nehemie',
+            'mat',
+            'ORANGE',
+            'CDI',
+            'DEV',
+            '2024-09-10',
+            'parcour academique',
+            'coding school',
+            '2024-04-15',
+            'M',
+            '25-36',
+            'licence'
+        ],
+            [ 'sussan',
+                    'lab',
+                    'notifier',
+                    'CDI',
+                    'peintre',
+                    '2024-09-10',
+                    'parcour academique',
+                    'coding school',
+                    '2024-04-15',
+                    'M',
+                    '25-36',
+                    'licence'
+                ]],
+         NULL, 'A2');
 
 
         // Save the spreadsheet to a temporary file
@@ -332,4 +371,5 @@ class EmployabiliteController extends Controller
         $writer->save("php://output");
         exit();
     }
+
 }
