@@ -3,7 +3,10 @@
 use App\Http\Controllers\ActiviteController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProfileController;
+use App\Models\Categorie;
+use App\Models\Hashtag;
 use App\Models\User;
+use App\Models\TypeEvent;
 
 Route::get('/', function () {
     return redirect('login');
@@ -11,7 +14,10 @@ Route::get('/', function () {
 
 Route::get('/settings', function () {
     $users = User::all();
-    return view('settings.setting', compact('users'));
+    $typEvent= TypeEvent::all();
+    $categories= Categorie::all();
+    $tags= Hashtag::all();
+    return view('settings.setting', compact('users','typEvent','categories','tags'));
 })->name('setting');
 
 Route::get('/dashboard', [ActiviteController::class, 'chartActivity'])->middleware(['auth', 'verified'])->name('dashboard');
