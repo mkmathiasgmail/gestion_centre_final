@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::create('coursera_members', function (Blueprint $table) {
             $table->id();
-            $table->string('email');
             $table->string('name');
+            $table->string('email');
             $table->string('external_id')->nullable();
             $table->integer('enrolled_courses')->nullable();
             $table->string('completed_courses')->nullable();

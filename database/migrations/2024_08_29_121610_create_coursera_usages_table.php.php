@@ -15,8 +15,8 @@ return new class extends Migration
 
             $table->id();
             $table->string('email');
-            $table->foreign('email')->references('email')->on('coursera_members')->constrained()->onDelete('cascade')->onUpdate('cascade');
-            $table->string('course_name')->nullable();
+            $table->string('external_id')->nullable();
+            $table->string('course')->nullable();
             $table->string('course_id')->nullable();
             $table->string('course_slug')->nullable();
             $table->string('university')->nullable();
@@ -33,6 +33,7 @@ return new class extends Migration
             $table->string('course_grade')->nullable();
             $table->string('course_type')->nullable();
             $table->string('course_certificate_url')->nullable();
+            $table->foreignId('coursera_member_id')->constrained()->onDelete('cascade')->onUpdate('cascade')->unsigned();
             $table->timestamps();
         });
     }

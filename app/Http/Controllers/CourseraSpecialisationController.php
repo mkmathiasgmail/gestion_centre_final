@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\CourseraMember;
 use Illuminate\Support\Carbon;
 use App\Models\CourseraSpecialisation;
 
@@ -28,7 +29,8 @@ class CourseraSpecialisationController extends Controller
             //read csv file and skip data
             $file = $request->file('import_csv');
             $handle = fopen($file->path(), 'r');
-    
+
+            $memberEmails = CourseraMember::pluck('email')->toArray();
             //skip the header row
             fgetcsv($handle);
     
@@ -46,8 +48,8 @@ class CourseraSpecialisationController extends Controller
                     }
                     $chunkdata[] = $data; 
                 }
-    
-                $this->getchunkdata($chunkdata);
+
+                $this->getchunkdata($chunkdata, $memberEmails);
             }
             fclose($handle);
     
@@ -60,11 +62,18 @@ class CourseraSpecialisationController extends Controller
 
 
 
-    public function getchunkdata($chunkdata)
+    public function getchunkdata($chunkdata, $memberEmails)
     {
         foreach($chunkdata as $column){
                 
-              $email = $column[1];
+            $email = $column[1];
+            // Vérifier si l'email existe dans la table members
+            if (!in_array($email, $memberEmails)) {
+                continue; // Passer cet enregistrement si l'email n'est pas trouvé
+            }
+            // Récupérer l'ID du membre correspondant à l'email
+            $memberId = CourseraMember::where('email', $email)->value('id');
+
               $specialisaton_name = $column[3];
               $specialisaton_slug = $column[4];
               
@@ -86,7 +95,7 @@ class CourseraSpecialisationController extends Controller
 
                 [
                     "email"=> $email,
-                    'specialisaton_name' => $specialisaton_name,
+                    'specialisaton' => $specialisaton_name,
                     'specialisaton_slug' => $specialisaton_slug,
                     'university' => $university,
                     'enrollement_time' => Carbon::parse($enrollement_time),
@@ -99,6 +108,7 @@ class CourseraSpecialisationController extends Controller
                     'enrollment_source'=> $enrollment_source,
                     'specialization_completion_time'=> Carbon::parse($specialization_completion_time),
                     'specialization_certificate_url'=> $specialization_certificate_url,
+                    'coursera_member_id' => $memberId 
                 ]
             );
         }
