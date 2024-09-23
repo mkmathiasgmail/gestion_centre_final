@@ -210,8 +210,7 @@
 
 
     @section('script')
-    <script src="{{ Vite::asset('node_modules/jquery-ui/dist/jquery-ui.min.js') }}"></script>
-    <script src="https://cdn.datatables.net/2.0.8/js/dataTables.js "></script>
+    
 
     <script>
         function bindModalEvent(modalId) {
@@ -372,7 +371,7 @@
                     "url": "//cdn.datatables.net/plug-ins/1.11.5/i18n/fr-FR.json"
                 }
             }
-           
+
         );
 
 

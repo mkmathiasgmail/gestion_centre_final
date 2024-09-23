@@ -202,7 +202,7 @@ class CertificatController extends Controller
 
         //extension de la classe ZipArchive pour stocké tous les certificats
         $zip = new ZipArchive();
-        $zipFilename = "certificats_" . $id->title . ".zip";
+        $zipFilename = "certificats_" . preg_replace('/[^a-zA-Z0-9_\-]/', '_', $id->title) . ".zip";
         $zip->open($zipFilename, ZipArchive::CREATE | ZipArchive::OVERWRITE);
 
         // Boucler sur chaque candidat et générer le certificat
@@ -238,21 +238,26 @@ class CertificatController extends Controller
             // Définir la locale en français
             Carbon::setLocale('fr');
 
-            // Créer un objet Carbon pour la date de début
             $debut = new Carbon($candidat->activite->start_date);
-            $start_date = $debut->isoFormat('LLLL'); // Formatage en français
+            $start_date = $debut->isoFormat('D MMMM'); // Formatage en français
 
-            // Créer un objet Carbon pour la date de fin
             $fin = new Carbon($candidat->activite->end_date);
-            $end_date = $fin->isoFormat('LLLL'); // Formatage en français
+            $end_date = $fin->isoFormat('D MMMM YYYY'); // Formatage en français
 
-            if ($selectcerificat == '4') {
+            $dateActuelle = Carbon::now();
 
-                $pdf = view('Templete_certificat.certificat_super_codeur_31_02', compact('candidat', 'universiteValue', 'start_date', 'end_date'));
+            // Formater la date
+            $dateFormatee = $dateActuelle->isoFormat('D MMMM YYYY');
+            if($selectcerificat=='3'){
+                $pdf = view('Templete_certificat.certificat_standars', compact('candidat', 'universiteValue', 'start_date', 'end_date', 'dateFormatee'));
+            }elseif($selectcerificat == '4') {
+                $pdf = view('Templete_certificat.cerificat_supeur_codeur_stand', compact('candidat', 'universiteValue', 'start_date', 'end_date', 'dateFormatee'));
+            }elseif ($selectcerificat == '5') {
+                $pdf = view('Templete_certificat.certificat_maker_junior_stand', compact('candidat', 'universiteValue', 'start_date', 'end_date', 'dateFormatee'));
             }
 
 
-            $pdf = view('Templete_certificat.certificat_super_codeur_31_02', compact('candidat', 'universiteValue', 'start_date', 'end_date'));
+            // $pdf = view('Templete_certificat.cerificat_supeur_codeur_stand', compact('candidat', 'universiteValue', 'start_date', 'end_date', 'dateFormatee'));
 
             $options = new Options();
             $options->set('isHtml5ParserEnabled', true);

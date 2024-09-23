@@ -3,15 +3,15 @@
 
 <div class="flex justify-between mt-1 ">
     <div>
-        <a href="{{ route('allCertificat', $id) }}"
+        {{-- <a href="{{ route('allCertificat', $id) }}"
             class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-transparent bg-[#FF7322] text-white hover:bg-[#FF6822] focus:outline-none focus:bg-[#FF6822] disabled:opacity-50 disabled:pointer-events-none">Generer
             tous les certificats
-        </a>
+        </a> --}}
         {{-- Choix du model du certificat a generer --}}
         <a href="{{ route('allCertificat', $id) }}" data-modal-target="choixCertificat-modal"
             data-modal-toggle="choixCertificat-modal" onclick="choix_certificat(event)"
-            class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-gray-200 bg-white text-gray-800 shadow-sm hover:bg-gray-50 focus:outline-none focus:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-800 dark:border-neutral-700 dark:text-white dark:hover:bg-neutral-700 dark:focus:bg-neutral-700">
-            Choisir un model
+            class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-transparent bg-[#FF7322] text-white hover:bg-[#FF6822] focus:outline-none focus:bg-[#FF6822] disabled:opacity-50 disabled:pointer-events-none">
+            Choisir un model de certificat 
             <svg class="rtl:rotate-180 w-3.5 h-3.5 ms-2" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
                 fill="none" viewBox="0 0 14 10">
                 <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -100,7 +100,8 @@
                                 <option value="1">Model Parcours Academy</option>
                                 <option value="2">Model Parcours Fablab</option>
                                 <option value="3">Model Standard</option>
-                                <option value="4">Model SuperCodeurs</option>
+                                <option value="4">Model Super codeurs</option>
+                                <option value="5">Model maker junior</option>
                             </select>
                         </div>
                     </div>
