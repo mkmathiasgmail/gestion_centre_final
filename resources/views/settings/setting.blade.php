@@ -134,6 +134,10 @@
                                     <div class="flex flex-col bg-transparent md:flex-row">
                                         <div class="p-6 lg:w-3/5 xl:w-1/2 sm:p-12">
                                             <div class="flex flex-col items-center mt-12">
+                                                 <div class="mb-8 text-center ">
+                                                     <h1 class="text-2xl font-semibold leading-tight text-gray-700">S'enregistrer</h1>
+                                                 </div>
+
                                                 <div class="flex-1 w-full mt-8">
                                                     <form method="POST" action="{{ route('register') }}">
                                                         @csrf
@@ -189,10 +193,6 @@
                                                         </div>
 
                                                         <div class="flex items-center justify-end mt-4">
-                                                            <a class="text-sm text-gray-600 underline rounded-md dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-gray-800"
-                                                                href="{{ route('login') }}">
-                                                                {{ __('Déjà enregistré?') }}
-                                                            </a>
 
                                                             <x-primary-button class="ms-4">
                                                                 {{ __('S\'enregistrer') }}
@@ -203,7 +203,8 @@
                                             </div>
                                         </div>
                                         <div
-                                            class="flex-1 bg-[url('https://afriqueitnews.com/wp-content/uploads/Orange-Digital-Center-a-Madagascar.jpg')] bg-cover bg-center">
+                                         class="flex-1 bg-center bg-cover" style="background-image: url('/img/logo.jpg');">
+
                                         </div>
                                     </div>
                                 </div>
