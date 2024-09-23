@@ -10,9 +10,9 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 class Categorie extends Model
 {
     use HasFactory;
-    protected $fillable= ['name'];
+    protected $fillable = ['name'];
 
-    public function articles()
+    public function activites()
     {
         return $this->hasMany(Activite::class);
     }

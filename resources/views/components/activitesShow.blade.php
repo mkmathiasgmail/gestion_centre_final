@@ -8,7 +8,7 @@
 
     <div class="w-full  mx-auto">
         <div class="mx-5 my-3 text-sm">
-            <a href="" class=" text-red-600 font-bold tracking-widest">{{ $show->categorie->name }}</a>
+            <a href="{{ route('categorie.activites', $show->categorie->id) }}" class=" text-red-600 font-bold tracking-widest">{{ $show->categorie->name }}</a>
         </div>
 
 
