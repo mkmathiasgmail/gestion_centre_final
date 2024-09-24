@@ -271,7 +271,7 @@ class EmployabiliteController extends Controller
 
                 if ($odcuser) {
                     $validatedData['odcuser_id'] = $odcuser->id;
-                
+
 
                     Employabilite::create($validatedData);
                 } else {
