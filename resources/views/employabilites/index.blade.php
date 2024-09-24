@@ -210,7 +210,7 @@
 
 
     @section('script')
-    
+
 
     <script>
         function bindModalEvent(modalId) {
@@ -229,7 +229,7 @@
             if ($.fn.DataTable.isDataTable('#Mytable')) {
                 $('#Mytable').DataTable().destroy();
             }
-            var url = '{{ route('getdataEmploye', ': id ') }}';
+            var url = '{{ route('getdataEmploye', ' :idgit') }}';
             url = url.replace(':id', employeId);
 
             $('#Mytable').DataTable({
