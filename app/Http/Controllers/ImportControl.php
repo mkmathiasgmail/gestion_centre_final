@@ -378,6 +378,7 @@ class ImportControl extends Controller
             $email = $sheets->getcell("C{$lineexcel}")->getvalue();
             $genre = $sheets->getcell("D{$lineexcel}")->getvalue();
             $Evaluation = $sheets->getcell("E{$lineexcel}")->getvalue();
+            //dd($nom);
             //dd($Evaluation);
             if($Evaluation >= 60){
                 $this->generateAllCertificats($Id);
@@ -402,7 +403,7 @@ class ImportControl extends Controller
                             ->select('id', 'odcuser_id', 'activite_id', 'status')
                             ->with(['odcuser', 'candidat_attribute'])
                             ->get();
-        //dd($candidats);
+        // dd($candidats);
         //extension de la classe ZipArchive pour stocké tous les certificats
         $zip = new ZipArchive();
         $zipFilename = 'certificats.zip';
