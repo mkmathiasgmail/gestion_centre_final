@@ -113,103 +113,54 @@
 
         {{-- Script for participants data table --}}
         <script>
+            function generer(event) {
+                event.preventDefault()
+                $('#loading').removeClass('hidden');
+                $('#loading').addClass('inline');
+
+                let id_event = @json($id);
+                try {
+                    setTimeout(function() {
+                        window.location.href = "{{ route('generate_excel', '') }}/" + id_event;
+                    }, 1000);
+
+                    setTimeout(function() {
+                        $('#loading').addClass('hidden');
+                        $('#loading').removeClass('inline');
+                    }, 2000);
+
+                } catch (error) {
+                    console.log(error)
+                }
+            }
+
+
             $(document).ready(function() {
                 let event = @json($activite->title);
                 var id_event = @json($activite->id);
-                let columns = [{
-                        data: 'first_name',
-                        name: 'first_name'
-                    },
-                    {
-                        data: 'last_name',
-                        name: 'last_name'
-                    },
 
-                ];
-                let labels = @json($labels)
-
-                labels.forEach(element => {
-                    if (element !== 'Cv de votre parcours (Obligatoire)') {
-                        columns.push({
-                            data: element,
-                            name: element
-                        });
-                    }
-
-                });
-                columns.push({
-                    data: 'status',
-                    name: 'status',
-                }, {
-                    data: 'action',
-                    name: 'action'
-                }, {
-                    data: 'certificat',
-                    name: 'certificat'
-                })
                 $('#participantTable').DataTable({
-                    "processing": true,
-                    "serverSide": true,
-                    "ajax": {
-                        "url": "{{ route('getparticipants', $activite->id) }}",
-                        "dataType": "json",
-                        "type": "GET"
-                    },
-                    createdRow: function(row, data, dataIndex) {
-                        $(row).find('td:eq(' + ($(row).find('td').length - 2) + ')').attr('id',
-                            'statusCell');
-                    },
-                    columnDefs: [{
-                            visible: false,
-                            targets: '.label'
-                        },
-                        {
-                            responsivePriority: 1,
-                            targets: 0
-                        },
-                        {
-                            responsivePriority: 2,
-                            targets: -1
-                        }
-                    ],
-
-                    layout: {
-                        topStart: {
-                            pageLength: {
-                                menu: [10, 25, 50, 100, 200]
-                            },
-                            buttons: [
-                                'colvis',
-                                {
-                                    extend: 'excelHtml5',
-                                    action: function(e, dt, node, config) {
-                                        e.preventDefault();
-                                        let id_event = @json($activite->id);
-
-                                        window.location.href = '{{ url('generate_excel') }}/' +
-                                            id_event;
-                                    }
-                                }
-                            ]
-                        },
-                        topEnd: {
-                            search: {
-                                placeholder: 'Type search here'
-                            }
-                        },
-                        bottomEnd: {
-                            paging: {
-                                numbers: 3
-                            }
-                        },
-
-                    },
-                    columns: columns,
-                    pageLength: 10,
                     lengthMenu: [
                         [10, 25, 50, -1],
-                        [10, 25, 50, "All"]
-                    ]
+                        [10, 25, 50, "Tout"]
+                    ],
+                    columnDefs: [{
+                        targets: '.label',
+                        visible: false
+                    }],
+                    language: {
+                        lengthMenu: 'Afficher _MENU_',
+                        info: 'Affichage de la page _PAGE_ sur _PAGES_',
+                        search: 'Recherche : ',
+                        infoEmpty: "Affichage de 0 participants sur 0",
+                        emptyTable: 'Aucun participant n\'a été trouvé sur cette activité !',
+                        loadingRecords: 'Chargment des participants...',
+                        zeroRecords: 'Aucun participant correspondant à votre recherche n\'a été trouvé',
+                        aria: {
+                            "orderable": "Trier sur cette colonne",
+                            "orderableReverse": "Inverser l'ordre de tri de cette colonne"
+                        }
+                    }
                 });
 
                 $('body').on('click', function(event) {
@@ -224,6 +175,7 @@
                 });
 
                 $('#participantTable').css('width', '100%');
+                $("#dt-length-1").addClass('text-gray-700 dark:text-gray-200 w-24 bg-white')
 
             });
         </script>
@@ -244,106 +196,30 @@
             $(document).ready(function() {
                 let event = @json($activite->title);
                 var id_event = @json($activite->id);
-                var url = "{{ route('getcandidats', $activite->id) }}";
-                let columns = [{
-                        data: 'first_name',
-                        name: 'first_name'
-                    },
-                    {
-                        data: 'last_name',
-                        name: 'last_name'
-                    },
 
-                ];
-                let labels = @json($labels)
-
-                labels.forEach(element => {
-                    if (element !== 'Cv de votre parcours (Obligatoire)') {
-                        columns.push({
-                            data: element,
-                            name: element
-                        });
-                    }
-
-                });
-                columns.push({
-                    data: 'status',
-                    name: 'status',
-                }, {
-                    data: 'action',
-                    name: 'action'
-                })
                 $('#candidatTable').DataTable({
-                    "processing": true,
-                    "serverSide": true,
-                    "ajax": {
-                        "url": "{{ route('getcandidats', $activite->id) }}",
-                        "dataType": "json",
-                        "type": "GET"
-                    },
-                    createdRow: function(row, data, dataIndex) {
-                        $(row).find('td:eq(' + ($(row).find('td').length - 2) + ')').attr('id',
-                            'statusCell');
-                    },
-                    columnDefs: [{
-                            visible: false,
-                            targets: '.label'
-                        },
-                        {
-                            responsivePriority: 1,
-                            targets: 0
-                        },
-                        {
-                            responsivePriority: 2,
-                            targets: -1
-                        }
-                    ],
-
-                    layout: {
-                        topStart: {
-                            pageLength: {
-                                menu: [10, 25, 50, 100, 200]
-                            },
-                            buttons: [
-                                'copy',
-                                'print',
-
-                                {
-                                    extend: 'spacer',
-                                    style: 'bar',
-                                    text: 'Export files:'
-                                },
-                                'csv',
-                                'excel',
-                                'spacer',
-                                'pdf',
-                                {
-                                    extend: 'spacer',
-                                    style: 'bar',
-                                    text: ':'
-                                },
-
-                                'colvis'
-                            ]
-                        },
-                        topEnd: {
-                            search: {
-                                placeholder: 'Type search here'
-                            }
-                        },
-                        bottomEnd: {
-                            paging: {
-                                numbers: 3
-                            }
-                        },
-
-                    },
-                    columns: columns,
                     pageLength: 10,
                     lengthMenu: [
                         [10, 25, 50, -1],
-                        [10, 25, 50, "All"]
-                    ]
+                        [10, 25, 50, "Tous"]
+                    ],
+                    columnDefs: [{
+                        targets: '.label',
+                        visible: false
+                    }],
+                    language: {
+                        lengthMenu: 'Afficher _MENU_',
+                        info: 'Affichage de la page _PAGE_ sur _PAGES_',
+                        search: 'Recherche : ',
+                        infoEmpty: "Affichage de 0 candidats sur 0",
+                        emptyTable: 'Aucun candidat n\'a été trouvé sur cette activité !',
+                        loadingRecords: 'Chargment des candidats...',
+                        zeroRecords: 'Aucun candidat correspondant à votre recherche n\'a été trouvé',
+                        aria: {
+                            "orderable": "Trier sur cette colonne",
+                            "orderableReverse": "Inverser l'ordre de tri de cette colonne"
+                        }
+                    },
                 });
 
 
@@ -375,10 +251,7 @@
                 $('.dt-buttons buttons').addClass(
                     'cursor-pointer mt-5 bg-slate-600 p-2 rounded-sm font-bold')
 
-                $("#dt-length-2").addClass('text-gray-700 dark:text-gray-200 w-24 bg-white');
-                $(
-                    "label[for='dt-length-2']").addClass('text-gray-700 dark:text-gray-200').text(
-                    ' Enregistrements par page');
+                $("#dt-length-2").addClass('text-gray-700 dark:text-gray-200 w-24 bg-white')
 
             })
 
@@ -457,6 +330,10 @@
                         // Update the UI or display a success message
                         // Update the table cell with the new status
                         $(statusCell[0]).text(status);
+                        $('#alert-success').addClass('flex')
+                        $('#alert-success').removeClass('hidden')
+                        $('#div-success').text(data.message)
+
                         console.log('Status updated successfully!');
                     },
                     error: function(xhr, status, error) {
