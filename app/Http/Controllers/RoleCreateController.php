@@ -36,9 +36,11 @@ class RoleCreateController extends Controller
 
         Role::create([
             'name' => $request->name,
-            
+
         ]);
-        return redirect()->route('user_role.index')->with('success', 'Role created successfully.');
+ 
+        return back()->with('success', 'Role created successfully.');
+
     }
 
     /**
