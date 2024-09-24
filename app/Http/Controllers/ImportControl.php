@@ -2,11 +2,18 @@
 
 namespace App\Http\Controllers;
 
+use ZipArchive;
+use Carbon\Carbon;
+use Dompdf\Dompdf;
+use Dompdf\Options;
+use DateTimeImmutable;
 use App\Models\Odcuser;
 use App\Models\Activite;
 use App\Models\Candidat;
 use App\Models\Presence;
+use App\Models\Certificat;
 use Illuminate\Http\Request;
+use Barryvdh\DomPDF\Facade\Pdf;
 use App\Models\CandidatAttribute;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
@@ -17,12 +24,6 @@ use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 use PhpOffice\PhpSpreadsheet\Style\Border;
 use PhpOffice\PhpSpreadsheet\Style\Alignment;
 use App\Http\Controllers\CertificatController;
-use ZipArchive;
-use Dompdf\Dompdf;
-use Dompdf\Options;
-use DateTimeImmutable;
-use App\Models\Certificat;
-use Barryvdh\DomPDF\Facade\Pdf;
 
 class ImportControl extends Controller
 {
@@ -381,7 +382,7 @@ class ImportControl extends Controller
             //dd($nom);
             //dd($Evaluation);
             if($Evaluation >= 60){
-                $this->generateAllCertificats($Id);
+                $this->generateAllCertificats($request, $Id);
             }else{
                 continue;
             }
@@ -391,31 +392,79 @@ class ImportControl extends Controller
         //dd($gestion);
     }
 
-    public  function generateAllCertificats($Id)
+    public  function generateAllCertificats(Request $request, $Id)
     {
         $id = Activite::find($Id);
         //dd($Id);
         $idactivite= $id->id;
         //dd( $idactivite);
         set_time_limit(100000);
+        $selectcerificat = $request->input('certificat');
+
         $candidats = Candidat::where('activite_id', $idactivite)
-                            ->where('status', 'accept')
-                            ->select('id', 'odcuser_id', 'activite_id', 'status')
-                            ->with(['odcuser', 'candidat_attribute'])
-                            ->get();
-        // dd($candidats);
+            ->where('status', 'accept')
+            ->select('id', 'odcuser_id', 'activite_id', 'status')
+            ->with(['odcuser', 'candidat_attribute'])
+            ->get();
+
         //extension de la classe ZipArchive pour stocké tous les certificats
         $zip = new ZipArchive();
-        $zipFilename = 'certificats.zip';
+        $zipFilename = "certificats_" . preg_replace('/[^a-zA-Z0-9_\-]/', '_', $id->title) . ".zip";
         $zip->open($zipFilename, ZipArchive::CREATE | ZipArchive::OVERWRITE);
 
         // Boucler sur chaque candidat et générer le certificat
         foreach ($candidats as $candidat) {
+            // Récupération de l'université du candidat dans la table candidat_attributes et odcusers
+            $variables = ['Université', 'Etablissement', 'Structure', 'Entreprise', 'Si autre université'];
 
-            $date = new DateTimeImmutable($candidat->activite->start_date);
-            $format = date_format($date, 'jS \o\f F Y');
+            $universiteLabelAttribute = DB::table('candidat_attributes')
+                ->where(function ($query) use ($variables) {
+                    foreach ($variables as $value) {
+                        $query->orWhere('label', 'LIKE', "%{$value}%");
+                    }
+                })
+                ->where('candidat_id', $candidat->id)
+                ->first();
 
-            $pdf = view('Templete_certificat.cerificat_supeur_codeur_stand', compact('candidat', 'format'));
+            $universiteValue = '';
+            if ($universiteLabelAttribute) {
+                $universiteValue = $universiteLabelAttribute->value;
+            } elseif ($universiteValue === null) {
+                $odcusers = Odcuser::where('id', $candidat->id)
+                    ->get();
+                if (request()->expectsJson()) {
+                    return response()->json($odcusers);
+                }
+                foreach ($odcusers as $key => $odcuser) {
+                    $detail_profession = json_decode($odcuser->detail_profession, true);
+                    $universiteValue = $detail_profession['university'] ?? '';
+                }
+            } else {
+                $universiteValue = '';
+            }
+            // Définir la locale en français
+            Carbon::setLocale('fr');
+
+            $debut = new Carbon($candidat->activite->start_date);
+            $start_date = $debut->isoFormat('D MMMM'); // Formatage en français
+
+            $fin = new Carbon($candidat->activite->end_date);
+            $end_date = $fin->isoFormat('D MMMM YYYY'); // Formatage en français
+
+            $dateActuelle = Carbon::now();
+
+            // Formater la date
+            $dateFormatee = $dateActuelle->isoFormat('D MMMM YYYY');
+            /*if($selectcerificat=='3'){
+                $pdf = view('Templete_certificat.certificat_standars', compact('candidat', 'universiteValue', 'start_date', 'end_date', 'dateFormatee'));
+            }elseif($selectcerificat == '4') {
+                $pdf = view('Templete_certificat.cerificat_supeur_codeur_stand', compact('candidat', 'universiteValue', 'start_date', 'end_date', 'dateFormatee'));
+            }elseif ($selectcerificat == '5') {
+                $pdf = view('Templete_certificat.certificat_maker_junior_stand', compact('candidat', 'universiteValue', 'start_date', 'end_date', 'dateFormatee'));
+            }*/
+
+
+            $pdf = view('Templete_certificat.cerificat_supeur_codeur_stand', compact('candidat', 'universiteValue', 'start_date', 'end_date', 'dateFormatee'));
 
             $options = new Options();
             $options->set('isHtml5ParserEnabled', true);
@@ -424,14 +473,14 @@ class ImportControl extends Controller
             $dompdf->loadHtml($pdf);
             $dompdf->setPaper('A4', 'landscape');
             $dompdf->render();
-        
+
             $pdfContent = $dompdf->output();
-            $filename = 'certificat_' . $candidat->id . '.pdf';
+            $filename = "Certificat_" . $candidat->odcuser->first_name . "_" . $candidat->odcuser->last_name . ".pdf";
             $zip->addFromString($filename, $pdfContent);
         }
 
         $zip->close();
-        return response()->download($zipFilename);
+        return response()->download($zipFilename)->deleteFileAfterSend(true);
 
     }
 
