@@ -76,4 +76,12 @@ class CategorieController extends Controller
 
         return redirect()->route('categories.index')->with('success', 'La catégorie a été supprimée avec succès.');
     }
+
+
+    public function showActivites($id)
+    {
+        // Récupérer la catégorie avec ses activités
+        $categorie = Categorie::with('activites')->findOrFail($id);
+        return view('categories.activites', compact('categorie'));
+    }
 }

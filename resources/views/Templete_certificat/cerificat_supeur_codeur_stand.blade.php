@@ -77,7 +77,7 @@
             position: relative;
             right: -19em;
             /* Augmentez cette valeur pour déplacer plus à droite */
-            top: -70px;
+            top: -80px;
             /* Diminuez cette valeur pour déplacer plus haut */
         }
 

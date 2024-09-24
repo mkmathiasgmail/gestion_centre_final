@@ -258,10 +258,12 @@
                 let labels = @json($labels)
 
                 labels.forEach(element => {
-                    columns.push({
-                        data: element,
-                        name: element
-                    });
+                    if (element !== 'Cv de votre parcours (Obligatoire)') {
+                        columns.push({
+                            data: element,
+                            name: element
+                        });
+                    }
 
                 });
                 columns.push({
@@ -613,7 +615,7 @@
                             bottom: -20,
                         },
                     },
-                    labels: ["Filles", "Garçons"], // Étiquettes pour les séries
+                    labels: ["Femme", "Homme"], // Étiquettes pour les séries
                     dataLabels: {
                         enabled: false,
                     },

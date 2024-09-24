@@ -9,7 +9,9 @@ use App\Http\Controllers\EmployabiliteController;
 
 Route::get('get_emplois/{id}', [EmployabiliteController::class, 'getEmplois'])->name('getdataEmploye');
 
+
 Route::post('employabilites/import', [EmployabiliteController::class, 'import'])->name('importEmploye');
+
 
 Route::get('exportModelEmploye', [EmployabiliteController::class, 'exportModelEmploye'])->name('exportModelEmploye');
 

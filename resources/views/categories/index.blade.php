@@ -148,7 +148,7 @@
         </table>
     </div>
 
-    <x-delete :name="__('Are you sure you want to delete this product? ')" />
+
 
     @section('script')
         <script>

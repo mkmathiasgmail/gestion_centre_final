@@ -18,7 +18,7 @@
     aria-labelledby="dashboard-tab">
 
     <a href="#" onclick="Reload()"
-        class="self-center text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">Actualiser</a>
+        class="self-center py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-transparent bg-[#FF7322] text-white hover:bg-[#FF6822] focus:outline-none focus:bg-[#FF6822] disabled:opacity-50 disabled:pointer-events-none">Actualiser</a>
 
     <div class="py-6 relative overflow-x-auto">
         @if (isset($candidatsData))
@@ -28,11 +28,11 @@
 
                         <th scope="col"
                             class="px-6 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                            Firstname
+                            Prénom
                         </th>
                         <th scope="col"
                             class="px-6 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                            Lastname
+                            Nom
                         </th>
                         @foreach (array_unique($labels) as $label)
                             @if (isset($label))
