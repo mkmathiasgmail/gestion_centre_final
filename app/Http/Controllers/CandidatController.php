@@ -18,6 +18,7 @@ use PhpOffice\PhpSpreadsheet\Style\Border;
 use App\Http\Requests\StoreCandidatRequest;
 use PhpOffice\PhpSpreadsheet\Cell\DataType;
 use App\Http\Requests\UpdateCandidatRequest;
+use Illuminate\Support\Facades\DB;
 use PhpOffice\PhpSpreadsheet\Cell\Coordinate;
 use Illuminate\Support\Facades\Log as FacadesLog;
 use PhpOffice\PhpSpreadsheet\Worksheet\PageSetup;
@@ -30,58 +31,6 @@ class CandidatController extends Controller
 {
     public function index() {}
 
-    public function getCandidats(Request $request, $id)
-    {
-        try {
-            $candidats = Candidat::where('activite_id', $id)->with(['odcuser', 'candidat_attribute'])->get();
-
-            if (count($candidats) > 0) {
-                $candidatsData = [];
-                $labels = [];
-                foreach ($candidats as $candidat) {
-                    $candidatArray = $candidat->toArray();
-                    if ($candidat->candidat_attribute) {
-                        foreach ($candidat->candidat_attribute as $attribute) {
-                            $candidatArray[$attribute->label] = $attribute->value;
-                            if (!in_array($attribute->label, $labels)) {
-                                $labels[] = $attribute->label;
-                            }
-                        }
-                    }
-                    $candidatsData[] = $candidatArray;
-                }
-            } else {
-                $candidatsData = null;
-                $labels = null;
-            }
-
-            $dataTable = DataTables::of($candidatsData)
-                ->editColumn('first_name', function ($candidat) {
-                    return $candidat['odcuser']['first_name'];
-                })
-                ->editColumn('last_name', function ($candidat) {
-                    return $candidat['odcuser']['last_name'];
-                });
-
-            foreach (array_unique($labels) as $label) {
-                if ($label !== 'Cv de votre parcours (Obligatoire)') {
-                    $dataTable->addColumn($label, function ($candidat) use ($label) {
-                        $value = isset($candidat[$label]) && $candidat[$label] !== '' ? $candidat[$label] : 'N/A';
-                        return Str::of($value)->limit(45, '...') . '<span hidden>' . $value . '</span>' . (strlen($value) > 45 ? " <a href='#' onclick='readMore(event)'>Read more</a>" : '');
-                    })->escapeColumns([])
-                        ->rawColumns([]);
-                }
-            }
-
-            $dataTable->addColumn('action', function ($candidat) {
-                return view('partials.action-btn-candidats', ['candidat' => $candidat])->render();
-            });
-
-            return $dataTable->toJson();
-        } catch (\Exception $e) {
-            return response()->json(['error' => 'Une erreur est survenue : ' . $e->getMessage()], 500);
-        }
-    }
 
     public function getParticipants(Request $request, $id)
     {
@@ -439,19 +388,19 @@ class CandidatController extends Controller
             case 'accept':
                 $candidat->status = 'accept';
                 $candidat->save();
-                return response()->json(['message' => 'Candidate successfully validated!'], 200);
+                return response()->json(['message' => 'Candidat validé avec succès !'], 200);
                 break;
 
             case 'decline':
                 $candidat->status = 'decline';
                 $candidat->save();
-                return response()->json(['message' => 'Application successfully rejected!'], 200);
+                return response()->json(['message' => 'Le candidat a été rejeté avec succès !'], 200);
                 break;
 
             case 'wait':
                 $candidat->status = 'wait';
                 $candidat->save();
-                return response()->json(['message' => 'Candidate successfully put on hold!'], 200);
+                return response()->json(['message' => 'Le candidat a été mis en attente avec succès !'], 200);
                 break;
             default:
                 return response()->json(['Erreur lors de la mise a jour du statut!']);
