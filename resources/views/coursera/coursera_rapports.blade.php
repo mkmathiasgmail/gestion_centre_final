@@ -1,5 +1,5 @@
 <x-app-layout>
-    
+
     <div class=" mt-4">
         <h4
             class="mb-8 text-3xl font-extrabold leading-none tracking-tight text-gray-700 md:text-5xl lg:text-6xl dark:text-white text-center">
@@ -80,6 +80,430 @@
 
         </div>
     </section> --}}
+    @section('modal')
+        <!-- Main modal -->
+        <div id="default-modal" dark:text-gray-300
+            class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
+            <div class="relative p-4 w-full max-w-xl lg:max-w-6xl xl:max-w-7xl max-h-full">
+                <!-- Modal content -->
+                <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
+                    <!-- Modal header -->
+                    <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
+                        <h3 class="text-xl font-semibold text-gray-900 dark:text-white">
+                            Personnes ayant fini leurs spécialisations
+                        </h3>
+                        <button type="button"
+                            class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
+                            data-modal-hide="default-modal">
+                            <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
+                                viewBox="0 0 14 14">
+                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
+                            </svg>
+                            <span class="sr-only">Close modal</span>
+                        </button>
+                    </div>
+                    <!-- Modal body -->
+                    <div class="p-4 md:p-5 space-y-4">
+                        <table id="mytable"
+                            class="display nowrap w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-300"
+                            style="width:100%">
+                            <thead>
+                                <tr>
+                                    <th scope="col" class="px-6 py-3">
+                                        Email
+                                    </th>
+
+                                    <th scope="col" class="px-6 py-3">cours</th>
+
+                                    <th scope="col" class="px-6 py-3">
+                                        université
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach ($getCompletedUsages as $member)
+                                    <tr>
+                                        <td class="px-6 py-4">
+                                            {{ $member->email }}
+
+                                        </td>
+
+                                        <td class="px-6 py-4">
+                                            {{ $member->course_slug }}
+                                        </td>
+
+                                        <td class="px-6 py-4">{{ $member->university }}</td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
+                    <!-- Modal footer -->
+                    <div class="flex items-center p-4 md:p-5 border-t border-gray-200 rounded-b dark:border-gray-600">
+                        <button data-modal-hide="default-modal" type="button"
+                            class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">I
+                            accept</button>
+                        <button data-modal-hide="default-modal" type="button"
+                            class="py-2.5 px-5 ms-3 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">Decline</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
+        <!-- Main modal -->
+        <div id="default-modal2" dark:text-gray-300
+            class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
+            <div class="relative p-4 w-full max-w-xl lg:max-w-6xl xl:max-w-7xl max-h-full">
+                <!-- Modal content -->
+                <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
+                    <!-- Modal header -->
+                    <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
+                        <h3 class="text-xl font-semibold text-gray-900 dark:text-white">
+                            Nombres de ceux qui n'ont pas accepté l'invitation
+                        </h3>
+                        <button type="button"
+                            class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
+                            data-modal-hide="default-modal">
+                            <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
+                                viewBox="0 0 14 14">
+                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
+                            </svg>
+                            <span class="sr-only">Close modal</span>
+                        </button>
+                    </div>
+                    <!-- Modal body -->
+                    <div class="p-4 md:p-5 space-y-4">
+                        <table id="mytable2"
+                            class="display nowrap w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-300"
+                            style="width:100%">
+                            <thead>
+                                <tr>
+                                    <th scope="col" class="px-6 py-3">
+                                        Email
+                                    </th>
+
+                                    <th scope="col" class="px-6 py-3">cours</th>
+
+                                    <th scope="col" class="px-6 py-3">
+                                        université
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach ($getCompletedUsages as $member)
+                                    <tr>
+                                        <td class="px-6 py-4">
+                                            {{ $member->email }}
+
+                                        </td>
+
+                                        <td class="px-6 py-4">
+                                            {{ $member->course_slug }}
+                                        </td>
+
+                                        <td class="px-6 py-4">{{ $member->university }}</td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
+                    <!-- Modal footer -->
+                    <div class="flex items-center p-4 md:p-5 border-t border-gray-200 rounded-b dark:border-gray-600">
+                        <button data-modal-hide="default-modal" type="button"
+                            class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">I
+                            accept</button>
+                        <button data-modal-hide="default-modal" type="button"
+                            class="py-2.5 px-5 ms-3 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">Decline</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main modal -->
+        <div id="default-modal4" dark:text-gray-300
+            class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
+            <div class="relative p-4 w-full max-w-xl lg:max-w-6xl xl:max-w-7xl max-h-full">
+                <!-- Modal content -->
+                <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
+                    <!-- Modal header -->
+                    <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
+                        <h3 class="text-xl font-semibold text-gray-900 dark:text-white">
+                            Personnes ayant fini leurs spécialisations
+                        </h3>
+                        <button type="button"
+                            class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
+                            data-modal-hide="default-modal">
+                            <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
+                                viewBox="0 0 14 14">
+                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
+                            </svg>
+                            <span class="sr-only">Close modal</span>
+                        </button>
+                    </div>
+                    <!-- Modal body -->
+                    <div class="p-4 md:p-5 space-y-4">
+                        <table id="mytable4"
+                            class="display nowrap w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-300"
+                            style="width:100%">
+                            <thead>
+                                <tr>
+                                    <th scope="col" class="px-6 py-3">
+                                        Email
+                                    </th>
+
+                                    <th scope="col" class="px-6 py-3">cours</th>
+
+                                    <th scope="col" class="px-6 py-3">
+                                        université
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach ($getCompletedUsages as $member)
+                                    <tr>
+                                        <td class="px-6 py-4">
+                                            {{ $member->email }}
+
+                                        </td>
+
+                                        <td class="px-6 py-4">
+                                            {{ $member->course_slug }}
+                                        </td>
+
+                                        <td class="px-6 py-4">{{ $member->university }}</td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
+                    <!-- Modal footer -->
+                    <div class="flex items-center p-4 md:p-5 border-t border-gray-200 rounded-b dark:border-gray-600">
+                        <button data-modal-hide="default-modal" type="button"
+                            class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">I
+                            accept</button>
+                        <button data-modal-hide="default-modal" type="button"
+                            class="py-2.5 px-5 ms-3 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">Decline</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main modal -->
+        <div id="default-modal5" dark:text-gray-300
+            class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
+            <div class="relative p-4 w-full max-w-xl lg:max-w-6xl xl:max-w-7xl max-h-full">
+                <!-- Modal content -->
+                <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
+                    <!-- Modal header -->
+                    <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
+                        <h3 class="text-xl font-semibold text-gray-900 dark:text-white">
+                            Personnes ayant fini leurs spécialisations
+                        </h3>
+                        <button type="button"
+                            class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
+                            data-modal-hide="default-modal">
+                            <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
+                                viewBox="0 0 14 14">
+                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                    stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
+                            </svg>
+                            <span class="sr-only">Close modal</span>
+                        </button>
+                    </div>
+                    <!-- Modal body -->
+                    <div class="p-4 md:p-5 space-y-4">
+                        <table id="mytable5"
+                            class="display nowrap w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-300"
+                            style="width:100%">
+                            <thead>
+                                <tr>
+                                    <th scope="col" class="px-6 py-3">
+                                        Email
+                                    </th>
+
+                                    <th scope="col" class="px-6 py-3">cours</th>
+
+                                    <th scope="col" class="px-6 py-3">
+                                        université
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach ($getCompletedUsages as $member)
+                                    <tr>
+                                        <td class="px-6 py-4">
+                                            {{ $member->email }}
+
+                                        </td>
+
+                                        <td class="px-6 py-4">
+                                            {{ $member->course_slug }}
+                                        </td>
+
+                                        <td class="px-6 py-4">{{ $member->university }}</td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
+                    <!-- Modal footer -->
+                    <div class="flex items-center p-4 md:p-5 border-t border-gray-200 rounded-b dark:border-gray-600">
+                        <button data-modal-hide="default-modal" type="button"
+                            class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">I
+                            accept</button>
+                        <button data-modal-hide="default-modal" type="button"
+                            class="py-2.5 px-5 ms-3 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">Decline</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main modal -->
+        <div id="default-modal6" dark:text-gray-300
+            class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
+            <div class="relative p-4 w-full max-w-xl lg:max-w-6xl xl:max-w-7xl max-h-full">
+                <!-- Modal content -->
+                <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
+                    <!-- Modal header -->
+                    <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
+                        <h3 class="text-xl font-semibold text-gray-900 dark:text-white">
+                            Personnes ayant fini leurs spécialisations
+                        </h3>
+                        <button type="button"
+                            class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
+                            data-modal-hide="default-modal">
+                            <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
+                                viewBox="0 0 14 14">
+                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                    stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
+                            </svg>
+                            <span class="sr-only">Close modal</span>
+                        </button>
+                    </div>
+                    <!-- Modal body -->
+                    <div class="p-4 md:p-5 space-y-4">
+                        <table id="mytable6"
+                            class="display nowrap w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-300"
+                            style="width:100%">
+                            <thead>
+                                <tr>
+                                    <th scope="col" class="px-6 py-3">
+                                        Email
+                                    </th>
+
+                                    <th scope="col" class="px-6 py-3">cours</th>
+
+                                    <th scope="col" class="px-6 py-3">
+                                        université
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach ($getCompletedUsages as $member)
+                                    <tr>
+                                        <td class="px-6 py-4">
+                                            {{ $member->email }}
+
+                                        </td>
+
+                                        <td class="px-6 py-4">
+                                            {{ $member->course_slug }}
+                                        </td>
+
+                                        <td class="px-6 py-4">{{ $member->university }}</td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
+                    <!-- Modal footer -->
+                    <div class="flex items-center p-4 md:p-5 border-t border-gray-200 rounded-b dark:border-gray-600">
+                        <button data-modal-hide="default-modal" type="button"
+                            class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">I
+                            accept</button>
+                        <button data-modal-hide="default-modal" type="button"
+                            class="py-2.5 px-5 ms-3 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">Decline</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main modal -->
+        <div id="default-modal7" dark:text-gray-300
+            class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
+            <div class="relative p-4 w-full max-w-xl lg:max-w-6xl xl:max-w-7xl max-h-full">
+                <!-- Modal content -->
+                <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
+                    <!-- Modal header -->
+                    <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
+                        <h3 class="text-xl font-semibold text-gray-900 dark:text-white">
+                            Personnes ayant fini leurs spécialisations
+                        </h3>
+                        <button type="button"
+                            class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
+                            data-modal-hide="default-modal">
+                            <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
+                                viewBox="0 0 14 14">
+                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                    stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
+                            </svg>
+                            <span class="sr-only">Close modal</span>
+                        </button>
+                    </div>
+                    <!-- Modal body -->
+                    <div class="p-4 md:p-5 space-y-4">
+                        <table id="mytable7"
+                            class="display nowrap w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-300"
+                            style="width:100%">
+                            <thead>
+                                <tr>
+                                    <th scope="col" class="px-6 py-3">
+                                        Email
+                                    </th>
+
+                                    <th scope="col" class="px-6 py-3">cours</th>
+
+                                    <th scope="col" class="px-6 py-3">
+                                        université
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach ($getCompletedUsages as $member)
+                                    <tr>
+                                        <td class="px-6 py-4">
+                                            {{ $member->email }}
+
+                                        </td>
+
+                                        <td class="px-6 py-4">
+                                            {{ $member->course_slug }}
+                                        </td>
+
+                                        <td class="px-6 py-4">{{ $member->university }}</td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
+                    <!-- Modal footer -->
+                    <div class="flex items-center p-4 md:p-5 border-t border-gray-200 rounded-b dark:border-gray-600">
+                        <button data-modal-hide="default-modal" type="button"
+                            class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">I
+                            accept</button>
+                        <button data-modal-hide="default-modal" type="button"
+                            class="py-2.5 px-5 ms-3 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">Decline</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    @endsection
+
 
     <section class="flex justify-between p-4 gap-4 w-full md:inset-0 h-[calc(100%-1rem)] max-h-full mb-8">
 
@@ -87,29 +511,31 @@
             class=" bg-[#fcdab40a] dark:bg-gray-800 mb-4 p-5 rounded-lg w-1/2 shadow-lg dark:shadow-lg dark:shadow-gray-500/20 ">
             <div class="flex gap-5">
                 <div class=" ">
-                    <a href="{{route('import.specialisations')}}" class=" flex items-center">
+                    <a href="{{ route('import.specialisations') }}" class=" flex items-center">
                         {{-- <span class="text-gray-800 lg:text-sm  dark:text-gray-200"></span> --}}
-                        <button type="button" class="text-white-700 hover:text-blue border border-blue-700 hover:bg-blue-800 focus:ring-4 
-                        focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2 dark:border-blue-500 dark:text-blue-500 dark:hover:text-white dark:hover:bg-blue-500 dark:focus:ring-blue-800">import specialisation csv</button>
-
+                        <button type="button"
+                            class="text-white-700 hover:text-blue border border-blue-700 hover:bg-blue-800 focus:ring-4 
+                        focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2 dark:border-blue-500 dark:text-blue-500 dark:hover:text-white dark:hover:bg-blue-500 dark:focus:ring-blue-800">import
+                            specialisation csv</button>
                     </a>
                 </div>
-                 <div>
-                    <a href="{{route('import.members')}}" class=" flex items-center">
-                        {{-- <span class="text-gray-800 lg:text-sm  dark:text-gray-200"></span> --}}
-                        <button type="button" class="text-green-700 hover:text-white border border-green-700 hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm 
-                        px-5 py-2.5 text-center me-2 mb-2 dark:border-green-500 dark:text-green-500 dark:hover:text-white dark:hover:bg-green-600 dark:focus:ring-green-800">import members csv</button>
-                    </a>
-                </div> 
                 <div>
-                    <a href="{{route('import.usages')}}" class=" flex items-center">
-                        <button type="button" class="text-gray-900 hover:text-white border border-gray-800 hover:bg-gray-900 focus:ring-4 focus:outline-none focus:ring-gray-300 font-medium rounded-lg text-sm px-5 
-                        py-2.5 text-center me-2 mb-2 dark:border-gray-600 dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-800">import usages csv</button>
-
-                        {{-- <span class="text-gray-800 lg:text-sm  dark:text-gray-200">import usages csv</span> --}}
+                    <a href="{{ route('import.members') }}" class=" flex items-center">
+                        {{-- <span class="text-gray-800 lg:text-sm  dark:text-gray-200"></span> --}}
+                        <button type="button"
+                            class="text-green-700 hover:text-white border border-green-700 hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm 
+                        px-5 py-2.5 text-center me-2 mb-2 dark:border-green-500 dark:text-green-500 dark:hover:text-white dark:hover:bg-green-600 dark:focus:ring-green-800">import
+                            members csv</button>
                     </a>
-                </div> 
-
+                </div>
+                <div>
+                    <a href="{{ route('import.usages') }}" class=" flex items-center">
+                        <button type="button"
+                            class="text-gray-900 hover:text-white border border-gray-800 hover:bg-gray-900 focus:ring-4 focus:outline-none focus:ring-gray-300 font-medium rounded-lg text-sm px-5 
+                        py-2.5 text-center me-2 mb-2 dark:border-gray-600 dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-800">import
+                            usages csv</button>
+                    </a>
+                </div>
             </div>
             <div class="w-11/12">
                 <canvas id="myChart"></canvas>
@@ -118,78 +544,117 @@
 
         <div class="m-4 flex justify-around gap-4 rounded-lg">
             <div class="min-w-full ">
-                 <div>
-                    <h4 class="mb-6 text-lg font-normal text-gray lg:text-2xl  dark:text-gray-400">Statistiques coursera</h4>
+                <div>
+                    <h4 class="mb-6 text-lg font-normal text-gray lg:text-2xl  dark:text-gray-400">Statistiques
+                        coursera
+                    </h4>
                 </div>
                 <div>
-                        <div class=" h-16 flex shadow-lg dark:shadow-lg dark:shadow-gray-500/20   w-full gap-1 items-center p-2 mb-2 rounded-xl bg-[#fcdab40a] dark:bg-gray-800 dark:hover:bg-gray-600 hover:bg-[#f8f0e7] hover:scale-105 transition duration-700 ease-in-out">
+                    <button data-modal-target="default-modal" data-modal-toggle="default-modal" class="block"
+                        type="button">
+                        <div
+                            class=" h-16 flex shadow-lg dark:shadow-lg dark:shadow-gray-500/20   w-full gap-1 items-center p-2 mb-2 rounded-xl bg-[#fcdab40a] dark:bg-gray-800 dark:hover:bg-gray-600 hover:bg-[#f8f0e7] hover:scale-105 transition duration-700 ease-in-out">
                             <div>
-                                <p href="" class="text-xs font-normal text-gray-800 lg:text-sm  dark:text-gray-400">
-                                    Nombres de ceux qui ont acceptés l'invitation : <span class="text-[#36d4fc]">{{$coursera_members->members}}</span>
+                                <p href=""
+                                    class="text-xs font-normal text-gray-800 lg:text-sm  dark:text-gray-400">
+                                    Nombres de ceux qui ont acceptés l'invitation : <span
+                                        class="text-[#36d4fc]">{{ $coursera_members->members }}</span>
                                 </p>
                             </div>
                         </div>
-                        <div class=" h-16 flex shadow-lg dark:shadow-lg dark:shadow-gray-500/20   w-full gap-1 items-center p-2 mb-2 rounded-xl bg-[#fcdab40a] dark:bg-gray-800 dark:hover:bg-gray-600 hover:bg-[#f8f0e7] hover:scale-105 transition duration-700 ease-in-out">
-                            <div>
-                                <p href="" class="text-xs font-normal text-gray-800 lg:text-sm  dark:text-gray-400">
-                                    Nombres de ceux qui n'ont pas accepté l'invitation: <span class="text-[#36d4fc]">{{$coursera_members->invites}}</span>
-                                </p>
-                            </div>
-                        </div>
+                    </button>
 
-                        <div class=" h-16 flex shadow-lg dark:shadow-lg dark:shadow-gray-500/20   w-full gap-1 items-center p-2 mb-2 rounded-xl bg-[#fcdab40a] dark:bg-gray-800 dark:hover:bg-gray-600 hover:bg-[#f8f0e7] hover:scale-105 transition duration-700 ease-in-out">
+                    <button data-modal-target="default-modal2" data-modal-toggle="default-modal2" class="block"
+                        type="button">
+                        <div
+                            class=" h-16 flex shadow-lg dark:shadow-lg dark:shadow-gray-500/20   w-full gap-1 items-center p-2 mb-2 rounded-xl bg-[#fcdab40a] dark:bg-gray-800 dark:hover:bg-gray-600 hover:bg-[#f8f0e7] hover:scale-105 transition duration-700 ease-in-out">
                             <div>
-                                <p href="" class="text-xs font-normal text-gray-800 lg:text-sm  dark:text-gray-400">
-                                    Nombres des personnes qui n'ont pas fini leur formation : <span class="text-[#36d4fc]">{{$uncompletedUsages}}</span>
+                                <p href=""
+                                    class="text-xs font-normal text-gray-800 lg:text-sm  dark:text-gray-400">
+                                    Nombres de ceux qui n'ont pas accepté l'invitation: <span
+                                        class="text-[#36d4fc]">{{ $coursera_members->invites }}</span>
                                 </p>
                             </div>
                         </div>
-                        <div class=" h-16 flex shadow-lg dark:shadow-lg dark:shadow-gray-500/20   w-full gap-1 items-center p-2 mb-2 rounded-xl bg-[#fcdab40a] dark:bg-gray-800 dark:hover:bg-gray-600 hover:bg-[#f8f0e7] hover:scale-105 transition duration-700 ease-in-out">
+                    </button>
+
+                    <button data-modal-target="default-modal3" data-modal-toggle="default-modal3" class="block"
+                        type="button">
+                        <div
+                            class=" h-16 flex shadow-lg dark:shadow-lg dark:shadow-gray-500/20   w-full gap-1 items-center p-2 mb-2 rounded-xl bg-[#fcdab40a] dark:bg-gray-800 dark:hover:bg-gray-600 hover:bg-[#f8f0e7] hover:scale-105 transition duration-700 ease-in-out">
                             <div>
-                                <p href="" class="text-xs font-normal text-gray-800 lg:text-sm  dark:text-gray-400">
-                                    Nombres des personnes qui ont fini leur formation : <span class="text-[#36d4fc]">{{$completedUsages}}</span>
+                                <p href=""
+                                    class="text-xs font-normal text-gray-800 lg:text-sm  dark:text-gray-400">
+                                    Nombres des personnes qui n'ont pas fini leur formation : <span
+                                        class="text-[#36d4fc]">{{ $coursera_usages->noCompleted }}</span>
                                 </p>
                             </div>
                         </div>
-                        <div class=" h-16 flex shadow-lg dark:shadow-lg dark:shadow-gray-500/20   w-full gap-1 items-center p-2 mb-2 rounded-xl bg-[#fcdab40a] dark:bg-gray-800 dark:hover:bg-gray-600 hover:bg-[#f8f0e7] hover:scale-105 transition duration-700 ease-in-out">
+                    </button>
+
+                    <button data-modal-target="default-modal4" data-modal-toggle="default-modal4" class="block"
+                        type="button">
+                        <div
+                            class=" h-16 flex shadow-lg dark:shadow-lg dark:shadow-gray-500/20   w-full gap-1 items-center p-2 mb-2 rounded-xl bg-[#fcdab40a] dark:bg-gray-800 dark:hover:bg-gray-600 hover:bg-[#f8f0e7] hover:scale-105 transition duration-700 ease-in-out">
                             <div>
-                                <p href="" class="text-xs font-normal text-gray-800 lg:text-sm  dark:text-gray-400">
-                                    Nombres des personnes supprimées des formations : <span class="text-[#36d4fc]">{{$deletedUsages}}</span>
+                                <p href=""
+                                    class="text-xs font-normal text-gray-800 lg:text-sm  dark:text-gray-400">
+                                    Nombres des personnes qui ont fini leur formation : <span
+                                        class="text-[#36d4fc]">{{ $coursera_usages->completed }}</span>
                                 </p>
                             </div>
                         </div>
-                        <div class=" h-16 flex shadow-lg dark:shadow-lg dark:shadow-gray-500/20   w-full gap-1 items-center p-2 mb-2 rounded-xl bg-[#fcdab40a] dark:bg-gray-800 dark:hover:bg-gray-600 hover:bg-[#f8f0e7] hover:scale-105 transition duration-700 ease-in-out">
+                    </button>
+
+                    <button data-modal-target="default-modal5" data-modal-toggle="default-modal5" class="block"
+                        type="button">
+                        <div
+                            class=" h-16 flex shadow-lg dark:shadow-lg dark:shadow-gray-500/20   w-full gap-1 items-center p-2 mb-2 rounded-xl bg-[#fcdab40a] dark:bg-gray-800 dark:hover:bg-gray-600 hover:bg-[#f8f0e7] hover:scale-105 transition duration-700 ease-in-out">
                             <div>
-                                <p href="" class="text-xs font-normal text-gray-800 lg:text-sm  dark:text-gray-400">
-                                    Membres coursera : <span class="text-[#36d4fc]">{{$coursera_members->total}}</span>
+                                <p href=""
+                                    class="text-xs font-normal text-gray-800 lg:text-sm  dark:text-gray-400">
+                                    Nombres des personnes supprimées des formations : <span
+                                        class="text-[#36d4fc]">{{ $deletedUsages }}</span>
                                 </p>
                             </div>
                         </div>
-                        <div class=" h-16 flex shadow-lg dark:shadow-lg dark:shadow-gray-500/20   w-full gap-1 items-center p-2 mb-2 rounded-xl bg-[#fcdab40a] dark:bg-gray-800 dark:hover:bg-gray-600 hover:bg-[#f8f0e7] hover:scale-105 transition duration-700 ease-in-out">
+                    </button>
+
+
+                    <button data-modal-target="default-modal6" data-modal-toggle="default-modal6" class="block"
+                        type="button">
+                        <div
+                            class=" h-16 flex shadow-lg dark:shadow-lg dark:shadow-gray-500/20   w-full gap-1 items-center p-2 mb-2 rounded-xl bg-[#fcdab40a] dark:bg-gray-800 dark:hover:bg-gray-600 hover:bg-[#f8f0e7] hover:scale-105 transition duration-700 ease-in-out">
                             <div>
-                                <p href="" class="text-xs font-normal text-gray-800 lg:text-sm  dark:text-gray-400">
-                                    Total des specialisations : <span class="text-[#36d4fc]">{{$specialisationsCount}}</span>
+                                <p href=""
+                                    class="text-xs font-normal text-gray-800 lg:text-sm  dark:text-gray-400">
+                                    Membres coursera : <span
+                                        class="text-[#36d4fc]">{{ $coursera_members->total }}</span>
                                 </p>
                             </div>
                         </div>
-                       
+                    </button>
+
+
+                    <button data-modal-target="default-modal7" data-modal-toggle="default-modal7" class="block"
+                        type="button">
+                        <div
+                            class=" h-16 flex shadow-lg dark:shadow-lg dark:shadow-gray-500/20   w-full gap-1 items-center p-2 mb-2 rounded-xl bg-[#fcdab40a] dark:bg-gray-800 dark:hover:bg-gray-600 hover:bg-[#f8f0e7] hover:scale-105 transition duration-700 ease-in-out">
+                            <div>
+                                <p href=""
+                                    class="text-xs font-normal text-gray-800 lg:text-sm  dark:text-gray-400">
+                                    Total des specialisations : <span
+                                        class="text-[#36d4fc]">{{ $specialisationsCount }}</span>
+                                </p>
+                            </div>
+                        </div>
+                    </button>
                 </div>
-
             </div>
-
-            {{-- <div class=" w-1/2">
-                <div class=" m-4 ">
-                    <canvas id="myChart2"></canvas>
-                </div>
-
-
-            </div> --}}
-
-
         </div>
 
 
-        
+
     </section>
     <section p-1.5 min-w-full inline-block align-middle>
         <div class="  p-4 sm:px-6 mx-auto">
@@ -200,100 +665,7 @@
                         <div
                             class="bg-[#fcdab40a] border border-gray-200 rounded-xl shadow-sm overflow-hidden dark:bg-[#1e293b62] dark:border-neutral-700">
                             <!-- Header -->
-                            <div
-                                class="px-6 py-4 grid gap-3 md:flex md:justify-between md:items-center border-b border-gray-200 dark:border-neutral-700">
-                                <div>
-                                    <h2 class="text-xl font-semibold text-gray-800 dark:text-neutral-200">
-                                        Liste des personnes ayant fini leur formation
-                                    </h2>
-                                </div>
-                            </div>
 
-
-
-
-
-        <table class="min-w-full divide-y divide-gray-700 dark:divide-neutral-200">
-            <thead class="bg-[#fcdab40a] dark:bg-[#fcdab40a]">
-                <tr>
-                    <th scope="col" class="px-6 py-3 text-start">
-                        <a class="group inline-flex items-center gap-x-2 text-xs font-semibold uppercase text-gray-800 hover:text-gray-500 focus:outline-none focus:text-gray-500 dark:text-neutral-200 dark:hover:text-neutral-500 dark:focus:text-neutral-500"
-                            href="#">
-                            Email
-                            <svg class="shrink-0 size-3.5 text-gray-800 dark:text-neutral-200"
-                                xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <path d="m7 15 5 5 5-5" />
-                                <path d="m7 9 5-5 5 5" />
-                            </svg>
-                        </a>
-                    </th>
-
-                    <th scope="col" class="px-6 py-3 text-start">
-                        <a class="group inline-flex items-center gap-x-2 text-xs font-semibold uppercase text-gray-800 hover:text-gray-500 focus:outline-none focus:text-gray-500 dark:text-neutral-200 dark:hover:text-neutral-500 dark:focus:text-neutral-500"
-                            href="#">
-                            cours
-                            <svg class="shrink-0 size-3.5 text-gray-800 dark:text-neutral-200"
-                                xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <path d="m7 15 5 5 5-5" />
-                                <path d="m7 9 5-5 5 5" />
-                            </svg>
-                        </a>
-                    </th>
-
-                    <th scope="col" class="px-6 py-3 text-start">
-                        <a class="group inline-flex items-center gap-x-2 text-xs font-semibold uppercase text-gray-800 hover:text-gray-500 focus:outline-none focus:text-gray-500 dark:text-neutral-200 dark:hover:text-neutral-500 dark:focus:text-neutral-500"
-                            href="#">
-                            université
-                            <svg class="shrink-0 size-3.5 text-gray-800 dark:text-neutral-200"
-                                xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <path d="m7 15 5 5 5-5" />
-                                <path d="m7 9 5-5 5 5" />
-                            </svg>
-                        </a>
-                    </th>
-                
-                </tr>
-            </thead>
-
-            <tbody class="divide-y divide-gray-700 dark:divide-neutral-200">
-                @foreach ($getCompletedUsages as $member)
-                    <tr
-                        class=" text-gray-700 dark:text-gray-200 bg-[#eaeaebf3] hover:bg-[#96816a0a] dark:bg-[#1e293b62] dark:hover:bg-neutral-800">
-                        <td scope="col" class="px-6 py-3">
-                            {{ $member->email }}
-
-                        </td>
-
-                        <td scope="col" class="px-6 py-3">
-                            {{ $member->course_name }}
-
-                        </td>
-
-                        <td scope="col" class="px-6 py-3">
-                            {{ $member->university }}
-                        </td>
-
-                    </tr>
-                @endforeach
-            </tbody>
-        </table>
-        <div
-                            class="px-6 py-4 grid gap-3 md:flex md:justify-between md:items-center border-t border-gray-200 dark:border-neutral-700">
-                            <div>
-                                <p class="text-sm text-gray-600 dark:text-neutral-400">
-                                    <span
-                                        class="">Total :</span>
-                                        <span class="font-semibold text-gray-800 dark:text-neutral-200">{{ $completedUsages}}</span>
-                                </p>
-                            </div>
-
-                            
                         </div>
                         <!-- End Footer -->
                     </div>
@@ -301,24 +673,86 @@
             </div>
         </div>
         <!-- End Card -->
-    
+
     </section>
 
     @section('script')
         <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
         <script>
+            $(document).ready(function() {
+                $('#mytable').DataTable({
+                    "scrollX": true,
+                    "fixedColumns": {
+                        "start": 3
+                    }
+                });
+            });
+
+            $(document).ready(function() {
+                $('#mytable2').DataTable({
+                    "scrollX": true,
+                    "fixedColumns": {
+                        "start": 3
+                    }
+                });
+            });
+
+            $(document).ready(function() {
+                $('#mytable3').DataTable({
+                    "scrollX": true,
+                    "fixedColumns": {
+                        "start": 3
+                    }
+                });
+            });
+
+            $(document).ready(function() {
+                $('#mytable4').DataTable({
+                    "scrollX": true,
+                    "fixedColumns": {
+                        "start": 3
+                    }
+                });
+            });
+
+            $(document).ready(function() {
+                $('#mytable5').DataTable({
+                    "scrollX": true,
+                    "fixedColumns": {
+                        "start": 3
+                    }
+                });
+            });
+
+            $(document).ready(function() {
+                $('#mytable6').DataTable({
+                    "scrollX": true,
+                    "fixedColumns": {
+                        "start": 3
+                    }
+                });
+            });
+            $(document).ready(function() {
+                $('#mytable7').DataTable({
+                    "scrollX": true,
+                    "fixedColumns": {
+                        "start": 3
+                    }
+                });
+            });
+        </script>
+
+        <script>
             const ctx = document.getElementById('myChart').getContext('2d');
-            var chart = new Chart(ctx,{
-                type:'bar',
-                data:{
+            var chart = new Chart(ctx, {
+                type: 'bar',
+                data: {
                     labels: {!! json_encode($labels) !!},
                     datasets: {!! json_encode($datasets) !!}
                 },
             });
         </script>
-        
-       
     @endsection
 
 

@@ -57,38 +57,36 @@ class CourseraController extends Controller
         ];
 
 
-
+        //MEMBERS___________________________________________
         $coursera_members = DB::table('coursera_members')
         ->selectRaw('count(*) as total')
         ->selectRaw("count(case when member_state = 'MEMBER' then 1 end) as members")
         ->selectRaw("count(case when member_state = 'INVITED' then 1 end) as invites")
         ->first();
 
+        $acceptInvitation = CourseraMember::where('member_state', 'MEMBER')->get();
+        $noAcceptInvitation = CourseraMember::where('member_state', 'INVITED')->get();
 
-        $coursera_usages = DB::table('coursera_usages')
+        //USAGES__________________________________________________
+        $coursera_usages = DB::table('coursera_usages') 
         ->selectRaw('count(*) as total')
         ->selectRaw("count(case when completed = 'Yes' then 1 end) as completed")
         ->selectRaw("count(case when completed = 'No' then 1 end) as noCompleted")
         ->first();
 
-
-
-        $specialisations = CourseraSpecialisation::where('specialization_completion_time', '<', now())->count();
-
-        $specialisationsCount = DB::table('coursera_specialisations')
-        ->select('specialisaton_name')->count();
-
-        $completedSpecialisations = CourseraSpecialisation::where('completed', 'Yes')->count();
-        $completedUsages = CourseraUsage::where('completed', 'Yes')->count();
-        $getCompletedUsages = CourseraUsage::where('completed', 'Yes')->paginate(25);
-        $uncompletedSpecialisations = CourseraSpecialisation::where('completed', 'NO')->count();
-        $uncompletedUsages = CourseraUsage::where('completed', 'NO')->count();
+        $getCompletedUsages = CourseraUsage::where('completed', 'Yes')->get();
+        $uncompletedUsages = CourseraUsage::where('completed', 'NO')->get();
         $deletedUsages = CourseraUsage::where('removed_from_program', 'Yes')->count();
 
 
-        $usagesEncourrs = DB::table('coursera_usages')
-        ->where('class_start_time', '<=', now())
-            ->where('class_end_time', '>=', now())->count();
+        //Specialisation__________________________________________
+
+        $specialisationsCount = DB::table('coursera_specialisations')
+                            ->select('specialisaton_name')->count();
+
+        $completedSpecialisations = CourseraSpecialisation::where('completed', 'Yes')->count();
+       
+        $uncompletedSpecialisations = CourseraSpecialisation::where('completed', 'NO')->count();
 
 
         return view('coursera.coursera_rapports', compact(
@@ -97,11 +95,9 @@ class CourseraController extends Controller
             "coursera_members",
             "specialisationsCount",
             "coursera_usages",
-            "specialisations",
             "completedSpecialisations",
             "uncompletedSpecialisations",
             "deletedUsages",
-            "completedUsages",
             "uncompletedUsages",
             "getCompletedUsages"
         ));
