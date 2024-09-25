@@ -12,6 +12,7 @@ use App\Http\Controllers\TypeEventController;
 
 
 Route::middleware('auth')->group(function () {
+    Route::get('/activite/{id}/statusupdate',[ActiviteController::class,'syncParticipant'])->name('syncandidats');
     Route::get('/categorie/{id}/activites', [CategorieController::class, 'showActivites'])->name('categorie.activites');
     Route::get('/api/activities', [ActiviteController::class, 'getActivitiesData']);
     Route::get('/activites/search', [ActiviteController::class, 'search'])->name('activites.search');
