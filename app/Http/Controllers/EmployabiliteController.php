@@ -264,17 +264,21 @@ class EmployabiliteController extends Controller
                 $rowData['type_contrat_id'] = $typeContrat->id;
 
                 $validatedData = $this->validateRowData($rowData);
-
+                // la comparaison de champs dans la table odcuser et employabilité
                 $odcuser = Odcuser::select('id')->where('first_name', $validatedData['name'])->where('last_name', $validatedData['last_name'])->first();
                 unset($validatedData['last_name']);
-
 
                 if ($odcuser) {
                     $validatedData['odcuser_id'] = $odcuser->id;
 
-
+                    // Création de l'enregistrement dans la table employabilité
                     Employabilite::create($validatedData);
                 } else {
+                    // Création de l'utilisateur dans la table odcuser
+                    $odcuser = Odcuser::create($validatedData);
+
+                    // Ensuite, on crée l'enregistrement dans la table employabilité
+                    $validatedData['odcuser_id'] = $odcuser->id; // Assigner l'ID du nouvel utilisateur
                     Employabilite::create($validatedData);
                 }
             } catch (\Throwable $th) {
@@ -311,6 +315,7 @@ class EmployabiliteController extends Controller
 
         return $validator->validated();
     }
+
 
     public function exportModelEmploye(Request $request)
     {
