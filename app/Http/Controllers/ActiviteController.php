@@ -250,12 +250,6 @@ class ActiviteController extends Controller
 
         $id = $activite->id;
 
-
-
-
-
-
-
         $datachart = DB::table('candidats')
             ->join('odcusers', 'candidats.odcuser_id', '=', 'odcusers.id')
             ->join('activites', 'candidats.activite_id', '=', 'activites.id')
@@ -469,20 +463,20 @@ class ActiviteController extends Controller
             ->where('class_end_time', '>=', now())->count();
 
 
-        return view('coursera.coursera_rapports', compact('datasets', 
-                                                            'labels', "coursera_members", 
-                                                            "specialisationsCount", 
-                                                            "coursera_usages", 
-                                                            "specialisations",
-                                                            "completedSpecialisations",
-                                                            "uncompletedSpecialisations",
-                                                            "deletedUsages",
-                                                            "completedUsages",
-                                                            "uncompletedUsages",
-                                                            "getCompletedUsages"
-                                                            ));
-
-        
+        return view('coursera.coursera_rapports', compact(
+            'datasets',
+            'labels',
+            "coursera_members",
+            "specialisationsCount",
+            "coursera_usages",
+            "specialisations",
+            "completedSpecialisations",
+            "uncompletedSpecialisations",
+            "deletedUsages",
+            "completedUsages",
+            "uncompletedUsages",
+            "getCompletedUsages"
+        ));
     }
 
 
@@ -767,5 +761,32 @@ class ActiviteController extends Controller
         $activities = $query->groupBy('date')->get();
 
         return response()->json($activities);
+    }
+
+
+    public function syncParticipant($id)
+    {
+        $activite = Activite::findOrFail($id);
+
+
+        $candidatsAvecPresence = Candidat::where('activite_id', $activite->id)
+            ->whereHas('presences')
+            ->get();
+
+
+        foreach ($candidatsAvecPresence as $candidat) {
+
+            if ($candidat->status == 'new') {
+                $candidat->status = 'accepted';
+                $candidat->save();
+
+                return redirect()->route('activite.show', $id)->with('success', 'Statut des candidats mis à jour');
+            }else {
+
+                return redirect()->route('activite.show', $id)->with('success', 'Statut sont deja à jour');
+            }
+        }
+
+
     }
 }
