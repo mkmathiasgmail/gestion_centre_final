@@ -10,7 +10,7 @@
             générer de la valeur à long terme et stimuler la croissance économique.</p> --}}
     </div>
 
-    {{-- <section class=" flex justify-between p-4 gap-4 w-full md:inset-0 h-[calc(100%-1rem)] max-h-full mb-8">
+    <section class=" flex justify-between p-4 gap-4 w-full md:inset-0 h-[calc(100%-1rem)] max-h-full mb-8">
 
         <div
             class=" h-36  flex  items-center  p-1 w-full rounded-lg shadow-lg dark:shadow-lg dark:shadow-gray-500/20 backdrop-blur-xl bg-cover bg-[#fcdab40a] dark:bg-gray-800 dark:hover:bg-gray-700  hover:bg-[#f8f0e7] hover:scale-105 transition duration-700 ease-in-out border-l-8 border-[#ff9822] hover:border-l-10 ">
@@ -79,7 +79,7 @@
             </div>
 
         </div>
-    </section> --}}
+    </section>
     @section('modal')
         <!-- Main modal -->
         <div id="default-modal" dark:text-gray-300
@@ -90,7 +90,7 @@
                     <!-- Modal header -->
                     <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
                         <h3 class="text-xl font-semibold text-gray-900 dark:text-white">
-                            Personnes ayant fini leurs spécialisations
+                            Licences en cours d'utilisation
                         </h3>
                         <button type="button"
                             class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
@@ -111,6 +111,9 @@
                             <thead>
                                 <tr>
                                     <th scope="col" class="px-6 py-3">
+                                        Nom
+                                    </th>
+                                    <th scope="col" class="px-6 py-3">
                                         Email
                                     </th>
 
@@ -122,18 +125,21 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach ($getCompletedUsages as $member)
+                                @foreach ($licence_en_cours as $licence)
                                     <tr>
                                         <td class="px-6 py-4">
-                                            {{ $member->email }}
+                                            {{$licence->name}}
+                                        </td>
+                                        <td class="px-6 py-4">
+                                            {{ $licence->email }}
 
                                         </td>
 
                                         <td class="px-6 py-4">
-                                            {{ $member->course_slug }}
+                                            {{ $licence->course }} 
                                         </td>
 
-                                        <td class="px-6 py-4">{{ $member->university }}</td>
+                                        <td class="px-6 py-4">{{ $licence->university }}</td>
                                     </tr>
                                 @endforeach
                             </tbody>
@@ -141,9 +147,9 @@
                     </div>
                     <!-- Modal footer -->
                     <div class="flex items-center p-4 md:p-5 border-t border-gray-200 rounded-b dark:border-gray-600">
-                        <button data-modal-hide="default-modal" type="button"
-                            class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">I
-                            accept</button>
+                        <a href="{{ route('licencesCoursera')}}" data-modal-hide="default-modal" type="button"
+                            class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-transparent bg-[#FF7322] text-white hover:bg-[#FF6822] focus:outline-none focus:bg-[#FF6822] disabled:opacity-50 disabled:pointer-events-none">
+                            Exporte en Excel</a>
                         <button data-modal-hide="default-modal" type="button"
                             class="py-2.5 px-5 ms-3 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">Decline</button>
                     </div>
@@ -162,7 +168,7 @@
                     <!-- Modal header -->
                     <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
                         <h3 class="text-xl font-semibold text-gray-900 dark:text-white">
-                            Nombres de ceux qui n'ont pas accepté l'invitation
+                            Nombres de ceux qui ont obtenu les certificats
                         </h3>
                         <button type="button"
                             class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
@@ -183,6 +189,9 @@
                             <thead>
                                 <tr>
                                     <th scope="col" class="px-6 py-3">
+                                        Nom
+                                    </th>
+                                    <th scope="col" class="px-6 py-3">
                                         Email
                                     </th>
 
@@ -194,15 +203,96 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach ($getCompletedUsages as $member)
+                                @foreach ($certificats as $certif)
                                     <tr>
+                                        <td class="px-6 py-4">
+                                            {{ $certif->name }}
+
+                                        </td>
+
+                                        <td class="px-6 py-4">
+                                            {{ $certif->email }}
+                                        </td>
+
+                                        <td class="px-6 py-4">{{ $certif->course }}</td>
+                                        </td>
+
+                                        <td class="px-6 py-4">{{ $certif->university }}</td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
+                    <!-- Modal footer -->
+                    <div class="flex items-center p-4 md:p-5 border-t border-gray-200 rounded-b dark:border-gray-600">
+                        <a href="{{route('certificatscursera')}}" data-modal-hide="default-modal" type="button"
+                            class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-transparent bg-[#FF7322] text-white hover:bg-[#FF6822] focus:outline-none focus:bg-[#FF6822] disabled:opacity-50 disabled:pointer-events-none">
+                            Exporte en Excel</a>
+                        <button data-modal-hide="default-modal" type="button"
+                            class="py-2.5 px-5 ms-3 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">Decline</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main modal -->
+        <div id="default-modal3" dark:text-gray-300
+            class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
+            <div class="relative p-4 w-full max-w-xl lg:max-w-6xl xl:max-w-7xl max-h-full">
+                <!-- Modal content -->
+                <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
+                    <!-- Modal header -->
+                    <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
+                        <h3 class="text-xl font-semibold text-gray-900 dark:text-white">
+                            Nombres des personnes membres depuis 30 jours et n'ont pas de certificat
+                        </h3>
+                        <button type="button"
+                            class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
+                            data-modal-hide="default-modal">
+                            <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
+                                viewBox="0 0 14 14">
+                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
+                            </svg>
+                            <span class="sr-only">Close modal</span>
+                        </button>
+                    </div>
+                    <!-- Modal body -->
+                    <div class="p-4 md:p-5 space-y-4">
+                        <table id="mytable3"
+                            class="display nowrap w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-300"
+                            style="width:100%">
+                            <thead>
+                                <tr>
+                                    <th scope="col" class="px-6 py-3">
+                                        Nom
+                                    </th>
+
+                                    <th scope="col" class="px-6 py-3">
+                                        Email
+                                    </th>
+
+                                    <th scope="col" class="px-6 py-3">cours</th>
+
+                                    <th scope="col" class="px-6 py-3">
+                                        université
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach ($apprenants_30day as $member)
+                                    <tr>
+                                        <td class="px-6 py-4">
+                                            {{ $member->name }}
+
+                                        </td>
                                         <td class="px-6 py-4">
                                             {{ $member->email }}
 
                                         </td>
 
                                         <td class="px-6 py-4">
-                                            {{ $member->course_slug }}
+                                            {{ $member->course }}
                                         </td>
 
                                         <td class="px-6 py-4">{{ $member->university }}</td>
@@ -213,9 +303,9 @@
                     </div>
                     <!-- Modal footer -->
                     <div class="flex items-center p-4 md:p-5 border-t border-gray-200 rounded-b dark:border-gray-600">
-                        <button data-modal-hide="default-modal" type="button"
-                            class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">I
-                            accept</button>
+                        <a href="{{route('membre_30days')}}" data-modal-hide="default-modal" type="button"
+                            class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-transparent bg-[#FF7322] text-white hover:bg-[#FF6822] focus:outline-none focus:bg-[#FF6822] disabled:opacity-50 disabled:pointer-events-none">
+                            Exporte en Excel</a>
                         <button data-modal-hide="default-modal" type="button"
                             class="py-2.5 px-5 ms-3 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">Decline</button>
                     </div>
@@ -232,15 +322,15 @@
                     <!-- Modal header -->
                     <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
                         <h3 class="text-xl font-semibold text-gray-900 dark:text-white">
-                            Personnes ayant fini leurs spécialisations
+                            Nombres des personnes invitées depuis plus de 7 jours et ne sont inscrit à aucun cours :
                         </h3>
                         <button type="button"
                             class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
                             data-modal-hide="default-modal">
                             <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
                                 viewBox="0 0 14 14">
-                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
+                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                    stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
                             </svg>
                             <span class="sr-only">Close modal</span>
                         </button>
@@ -252,6 +342,9 @@
                             style="width:100%">
                             <thead>
                                 <tr>
+                                     <th scope="col" class="px-6 py-3">
+                                        Nom
+                                    </th>
                                     <th scope="col" class="px-6 py-3">
                                         Email
                                     </th>
@@ -264,18 +357,23 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach ($getCompletedUsages as $member)
+                                @foreach ($non_inscrit_cours as $inscrit)
                                     <tr>
-                                        <td class="px-6 py-4">
-                                            {{ $member->email }}
+                                         <td class="px-6 py-4">
+                                            {{ $inscrit->name }}
 
                                         </td>
 
                                         <td class="px-6 py-4">
-                                            {{ $member->course_slug }}
+                                            {{ $inscrit->email }}
+
                                         </td>
 
-                                        <td class="px-6 py-4">{{ $member->university }}</td>
+                                        <td class="px-6 py-4">
+                                            {{ $inscrit->course_slug }}
+                                        </td>
+
+                                        <td class="px-6 py-4">{{ $inscrit->university }}</td>
                                     </tr>
                                 @endforeach
                             </tbody>
@@ -283,9 +381,9 @@
                     </div>
                     <!-- Modal footer -->
                     <div class="flex items-center p-4 md:p-5 border-t border-gray-200 rounded-b dark:border-gray-600">
-                        <button data-modal-hide="default-modal" type="button"
-                            class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">I
-                            accept</button>
+                        <a href="{{route('non_inscrit_coursera')}}" data-modal-hide="default-modal" type="button"
+                            class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-transparent bg-[#FF7322] text-white hover:bg-[#FF6822] focus:outline-none focus:bg-[#FF6822] disabled:opacity-50 disabled:pointer-events-none">
+                            Exporte en Excel</a>
                         <button data-modal-hide="default-modal" type="button"
                             class="py-2.5 px-5 ms-3 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">Decline</button>
                     </div>
@@ -302,7 +400,7 @@
                     <!-- Modal header -->
                     <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
                         <h3 class="text-xl font-semibold text-gray-900 dark:text-white">
-                            Personnes ayant fini leurs spécialisations
+                            Nombre des membres inactifs dépuis le 1er septembre 
                         </h3>
                         <button type="button"
                             class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
@@ -322,6 +420,9 @@
                             style="width:100%">
                             <thead>
                                 <tr>
+                                     <th scope="col" class="px-6 py-3">
+                                        Nom
+                                    </th>
                                     <th scope="col" class="px-6 py-3">
                                         Email
                                     </th>
@@ -334,8 +435,12 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach ($getCompletedUsages as $member)
+                                @foreach ($last_activity as $member)
                                     <tr>
+                                        <td class="px-6 py-4">
+                                            {{ $member->name }}
+
+                                        </td>
                                         <td class="px-6 py-4">
                                             {{ $member->email }}
 
@@ -353,9 +458,9 @@
                     </div>
                     <!-- Modal footer -->
                     <div class="flex items-center p-4 md:p-5 border-t border-gray-200 rounded-b dark:border-gray-600">
-                        <button data-modal-hide="default-modal" type="button"
-                            class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">I
-                            accept</button>
+                        <a href="{{route('last_activity')}}" data-modal-hide="default-modal" type="button"
+                            class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-transparent bg-[#FF7322] text-white hover:bg-[#FF6822] focus:outline-none focus:bg-[#FF6822] disabled:opacity-50 disabled:pointer-events-none">
+                            Exporte en Excel</a>
                         <button data-modal-hide="default-modal" type="button"
                             class="py-2.5 px-5 ms-3 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">Decline</button>
                     </div>
@@ -372,7 +477,7 @@
                     <!-- Modal header -->
                     <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
                         <h3 class="text-xl font-semibold text-gray-900 dark:text-white">
-                            Personnes ayant fini leurs spécialisations
+                            Utilisateurs des licences dans les 21 derniers jours
                         </h3>
                         <button type="button"
                             class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
@@ -393,75 +498,8 @@
                             <thead>
                                 <tr>
                                     <th scope="col" class="px-6 py-3">
-                                        Email
+                                        Nom
                                     </th>
-
-                                    <th scope="col" class="px-6 py-3">cours</th>
-
-                                    <th scope="col" class="px-6 py-3">
-                                        université
-                                    </th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach ($getCompletedUsages as $member)
-                                    <tr>
-                                        <td class="px-6 py-4">
-                                            {{ $member->email }}
-
-                                        </td>
-
-                                        <td class="px-6 py-4">
-                                            {{ $member->course_slug }}
-                                        </td>
-
-                                        <td class="px-6 py-4">{{ $member->university }}</td>
-                                    </tr>
-                                @endforeach
-                            </tbody>
-                        </table>
-                    </div>
-                    <!-- Modal footer -->
-                    <div class="flex items-center p-4 md:p-5 border-t border-gray-200 rounded-b dark:border-gray-600">
-                        <button data-modal-hide="default-modal" type="button"
-                            class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">I
-                            accept</button>
-                        <button data-modal-hide="default-modal" type="button"
-                            class="py-2.5 px-5 ms-3 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">Decline</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Main modal -->
-        <div id="default-modal7" dark:text-gray-300
-            class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
-            <div class="relative p-4 w-full max-w-xl lg:max-w-6xl xl:max-w-7xl max-h-full">
-                <!-- Modal content -->
-                <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
-                    <!-- Modal header -->
-                    <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
-                        <h3 class="text-xl font-semibold text-gray-900 dark:text-white">
-                            Personnes ayant fini leurs spécialisations
-                        </h3>
-                        <button type="button"
-                            class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
-                            data-modal-hide="default-modal">
-                            <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
-                                viewBox="0 0 14 14">
-                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
-                                    stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
-                            </svg>
-                            <span class="sr-only">Close modal</span>
-                        </button>
-                    </div>
-                    <!-- Modal body -->
-                    <div class="p-4 md:p-5 space-y-4">
-                        <table id="mytable7"
-                            class="display nowrap w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-300"
-                            style="width:100%">
-                            <thead>
-                                <tr>
                                     <th scope="col" class="px-6 py-3">
                                         Email
                                     </th>
@@ -474,15 +512,17 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach ($getCompletedUsages as $member)
+                                @foreach ($taux_utilisation as $member)
                                     <tr>
+                                         <td class="px-6 py-4">
+                                            {{ $member->name }}
+                                        </td>
                                         <td class="px-6 py-4">
                                             {{ $member->email }}
-
                                         </td>
 
                                         <td class="px-6 py-4">
-                                            {{ $member->course_slug }}
+                                            {{ $member->course }}
                                         </td>
 
                                         <td class="px-6 py-4">{{ $member->university }}</td>
@@ -493,9 +533,9 @@
                     </div>
                     <!-- Modal footer -->
                     <div class="flex items-center p-4 md:p-5 border-t border-gray-200 rounded-b dark:border-gray-600">
-                        <button data-modal-hide="default-modal" type="button"
-                            class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">I
-                            accept</button>
+                        <a href="{{route('taux_utilisation')}}" data-modal-hide="default-modal" type="button"
+                            class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-transparent bg-[#FF7322] text-white hover:bg-[#FF6822] focus:outline-none focus:bg-[#FF6822] disabled:opacity-50 disabled:pointer-events-none">
+                            Experte en Excel</a>
                         <button data-modal-hide="default-modal" type="button"
                             class="py-2.5 px-5 ms-3 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">Decline</button>
                     </div>
@@ -506,7 +546,6 @@
 
 
     <section class="flex justify-between p-4 gap-4 w-full md:inset-0 h-[calc(100%-1rem)] max-h-full mb-8">
-
         <div
             class=" bg-[#fcdab40a] dark:bg-gray-800 mb-4 p-5 rounded-lg w-1/2 shadow-lg dark:shadow-lg dark:shadow-gray-500/20 ">
             <div class="flex gap-5">
@@ -557,8 +596,8 @@
                             <div>
                                 <p href=""
                                     class="text-xs font-normal text-gray-800 lg:text-sm  dark:text-gray-400">
-                                    Nombres de ceux qui ont acceptés l'invitation : <span
-                                        class="text-[#36d4fc]">{{ $coursera_members->members }}</span>
+                                    Nombre de licences en cours d'utilisation : <span
+                                        class="text-[#36d4fc]">{{ $licence_en_cours_count}}</span>
                                 </p>
                             </div>
                         </div>
@@ -571,8 +610,8 @@
                             <div>
                                 <p href=""
                                     class="text-xs font-normal text-gray-800 lg:text-sm  dark:text-gray-400">
-                                    Nombres de ceux qui n'ont pas accepté l'invitation: <span
-                                        class="text-[#36d4fc]">{{ $coursera_members->invites }}</span>
+                                    Nombres de ceux qui ont obtenu les certificats : <span
+                                        class="text-[#36d4fc]">{{ $certificat_count }}</span>
                                 </p>
                             </div>
                         </div>
@@ -585,8 +624,8 @@
                             <div>
                                 <p href=""
                                     class="text-xs font-normal text-gray-800 lg:text-sm  dark:text-gray-400">
-                                    Nombres des personnes qui n'ont pas fini leur formation : <span
-                                        class="text-[#36d4fc]">{{ $coursera_usages->noCompleted }}</span>
+                                    Nombres des personnes membres depuis 30 jours <br> et n'ont pas de certificat: <span
+                                        class="text-[#36d4fc]">{{ $apprenants_30day_count }}</span>
                                 </p>
                             </div>
                         </div>
@@ -599,8 +638,8 @@
                             <div>
                                 <p href=""
                                     class="text-xs font-normal text-gray-800 lg:text-sm  dark:text-gray-400">
-                                    Nombres des personnes qui ont fini leur formation : <span
-                                        class="text-[#36d4fc]">{{ $coursera_usages->completed }}</span>
+                                    Nombres des personnes invitées depuis plus de 7 jours <br> et ne sont inscrit à aucun cours : <span
+                                        class="text-[#36d4fc]">{{ $non_inscrit_cours_count }}</span>
                                 </p>
                             </div>
                         </div>
@@ -613,8 +652,8 @@
                             <div>
                                 <p href=""
                                     class="text-xs font-normal text-gray-800 lg:text-sm  dark:text-gray-400">
-                                    Nombres des personnes supprimées des formations : <span
-                                        class="text-[#36d4fc]">{{ $deletedUsages }}</span>
+                                    Nombre des membres inactifs dépuis le 1er septembre : <span
+                                        class="text-[#36d4fc]">{{ $last_activity_count }}</span>
                                 </p>
                             </div>
                         </div>
@@ -628,8 +667,8 @@
                             <div>
                                 <p href=""
                                     class="text-xs font-normal text-gray-800 lg:text-sm  dark:text-gray-400">
-                                    Membres coursera : <span
-                                        class="text-[#36d4fc]">{{ $coursera_members->total }}</span>
+                                    Taux d'utilisation des licences de 21 derniers jours : <span
+                                        class="text-[#36d4fc]">{{ $taux }} %</span>
                                 </p>
                             </div>
                         </div>
