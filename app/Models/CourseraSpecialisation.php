@@ -4,6 +4,8 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class CourseraSpecialisation extends Model
 {
@@ -11,7 +13,7 @@ class CourseraSpecialisation extends Model
 
     protected $fillable = [
         'email',
-        'specialisaton_name',
+        'specialisaton',
         'specialisaton_slug',
         'university',
         'enrollement_time',
@@ -22,6 +24,11 @@ class CourseraSpecialisation extends Model
         'removed_from_program',
         'enrollment_source',
         'specialization_completion_time',
-        'specialization_certificate_url'
+        'specialization_certificate_url',
+        'coursera_member_id'
     ];
+    public function member():HasMany
+    {
+        return $this->hasMany(CourseraMember::class);
+    }
 }

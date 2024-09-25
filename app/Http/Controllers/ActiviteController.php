@@ -159,31 +159,35 @@ class ActiviteController extends Controller
         $presences = Presence::orderBy('id')->get();
         $test = Presence::all();
 
+        try {
+            $candidats = Candidat::where('activite_id', $id)->with(['odcuser', 'candidat_attribute'])->get();
 
-
-        // Récupérer les candidats liés à cette activité
-        $candidats = Candidat::where('activite_id', $id)->with(['odcuser', 'candidat_attribute'])->get();
-
-        if (count($candidats) > 0) {
             $candidatsData = [];
             $labels = [];
-            foreach ($candidats as $candidat) {
-                $candidatArray = $candidat->toArray();
-                if ($candidat->candidat_attribute) {
-                    foreach ($candidat->candidat_attribute as $attribute) {
-                        $candidatArray[$attribute->label] = $attribute->value;
-                        if (!in_array($attribute->label, $labels)) {
-                            $labels[] = $attribute->label;
+            if (count($candidats) > 0) {
+                $candidatsData = [];
+                $labels = [];
+                foreach ($candidats as $candidat) {
+                    $candidatArray = $candidat->toArray();
+                    if ($candidat->candidat_attribute) {
+                        foreach ($candidat->candidat_attribute as $attribute) {
+                            $candidatArray[$attribute->label] = $attribute->value;
+                            if (!in_array($attribute->label, $labels)) {
+                                $labels[] = $attribute->label;
+                            }
                         }
                     }
+                    $candidatsData[] = $candidatArray;
                 }
-                $candidatsData[] = $candidatArray;
+            } else {
+                $candidatsData = null;
+                $labels = null;
             }
-        } else {
-            $candidatsData = null;
-            $labels = null;
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Une erreur est survenue : ' . $e->getMessage()], 500);
         }
 
+        // dd($candidatsData[0]['odcuser']['first_name']);
 
         $participants = Candidat::where('activite_id', $id)->where('status', 'accept')->select('id', 'odcuser_id', 'activite_id', 'status')->with(['odcuser', 'candidat_attribute'])->get();
 

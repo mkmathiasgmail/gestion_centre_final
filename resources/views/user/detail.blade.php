@@ -114,16 +114,7 @@
                 </tr>
             </tbody>
         </table>
-        <div class="flex justify-end mt-4 mb-4 text-white " >
-            <a href="{{ route('user_role.index') }}"
-                class="px-4 py-2 font-bold text-white">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="25" height="25">
-
-                    <path
-                    d="M2,12A10,10 0 0,1 12,2A10,10 0 0,1 22,12A10,10 0 0,1 12,22A10,10 0 0,1 2,12M18,11H10L13.5,7.5L12.08,6.08L6.16,12L12.08,17.92L13.5,16.5L10,13H18V11Z" />
-                </svg>
-            </a>
-        </div>
+       
         @section('modal')
         <x-checkboxAddRole />
         <x-checkboxDesRole />
