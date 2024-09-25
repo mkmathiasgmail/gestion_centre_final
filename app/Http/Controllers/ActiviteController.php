@@ -254,6 +254,12 @@ class ActiviteController extends Controller
 
         $id = $activite->id;
 
+
+
+
+
+
+
         $datachart = DB::table('candidats')
             ->join('odcusers', 'candidats.odcuser_id', '=', 'odcusers.id')
             ->join('activites', 'candidats.activite_id', '=', 'activites.id')
@@ -386,104 +392,6 @@ class ActiviteController extends Controller
 
         return view('dashboard', compact('activites', 'user', 'data', 'hommes', 'femmes', "activityForWeekend", 'requestActivityperiode'));
     }
-
-    public function coursera_rapport()
-    {
-        $membersMonths = CourseraMember::selectRaw('MONTH(join_date) as month, COUNT(*) as count')
-            ->whereYear('join_date', date('Y'))
-            ->groupBy('month')->orderBy('month')->get();
-
-        $labels = [];
-        $mydata = [];
-        $colors = [
-            '#FF6384',
-            '#36A2EB',
-            '#c9625b',
-            '#cf72fa',
-            '#f83d3d',
-            '#fa43cc',
-            '#ADD478',
-            '#fcc737',
-            '#ADD813',
-            '#36d4fc',
-            '#c92daf',
-            '#FF7890'
-        ];
-
-        for ($i = 1; $i <= 12; $i++) {
-            $month = date('F', mktime(0, 0, 0, $i, 1));
-            $count = 0;
-            foreach ($membersMonths as $member) {
-                if ($member->month == $i) {
-                    $count = $member->count;
-                    break;
-                }
-            }
-
-            array_push($labels, $month);
-            array_push($mydata, $count);
-        }
-
-        $datasets = [
-            [
-                'label' => "member join by month",
-                'data' => $mydata,
-                'backgroundColor' => $colors
-            ]
-        ];
-
-
-
-        $coursera_members = DB::table('coursera_members')
-            ->selectRaw('count(*) as total')
-            ->selectRaw("count(case when member_state = 'MEMBER' then 1 end) as members")
-            ->selectRaw("count(case when member_state = 'INVITED' then 1 end) as invites")
-            ->first();
-
-
-        $coursera_usages = DB::table('coursera_usages')
-            ->selectRaw('count(*) as total')
-            ->selectRaw("count(case when completed = 'Yes' then 1 end) as completed")
-            ->selectRaw("count(case when completed = 'No' then 1 end) as noCompleted")
-            ->first();
-
-
-
-        $specialisations = CourseraSpecialisation::where('specialization_completion_time', '<', now())->count();
-
-        $specialisationsCount = DB::table('coursera_specialisations')
-            ->select('specialisaton_name')->count();
-
-        $completedSpecialisations = CourseraSpecialisation::where('completed', 'Yes')->count();
-        $completedUsages = CourseraUsage::where('completed', 'Yes')->count();
-        $getCompletedUsages = CourseraUsage::where('completed', 'Yes')->paginate(25);
-        $uncompletedSpecialisations = CourseraSpecialisation::where('completed', 'NO')->count();
-        $uncompletedUsages = CourseraUsage::where('completed', 'NO')->count();
-        $deletedUsages = CourseraUsage::where('removed_from_program', 'Yes')->count();
-
-
-        $usagesEncourrs = DB::table('coursera_usages')
-            ->where('class_start_time', '<=', now())
-            ->where('class_end_time', '>=', now())->count();
-
-
-        return view('coursera.coursera_rapports', compact(
-            'datasets',
-            'labels',
-            "coursera_members",
-            "specialisationsCount",
-            "coursera_usages",
-            "specialisations",
-            "completedSpecialisations",
-            "uncompletedSpecialisations",
-            "deletedUsages",
-            "completedUsages",
-            "uncompletedUsages",
-            "getCompletedUsages"
-        ));
-    }
-
-
     public function showInCalendar(Request $request, $id)
     {
 
@@ -767,30 +675,41 @@ class ActiviteController extends Controller
         return response()->json($activities);
     }
 
-
     public function syncParticipant($id)
     {
         $activite = Activite::findOrFail($id);
 
-
+        // Récupérer les candidats ayant une présence
         $candidatsAvecPresence = Candidat::where('activite_id', $activite->id)
-            ->whereHas('presences')
+            ->whereHas('presence')
             ->get();
 
+        $updated = false;
 
         foreach ($candidatsAvecPresence as $candidat) {
-
-            if ($candidat->status == 'new') {
-                $candidat->status = 'accepted';
-                $candidat->save();
-
-                return redirect()->route('activite.show', $id)->with('success', 'Statut des candidats mis à jour');
-            }else {
-
-                return redirect()->route('activite.show', $id)->with('success', 'Statut sont deja à jour');
+            try {
+                // Si le statut est "new", on le change en "accept"
+                if ($candidat->status == '1') {
+                    $candidat->status = 'accept';
+                    $candidat->save();
+                    $updated = true;
+                }
+            } catch (\Exception $th) {
+                // Si une erreur survient, renvoyer une réponse JSON d'erreur
+                return response()->json([
+                    'success' => false,
+                    'message' => 'La mise à jour a échoué',
+                    'error' => $th->getMessage()
+                ], 500);
             }
         }
 
 
+
+        if ($updated) {
+            return redirect()->route('activites.show', $id)->with('success', 'Statut des candidats mis à jour');
+        } else {
+            return redirect()->route('activites.show', $id)->with('error', 'Les statuts sont déjà à jour');
+        }
     }
 }
