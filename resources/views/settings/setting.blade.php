@@ -131,11 +131,7 @@
                     <div class="flex justify-end mt-4 mb-4 text-white">
                         <button type="submit"
                             class="p-2 text-white bg-[#ff7322] hover:bg-[#ff7920] focus:bg-[#ff7910] disabled:opacity-50 rounded-md"
-                            data-modal-target="crud-modal" data-modal-toggle="crud-modal">Créer un
-
-
-
-                            rôle
+                            data-modal-target="crud-modal" data-modal-toggle="crud-modal">Créer un rôle
                         </button>
                     </div>
                     <table class="w-full text-sm text-left text-gray-500 rtl:text-right dark:text-gray-400">
@@ -194,7 +190,7 @@
                                         <div class="p-6 lg:w-3/5 xl:w-1/2 sm:p-12">
                                             <div class="flex flex-col items-center mt-12">
                                                  <div class="mb-8 text-center ">
-                                                     <h1 class="text-2xl font-semibold leading-tight text-gray-700">S'enregistrer</h1>
+                                                     <h1 class="text-2xl font-semibold leading-tight text-gray-700">Formulaire d'inscription</h1>
                                                  </div>
 
                                                 <div class="flex-1 w-full mt-8">
