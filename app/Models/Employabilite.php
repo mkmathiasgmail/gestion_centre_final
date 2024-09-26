@@ -37,15 +37,7 @@ class Employabilite extends Model
         return $this->belongsTo(TypeContrat::class);
     }
 
-    public function entreprise()
-    {
-        return $this->hasMany(Entreprise::class);
-    }
-
-    public function poste()
-    {
-        return $this->hasMany(Poste::class);
-    }
+    
 
 
 }

@@ -15,8 +15,8 @@ class TypeEventController extends Controller
     public function index()
     {
        $typEvent= TypeEvent::all();
-       return view('typEvents.index',compact("typEvent"));
-      
+       return view('settings.setting',compact("typEvent"));
+
     }
 
     /**
@@ -35,7 +35,7 @@ class TypeEventController extends Controller
         $typeEvent = TypeEvent::create([
             'code' => $request->code,
             'title' => $request->type,
-           
+
         ]);
 
         return redirect()->route('typevents.index', compact('typeEvent'));

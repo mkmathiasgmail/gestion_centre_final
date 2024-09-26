@@ -2,8 +2,9 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class CourseraUsage extends Model
 {
@@ -29,6 +30,11 @@ class CourseraUsage extends Model
         'course_grade',
         'course_certificate_url',
         'course_type',
+        'coursera_member_id'
         
     ];
+    public function member(): HasMany
+    {
+        return $this->hasMany(CourseraMember::class);
+    }
 }
