@@ -15,46 +15,50 @@
         <div
             class=" h-36  flex  items-center  p-1 w-full rounded-lg shadow-lg dark:shadow-lg dark:shadow-gray-500/20 backdrop-blur-xl bg-cover bg-[#fcdab40a] dark:bg-gray-800 dark:hover:bg-gray-700  hover:bg-[#f8f0e7] hover:scale-105 transition duration-700 ease-in-out border-l-8 border-[#ff9822] hover:border-l-10 ">
             <div>
-                <svg class="w-12 h-12 m-4 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
-                    width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
+                <svg class="w-12 h-12 m-4 text-gray-800 dark:text-white" aria-hidden="true"
+                    xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor"
+                    viewBox="0 0 24 24">
                     <path
                         d="M13.5 2c-.178 0-.356.013-.492.022l-.074.005a1 1 0 0 0-.934.998V11a1 1 0 0 0 1 1h7.975a1 1 0 0 0 .998-.934l.005-.074A7.04 7.04 0 0 0 22 10.5 8.5 8.5 0 0 0 13.5 2Z" />
                     <path d="M11 6.025a1 1 0 0 0-1.065-.998 8.5 8.5 0 1 0 9.038 9.039A1 1 0 0 0 17.975 13H11V6.025Z" />
                 </svg>
 
             </div>
-            <div>
-                <h3 class="text-sm font-semibold text-gray-800 dark:text-gray-200 ">
-                    Membres coursera : <span id="count" class="text-[#fcdf3f]">{{$coursera_members->total}}
+            <button data-modal-target="default-modal-member" data-modal-toggle="default-modal-member" type="button">
+                <div>
+                    <h3 class="text-sm font-semibold text-gray-800 dark:text-gray-200 ">
+                        Membres coursera : <span id="count" class="text-[#fcdf3f]">{{ $coursera_members->total }}
                         </span>
-                </h3>
-                <p class="text-sm font-normal text-gray-400 dark:text-gray-400">
-                    nombre des personnes participant aux formations coursera.</p>
-            </div>
+                    </h3>
+                    <p class="text-sm font-normal text-gray-400 dark:text-gray-400">
+                        nombre des personnes participant aux formations coursera.</p>
+                </div>
+            </button>
         </div>
         <div
-            class=" flex p-2 h-36 w-full items-center  rounded-lg shadow-lg  dark:shadow-gray-500/20 backdrop-blur-xl bg-[#fcdab40a] dark:bg-gray-800 dark:hover:bg-gray-700  hover:scale-105 transition duration-700 ease-in-out hover:bg-[#f8f0e7] hover:text-black border-l-8 border-[#ff9822] hover:border-l-10 ">
-
+            class=" h-36  flex  items-center  p-1 w-full rounded-lg shadow-lg dark:shadow-lg dark:shadow-gray-500/20 backdrop-blur-xl bg-cover bg-[#fcdab40a] dark:bg-gray-800 dark:hover:bg-gray-700  hover:bg-[#f8f0e7] hover:scale-105 transition duration-700 ease-in-out border-l-8 border-[#ff9822] hover:border-l-10 ">
             <div>
                 <svg class="w-12 h-12 m-4 text-gray-800 dark:text-white" aria-hidden="true"
                     xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor"
                     viewBox="0 0 24 24">
-                    <path fill-rule="evenodd"
-                        d="M5.617 2.076a1 1 0 0 1 1.09.217L8 3.586l1.293-1.293a1 1 0 0 1 1.414 0L12 3.586l1.293-1.293a1 1 0 0 1 1.414 0L16 3.586l1.293-1.293A1 1 0 0 1 19 3v18a1 1 0 0 1-1.707.707L16 20.414l-1.293 1.293a1 1 0 0 1-1.414 0L12 20.414l-1.293 1.293a1 1 0 0 1-1.414 0L8 20.414l-1.293 1.293A1 1 0 0 1 5 21V3a1 1 0 0 1 .617-.924ZM9 7a1 1 0 0 0 0 2h6a1 1 0 1 0 0-2H9Zm0 4a1 1 0 1 0 0 2h6a1 1 0 1 0 0-2H9Zm0 4a1 1 0 1 0 0 2h6a1 1 0 1 0 0-2H9Z"
-                        clip-rule="evenodd" />
+                    <path
+                        d="M13.5 2c-.178 0-.356.013-.492.022l-.074.005a1 1 0 0 0-.934.998V11a1 1 0 0 0 1 1h7.975a1 1 0 0 0 .998-.934l.005-.074A7.04 7.04 0 0 0 22 10.5 8.5 8.5 0 0 0 13.5 2Z" />
+                    <path d="M11 6.025a1 1 0 0 0-1.065-.998 8.5 8.5 0 1 0 9.038 9.039A1 1 0 0 0 17.975 13H11V6.025Z" />
                 </svg>
 
             </div>
-            <div>
-                <h3 class="text-sm font-semibold text-gray-800 dark:text-gray-200">
-                    Total des specialisations : <span class="text-[#fcdf3f]">{{$specialisationsCount}}
+            <button data-modal-target="default-modal-specialite" data-modal-toggle="default-modal-specialite"
+                type="button">
+                <div>
+                    <h3 class="text-sm font-semibold text-gray-800 dark:text-gray-200 ">
+                        Nombre de specialité coursera : <span id="count"
+                            class="text-[#fcdf3f]">{{ $specialisationsCount }}
                         </span>
-                </h3>
-                <p class="text-sm font-normal text-gray-400 dark:text-gray-400">
-                    nombre des spécialisations disponible sur coursera.
-                </p>
-            </div>
-
+                    </h3>
+                    <p class="text-sm font-normal text-gray-400 dark:text-gray-400">
+                        nombre des specialité contenue dans le programme coursera.</p>
+                </div>
+            </button>
         </div>
         <div
             class="rounded-xl flex gap-1 items-center  p-2 h-36 w-full shadow-lg dark:shadow-lg dark:shadow-gray-500/20 backdrop-blur-xl bg-cover bg-[#fcdab40a] dark:bg-gray-800 dark:hover:bg-gray-700   hover:bg-[#f8f0e7]  hover:scale-105 transition duration-700 ease-in-out border-l-8 border-[#ff9822] hover:border-l-10 ">
@@ -69,15 +73,16 @@
                 </svg>
 
             </div>
-            <div class="">
-                <h3 class="text-sm font-semibold text-gray-800 dark:text-gray-200">
-                    Nombre total des cours sur coursera : <span id="count"
-                        class="text-[#fcdf3f]">{{$coursera_usages->total}}</span>
-                </h3>
-                <p class="text-sm font-normal text-gray-400 dark:text-gray-400">
-                    nombre de cours accessibles sur coursera.</p>
-            </div>
-
+            <a href="">
+                <div class="">
+                    <h3 class="text-sm font-semibold text-gray-800 dark:text-gray-200">
+                        Nombre total des cours sur coursera : <span id="count"
+                            class="text-[#fcdf3f]">{{ $coursera_usages->total }}</span>
+                    </h3>
+                    <p class="text-sm font-normal text-gray-400 dark:text-gray-400">
+                        nombre de cours accessibles sur coursera.</p>
+                </div>
+            </a>
         </div>
     </section>
     @section('modal')
@@ -117,10 +122,10 @@
                                         Email
                                     </th>
 
-                                    <th scope="col" class="px-6 py-3">cours</th>
+                                    <th scope="col" class="px-6 py-3">Cours</th>
 
                                     <th scope="col" class="px-6 py-3">
-                                        université
+                                        Université
                                     </th>
                                 </tr>
                             </thead>
@@ -128,7 +133,7 @@
                                 @foreach ($licence_en_cours as $licence)
                                     <tr>
                                         <td class="px-6 py-4">
-                                            {{$licence->name}}
+                                            {{ $licence->name }}
                                         </td>
                                         <td class="px-6 py-4">
                                             {{ $licence->email }}
@@ -136,7 +141,7 @@
                                         </td>
 
                                         <td class="px-6 py-4">
-                                            {{ $licence->course }} 
+                                            {{ $licence->course }}
                                         </td>
 
                                         <td class="px-6 py-4">{{ $licence->university }}</td>
@@ -147,7 +152,7 @@
                     </div>
                     <!-- Modal footer -->
                     <div class="flex items-center p-4 md:p-5 border-t border-gray-200 rounded-b dark:border-gray-600">
-                        <a href="{{ route('licencesCoursera')}}" data-modal-hide="default-modal" type="button"
+                        <a href="{{ route('licencesCoursera') }}" data-modal-hide="default-modal" type="button"
                             class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-transparent bg-[#FF7322] text-white hover:bg-[#FF6822] focus:outline-none focus:bg-[#FF6822] disabled:opacity-50 disabled:pointer-events-none">
                             Exporte en Excel</a>
                         <button data-modal-hide="default-modal" type="button"
@@ -175,8 +180,8 @@
                             data-modal-hide="default-modal">
                             <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
                                 viewBox="0 0 14 14">
-                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
+                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                    stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
                             </svg>
                             <span class="sr-only">Close modal</span>
                         </button>
@@ -195,10 +200,10 @@
                                         Email
                                     </th>
 
-                                    <th scope="col" class="px-6 py-3">cours</th>
+                                    <th scope="col" class="px-6 py-3">Cours</th>
 
                                     <th scope="col" class="px-6 py-3">
-                                        université
+                                        Université
                                     </th>
                                 </tr>
                             </thead>
@@ -225,7 +230,7 @@
                     </div>
                     <!-- Modal footer -->
                     <div class="flex items-center p-4 md:p-5 border-t border-gray-200 rounded-b dark:border-gray-600">
-                        <a href="{{route('certificatscursera')}}" data-modal-hide="default-modal" type="button"
+                        <a href="{{ route('certificatscursera') }}" data-modal-hide="default-modal" type="button"
                             class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-transparent bg-[#FF7322] text-white hover:bg-[#FF6822] focus:outline-none focus:bg-[#FF6822] disabled:opacity-50 disabled:pointer-events-none">
                             Exporte en Excel</a>
                         <button data-modal-hide="default-modal" type="button"
@@ -251,8 +256,8 @@
                             data-modal-hide="default-modal">
                             <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
                                 viewBox="0 0 14 14">
-                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
+                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                    stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
                             </svg>
                             <span class="sr-only">Close modal</span>
                         </button>
@@ -272,10 +277,10 @@
                                         Email
                                     </th>
 
-                                    <th scope="col" class="px-6 py-3">cours</th>
+                                    <th scope="col" class="px-6 py-3">Cours</th>
 
                                     <th scope="col" class="px-6 py-3">
-                                        université
+                                        Université
                                     </th>
                                 </tr>
                             </thead>
@@ -303,7 +308,7 @@
                     </div>
                     <!-- Modal footer -->
                     <div class="flex items-center p-4 md:p-5 border-t border-gray-200 rounded-b dark:border-gray-600">
-                        <a href="{{route('membre_30days')}}" data-modal-hide="default-modal" type="button"
+                        <a href="{{ route('membre_30days') }}" data-modal-hide="default-modal" type="button"
                             class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-transparent bg-[#FF7322] text-white hover:bg-[#FF6822] focus:outline-none focus:bg-[#FF6822] disabled:opacity-50 disabled:pointer-events-none">
                             Exporte en Excel</a>
                         <button data-modal-hide="default-modal" type="button"
@@ -342,24 +347,24 @@
                             style="width:100%">
                             <thead>
                                 <tr>
-                                     <th scope="col" class="px-6 py-3">
+                                    <th scope="col" class="px-6 py-3">
                                         Nom
                                     </th>
                                     <th scope="col" class="px-6 py-3">
                                         Email
                                     </th>
 
-                                    <th scope="col" class="px-6 py-3">cours</th>
+                                    <th scope="col" class="px-6 py-3">Cours</th>
 
                                     <th scope="col" class="px-6 py-3">
-                                        université
+                                        Université
                                     </th>
                                 </tr>
                             </thead>
                             <tbody>
                                 @foreach ($non_inscrit_cours as $inscrit)
                                     <tr>
-                                         <td class="px-6 py-4">
+                                        <td class="px-6 py-4">
                                             {{ $inscrit->name }}
 
                                         </td>
@@ -381,7 +386,7 @@
                     </div>
                     <!-- Modal footer -->
                     <div class="flex items-center p-4 md:p-5 border-t border-gray-200 rounded-b dark:border-gray-600">
-                        <a href="{{route('non_inscrit_coursera')}}" data-modal-hide="default-modal" type="button"
+                        <a href="{{ route('non_inscrit_coursera') }}" data-modal-hide="default-modal" type="button"
                             class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-transparent bg-[#FF7322] text-white hover:bg-[#FF6822] focus:outline-none focus:bg-[#FF6822] disabled:opacity-50 disabled:pointer-events-none">
                             Exporte en Excel</a>
                         <button data-modal-hide="default-modal" type="button"
@@ -400,7 +405,7 @@
                     <!-- Modal header -->
                     <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
                         <h3 class="text-xl font-semibold text-gray-900 dark:text-white">
-                            Nombre des membres inactifs dépuis le 1er septembre 
+                            Nombre des membres inactifs dépuis le 1er septembre
                         </h3>
                         <button type="button"
                             class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
@@ -420,7 +425,7 @@
                             style="width:100%">
                             <thead>
                                 <tr>
-                                     <th scope="col" class="px-6 py-3">
+                                    <th scope="col" class="px-6 py-3">
                                         Nom
                                     </th>
                                     <th scope="col" class="px-6 py-3">
@@ -458,7 +463,7 @@
                     </div>
                     <!-- Modal footer -->
                     <div class="flex items-center p-4 md:p-5 border-t border-gray-200 rounded-b dark:border-gray-600">
-                        <a href="{{route('last_activity')}}" data-modal-hide="default-modal" type="button"
+                        <a href="{{ route('last_activity') }}" data-modal-hide="default-modal" type="button"
                             class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-transparent bg-[#FF7322] text-white hover:bg-[#FF6822] focus:outline-none focus:bg-[#FF6822] disabled:opacity-50 disabled:pointer-events-none">
                             Exporte en Excel</a>
                         <button data-modal-hide="default-modal" type="button"
@@ -514,7 +519,7 @@
                             <tbody>
                                 @foreach ($taux_utilisation as $member)
                                     <tr>
-                                         <td class="px-6 py-4">
+                                        <td class="px-6 py-4">
                                             {{ $member->name }}
                                         </td>
                                         <td class="px-6 py-4">
@@ -533,12 +538,154 @@
                     </div>
                     <!-- Modal footer -->
                     <div class="flex items-center p-4 md:p-5 border-t border-gray-200 rounded-b dark:border-gray-600">
-                        <a href="{{route('taux_utilisation')}}" data-modal-hide="default-modal" type="button"
+                        <a href="{{ route('taux_utilisation') }}" data-modal-hide="default-modal" type="button"
                             class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-transparent bg-[#FF7322] text-white hover:bg-[#FF6822] focus:outline-none focus:bg-[#FF6822] disabled:opacity-50 disabled:pointer-events-none">
                             Experte en Excel</a>
                         <button data-modal-hide="default-modal" type="button"
                             class="py-2.5 px-5 ms-3 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">Decline</button>
                     </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main modal memebres coursera-->
+        <div id="default-modal-specialite" dark:text-gray-300
+            class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
+            <div class="relative p-4 w-full max-w-xl lg:max-w-6xl xl:max-w-7xl max-h-full">
+                <!-- Modal content -->
+                <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
+                    <!-- Modal header -->
+                    <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
+                        <h3 class="text-xl font-semibold text-gray-900 dark:text-white">
+                            Membres du programme coursera
+                        </h3>
+                        <button type="button"
+                            class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
+                            data-modal-hide="default-modal">
+                            <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
+                                viewBox="0 0 14 14">
+                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                    stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
+                            </svg>
+                            <span class="sr-only">Close modal</span>
+                        </button>
+                    </div>
+                    <!-- Modal body -->
+                    <div class="relative overflow-x-auto">
+                        <table id="mytable_member"
+                            class="display nowrap w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-300"
+                            style="width:100%">
+                            <thead>
+                                <tr>
+                                    <th scope="col" class="px-6 py-3">
+                                        Specialisation
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach ($allSpecialisations as $specialite)
+                                    <tr>
+                                        <td class="px-6 py-4">
+                                            {{ $specialite->specialisaton }}
+                                        </td>                                       
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
+                    <!-- Modal footer -->
+                </div>
+            </div>
+        </div>
+
+                <!-- Main modal memebres coursera-->
+        <div id="default-modal-member" dark:text-gray-300
+            class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
+            <div class="relative p-4 w-full max-w-xl lg:max-w-6xl xl:max-w-7xl max-h-full">
+                <!-- Modal content -->
+                <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
+                    <!-- Modal header -->
+                    <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
+                        <h3 class="text-xl font-semibold text-gray-900 dark:text-white">
+                            Membres du programme coursera
+                        </h3>
+                        <button type="button"
+                            class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
+                            data-modal-hide="default-modal">
+                            <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
+                                viewBox="0 0 14 14">
+                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                    stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
+                            </svg>
+                            <span class="sr-only">Close modal</span>
+                        </button>
+                    </div>
+                    <!-- Modal body -->
+                    <div class="relative overflow-x-auto">
+                        <table id="mytable_specialite"
+                            class="display nowrap w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-300"
+                            style="width:100%">
+                            <thead>
+                                <tr>
+                                    <th scope="col" class="px-6 py-3">
+                                        Name
+                                    </th>
+                                    <th scope="col" class="px-6 py-3">
+                                        Email
+                                    </th>
+                                    <th scope="col" class="px-6 py-3">
+                                        External Id
+                                    </th>
+                                    <th scope="col" class="px-6 py-3">
+                                        Program Slug
+                                    </th>
+                                    <th scope="col" class="px-6 py-3">
+                                        Enrolled Courses
+                                    </th>
+                                    <th scope="col" class="px-6 py-3">
+                                        Completed Courses
+                                    </th>
+                                    <th scope="col" class="px-6 py-3">
+                                        Member State
+                                    </th>
+                                    <th scope="col" class="px-6 py-3">
+                                        Join Date
+                                    </th>
+                                    <th scope="col" class="px-6 py-3">
+                                        Invitation Date
+                                    </th>
+                                    <th scope="col" class="px-6 py-3">
+                                        Latest Program Activity Date
+                                    </th>
+
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach ($allMembers as $member)
+                                    <tr>
+                                        <td class="px-6 py-4">
+                                            {{ $member->name }}
+                                        </td>
+                                        <td class="px-6 py-4">
+                                            {{ $member->email }}
+                                        </td>
+                                        <td class="px-6 py-4">{{ $member->external_id }}
+                                        </td>
+                                        </td>
+                                        <td class="px-6 py-4">{{ $member->enrolled_courses }}
+                                        </td>
+                                        <td class="px-6 py-4">{{ $member->enrolled_courses }}</td>
+                                        <td class="px-6 py-4">{{ $member->completed_courses }}</td>
+                                        <td class="px-6 py-4">{{ $member->member_state }}</td>
+                                        <td class="px-6 py-4">{{ $member->join_date }}</td>
+                                        <td class="px-6 py-4">{{ $member->invitation_date }}</td>
+                                        <td class="px-6 py-4">{{ $member->latest_program_activity_date }}</td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
+                    <!-- Modal footer -->
                 </div>
             </div>
         </div>
@@ -553,7 +700,7 @@
                     <a href="{{ route('import.specialisations') }}" class=" flex items-center">
                         {{-- <span class="text-gray-800 lg:text-sm  dark:text-gray-200"></span> --}}
                         <button type="button"
-                            class="text-white-700 hover:text-blue border border-blue-700 hover:bg-blue-800 focus:ring-4 
+                            class="text-white-700 hover:text-white border border-blue-700 hover:bg-blue-800 focus:ring-4 
                         focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2 dark:border-blue-500 dark:text-blue-500 dark:hover:text-white dark:hover:bg-blue-500 dark:focus:ring-blue-800">import
                             specialisation csv</button>
                     </a>
@@ -597,7 +744,7 @@
                                 <p href=""
                                     class="text-xs font-normal text-gray-800 lg:text-sm  dark:text-gray-400">
                                     Nombre de licences en cours d'utilisation : <span
-                                        class="text-[#36d4fc]">{{ $licence_en_cours_count}}</span>
+                                        class="text-[#36d4fc]">{{ $licence_en_cours_count }}</span>
                                 </p>
                             </div>
                         </div>
@@ -638,8 +785,8 @@
                             <div>
                                 <p href=""
                                     class="text-xs font-normal text-gray-800 lg:text-sm  dark:text-gray-400">
-                                    Nombres des personnes invitées depuis plus de 7 jours <br> et ne sont inscrit à aucun cours : <span
-                                        class="text-[#36d4fc]">{{ $non_inscrit_cours_count }}</span>
+                                    Nombres des personnes invitées depuis plus de 7 jours <br> et ne sont inscrit à
+                                    aucun cours : <span class="text-[#36d4fc]">{{ $non_inscrit_cours_count }}</span>
                                 </p>
                             </div>
                         </div>
@@ -673,25 +820,9 @@
                             </div>
                         </div>
                     </button>
-
-
-                    <button data-modal-target="default-modal7" data-modal-toggle="default-modal7" class="block"
-                        type="button">
-                        <div
-                            class=" h-16 flex shadow-lg dark:shadow-lg dark:shadow-gray-500/20   w-full gap-1 items-center p-2 mb-2 rounded-xl bg-[#fcdab40a] dark:bg-gray-800 dark:hover:bg-gray-600 hover:bg-[#f8f0e7] hover:scale-105 transition duration-700 ease-in-out">
-                            <div>
-                                <p href=""
-                                    class="text-xs font-normal text-gray-800 lg:text-sm  dark:text-gray-400">
-                                    Total des specialisations : <span
-                                        class="text-[#36d4fc]">{{ $specialisationsCount }}</span>
-                                </p>
-                            </div>
-                        </div>
-                    </button>
                 </div>
             </div>
         </div>
-
 
 
     </section>
@@ -739,7 +870,6 @@
 
             $(document).ready(function() {
                 $('#mytable3').DataTable({
-                    "scrollX": true,
                     "fixedColumns": {
                         "start": 3
                     }
@@ -780,6 +910,22 @@
                     }
                 });
             });
+            $(document).ready(function() {
+                $('#mytable_member').DataTable({
+                    "scrollX": true,
+                    "fixedColumns": {
+                        "start": 3
+                    }
+                })
+            });
+            $(document).ready(function() {
+                $('#mytable_specialite').DataTable({
+                    "scrollX": true,
+                    "fixedColumns": {
+                        "start": 3
+                    }
+                })
+            })
         </script>
 
         <script>

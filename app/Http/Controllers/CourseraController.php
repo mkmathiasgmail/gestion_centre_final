@@ -73,6 +73,7 @@ class CourseraController extends Controller
 
         $acceptInvitation = CourseraMember::where('member_state', 'MEMBER')->get();
         $noAcceptInvitation = CourseraMember::where('member_state', 'INVITED')->get();
+        $allMembers = CourseraMember::all();
 
         //USAGES__________________________________________________
         $coursera_usages = DB::table('coursera_usages')
@@ -88,13 +89,15 @@ class CourseraController extends Controller
             'coursera_usages.course_slug',
         ])->where('completed', 'Yes')->get();
         $uncompletedUsages = CourseraUsage::where('completed', 'NO')->get();
-        $deletedUsages = CourseraUsage::where('removed_from_program', 'Yes')->count();
-
+        $allUsages = CourseraUsage:: all();
 
         //Specialisation__________________________________________
-
+        $allSpecialisations = CourseraSpecialisation::select('specialisaton') // Remplacez par le nom de la colonne que vous souhaitez
+        ->distinct()
+        ->get();
         $specialisationsCount = DB::table('coursera_specialisations')
-            ->select('specialisaton_name')->count();
+        ->distinct()
+        ->count('specialisaton');
 
         $completedSpecialisations = CourseraSpecialisation::where('completed', 'Yes')->count();
 
@@ -163,7 +166,6 @@ class CourseraController extends Controller
             "coursera_usages",
             "completedSpecialisations",
             "uncompletedSpecialisations",
-            "deletedUsages",
             "uncompletedUsages",
             "getCompletedUsages",
             "licence_en_cours",
@@ -178,7 +180,10 @@ class CourseraController extends Controller
             "last_activity_count",
             "taux_utilisation",
             "taux_count",
-            "taux"
+            "taux",
+            "allMembers",
+            "allUsages",
+            "allSpecialisations"
         ));
     }
     public function licence_encours()
