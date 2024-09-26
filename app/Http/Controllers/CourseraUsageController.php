@@ -73,7 +73,7 @@ class CourseraUsageController extends Controller
             $memberId = CourseraMember::where('email', $email)->value('id');
 
             // Extraire les autres données du CSV
-            $course_name = $column[3];
+            $course = $column[3];
             $course_id = $column[4];
             $course_slug = $column[5];
             $university = $column[6];
@@ -95,9 +95,10 @@ class CourseraUsageController extends Controller
             $course_type = $column[22];
 
             // Insérer dans la table CourseraUsage
-            $check = CourseraUsage::Create([
+            $check = CourseraUsage::updateOrCreate(['email' => $email, 'course_id'=>$course_id], [
+
                 "email" => $email,
-                'course' => $course_name,
+                'course' => $course,
                 'course_id' => $course_id,
                 'course_slug' => $course_slug,
                 'university' => $university,
@@ -113,7 +114,8 @@ class CourseraUsageController extends Controller
                 'completion_time' => Carbon::parse($completion_time),
                 'course_grade' => $course_grade,
                 'course_certificate_url' => $course_certificate_url,
-                'coursera_member_id' => $memberId // Ajouter l'ID du membre ici
+                'coursera_member_id' => $memberId, // Ajouter l'ID du membre ici
+                'course_type'=>$course_type,
             ]);
         }
     }
