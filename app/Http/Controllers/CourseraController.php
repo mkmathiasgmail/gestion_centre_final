@@ -99,6 +99,15 @@ class CourseraController extends Controller
         ->distinct()
         ->count('specialisaton');
 
+         $getcompleteSpecialisation=CourseraSpecialisation::leftJoin('coursera_members', 'coursera_members.id', '=', 'coursera_specialisations.coursera_member_id')->select([
+            'coursera_members.name',
+            'coursera_members.email',
+            'coursera_specialisations.specialisaton',
+            'coursera_specialisations.university',
+            'coursera_specialisations.last_specialisation_activity',
+            'coursera_specialisations.completed',
+         ])->where('completed', 'Yes')->get();
+
         $completedSpecialisations = CourseraSpecialisation::where('completed', 'Yes')->count();
 
         $uncompletedSpecialisations = CourseraSpecialisation::where('completed', 'NO')->count();
@@ -183,7 +192,8 @@ class CourseraController extends Controller
             "taux",
             "allMembers",
             "allUsages",
-            "allSpecialisations"
+            "allSpecialisations",
+            "getcompleteSpecialisation"
         ));
     }
     public function licence_encours()

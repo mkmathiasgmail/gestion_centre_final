@@ -689,6 +689,81 @@
                 </div>
             </div>
         </div>
+         <!-- Main modal specialisation obtenues-->
+        <div id="default-modal-obtenue" dark:text-gray-300
+            class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
+            <div class="relative p-4 w-full max-w-xl lg:max-w-6xl xl:max-w-7xl max-h-full">
+                <!-- Modal content -->
+                <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
+                    <!-- Modal header -->
+                    <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
+                        <h3 class="text-xl font-semibold text-gray-900 dark:text-white">
+                            Membres du programme coursera
+                        </h3>
+                        <button type="button"
+                            class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
+                            data-modal-hide="default-modal">
+                            <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
+                                viewBox="0 0 14 14">
+                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                    stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
+                            </svg>
+                            <span class="sr-only">Close modal</span>
+                        </button>
+                    </div>
+                    <!-- Modal body -->
+                    <div class="relative overflow-x-auto">
+                        <table id="mytable_obtenue"
+                            class="display nowrap w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-300"
+                            style="width:100%">
+                            <thead>
+                                <tr>
+                                    <th scope="col" class="px-6 py-3">
+                                        Name
+                                    </th>
+                                    <th scope="col" class="px-6 py-3">
+                                        Email
+                                    </th>
+                                    <th scope="col" class="px-6 py-3">
+                                        Specialisation
+                                    </th>
+                                    <th scope="col" class="px-6 py-3">
+                                        Université
+                                    </th>
+                                    <th scope="col" class="px-6 py-3">
+                                        Specialisation Complete
+                                    </th>
+                                    <th scope="col" class="px-6 py-3">
+                                        Latest Program Activity Date
+                                    </th>
+
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach ($getcompleteSpecialisation as $completeSpec)
+                                    <tr>
+                                        <td class="px-6 py-4">
+                                            {{ $completeSpec->name }}
+                                        </td>
+                                        <td class="px-6 py-4">
+                                            {{ $completeSpec->email }}
+                                        </td>
+                                        <td class="px-6 py-4">{{ $completeSpec->specialisaton }}
+                                        </td>
+                                        </td>
+                                        <td class="px-6 py-4">{{ $completeSpec->university }}
+                                        </td>
+                                        <td class="px-6 py-4">{{ $completeSpec->completed }}</td>
+                                        <td class="px-6 py-4">{{ $completeSpec->last_specialisation_activity }}</td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
+                    <!-- Modal footer -->
+                </div>
+            </div>
+        </div>
     @endsection
 
 
@@ -773,6 +848,19 @@
                                     class="text-xs font-normal text-gray-800 lg:text-sm  dark:text-gray-400">
                                     Nombres des personnes membres depuis 30 jours <br> et n'ont pas de certificat: <span
                                         class="text-[#36d4fc]">{{ $apprenants_30day_count }}</span>
+                                </p>
+                            </div>
+                        </div>
+                    </button>
+                     <button data-modal-target="default-modal-obtenue" data-modal-toggle="default-modal-obtenue" class="block"
+                        type="button">
+                        <div
+                            class=" h-16 flex shadow-lg dark:shadow-lg dark:shadow-gray-500/20   w-full gap-1 items-center p-2 mb-2 rounded-xl bg-[#fcdab40a] dark:bg-gray-800 dark:hover:bg-gray-600 hover:bg-[#f8f0e7] hover:scale-105 transition duration-700 ease-in-out">
+                            <div>
+                                <p href=""
+                                    class="text-xs font-normal text-gray-800 lg:text-sm  dark:text-gray-400">
+                                    Nombres de ceux qui ont obtenues leurs Specialisations <span
+                                        class="text-[#36d4fc]">{{ $completedSpecialisations }}</span>
                                 </p>
                             </div>
                         </div>
@@ -925,7 +1013,15 @@
                         "start": 3
                     }
                 })
-            })
+            });
+            $(document).ready(function() {
+                $('#mytable_obtenue').DataTable({
+                    "scrollX": true,
+                    "fixedColumns": {
+                        "start": 3
+                    }
+                })
+            });
         </script>
 
         <script>
