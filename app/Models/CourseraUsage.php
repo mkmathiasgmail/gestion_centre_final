@@ -13,7 +13,7 @@ class CourseraUsage extends Model
     protected $fillable = [     
 
         'email',
-        'course_name',
+        'course',
         'course_id',
         'course_slug',
         'university',
