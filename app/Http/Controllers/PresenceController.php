@@ -129,6 +129,7 @@ class PresenceController extends Controller
                         'candidat_id' => $createdCandidat->id,
                         'date' => $date
                     ]);
+                    session(['confirmation_access' => true]);
                     return view('presences.confirmation');
                 } else {
                     return redirect('activitencours')->with('error', 'Votre presence pour cette journée existe déjà');
@@ -144,6 +145,7 @@ class PresenceController extends Controller
                     'candidat_id' => $candidat->id,
                     'date' => $date
                 ]);
+                session(['confirmation_access' => true]);
                 return view('presences.confirmation');
             } else {
                 return redirect('activitencours')->with('error', 'Votre presence pour cette journée existe déjà');
@@ -170,14 +172,11 @@ class PresenceController extends Controller
             'first_name' => 'required|string',
             'last_name' => 'required|string',
             'email' => 'required|string|email|unique:odcusers,email',
-            'password' => 'required|string|min:8|confirmed',
             'activite' => 'required|exists:activites,id'
         ], [
             'first_name.required' => 'Le prénom est obligatoire.',
             'last_name.required' => 'Veuillez renseigner le nom.',
             'email.unique' => 'Cette adresse est déjà prise !',
-            'password.min' => 'Le mot de passe doit contenir au moins 8 caractères.',
-            'password.confirmed' => 'Les mots de passe doivent correspondre !',
         ]);
 
         // Create or update ODC user
@@ -185,7 +184,6 @@ class PresenceController extends Controller
             'first_name' => $validated['first_name'],
             'last_name' => $validated['last_name'],
             'email' => $validated['email'],
-            'password' => bcrypt($validated['password']),
         ]);
 
         // Create candidat
@@ -221,14 +219,13 @@ class PresenceController extends Controller
 
         return view('presences.securite', compact('activites'));
     }
-    public function searchQuery(Request $request, $activite_id)
-    {
-        $data = Odcuser::select("email")
-            ->join("candidats", "candidats.odcuser_id", "=", "odcusers.id")
-            ->where("candidats.activite_id", $activite_id)
-            ->where("email", "LIKE", "%{$request->input('query')}%")
-            ->take(10)
-            ->get();
-        return response()->json($data);
+    public function confirmation(){
+        if (!session('enregistrement_complet')) {
+            return redirect()->route('activitencours');
+        }
+        session()->forget('confirmation_access');
+
+        return view('presences.confirmation');
     }
+    
 }

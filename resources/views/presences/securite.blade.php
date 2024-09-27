@@ -4,8 +4,10 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Laravel</title>
+    <title>page de la securité</title>
     <!-- Fonts -->
+   <link rel="shortcut icon" href="{{ asset('img/orange.webp') }}" type="image/x-icon">
+
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=figtree:400,600&display=swap" rel="stylesheet" />
     @vite(['resources/css/app.css', 'resources/js/app.js'])
@@ -21,7 +23,7 @@
         </a>
     </nav>
     <div class="mt-14 p-5">
-        <h1 class ="mb-4 text-4xl font-extrabold tracking-tight leading-none md:text-5xl lg:text-6xl dark:text-white">
+        <h1 class ="mb-4 text-4xl text-center font-extrabold tracking-tight leading-none md:text-5xl lg:text-6xl dark:text-white">
             Bienvenue à la page d'accueil</h1>
     </div>
     @if ($errors->any())
