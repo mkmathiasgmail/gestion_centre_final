@@ -64,16 +64,15 @@ class CourseraController extends Controller
         ];
 
 
-        //MEMBERS___________________________________________
-        $coursera_members = DB::table('coursera_members')
-            ->selectRaw('count(*) as total')
-            ->selectRaw("count(case when member_state = 'MEMBER' then 1 end) as members")
-            ->selectRaw("count(case when member_state = 'INVITED' then 1 end) as invites")
-            ->first();
-
         $acceptInvitation = CourseraMember::where('member_state', 'MEMBER')->get();
         $noAcceptInvitation = CourseraMember::where('member_state', 'INVITED')->get();
+        $noAcceptInvitation_cout = $noAcceptInvitation->count();
+        $acceptInvitation_count = $acceptInvitation->count();
         $allMembers = CourseraMember::all();
+       
+        //$membersKinshasa = $allMembers->where('external_id', 'REGEXP', '^1\d*');
+ 
+        $coursera_members = $allMembers->count();
 
         //USAGES__________________________________________________
         $coursera_usages = DB::table('coursera_usages')
@@ -90,14 +89,14 @@ class CourseraController extends Controller
         ])->where('completed', 'Yes')->get();
         $uncompletedUsages = CourseraUsage::where('completed', 'NO')->get();
         $allUsages = CourseraUsage:: all();
+        
+
 
         //Specialisation__________________________________________
         $allSpecialisations = CourseraSpecialisation::select('specialisaton') // Remplacez par le nom de la colonne que vous souhaitez
         ->distinct()
         ->get();
-        $specialisationsCount = DB::table('coursera_specialisations')
-        ->distinct()
-        ->count('specialisaton');
+        $specialisationsCount = $allSpecialisations->count();
 
          $getcompleteSpecialisation=CourseraSpecialisation::leftJoin('coursera_members', 'coursera_members.id', '=', 'coursera_specialisations.coursera_member_id')->select([
             'coursera_members.name',
@@ -114,8 +113,29 @@ class CourseraController extends Controller
 
         $licence_en_cours = CourseraUsage::leftJoin('coursera_members as cm', 'cm.id', '=', 'coursera_usages.coursera_member_id')
             ->where('coursera_usages.removed_from_program', 'Yes')
-            ->select('cm.email', 'cm.name', 'coursera_usages.course', 'coursera_usages.course_slug', 'coursera_usages.university')
+            ->select('cm.email', 'cm.name', 'coursera_usages.course', 'coursera_usages.course_slug', 'coursera_usages.university', 'cm.external_id')
             ->get();
+
+        //dd($licence_en_cours);
+
+        $membersKinEnCours = $licence_en_cours->filter(function ($member) {
+            return preg_match('/^1\d*/', $member->external_id);
+        });
+        
+
+        $membersLubEnCours = $licence_en_cours->filter(function ($member) {
+            return preg_match('/^2\d*/', $member->external_id);
+        });
+
+        $membersKanEnCours = $licence_en_cours->filter(function ($member) {
+            return preg_match('/^4\d*/', $member->external_id);
+        });
+
+        $membersMatEnCours = $licence_en_cours->filter(function ($member) {
+            return preg_match('/^3\d*/', $member->external_id);
+        });
+        
+        // dd($membersKanEnCours);
 
         $licence_en_cours_count = $licence_en_cours->count();
 
@@ -165,6 +185,24 @@ class CourseraController extends Controller
             ->get();
         $taux_count = $taux_utilisation->count();
         $taux = ($taux_count * 100) / 125;
+
+
+        $membersKinshasa = CourseraMember::where('external_id', 'REGEXP', '^1\d*')
+        ->get();
+
+        $membersLubumbashi = CourseraMember::where('external_id', 'REGEXP', '^2\d*')
+        ->get();
+
+        $membersMatadi = CourseraMember::where('external_id', 'REGEXP', '^3\d*')
+        ->get();
+
+        $membersKananga = CourseraMember::where('external_id', 'REGEXP', '^3\d*')
+        ->get();
+
+        $resultats = CourseraMember::selectRaw("SUBSTRING(external_id, 1, 1) AS premier_chiffre")
+        ->limit(50)
+        ->where('external_id', 'REGEXP', '^[0-9]')
+            ->get();
 
 
         return view('coursera.coursera_rapports', compact(
@@ -656,4 +694,105 @@ class CourseraController extends Controller
         return response()->download($tempFile, $fileName)->deleteFileAfterSend(true);
     }
 
+    public function complete_specialisation()
+    {
+        $complete_specialisation = CourseraSpecialisation::leftJoin('coursera_members', 'coursera_members.id', '=', 'coursera_specialisations.coursera_member_id')->select([
+            'coursera_members.name',
+            'coursera_members.email',
+            'coursera_specialisations.specialisaton',
+            'coursera_specialisations.university',
+            'coursera_specialisations.last_specialisation_activity',
+            'coursera_specialisations.completed',
+        ])->where('completed', 'Yes')->get();;
+
+        // Vérifie si des membres ont été trouvés
+        if ($complete_specialisation->isEmpty()) {
+            return response()->json(['message' => 'Aucune invitation trouvée.'], 404);
+        }
+
+        $spreadsheet = new Spreadsheet();
+        $worksheet = $spreadsheet->getActiveSheet();
+
+        $worksheet->setCellValue('A1', 'Name');
+        $worksheet->getStyle('A1')
+            ->getFill()
+            ->setFillType(Fill::FILL_SOLID)
+            ->setStartColor(new Color('D3D3D3'));
+
+        $worksheet->setCellValue('B1', 'Email');
+        $worksheet->getStyle('B1')
+            ->getFill()
+            ->setFillType(Fill::FILL_SOLID)
+            ->setStartColor(new Color('D3D3D3'));
+
+        $worksheet->setCellValue('C1', 'specialisaton');
+        $worksheet->getStyle('C1')
+            ->getFill()
+            ->setFillType(Fill::FILL_SOLID)
+            ->setStartColor(new Color('D3D3D3'));
+
+        $worksheet->setCellValue('D1', 'University');
+        $worksheet->getStyle('D1')
+            ->getFill()
+            ->setFillType(Fill::FILL_SOLID)
+            ->setStartColor(new Color('D3D3D3'));
+
+        $worksheet->setCellValue('D1', 'last_specialisation_activity');
+        $worksheet->getStyle('D1')
+            ->getFill()
+            ->setFillType(Fill::FILL_SOLID)
+            ->setStartColor(new Color('D3D3D3'));
+
+        $worksheet->setCellValue('D1', 'completed');
+        $worksheet->getStyle('D1')
+            ->getFill()
+            ->setFillType(Fill::FILL_SOLID)
+            ->setStartColor(new Color('D3D3D3'));
+        // Définition des bordures
+        $worksheet->getStyle('A1:D1')->getBorders()->getAllBorders()->setBorderStyle(Border::BORDER_THIN);
+        $row = 2;
+
+        foreach ($complete_specialisation as $member) {
+            $worksheet->setCellValue('A' . $row, $member->name)
+                ->getStyle('A' . $row)
+                ->getAlignment()
+                ->setHorizontal(Alignment::HORIZONTAL_LEFT);
+
+            $worksheet->setCellValue('B' . $row, $member->email)
+                ->getStyle('B' . $row)
+                ->getAlignment()
+                ->setHorizontal(Alignment::HORIZONTAL_LEFT);
+
+            $worksheet->setCellValue('C' . $row, $member->specialisaton)
+                ->getStyle('C' . $row)
+                ->getAlignment()
+                ->setHorizontal(Alignment::HORIZONTAL_LEFT);
+
+            $worksheet->setCellValue('C' . $row, $member->university)
+                ->getStyle('C' . $row)
+                ->getAlignment()
+                ->setHorizontal(Alignment::HORIZONTAL_LEFT);
+
+            $worksheet->setCellValue('D' . $row, $member->last_specialisation_activity)
+                ->getStyle('D' . $row)
+                ->getAlignment()
+                ->setHorizontal(Alignment::HORIZONTAL_LEFT);
+
+            $worksheet->setCellValue('D' . $row, $member->completed)
+                ->getStyle('D' . $row)
+                ->getAlignment()
+                ->setHorizontal(Alignment::HORIZONTAL_LEFT);
+
+            $row++;
+        }
+
+        // On crée le fichier Excel
+        $writer = new Xlsx($spreadsheet);
+        $fileName = "Invitater.xlsx";
+        $tempFile = tempnam(sys_get_temp_dir(), $fileName);
+        $writer->save($tempFile);
+
+        // On renvoie le fichier Excel au navigateur
+        return response()->download($tempFile, $fileName)->deleteFileAfterSend(true);
+    }
 }

@@ -37,3 +37,4 @@ Route::get('cursera-memmbre_30day', [CourseraController::class, 'memmbre_30day']
 Route::get('cursera-non_inscrit_cours', [CourseraController::class, 'non_inscrit_cours'])->name('non_inscrit_coursera');
 Route::get('cursera-taux_utilisation', [CourseraController::class, 'taux_utilisation'])->name('taux_utilisation');
 Route::get('cursera-last_activity', [CourseraController::class, 'last_activity'])->name('last_activity');
+Route::get('cursera-complete_specialisation', [CourseraController::class, 'complete_specialisation'])->name('complete_specialisation');
