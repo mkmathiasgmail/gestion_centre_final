@@ -3,7 +3,7 @@
         class="flex items-center justify-center flex-none h-full ml-12 duration-500 ease-in-out transform logo dark:text-white">
         <a href="{{ route('dashboard') }}" class="flex ms-2 md:me-24">
             <img src="{{ asset('img/orange.webp') }}" class="h-8 me-3" alt="FlowBite Logo" />
-            <span class="self-center font-semibold text-1xl sm:text-1xl whitespace-nowrap text-white">Orange
+            <span class="self-center font-semibold text-white text-1xl sm:text-1xl whitespace-nowrap">Orange
                 Digital Center</span>
         </a>
     </div>
@@ -57,7 +57,7 @@
                 </ul>
             </div>
             @if (Auth()->user()->hasRole('super-admin'))
-                <div class="hidden  text-sm  md:block md:text-md text-white cursor-pointer"
+                <div class="hidden text-sm text-white cursor-pointer md:block md:text-md"
                     aria-expanded="false">
                     <a href="{{ route('setting') }}">
                         <svg class="w-6 h-6 text-white" aria-hidden="true"
@@ -91,6 +91,7 @@
             <div>
                 <div onclick="setDark('dark')"
                     class="moon text-gray-700 dark:text-white hover:text-blue-500 dark:hover:text-[#38BDF8]">
+
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={3}
                         stroke="currentColor" class="w-4 h-4">
                         <path strokeLinecap="round" strokeLinejoin="round"
@@ -174,12 +175,6 @@
                     height="24" fill="none" viewBox="0 0 24 24">
                     <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                         d="M17 9h2V7h-2zm1 14q-2.075 0-3.537-1.463T13 18t1.463-3.537T18 13t3.538 1.463T23 18t-1.463 3.538T18 23m-.5-2h1v-2.5H21v-1h-2.5V15h-1v2.5H15v1h2.5zm5.5-7.875q-.975-1.05-2.275-1.588T18 11q-.275 0-.513.013t-.487.062V10l-7-5.05V3h13zM1 21V11l7-5l7 5v.675q-1.8.85-2.9 2.588T11 18q0 .775.163 1.538T11.675 21H10v-6H6v6z" />
-
-
-
-                    {{-- d="M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18Zm0 0a8.949 8.949 0 0 0 4.951-1.488A3.987 3.987 0 0 0 13
-                    16h-2a3.987 3.987 0 0 0-3.951 3.512A8.948 8.948 0 0 0 12 21Zm3-11a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
-                    --}}
                 </svg>
                 <span>Employabilités</span>
             </a>

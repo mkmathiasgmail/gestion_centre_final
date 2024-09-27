@@ -61,7 +61,7 @@
 
 
     <div class="relative mt-4 overflow-x-auto">
-        <table class="w-full text-sm text-left text-gray-500 rtl:text-right dark:text-gray-400 display " style="width: 100%" id="table">
+        <table class="w-full text-sm text-left text-black rtl:text-right dark:text-gray-400 display " style="width: 100%" id="table">
             <thead class="text-xs text-white uppercase bg-gray-50 dark:bg-gray-700 dark:text-white">
                 <tr>
                     <th scope="col" class="px-6 py-3 bg-slate-700">
