@@ -24,15 +24,37 @@
 <div class="p-4 rounded-lg bg-gray-50 dark:bg-gray-800" id="styled-dashboard" role="tabpanel"
     aria-labelledby="dashboard-tab">
 
-    <a href="#" onclick="Reload()"
-        class="self-center py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-transparent bg-[#FF7322] text-white hover:bg-[#FF6822] focus:outline-none focus:bg-[#FF6822] disabled:opacity-50 disabled:pointer-events-none">Actualiser</a>
+    <div class="flex justify-between">
+        <a href="#" onclick="Reload()"
+            class="self-center py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-transparent bg-[#FF7322] text-white hover:bg-[#FF6822] focus:outline-none focus:bg-[#FF6822] disabled:opacity-50 disabled:pointer-events-none">Actualiser</a>
+        <div>
+            <a href="#" id="acceptAllBtn"
+                class="hidden self-center py-2 px-3 items-center gap-x-2 text-sm font-medium rounded-lg border border-transparent bg-[#FF7322] text-white hover:bg-[#FF6822] focus:outline-none focus:bg-[#FF6822] disabled:opacity-50 disabled:pointer-events-none">Accepter</a>
+            <a href="#" id="rejectAllBtn"
+                class="hidden self-center py-2 px-3 items-center gap-x-2 text-sm font-medium rounded-lg border border-transparent bg-[#FF7322] text-white hover:bg-[#FF6822] focus:outline-none focus:bg-[#FF6822] disabled:opacity-50 disabled:pointer-events-none">Rejeter</a>
+            <a href="#" id="awaitAllBtn"
+                class="hidden self-center py-2 px-3 items-center gap-x-2 text-sm font-medium rounded-lg border border-transparent bg-[#FF7322] text-white hover:bg-[#FF6822] focus:outline-none focus:bg-[#FF6822] disabled:opacity-50 disabled:pointer-events-none">Mettre
+                en attente</a>
+
+        </div>
+    </div>
 
     <div class="py-6 relative overflow-x-auto">
         @if ($candidatsData)
             <table id="candidatTable" class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
                 <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                     <tr>
-
+                        <th>
+                            <input id="select-all" type="checkbox" class="hidden peer" />
+                            <label for="select-all"
+                                class="relative flex items-center justify-center p-0.5 peer-checked:before:hidden before:block before:absolute before:w-full before:h-full before:bg-white w-5 h-5 cursor-pointer bg-blue-500 border border-gray-400 rounded overflow-hidden">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="w-full fill-white" viewBox="0 0 520 520">
+                                    <path
+                                        d="M79.423 240.755a47.529 47.529 0 0 0-36.737 77.522l120.73 147.894a43.136 43.136 0 0 0 36.066 16.009c14.654-.787 27.884-8.626 36.319-21.515L486.588 56.773a6.13 6.13 0 0 1 .128-.2c2.353-3.613 1.59-10.773-3.267-15.271a13.321 13.321 0 0 0-19.362 1.343q-.135.166-.278.327L210.887 328.736a10.961 10.961 0 0 1-15.585.843l-83.94-76.386a47.319 47.319 0 0 0-31.939-12.438z"
+                                        data-name="7-Check" data-original="#000000" />
+                                </svg>
+                            </label>
+                        </th>
                         <th scope="col"
                             class="px-6 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                             Prénom
@@ -91,6 +113,19 @@
                 <tbody>
                     @foreach ($candidatsData as $candidat)
                         <tr>
+                            <td class="pl-4 w-8">
+                                <input id="checkbox{{ $candidat['id'] }}" type="checkbox"
+                                    class="row-select hidden peer" />
+                                <label for="checkbox{{ $candidat['id'] }}"
+                                    class="relative flex items-center justify-center p-0.5 peer-checked:before:hidden before:block before:absolute before:w-full before:h-full before:bg-white w-5 h-5 cursor-pointer bg-blue-500 border border-gray-400 rounded overflow-hidden">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="w-full fill-white"
+                                        viewBox="0 0 520 520">
+                                        <path
+                                            d="M79.423 240.755a47.529 47.529 0 0 0-36.737 77.522l120.73 147.894a43.136 43.136 0 0 0 36.066 16.009c14.654-.787 27.884-8.626 36.319-21.515L486.588 56.773a6.13 6.13 0 0 1 .128-.2c2.353-3.613 1.59-10.773-3.267-15.271a13.321 13.321 0 0 0-19.362 1.343q-.135.166-.278.327L210.887 328.736a10.961 10.961 0 0 1-15.585.843l-83.94-76.386a47.319 47.319 0 0 0-31.939-12.438z"
+                                            data-name="7-Check" data-original="#000000" />
+                                    </svg>
+                                </label>
+                            </td>
                             <td class="px-6 py-3">{{ $candidat['odcuser']['first_name'] }}</td>
                             <td class="px-6 py-3">{{ $candidat['odcuser']['last_name'] }}</td>
 
@@ -144,15 +179,18 @@
                                     class="z-40 right-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700 dark:divide-gray-600 absolute modal">
                                     <ul class="py-2 text-sm text-gray-700 dark:text-gray-200">
                                         <li>
-                                            <a href="#" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
+                                            <a href="#"
+                                                class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
                                                 onclick="actionStatus(event, 'accept', '{{ $candidat['id'] }}', '{{ $candidat['odcuser']['first_name'] }}')">Accepter</a>
                                         </li>
                                         <li>
-                                            <a href="#" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
+                                            <a href="#"
+                                                class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
                                                 onclick="actionStatus(event, 'decline', '{{ $candidat['id'] }}', '{{ $candidat['odcuser']['first_name'] }}')">Refuser</a>
                                         </li>
                                         <li>
-                                            <a href="#" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
+                                            <a href="#"
+                                                class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
                                                 onclick="actionStatus(event, 'wait', '{{ $candidat['id'] }}', '{{ $candidat['odcuser']['first_name'] }}', '{{ $candidat['odcuser']['last_name'] }}')">Attendre</a>
                                         </li>
                                     </ul>
@@ -163,12 +201,12 @@
                 </tbody>
 
             </table>
-            <button type="button" data-modal-target="popup-accept" id="first-modal" data-modal-toggle="popup-accept"
-                hidden>
+            <button type="button" data-modal-target="popup-accept" id="first-modal"
+                data-modal-toggle="popup-accept" hidden>
                 Launch Modal
             </button>
-            <button type="button" data-modal-target="popup-decline" id="second-modal" data-modal-toggle="popup-decline"
-                hidden>
+            <button type="button" data-modal-target="popup-decline" id="second-modal"
+                data-modal-toggle="popup-decline" hidden>
                 Launch Modal
             </button>
             <button type="button" data-modal-target="popup-wait" id="third-modal" data-modal-toggle="popup-wait"

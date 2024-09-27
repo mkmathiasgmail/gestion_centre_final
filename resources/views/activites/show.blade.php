@@ -97,7 +97,53 @@
     @endphp
 
     @section('script')
+        <script>
+            const selectAllCheckbox = document.getElementById('select-all');
+            const rowCheckboxes = document.querySelectorAll('.row-select');
+            const selectedCountDisplay = document.createElement('span');
+            selectedCountDisplay.className = "text-gray-200 ms-5";
+            selectedCountDisplay.id = "selected-count";
+
+            $(document).ready(function() {
+                // Événement pour le checkbox "Sélectionner tout"
+
+                selectAllCheckbox.addEventListener('change', function() {
+                    rowCheckboxes.forEach(checkbox => {
+                        checkbox.checked = selectAllCheckbox.checked;
+                    });
+                    $('#acceptAllBtn').removeClass('hidden')
+                    $('#rejectAllBtn').removeClass('hidden')
+                    $('#awaitAllBtn').removeClass('hidden')
+                    selectedCountDisplay.textContent = "Toutes les lignes sont sélectionnées";
+                    $('#candidatTable_info').append(selectedCountDisplay);
+                });
+
+                // Événement pour les checkboxes de chaque ligne
+                rowCheckboxes.forEach(checkbox => {
+                    checkbox.addEventListener('change', function() {
+                        $('#candidatTable_info').append(selectedCountDisplay);
+                        if (!checkbox.checked) {
+                            selectAllCheckbox.checked = false; // Désélectionner "Sélectionner tout"
+                        }
+                        if (Array.from(rowCheckboxes).every(cb => cb.checked)) {
+                            selectAllCheckbox.checked =
+                                true; // Cocher "Sélectionner tout" si tous sont cochés
+                        }
+                        $('#acceptAllBtn').removeClass('hidden')
+                        $('#rejectAllBtn').removeClass('hidden')
+                        $('#awaitAllBtn').removeClass('hidden')
+
+                        const selectedCount = Array.from(rowCheckboxes).filter(checkbox => checkbox
+                            .checked).length;
+                        selectedCountDisplay.textContent = `${selectedCount} ligne(s) sélectionnée(s)`;
+                    });
+                });
+            });
+        </script>
+
+
         {{-- Script for presence data table --}}
+
         <script>
             $(document).ready(function() {
                 $('#candidatpresence').DataTable({
