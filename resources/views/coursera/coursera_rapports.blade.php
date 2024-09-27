@@ -27,7 +27,7 @@
             <button data-modal-target="default-modal-member" data-modal-toggle="default-modal-member" type="button">
                 <div>
                     <h3 class="text-sm font-semibold text-gray-800 dark:text-gray-200 ">
-                        Membres coursera : <span id="count" class="text-[#fcdf3f]">{{ $coursera_members->total }}
+                        Membres coursera : <span id="count" class="text-[#fcdf3f]">{{ $coursera_members }}
                         </span>
                     </h3>
                     <p class="text-sm font-normal text-gray-400 dark:text-gray-400">
@@ -51,12 +51,12 @@
                 type="button">
                 <div>
                     <h3 class="text-sm font-semibold text-gray-800 dark:text-gray-200 ">
-                        Nombre de specialité coursera : <span id="count"
+                        Nombre de specialitsations coursera : <span id="count"
                             class="text-[#fcdf3f]">{{ $specialisationsCount }}
                         </span>
                     </h3>
                     <p class="text-sm font-normal text-gray-400 dark:text-gray-400">
-                        nombre des specialité contenue dans le programme coursera.</p>
+                        nombre des specialisations contenues dans le programme coursera.</p>
                 </div>
             </button>
         </div>
@@ -557,7 +557,7 @@
                     <!-- Modal header -->
                     <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
                         <h3 class="text-xl font-semibold text-gray-900 dark:text-white">
-                            Membres du programme coursera
+                            Les specialisations coursera
                         </h3>
                         <button type="button"
                             class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
@@ -698,7 +698,7 @@
                     <!-- Modal header -->
                     <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
                         <h3 class="text-xl font-semibold text-gray-900 dark:text-white">
-                            Membres du programme coursera
+                             Nombres de ceux qui ont obtenues leurs Specialisations
                         </h3>
                         <button type="button"
                             class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
@@ -761,6 +761,13 @@
                         </table>
                     </div>
                     <!-- Modal footer -->
+                     <div class="flex items-center p-4 md:p-5 border-t border-gray-200 rounded-b dark:border-gray-600">
+                        <a href="{{ route('complete_specialisation') }}" data-modal-hide="default-modal" type="button"
+                            class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-transparent bg-[#FF7322] text-white hover:bg-[#FF6822] focus:outline-none focus:bg-[#FF6822] disabled:opacity-50 disabled:pointer-events-none">
+                            Experte en Excel</a>
+                        <button data-modal-hide="default-modal" type="button"
+                            class="py-2.5 px-5 ms-3 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">Decline</button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -859,7 +866,7 @@
                             <div>
                                 <p href=""
                                     class="text-xs font-normal text-gray-800 lg:text-sm  dark:text-gray-400">
-                                    Nombres de ceux qui ont obtenues leurs Specialisations <span
+                                    Nombres de ceux qui ont obtenues leurs Specialisations: <span
                                         class="text-[#36d4fc]">{{ $completedSpecialisations }}</span>
                                 </p>
                             </div>
