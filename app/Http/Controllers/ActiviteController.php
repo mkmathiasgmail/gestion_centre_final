@@ -24,6 +24,7 @@ use Illuminate\Support\Facades\Http;
 use App\Models\CourseraSpecialisation;
 use Ramsey\Uuid\Uuid;
 
+use function PHPUnit\Framework\isEmpty;
 
 class ActiviteController extends Controller
 {
@@ -711,5 +712,21 @@ class ActiviteController extends Controller
         } else {
             return redirect()->route('activites.show', $id)->with('error', 'Les statuts sont déjà à jour');
         }
+    }
+
+    public function critereParticipant($id)
+    {
+
+        $candidats = Candidat::join('activites', 'candidats.activite_id', '=', 'activites.id')
+            ->join('odcusers', 'candidats.odcuser_id', '=', 'odcusers.id')
+            ->where('activites.id', $id)
+            ->where('activites.title', 'LIKE', '%parcour%')
+            ->select('activites.title AS activite_title', 'odcusers.first_name AS candidat_nom')
+            ->get();
+
+
+
+
+        return  view('activites.parcour', compact('candidats'));
     }
 }
