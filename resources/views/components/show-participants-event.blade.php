@@ -54,6 +54,20 @@
     </div>
 
     <div class="flex justify-between">
+        <form action="{{route('generercodeqr',['id' => $id])}}">
+                <button type="submit"
+                class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-gray-200 bg-white text-gray-800 shadow-sm hover:bg-gray-50 focus:outline-none focus:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-800 dark:border-neutral-700 dark:text-white dark:hover:bg-neutral-700 dark:focus:bg-neutral-700">
+                    <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
+                        width="24" height="24" fill="none" viewBox="0 0 24 24">
+                        <path stroke="currentColor" stroke-linejoin="round" stroke-width="2"
+                            d="M4 4h6v6H4V4Zm10 10h6v6h-6v-6Zm0-10h6v6h-6V4Zm-4 10h.01v.01H10V14Zm0 4h.01v.01H10V18Zm-3 2h.01v.01H7V20Zm0-4h.01v.01H7V16Zm-3 2h.01v.01H4V18Zm0-4h.01v.01H4V14Z" />
+                        <path stroke="currentColor" stroke-linejoin="round" stroke-width="2"
+                            d="M7 7h.01v.01H7V7Zm10 10h.01v.01H17V17Z" />
+                    </svg>
+                    Generer les qrcodes
+                </button>
+            </form>
+
         <div class="space-x-4 mx-3">
             <button type="button" onclick="generer(event)"
                 class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-transparent bg-white text-gray-800 shadow-sm hover:bg-gray-50 focus:outline-none focus:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-800 dark:border-neutral-700 dark:text-white dark:hover:bg-neutral-700 dark:focus:bg-neutral-700">
@@ -76,6 +90,7 @@
                 </svg>
             </button>
         </div>
+        
 
         <form action="{{ route('exportParticipant') }}" method="POST">
             @csrf
