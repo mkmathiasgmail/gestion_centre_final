@@ -69,9 +69,9 @@ class CourseraController extends Controller
         $noAcceptInvitation_cout = $noAcceptInvitation->count();
         $acceptInvitation_count = $acceptInvitation->count();
         $allMembers = CourseraMember::all();
-       
+
         //$membersKinshasa = $allMembers->where('external_id', 'REGEXP', '^1\d*');
- 
+
         $coursera_members = $allMembers->count();
 
         //USAGES__________________________________________________
@@ -81,6 +81,7 @@ class CourseraController extends Controller
             ->selectRaw("count(case when completed = 'No' then 1 end) as noCompleted")
             ->first();
 
+        $nombre_cours = CourseraSpecialisation::sum('courses_in_specialisation');
         $getCompletedUsages = CourseraUsage::join('coursera_members as cmem', 'cmem.id', '=', 'coursera_usages.coursera_member_id')->select([
             'cmem.name',
             'cmem.email',
@@ -88,24 +89,24 @@ class CourseraController extends Controller
             'coursera_usages.course_slug',
         ])->where('completed', 'Yes')->get();
         $uncompletedUsages = CourseraUsage::where('completed', 'NO')->get();
-        $allUsages = CourseraUsage:: all();
-        
+        $allUsages = CourseraUsage::all();
+
 
 
         //Specialisation__________________________________________
         $allSpecialisations = CourseraSpecialisation::select('specialisaton') // Remplacez par le nom de la colonne que vous souhaitez
-        ->distinct()
-        ->get();
+            ->distinct()
+            ->get();
         $specialisationsCount = $allSpecialisations->count();
 
-         $getcompleteSpecialisation=CourseraSpecialisation::leftJoin('coursera_members', 'coursera_members.id', '=', 'coursera_specialisations.coursera_member_id')->select([
+        $getcompleteSpecialisation = CourseraSpecialisation::leftJoin('coursera_members', 'coursera_members.id', '=', 'coursera_specialisations.coursera_member_id')->select([
             'coursera_members.name',
             'coursera_members.email',
             'coursera_specialisations.specialisaton',
             'coursera_specialisations.university',
             'coursera_specialisations.last_specialisation_activity',
             'coursera_specialisations.completed',
-         ])->where('completed', 'Yes')->get();
+        ])->where('completed', 'Yes')->get();
 
         $completedSpecialisations = CourseraSpecialisation::where('completed', 'Yes')->count();
 
@@ -118,24 +119,25 @@ class CourseraController extends Controller
 
         //dd($licence_en_cours);
 
-        $membersKinEnCours = $licence_en_cours->filter(function ($member) {
-            return preg_match('/^1\d*/', $member->external_id);
+        $licenceKinEnCours = $licence_en_cours->filter(function ($member) {
+            return preg_match('/^[10]\d*/', $member->external_id);
         });
-        
+        $licenceKinEnCours_count=$licenceKinEnCours->count();
 
-        $membersLubEnCours = $licence_en_cours->filter(function ($member) {
+        $licenceLubEnCours = $licence_en_cours->filter(function ($member) {
             return preg_match('/^2\d*/', $member->external_id);
         });
+        $licenceLubEnCours_count=$licenceLubEnCours->count();
 
-        $membersKanEnCours = $licence_en_cours->filter(function ($member) {
+        $licenceKanEnCours = $licence_en_cours->filter(function ($member) {
             return preg_match('/^4\d*/', $member->external_id);
         });
+        $licenceKanEnCours_count=$licenceKanEnCours->count();
 
-        $membersMatEnCours = $licence_en_cours->filter(function ($member) {
+        $licenceMatEnCours = $licence_en_cours->filter(function ($member) {
             return preg_match('/^3\d*/', $member->external_id);
         });
-        
-        // dd($membersKanEnCours);
+        $licenceMatEnCours_count=$licenceMatEnCours->count();
 
         $licence_en_cours_count = $licence_en_cours->count();
 
@@ -169,7 +171,8 @@ class CourseraController extends Controller
         $non_inscrit_cours_count = $non_inscrit_cours->count();
 
         $last_activity = CourseraMember::select([
-            'name', 'email',
+            'name',
+            'email',
             'join_date',
             'latest_program_activity_date'
 
@@ -187,21 +190,25 @@ class CourseraController extends Controller
         $taux = ($taux_count * 100) / 125;
 
 
-        $membersKinshasa = CourseraMember::where('external_id', 'REGEXP', '^1\d*')
-        ->get();
+        $membersKinshasa = CourseraMember::where('external_id', 'REGEXP', '^[10]\d*')
+            ->get();
+        $membersKinshasa_count = $membersKinshasa->count();
 
         $membersLubumbashi = CourseraMember::where('external_id', 'REGEXP', '^2\d*')
-        ->get();
+            ->get();
+        $membersLubumbashi_count = $membersLubumbashi->count();
 
         $membersMatadi = CourseraMember::where('external_id', 'REGEXP', '^3\d*')
-        ->get();
+            ->get();
+        $membersMatadi_count = $membersMatadi->count();
 
-        $membersKananga = CourseraMember::where('external_id', 'REGEXP', '^3\d*')
-        ->get();
+        $membersKananga = CourseraMember::where('external_id', 'REGEXP', '^4\d*')
+            ->get();
+        $membersKananga_count = $membersKananga->count();
 
         $resultats = CourseraMember::selectRaw("SUBSTRING(external_id, 1, 1) AS premier_chiffre")
-        ->limit(50)
-        ->where('external_id', 'REGEXP', '^[0-9]')
+            ->limit(50)
+            ->where('external_id', 'REGEXP', '^[0-9]')
             ->get();
 
 
@@ -231,7 +238,26 @@ class CourseraController extends Controller
             "allMembers",
             "allUsages",
             "allSpecialisations",
-            "getcompleteSpecialisation"
+            "getcompleteSpecialisation",
+            "membersKinshasa_count",
+            "membersKinshasa",
+            "membersLubumbashi_count",
+            "membersLubumbashi",
+            "membersMatadi_count",
+            "membersMatadi",
+            "membersKananga_count",
+            "membersKananga",
+            "nombre_cours",
+            "licenceKinEnCours_count",
+            "licenceLubEnCours_count",
+            "licenceKanEnCours_count",
+            "licenceMatEnCours_count",
+            "licenceKinEnCours",
+            "licenceLubEnCours",
+            "licenceKanEnCours",
+            "licenceMatEnCours"
+
+
         ));
     }
     public function licence_encours()
@@ -314,8 +340,8 @@ class CourseraController extends Controller
     public function memmbre_30day()
     {
         $apprenants_30day = CourseraMember::select('coursera_members.name', 'coursera_members.email', 'cu.university', 'cu.course', 'cu.course_slug', 'cu.course_certificate_url')
-        ->leftJoin('coursera_usages as cu', 'coursera_members.id', '=', 'cu.coursera_member_id')
-        ->where('coursera_members.join_date', '>=', Carbon::now()->subDays(30))
+            ->leftJoin('coursera_usages as cu', 'coursera_members.id', '=', 'cu.coursera_member_id')
+            ->where('coursera_members.join_date', '>=', Carbon::now()->subDays(30))
             ->where(function ($query) {
                 $query->where('cu.course_certificate_url', '=', '')
                     ->orWhereNull('cu.course_certificate_url');
@@ -393,7 +419,7 @@ class CourseraController extends Controller
     public function certificat_obtenue()
     {
         $certificats = CourseraUsage::leftJoin('coursera_members as cm', 'cm.id', '=', 'coursera_usages.coursera_member_id')
-        ->where('course_certificate_url', '!=', '')
+            ->where('course_certificate_url', '!=', '')
             ->select('cm.name', 'cm.email', 'coursera_usages.university', 'coursera_usages.course', 'coursera_usages.course_slug')
             ->get();
 
@@ -459,7 +485,7 @@ class CourseraController extends Controller
 
         // On crée le fichier Excel
         $writer = new Xlsx($spreadsheet);
-        $fileName = "Invitater.xlsx";
+        $fileName = "certificat_obtenue_coursera.xlsx";
         $tempFile = tempnam(sys_get_temp_dir(), $fileName);
         $writer->save($tempFile);
 
@@ -469,8 +495,8 @@ class CourseraController extends Controller
     public function non_inscrit_cours()
     {
         $non_inscrit_cours = CourseraMember::select('coursera_members.name', 'coursera_members.email', 'cu.university', 'cu.course', 'cu.course_slug', 'cu.course_certificate_url')
-        ->leftJoin('coursera_usages as cu', 'coursera_members.id', '=', 'cu.coursera_member_id')
-        ->where('coursera_members.join_date', '>', Carbon::now()->subDays(7))
+            ->leftJoin('coursera_usages as cu', 'coursera_members.id', '=', 'cu.coursera_member_id')
+            ->where('coursera_members.join_date', '>', Carbon::now()->subDays(7))
             ->where('coursera_members.member_state', '=', 'INVITED')
             ->get();
 
@@ -546,9 +572,9 @@ class CourseraController extends Controller
     public function taux_utilisation()
     {
         $taux_utilisation = CourseraUsage::select('cm.email', 'cm.name', 'coursera_usages.university', 'coursera_usages.course', 'coursera_usages.course_slug', 'coursera_usages.last_course_activity')
-        ->leftJoin('coursera_members AS cm', 'cm.id', '=', 'coursera_usages.coursera_member_id')
-        ->where('coursera_usages.removed_from_program', '=', 'Yes')
-        ->where('coursera_usages.last_course_activity', '>', Carbon::now()->subDays(21)) // Assurez-vous que 'last_course_activity' est dans 'coursera_usages'
+            ->leftJoin('coursera_members AS cm', 'cm.id', '=', 'coursera_usages.coursera_member_id')
+            ->where('coursera_usages.removed_from_program', '=', 'Yes')
+            ->where('coursera_usages.last_course_activity', '>', Carbon::now()->subDays(21)) // Assurez-vous que 'last_course_activity' est dans 'coursera_usages'
             ->get();
 
         // Vérifie si des membres ont été trouvés
@@ -795,4 +821,5 @@ class CourseraController extends Controller
         // On renvoie le fichier Excel au navigateur
         return response()->download($tempFile, $fileName)->deleteFileAfterSend(true);
     }
+    //----------------------------------------------------------------------------------------------------
 }
