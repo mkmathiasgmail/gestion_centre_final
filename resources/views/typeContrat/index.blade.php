@@ -5,7 +5,8 @@
         </h2>
     </x-slot>
     <div class="flex justify-end mt-4 mb-4 text-white ">
-        <button type="submit" data-modal-target="crud-modal" data-modal-toggle="crud-modal" class="text-white inline-flex items-center bg-black hover:bg-slate-700 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center ">
+        <button type="submit" data-modal-target="authentication-modal" data-modal-toggle="authentication-modal" class="text-white inline-flex items-center bg-black hover:bg-slate-700 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center ">
+
             <svg class="w-5 h-5 me-1 -ms-1" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
                 <path fill-rule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clip-rule="evenodd"></path>
             </svg>
@@ -60,7 +61,7 @@
 
 
     <div class="relative mt-4 overflow-x-auto">
-        <table class="w-full text-sm text-left text-gray-500 rtl:text-right dark:text-gray-400 display " style="width: 100%" id="table">
+        <table class="w-full text-sm text-left text-black rtl:text-right dark:text-gray-400 display " style="width: 100%" id="table">
             <thead class="text-xs text-white uppercase bg-gray-50 dark:bg-gray-700 dark:text-white">
                 <tr>
                     <th scope="col" class="px-6 py-3 bg-slate-700">
@@ -118,15 +119,23 @@
                 @endforeach
             </tbody>
 
-              <x-deleteContrat :id="$typecontrat->id" />
-
         </table>
 
 
 
 
+@section('modal')
+
+
+    <div class="flex justify-end mt-4 mb-4 text-white">
 
         <x-FormTypeContrat :typeContrats="$typeContrats" />
+    </div>
+    <div>
+        <x-deleteContrat :id="$typecontrat->id" />
+    </div>
+@endsection
+
  @section('script')
     <script>
 

@@ -5,7 +5,8 @@
     <form method="POST" action="{{ route('login') }}">
         @csrf
         <div class="mb-8 text-center ">
-            <h1 class="text-2xl font-semibold leading-tight text-gray-200">Connexion</h1>
+            <h1 class="text-2xl font-semibold leading-tight text-gray-200">Connectez-vous</h1>
+
         </div>
         <!-- Email Address -->
         <div>

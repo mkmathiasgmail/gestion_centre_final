@@ -24,6 +24,7 @@ use Illuminate\Support\Facades\Http;
 use App\Models\CourseraSpecialisation;
 use Ramsey\Uuid\Uuid;
 
+use function PHPUnit\Framework\isEmpty;
 
 class ActiviteController extends Controller
 {
@@ -673,5 +674,59 @@ class ActiviteController extends Controller
         $activities = $query->groupBy('date')->get();
 
         return response()->json($activities);
+    }
+
+    public function syncParticipant($id)
+    {
+        $activite = Activite::findOrFail($id);
+
+        // Récupérer les candidats ayant une présence
+        $candidatsAvecPresence = Candidat::where('activite_id', $activite->id)
+            ->whereHas('presence')
+            ->get();
+
+        $updated = false;
+
+        foreach ($candidatsAvecPresence as $candidat) {
+            try {
+                // Si le statut est "new", on le change en "accept"
+                if ($candidat->status == '1') {
+                    $candidat->status = 'accept';
+                    $candidat->save();
+                    $updated = true;
+                }
+            } catch (\Exception $th) {
+                // Si une erreur survient, renvoyer une réponse JSON d'erreur
+                return response()->json([
+                    'success' => false,
+                    'message' => 'La mise à jour a échoué',
+                    'error' => $th->getMessage()
+                ], 500);
+            }
+        }
+
+
+
+        if ($updated) {
+            return redirect()->route('activites.show', $id)->with('success', 'Statut des candidats mis à jour');
+        } else {
+            return redirect()->route('activites.show', $id)->with('error', 'Les statuts sont déjà à jour');
+        }
+    }
+
+    public function critereParticipant($id)
+    {
+
+        $candidats = Candidat::join('activites', 'candidats.activite_id', '=', 'activites.id')
+            ->join('odcusers', 'candidats.odcuser_id', '=', 'odcusers.id')
+            ->where('activites.id', $id)
+            ->where('activites.title', 'LIKE', '%parcour%')
+            ->select('activites.title AS activite_title', 'odcusers.first_name AS candidat_nom')
+            ->get();
+
+
+
+
+        return  view('activites.parcour', compact('candidats'));
     }
 }

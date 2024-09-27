@@ -131,11 +131,7 @@
                     <div class="flex justify-end mt-4 mb-4 text-white">
                         <button type="submit"
                             class="p-2 text-white bg-[#ff7322] hover:bg-[#ff7920] focus:bg-[#ff7910] disabled:opacity-50 rounded-md"
-                            data-modal-target="crud-modal" data-modal-toggle="crud-modal">Créer un
-
-
-
-                            rôle
+                            data-modal-target="crud-modal" data-modal-toggle="crud-modal">Créer un rôle
                         </button>
                     </div>
                     <table class="w-full text-sm text-left text-gray-500 rtl:text-right dark:text-gray-400">
@@ -165,7 +161,8 @@
                                     </td>
                                     <td class="px-6 py-4">
                                         <a href="{{ route('user_role.show', $item->id) }}"
-                                            class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
+                                            class="inline-flex items-center px-3 py-2 text-sm font-medium text-gray-800 bg-white border border-gray-200 rounded-lg shadow-sm gap-x-2 hover:bg-gray-50 focus:outline-none focus:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-800 dark:border-neutral-700 dark:text-white dark:hover:bg-neutral-700 dark:focus:bg-neutral-700 group">
+
                                             <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true"
                                                 xmlns="http://www.w3.org/2000/svg" width="24" height="24"
                                                 fill="none" viewBox="0 0 24 24">
@@ -193,7 +190,7 @@
                                         <div class="p-6 lg:w-3/5 xl:w-1/2 sm:p-12">
                                             <div class="flex flex-col items-center mt-12">
                                                  <div class="mb-8 text-center ">
-                                                     <h1 class="text-2xl font-semibold leading-tight text-gray-700">S'enregistrer</h1>
+                                                     <h1 class="text-2xl font-semibold leading-tight text-gray-700">Formulaire d'inscription</h1>
                                                  </div>
 
                                                 <div class="flex-1 w-full mt-8">

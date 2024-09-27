@@ -30,34 +30,34 @@
 <body class="body bg-white dark:bg-[#1E293B] text-black">
     <div class=" bg-gray-100 dark:bg-[#1E293B] ">
         @include('layouts.navigation')
-        <div class="content  transform ease-in-out duration-500  ">
+        <div class="duration-500 ease-in-out transform content ">
             <div class=" dark:bg-[#1e293bf3] bg-white pt-20 px-2 md:px-5 pb-4 ml-12  backdrop-blur-2xl">
                 <!-- Page Heading -->
                 @if (isset($header))
-                    <nav class = "flex px-5 py-3 text-gray-700  rounded-lg bg-[#eaeaebf3] dark:bg-[#1E293B] "
-                        aria-label="Breadcrumb">
-                        <ol class = "inline-flex items-center space-x-1 md:space-x-3">
-                            <li class = "inline-flex items-center">
-                                <a href="#"
-                                    class = "inline-flex items-center text-sm font-medium text-gray-700 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white">
+                    <nav class="flex px-5 py-3 text-gray-700 rounded-lg bg-[#eaeaebf3] dark:bg-[#1E293B]" aria-label="Breadcrumb">
+                        <ol class="inline-flex items-center space-x-1 md:space-x-3">
+                            <li class="inline-flex items-center">
+                                <a href="#" class="inline-flex items-center text-sm font-medium text-gray-700 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white">
                                     @yield('svg')
-                                    {{ $header }}
+                                  {{ $header }}
+
                                 </a>
                             </li>
                             <li>
-                                <div class = "flex items-center">
-                                    <svg class = "w-6 h-6 text-gray-400" fill="currentColor" viewBox="0 0 20 20"
-                                        xmlns="http://www.w3.org/2000/svg">
-                                        <path fillRule="evenodd"
-                                            d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
-                                            clipRule="evenodd"></path>
+                                <div class="flex items-center">
+                                    <svg class="w-6 h-6 text-gray-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                                        <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"></path>
                                     </svg>
-
                                 </div>
+                            </li>
+                            <li class="inline-flex items-center">
+                                <a id="previous-page" href="{{ $previous_page ?? 'dashboard' }}" class="inline-flex items-center text-sm font-medium text-gray-700 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white"></a>
                             </li>
                         </ol>
                     </nav>
+
                 @endif
+
 
                 <!-- Page Content -->
                 <main>
@@ -71,7 +71,7 @@
     </div>
     <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4="
         crossorigin="anonymous"></script>
-   
+
     <script src="https://cdn.jsdelivr.net/npm/simple-datatables@9.0.3"></script>
     <script src="https://cdn.datatables.net/2.0.8/js/dataTables.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
@@ -126,6 +126,30 @@
                 logo.classList.add('ml-12')
             }
         }
+
+
+            //  le stockage local
+            document.addEventListener("DOMContentLoaded", function() {
+            // Récupère l'URL de la page actuelle
+            const currentPage = window.location.href;
+
+            // Récupère la page précédente stockée
+            const previousPage = localStorage.getItem('previousPage');
+
+            // Met à jour le lien de la page précédente dans le breadcrumb
+            if (previousPage) {
+            const previousPageLink = document.getElementById('previous-page');
+            previousPageLink.href = previousPage;
+
+            // Extrait le nom de la page de l'URL
+            const previousPageName = previousPage.split('/').pop(); // Récupère la dernière partie de l'URL
+            previousPageLink.textContent = previousPageName.charAt(0).toUpperCase() + previousPageName.slice(1); // Capitalise le premier caractère
+            }
+
+            // Stocke l'URL actuelle comme la précédente pour la prochaine navigation
+            localStorage.setItem('previousPage', currentPage);
+            });
+
     </script>
     @yield('modal')
     @yield('modalparticipants')

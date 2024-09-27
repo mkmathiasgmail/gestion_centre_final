@@ -4,9 +4,10 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\QrCodeController;
 use App\Http\Controllers\PresenceController;
 use App\Http\Controllers\Api\PresenceAutocomplete;
+use FontLib\Table\Type\name;
 
 Route::get('codeqr', [QrCodeController::class, 'index'])->name('codeqr')->middleware('permissions');
-Route::get('generate/{id}', [QrCodeController::class, 'generateQrCode'])->name('generateQrCode');
+Route::get('participant/{id}', [QrCodeController::class, 'participant'])->name('participant');
 Route::post('storeqrcode/{id}', [QrCodeController::class, 'store'])->name('storeqrcode');
 // Route::resource('presences', PresenceController::class)->middleware('permissions');
 Route::get('create/{id}', [PresenceController::class, 'create'])->name('create');
@@ -17,7 +18,8 @@ Route::get('security', [PresenceController::class, 'security'])->name('security'
 Route::get('scanner', function () {
     return view('presences.camera');
 })->name('scanner');
-Route::get('autocompleted/{id}',[PresenceController::class,'searchQuery'])->name('autocompleted');
+Route::get('generercodeqr/{id}',[QrCodeController::class, 'generercodeqr'])->name('generercodeqr');
+Route::get('deleteqrcode',[QrCodeController::class, 'deleteqrcode'])->name('deleteqrcode');
 // client routes
 Route::post('/filtrer/{id}', [PresenceController::class, 'filtrer'])->name('filtrer');
 Route::get('/activitencours', [PresenceController::class, 'encours'])->name('activitencours');
