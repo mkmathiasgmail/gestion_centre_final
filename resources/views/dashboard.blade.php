@@ -127,10 +127,10 @@
 
     </section>
 
-    <section class="grid grid-cols-1 md:grid-cols-4 md:p-4 p-1 gap-4 w-full md:inset-0 h-[calc(100%-1rem)] max-h-full mb-8">
+    <section class="grid grid-cols-1 md:grid-cols-2 md:p-4 p-1 gap-4 w-full md:inset-0 h-[calc(100%-1rem)] max-h-full mb-8">
 
         <div
-            class=" bg-[#fcdab40a] dark:bg-[#1e293b62] md:p-5 p-1 rounded-lg md:w-1/2 w-full shadow-lg dark:shadow-lg dark:shadow-gray-500/20 ">
+            class=" bg-[#fcdab40a] dark:bg-[#1e293b62] md:p-5 p-1 rounded-lg  w-full shadow-lg dark:shadow-lg dark:shadow-gray-500/20 ">
             <div class=" flex justify-between items-center ">
                 <div class=" flex gap-4">
                     <div class=" ">
@@ -203,8 +203,8 @@
             </div>
         </div>
 
-        <div class=" grid grid-cols-1 md:grid-cols-4 gap-4 rounded-lg md:w-1/2 w-full">
-            <div class=" md:w-1/2 w-full">
+        <div class=" grid grid-cols-1 md:grid-cols-2 gap-4 rounded-lg  w-full">
+            <div class="  w-full">
                 <div>
                     <h3 class="mb-6 text-lg font-normal text-gray-500 lg:text-xl  dark:text-gray-400">Dernière activité enregistrée</h3>
                 </div>
@@ -222,7 +222,7 @@
 
             </div>
 
-            <div class=" md:w-1/2 w-full">
+            <div class=" w-full">
                 <div class=" m-4 ">
                     <canvas id="myChart2"></canvas>
                 </div>

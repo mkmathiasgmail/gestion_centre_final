@@ -8,12 +8,9 @@
 
     <div class="w-full  mx-auto">
         <div class="mx-5 my-3 text-sm">
-            <a href="{{ route('categorie.activites', $show->categorie->id) }}" class=" text-red-600 font-bold tracking-widest">{{ $show->categorie->name }}</a>
+            <a href="{{ route('categorie.activites', $show->categorie->id) }}"
+                class=" text-red-600 font-bold tracking-widest">{{ $show->categorie->name }}</a>
         </div>
-
-
-
-
 
         @if ($show->candidat->count() == 0)
             <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
@@ -267,7 +264,7 @@
                         <table class="w-full text-gray-600 dark:text-gray-200">
                             <tbody>
                                 <tr>
-                                    <td class="py-2">Total Homme</td>
+                                    <td class="py-2">Total</td>
                                     <td class="text-gray-500 dark:text-gray-200">
                                         {{ $datachart->first()->total_candidats }}</td>
                                     <td>
@@ -297,7 +294,7 @@
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td class="py-2">Total Femme</td>
+                                    <td class="py-2">Total Hommes</td>
                                     <td class="text-gray-500 dark:text-gray-200">
                                         {{ $datachart->first()->total_garcons }}</td>
                                     <td>
@@ -327,7 +324,7 @@
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td class="py-2">Total Filles</td>
+                                    <td class="py-2">Total Femme</td>
                                     <td class="text-gray-500 dark:text-gray-200">
                                         {{ $datachart->first()->total_filles }}</td>
                                     <td>
@@ -422,9 +419,10 @@
                                             xmlns="http://www.w3.org/2000/svg" width="24" height="24"
                                             fill="currentColor" viewBox="0 0 24 24">
                                             <path fill-rule="evenodd"
-                                                d="M9 2.221V7H4.221a2 2 0 0 1 .365-.5L8.5 2.586A2 2 0 0 1 9 2.22ZM11 2v5a2 2 0 0 1-2 2H4v11a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2h-7ZM8 16a1 1 0 0 1 1-1h6a1 1 0 1 1 0 2H9a1 1 0 0 1-1-1Zm1-5a1 1 0 1 0 0 2h6a1 1 0 1 0 0-2H9Z"
+                                                d="M3.559 4.544c.355-.35.834-.544 1.33-.544H19.11c.496 0 .975.194 1.33.544.356.35.559.829.559 1.331v9.25c0 .502-.203.981-.559 1.331-.355.35-.834.544-1.33.544H15.5l-2.7 3.6a1 1 0 0 1-1.6 0L8.5 17H4.889c-.496 0-.975-.194-1.33-.544A1.868 1.868 0 0 1 3 15.125v-9.25c0-.502.203-.981.559-1.331ZM7.556 7.5a1 1 0 1 0 0 2h8a1 1 0 0 0 0-2h-8Zm0 3.5a1 1 0 1 0 0 2H12a1 1 0 1 0 0-2H7.556Z"
                                                 clip-rule="evenodd" />
                                         </svg>
+
 
                                     </td>
                                 </tr>
@@ -433,8 +431,8 @@
                                     <td class="text-gray-500">
                                         {{ $show->send ? '✔️' : '⭕️' }}
                                     </td>
-                                    <td class="py-2">
-                                        <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true"
+                                    <td class="">
+                                        <svg class="w-16 ml-auto text-gray-800 dark:text-white" aria-hidden="true"
                                             xmlns="http://www.w3.org/2000/svg" width="24" height="24"
                                             fill="currentColor" viewBox="0 0 24 24">
                                             <path fill-rule="evenodd"
@@ -456,9 +454,10 @@
                                             xmlns="http://www.w3.org/2000/svg" width="24" height="24"
                                             fill="currentColor" viewBox="0 0 24 24">
                                             <path fill-rule="evenodd"
-                                                d="M9 2.221V7H4.221a2 2 0 0 1 .365-.5L8.5 2.586A2 2 0 0 1 9 2.22ZM11 2v5a2 2 0 0 1-2 2H4v11a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2h-7ZM8 16a1 1 0 0 1 1-1h6a1 1 0 1 1 0 2H9a1 1 0 0 1-1-1Zm1-5a1 1 0 1 0 0 2h6a1 1 0 1 0 0-2H9Z"
+                                                d="M9 2a1 1 0 0 0-1 1H6a2 2 0 0 0-2 2v15a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2h-2a1 1 0 0 0-1-1H9Zm1 2h4v2h1a1 1 0 1 1 0 2H9a1 1 0 0 1 0-2h1V4Zm5.707 8.707a1 1 0 0 0-1.414-1.414L11 14.586l-1.293-1.293a1 1 0 0 0-1.414 1.414l2 2a1 1 0 0 0 1.414 0l4-4Z"
                                                 clip-rule="evenodd" />
                                         </svg>
+
 
                                     </td>
                                 </tr>
@@ -470,11 +469,12 @@
                                     <td>
                                         <svg class="w-16 ml-auto text-gray-800 dark:text-white" aria-hidden="true"
                                             xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                            fill="currentColor" viewBox="0 0 24 24">
-                                            <path fill-rule="evenodd"
-                                                d="M9 2.221V7H4.221a2 2 0 0 1 .365-.5L8.5 2.586A2 2 0 0 1 9 2.22ZM11 2v5a2 2 0 0 1-2 2H4v11a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2h-7ZM8 16a1 1 0 0 1 1-1h6a1 1 0 1 1 0 2H9a1 1 0 0 1-1-1Zm1-5a1 1 0 1 0 0 2h6a1 1 0 1 0 0-2H9Z"
-                                                clip-rule="evenodd" />
+                                            fill="none" viewBox="0 0 24 24">
+                                            <path stroke="currentColor" stroke-linecap="round"
+                                                stroke-linejoin="round" stroke-width="2"
+                                                d="M8 20V7m0 13-4-4m4 4 4-4m4-12v13m0-13 4 4m-4-4-4 4" />
                                         </svg>
+
 
                                     </td>
                                 </tr>
@@ -484,13 +484,10 @@
                                         {{ $show->show_in_calendar ? '✔️' : '⭕️' }}
                                     </td>
                                     <td>
-                                        <svg class="w-16 ml-auto text-gray-800 dark:text-white" aria-hidden="true"
-                                            xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                            fill="currentColor" viewBox="0 0 24 24">
-                                            <path fill-rule="evenodd"
-                                                d="M9 2.221V7H4.221a2 2 0 0 1 .365-.5L8.5 2.586A2 2 0 0 1 9 2.22ZM11 2v5a2 2 0 0 1-2 2H4v11a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2h-7ZM8 16a1 1 0 0 1 1-1h6a1 1 0 1 1 0 2H9a1 1 0 0 1-1-1Zm1-5a1 1 0 1 0 0 2h6a1 1 0 1 0 0-2H9Z"
-                                                clip-rule="evenodd" />
-                                        </svg>
+                                        <svg class="w-16 ml-auto text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
+                                            <path fill-rule="evenodd" d="M18 5.05h1a2 2 0 0 1 2 2v2H3v-2a2 2 0 0 1 2-2h1v-1a1 1 0 1 1 2 0v1h3v-1a1 1 0 1 1 2 0v1h3v-1a1 1 0 1 1 2 0v1Zm-15 6v8a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-8H3ZM11 18a1 1 0 1 0 2 0v-1h1a1 1 0 1 0 0-2h-1v-1a1 1 0 1 0-2 0v1h-1a1 1 0 1 0 0 2h1v1Z" clip-rule="evenodd"/>
+                                          </svg>
+
 
                                     </td>
                                 </tr>
