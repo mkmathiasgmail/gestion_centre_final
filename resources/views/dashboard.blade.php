@@ -21,7 +21,7 @@
             Supervision Complète : Activités, Apprenants, Employabilité et Présence</p>
     </div>
 
-    <section class=" flex justify-between p-4 gap-4 w-full md:inset-0 h-[calc(100%-1rem)] max-h-full mb-8">
+    <section class=" grid grid-cols-1 md:grid-cols-4 gap-4 w-full md:inset-0 h-[calc(100%-1rem)] max-h-full mb-8">
         <a href="{{ route('activites.index') }}"
             class="h-36 items-center  p-2 w-full rounded-lg shadow-lg dark:shadow-lg dark:shadow-gray-500/20 backdrop-blur-xl bg-cover bg-[#fcdab40a] dark:bg-[#1e293b62] dark:hover:bg-gray-700  hover:bg-[#f8f0e7] hover:scale-105 transition duration-700 ease-in-out border-l-8 border-[#ff9822] hover:border-l-10 ">
             <div class=" ">
@@ -127,10 +127,10 @@
 
     </section>
 
-    <section class="flex justify-between p-4 gap-4 w-full md:inset-0 h-[calc(100%-1rem)] max-h-full mb-8">
+    <section class="grid grid-cols-1 md:grid-cols-2 md:p-4 p-1 gap-4 w-full md:inset-0 h-[calc(100%-1rem)] max-h-full mb-8">
 
         <div
-            class=" bg-[#fcdab40a] dark:bg-[#1e293b62] p-5 rounded-lg w-1/2 shadow-lg dark:shadow-lg dark:shadow-gray-500/20 ">
+            class=" bg-[#fcdab40a] dark:bg-[#1e293b62] md:p-5 p-1 rounded-lg  w-full shadow-lg dark:shadow-lg dark:shadow-gray-500/20 ">
             <div class=" flex justify-between items-center ">
                 <div class=" flex gap-4">
                     <div class=" ">
@@ -203,8 +203,8 @@
             </div>
         </div>
 
-        <div class=" flex justify-between gap-4 rounded-lg w-1/2">
-            <div class=" w-1/2">
+        <div class=" grid grid-cols-1 md:grid-cols-2 gap-4 rounded-lg  w-full">
+            <div class="  w-full">
                 <div>
                     <h3 class="mb-6 text-lg font-normal text-gray-500 lg:text-xl  dark:text-gray-400">Dernière activité enregistrée</h3>
                 </div>
@@ -222,7 +222,7 @@
 
             </div>
 
-            <div class=" w-1/2">
+            <div class=" w-full">
                 <div class=" m-4 ">
                     <canvas id="myChart2"></canvas>
                 </div>

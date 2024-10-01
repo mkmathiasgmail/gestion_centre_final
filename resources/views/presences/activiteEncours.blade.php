@@ -3,11 +3,12 @@
 
 <head>
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Laravel</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">    
+    <title>Activités en cours</title>
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=figtree:400,600&display=swap" rel="stylesheet" />
+    <link rel="shortcut icon" href="{{ asset('img/orange.webp') }}" type="image/x-icon">
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -24,7 +25,7 @@
     </nav>
     <div class=" p-5">
         <h1
-            class ="mb-2 mt-14 text-3xl font-extrabold tracking-tight leading-none text-gray-900 md:text-3xl lg:text-4xl dark:text-white">
+            class ="mb-2 mt-14 text-3xl text-center font-extrabold tracking-tight leading-none text-gray-900 md:text-3xl lg:text-4xl dark:text-white">
             Liste des activités en cours
         </h1>
     </div>
@@ -72,7 +73,7 @@
                 <div
                     class="container w-full lg:max-w-3xl px-2 md:max-w-md max-w-sm mx-auto p-4 bg-white border border-gray-200 rounded-lg shadow sm:p-6 dark:bg-gray-800 dark:border-gray-700">
                     <h5 class="mb-3 text-base font-semibold text-gray-900 md:text-xl dark:text-white">
-                        Choisisissez une action à effectuer :
+                        Choisisissez une activité:
                     </h5>
                     <p class="text-sm font-normal text-gray-500 dark:text-gray-400">Cliquez sur une activité pour
                         marquer votre présence.</p>
@@ -106,7 +107,7 @@
                                             Entrez votre email ou votre numéro de téléphone
                                         </h3>
 
-                                        <button type="button"
+                                        <button id="closeModal" type="button" 
                                             class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
                                             data-modal-toggle="crud-modal{{ $item->id }}">
                                             <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
@@ -213,6 +214,13 @@
 
     {{-- La section des scripts --}}
     <script>
+        var button = document.getElementById('closeModal');
+
+        button.onclick = function() {
+            window.location.reload();
+        }
+    </script>
+    <script>
         function confirmerMail(event) {
             event.preventDefault();
             const lien = event.target.getAttribute("href");
@@ -220,41 +228,6 @@
             document.getElementByClassName('validateForm').setAttribute('action', lien)
         }
     </script>
-
-    {{-- Script de l'auto complétion de l'email de l'utilisateur
-    <script type="text/javascript">
-        $(document).ready(function() {
-            $('#email').on('input', function() {
-                if ($(this).val().length > 0) {
-                    $('#results').removeClass('hidden');
-                } else {
-                    $('#results').addClass('hidden');
-                }
-            });
-
-            let idActivite = $('#email').data('id');
-
-            $('#email').autocomplete({
-                source: function(request, response) {
-                    $.ajax({
-                        url: "/autocompleted/" + idActivite,
-                        data: {
-                            query: request.term
-                        },
-                        success: function(data) {
-                            response(data.map(item => item.email));
-                        }
-                    });
-                },
-                minLength: 1,
-                select: function(event, ui) {
-                    $('#results').append('<div class="p-2 bg-gray-500 border-b">' + ui.item.value +
-                        '</div>');
-                    $('#results').addClass('hidden');
-                }
-            });
-        });
-    </script> --}}
     <script>
         function show(event, id) {
             if (event.target.getAttribute('id') === 'default-radio-1' + id) {
@@ -268,7 +241,7 @@
     </script>
 
     <script>
-        $('.validateForm').submit(function(e) {
+        $('.validateForm').on("submit",function(e) {
             e.preventDefault();
             var formData = $(this).serialize();
             var activityId = $(this).find('input[name="id"]').val();
@@ -287,6 +260,12 @@
                         $('.filterForms').addClass('hidden');
                         $('.modal-title').text("Confirmation des informations")
                         $('.radiodiv').addClass('hidden');
+                    } else if (data.error ===
+                        "Désolé, vous n\'êtes pas enregistré sur cette activité. Merci !") {
+                        $('.modal-title').text("Enregistrez vous     à l'activité")
+                        $("#confirmDiv").removeClass('hidden');
+                        $('.filterForms').addClass('hidden');
+                        $('#activite').attr('value', data.title);
                     } else {
                         $('.filterForms').addClass('hidden');
                         $("#confirmDiv").removeClass('hidden');

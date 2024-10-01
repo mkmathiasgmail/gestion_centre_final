@@ -81,6 +81,7 @@ class CourseraController extends Controller
             ->selectRaw("count(case when completed = 'No' then 1 end) as noCompleted")
             ->first();
 
+        $nombre_cours = CourseraSpecialisation::sum('courses_in_specialisation');
         $getCompletedUsages = CourseraUsage::join('coursera_members as cmem', 'cmem.id', '=', 'coursera_usages.coursera_member_id')->select([
             'cmem.name',
             'cmem.email',
@@ -88,7 +89,7 @@ class CourseraController extends Controller
             'coursera_usages.course_slug',
         ])->where('completed', 'Yes')->get();
         $uncompletedUsages = CourseraUsage::where('completed', 'NO')->get();
-        $allUsages = CourseraUsage:: all();
+        $allUsages = CourseraUsage::all();
 
 
 
@@ -144,24 +145,28 @@ class CourseraController extends Controller
 
         //dd($licence_en_cours);
 
-        $membersKinEnCours = $licence_en_cours->filter(function ($member) {
-            return preg_match('/^1\d*/', $member->external_id);
+        $licenceKinEnCours = $licence_en_cours->filter(function ($member) {
+            return preg_match('/^[10]\d*/', $member->external_id);
         });
 
+        $licenceKinEnCours_count=$licenceKinEnCours->count();
 
-        $membersLubEnCours = $licence_en_cours->filter(function ($member) {
+
+        $licenceLubEnCours = $licence_en_cours->filter(function ($member) {
             return preg_match('/^2\d*/', $member->external_id);
         });
+        $licenceLubEnCours_count=$licenceLubEnCours->count();
 
-        $membersKanEnCours = $licence_en_cours->filter(function ($member) {
+        $licenceKanEnCours = $licence_en_cours->filter(function ($member) {
             return preg_match('/^4\d*/', $member->external_id);
         });
+        $licenceKanEnCours_count=$licenceKanEnCours->count();
 
-        $membersMatEnCours = $licence_en_cours->filter(function ($member) {
+        $licenceMatEnCours = $licence_en_cours->filter(function ($member) {
             return preg_match('/^3\d*/', $member->external_id);
         });
-
-        // dd($membersKanEnCours);
+        
+        $licenceMatEnCours_count=$licenceMatEnCours->count();
 
         $licence_en_cours_count = $licence_en_cours->count();
 
@@ -258,17 +263,21 @@ class CourseraController extends Controller
         $taux = ($taux_count * 100) / 125;
 
 
-        $membersKinshasa = CourseraMember::where('external_id', 'REGEXP', '^1\d*')
+        $membersKinshasa = CourseraMember::where('external_id', 'REGEXP', '^[10]\d*')
             ->get();
+        $membersKinshasa_count = $membersKinshasa->count();
 
         $membersLubumbashi = CourseraMember::where('external_id', 'REGEXP', '^2\d*')
             ->get();
+        $membersLubumbashi_count = $membersLubumbashi->count();
 
         $membersMatadi = CourseraMember::where('external_id', 'REGEXP', '^3\d*')
             ->get();
+        $membersMatadi_count = $membersMatadi->count();
 
-        $membersKananga = CourseraMember::where('external_id', 'REGEXP', '^3\d*')
+        $membersKananga = CourseraMember::where('external_id', 'REGEXP', '^4\d*')
             ->get();
+        $membersKananga_count = $membersKananga->count();
 
         $resultats = CourseraMember::selectRaw("SUBSTRING(external_id, 1, 1) AS premier_chiffre")
             ->limit(50)
@@ -303,6 +312,7 @@ class CourseraController extends Controller
             "allUsages",
             "allSpecialisations",
             "getcompleteSpecialisation",
+
             "getcompleteKin_count",
             "getcompleteKan_count",
             "getcompleteMat_count",
@@ -318,7 +328,26 @@ class CourseraController extends Controller
             "non_inscritKin_count",
             "non_inscritKan_count",
             "non_inscritLub_count",
-            "non_inscritMat_count"
+            "non_inscritMat_count",
+
+            "membersKinshasa_count",
+            "membersKinshasa",
+            "membersLubumbashi_count",
+            "membersLubumbashi",
+            "membersMatadi_count",
+            "membersMatadi",
+            "membersKananga_count",
+            "membersKananga",
+            "nombre_cours",
+            "licenceKinEnCours_count",
+            "licenceLubEnCours_count",
+            "licenceKanEnCours_count",
+            "licenceMatEnCours_count",
+            "licenceKinEnCours",
+            "licenceLubEnCours",
+            "licenceKanEnCours",
+            "licenceMatEnCours"
+
         ));
     }
     public function licence_encours()
@@ -546,7 +575,7 @@ class CourseraController extends Controller
 
         // On crée le fichier Excel
         $writer = new Xlsx($spreadsheet);
-        $fileName = "Invitater.xlsx";
+        $fileName = "certificat_obtenue_coursera.xlsx";
         $tempFile = tempnam(sys_get_temp_dir(), $fileName);
         $writer->save($tempFile);
 
@@ -882,5 +911,5 @@ class CourseraController extends Controller
         // On renvoie le fichier Excel au navigateur
         return response()->download($tempFile, $fileName)->deleteFileAfterSend(true);
     }
-
+    //----------------------------------------------------------------------------------------------------
 }
