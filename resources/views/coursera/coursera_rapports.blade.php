@@ -85,10 +85,12 @@
             </a>
         </div>
     </section>
+
+
     @section('modal')
         <!-- Main modal -->
-        <div id="default-modal" dark:text-gray-300
-            class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
+        <div id="default-modal"
+            class="dark:text-gray-300 hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
             <div class="relative p-4 w-full max-w-xl lg:max-w-6xl xl:max-w-7xl max-h-full">
                 <!-- Modal content -->
                 <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
@@ -165,8 +167,8 @@
 
 
         <!-- Main modal -->
-        <div id="default-modal2" dark:text-gray-300
-            class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
+        <div id="default-modal2" 
+            class="dark:text-gray-300 hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
             <div class="relative p-4 w-full max-w-xl lg:max-w-6xl xl:max-w-7xl max-h-full">
                 <!-- Modal content -->
                 <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
@@ -177,7 +179,7 @@
                         </h3>
                         <button type="button"
                             class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
-                            data-modal-hide="default-modal">
+                            data-modal-hide="default-modal2">
                             <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
                                 viewBox="0 0 14 14">
                                 <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
@@ -241,8 +243,8 @@
         </div>
 
         <!-- Main modal -->
-        <div id="default-modal3" dark:text-gray-300
-            class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
+        <div id="default-modal3"
+            class="dark:text-gray-300 hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
             <div class="relative p-4 w-full max-w-xl lg:max-w-6xl xl:max-w-7xl max-h-full">
                 <!-- Modal content -->
                 <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
@@ -253,7 +255,7 @@
                         </h3>
                         <button type="button"
                             class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
-                            data-modal-hide="default-modal">
+                            data-modal-hide="default-modal3">
                             <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
                                 viewBox="0 0 14 14">
                                 <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
@@ -319,19 +321,19 @@
         </div>
 
         <!-- Main modal -->
-        <div id="default-modal4" dark:text-gray-300
-            class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
+        <div id="default-modal4"
+            class="dark:text-gray-300 hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
             <div class="relative p-4 w-full max-w-xl lg:max-w-6xl xl:max-w-7xl max-h-full">
                 <!-- Modal content -->
                 <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
                     <!-- Modal header -->
                     <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
                         <h3 class="text-xl font-semibold text-gray-900 dark:text-white">
-                            Nombres des personnes invitées depuis plus de 7 jours et ne sont inscrit à aucun cours :
+                            Nombres des personnes invitées depuis plus de 7 jours et ne sont inscrits à aucun cours :
                         </h3>
                         <button type="button"
                             class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
-                            data-modal-hide="default-modal">
+                            data-modal-hide="default-modal4">
                             <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
                                 viewBox="0 0 14 14">
                                 <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
@@ -389,16 +391,51 @@
                         <a href="{{ route('non_inscrit_coursera') }}" data-modal-hide="default-modal" type="button"
                             class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-transparent bg-[#FF7322] text-white hover:bg-[#FF6822] focus:outline-none focus:bg-[#FF6822] disabled:opacity-50 disabled:pointer-events-none">
                             Exporte en Excel</a>
-                        <button data-modal-hide="default-modal" type="button"
-                            class="py-2.5 px-5 ms-3 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">Decline</button>
+
+                            <button data-modal-target="default-non_inscritKin" data-modal-toggle="default-non_inscritKin"
+                            data-modal-hide="default-modal4" class="block" type="button">
+                            <div
+                                class="py-2.5 px-5 ms-3 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 
+                            dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">
+                                Kinshasa : {{ $non_inscritKin_count }}
+                            </div>
+                        </button>
+
+                        <button data-modal-target="default-non_inscritKan" data-modal-toggle="default-non_inscritKan"
+                            data-modal-hide="default-modal4" class="block" type="button">
+                            <div
+                                class="py-2.5 px-5 ms-3 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 
+                            dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">
+                                Kananga : {{ $non_inscritKan_count }}
+                            </div>
+                        </button>
+
+
+                        <button data-modal-target="default-non_inscritLub" data-modal-toggle="default-non_inscritLub"
+                            data-modal-hide="default-modal4" class="block" type="button">
+                            <div
+                                class="py-2.5 px-5 ms-3 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 
+                            dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">
+                                Lubumbashi : {{ $non_inscritLub_count }}
+                            </div>
+                        </button>
+
+                        <button data-modal-target="default-non_inscritKin" data-modal-toggle="default-non_inscritKin"
+                        data-modal-hide="default-modal4" class="block" type="button">
+                        <div
+                            class="py-2.5 px-5 ms-3 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 
+                        dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">
+                            Matadi : {{ $non_inscritMat_count }}
+                        </div>
+                    </button>
                     </div>
                 </div>
             </div>
         </div>
 
         <!-- Main modal -->
-        <div id="default-modal5" dark:text-gray-300
-            class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
+        <div id="default-modal5"
+            class="dark:text-gray-300 hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
             <div class="relative p-4 w-full max-w-xl lg:max-w-6xl xl:max-w-7xl max-h-full">
                 <!-- Modal content -->
                 <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
@@ -409,7 +446,7 @@
                         </h3>
                         <button type="button"
                             class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
-                            data-modal-hide="default-modal">
+                            data-modal-hide="default-modal5">
                             <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
                                 viewBox="0 0 14 14">
                                 <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
@@ -474,8 +511,8 @@
         </div>
 
         <!-- Main modal -->
-        <div id="default-modal6" dark:text-gray-300
-            class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
+        <div id="default-modal6" 
+            class="dark:text-gray-300 hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
             <div class="relative p-4 w-full max-w-xl lg:max-w-6xl xl:max-w-7xl max-h-full">
                 <!-- Modal content -->
                 <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
@@ -486,7 +523,7 @@
                         </h3>
                         <button type="button"
                             class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
-                            data-modal-hide="default-modal">
+                            data-modal-hide="default-modal6">
                             <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
                                 viewBox="0 0 14 14">
                                 <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
@@ -549,8 +586,8 @@
         </div>
 
         <!-- Main modal memebres coursera-->
-        <div id="default-modal-specialite" dark:text-gray-300
-            class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
+        <div id="default-modal-specialite" 
+            class="dark:text-gray-300 hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
             <div class="relative p-4 w-full max-w-xl lg:max-w-6xl xl:max-w-7xl max-h-full">
                 <!-- Modal content -->
                 <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
@@ -561,7 +598,7 @@
                         </h3>
                         <button type="button"
                             class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
-                            data-modal-hide="default-modal">
+                            data-modal-hide="default-modal-specialite">
                             <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
                                 viewBox="0 0 14 14">
                                 <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
@@ -587,7 +624,7 @@
                                     <tr>
                                         <td class="px-6 py-4">
                                             {{ $specialite->specialisaton }}
-                                        </td>                                       
+                                        </td>
                                     </tr>
                                 @endforeach
                             </tbody>
@@ -598,9 +635,9 @@
             </div>
         </div>
 
-                <!-- Main modal memebres coursera-->
-        <div id="default-modal-member" dark:text-gray-300
-            class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
+        <!-- Main modal memebres coursera-->
+        <div id="default-modal-member"
+            class="dark:text-gray-300 hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
             <div class="relative p-4 w-full max-w-xl lg:max-w-6xl xl:max-w-7xl max-h-full">
                 <!-- Modal content -->
                 <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
@@ -611,7 +648,7 @@
                         </h3>
                         <button type="button"
                             class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
-                            data-modal-hide="default-modal">
+                            data-modal-hide="default-modal-member">
                             <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
                                 viewBox="0 0 14 14">
                                 <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
@@ -689,20 +726,20 @@
                 </div>
             </div>
         </div>
-         <!-- Main modal specialisation obtenues-->
-        <div id="default-modal-obtenue" dark:text-gray-300
-            class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
+        <!-- Main modal specialisation obtenues-->
+        <div id="default-modal-obtenue" 
+            class="dark:text-gray-300 hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
             <div class="relative p-4 w-full max-w-xl lg:max-w-6xl xl:max-w-7xl max-h-full">
                 <!-- Modal content -->
                 <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
                     <!-- Modal header -->
                     <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
                         <h3 class="text-xl font-semibold text-gray-900 dark:text-white">
-                             Nombres de ceux qui ont obtenues leurs Specialisations
+                            Nombres de ceux qui ont obtenues leurs Specialisations
                         </h3>
                         <button type="button"
                             class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
-                            data-modal-hide="default-modal">
+                            data-modal-hide="default-modal-obtenue">
                             <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
                                 viewBox="0 0 14 14">
                                 <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
@@ -761,13 +798,644 @@
                         </table>
                     </div>
                     <!-- Modal footer -->
-                     <div class="flex items-center p-4 md:p-5 border-t border-gray-200 rounded-b dark:border-gray-600">
+                    <div class="flex items-center p-4 md:p-5 border-t border-gray-200 rounded-b dark:border-gray-600">
                         <a href="{{ route('complete_specialisation') }}" data-modal-hide="default-modal" type="button"
                             class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-transparent bg-[#FF7322] text-white hover:bg-[#FF6822] focus:outline-none focus:bg-[#FF6822] disabled:opacity-50 disabled:pointer-events-none">
                             Experte en Excel</a>
-                        <button data-modal-hide="default-modal" type="button"
-                            class="py-2.5 px-5 ms-3 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">Decline</button>
+
+                        <button data-modal-target="default-getcompKin" data-modal-toggle="default-getcompKin"
+                            data-modal-hide="default-modal-obtenue" class="block" type="button">
+                            <div
+                                class="py-2.5 px-5 ms-3 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 
+                            dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">
+                                Kinshasa : {{ $getcompleteKin_count }}
+                            </div>
+                        </button>
+
+                        <button data-modal-target="default-getcompKan" data-modal-toggle="default-getcompKan"
+                            data-modal-hide="default-modal-obtenue" class="block" type="button">
+                            <div
+                                class="py-2.5 px-5 ms-3 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 
+                            dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">
+                                Kananga : {{ $getcompleteKan_count }}
+                            </div>
+                        </button>
+
+
+                        <button data-modal-target="default-getcompLub" data-modal-toggle="default-getcompLub"
+                            data-modal-hide="default-modal-obtenue" class="block" type="button">
+                            <div
+                                class="py-2.5 px-5 ms-3 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 
+                            dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">
+                                Lubumbashi : {{ $getcompleteLub_count }}
+                            </div>
+                        </button>
+
+                        <button data-modal-target="default-getcompMat" data-modal-toggle="default-getcompMat"
+                        data-modal-hide="default-modal-obtenue" class="block" type="button">
+                        <div
+                            class="py-2.5 px-5 ms-3 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 
+                        dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">
+                            Matadi : {{ $getcompleteMat_count }}
+                        </div>
+                    </button>
+
                     </div>
+                </div>
+            </div>
+        </div>
+
+
+        <div id="default-getcompKin" 
+            class="dark:text-gray-300 hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
+            <div class="relative p-4 w-full max-w-xl lg:max-w-6xl xl:max-w-7xl max-h-full">
+                <!-- Modal content -->
+                <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
+                    <!-- Modal header -->
+                    <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
+                        <h3 class="text-xl font-semibold text-gray-900 dark:text-white">
+                            Ceux de Kinshasa qui ont fini leur parcours
+                        </h3>
+                        <button type="button"
+                            class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
+                            data-modal-hide="default-getcompKin">
+                            <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
+                                viewBox="0 0 14 14">
+                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                    stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
+                            </svg>
+                            <span class="sr-only">Close modal</span>
+                        </button>
+                    </div>
+                    <!-- Modal body -->
+                    <div class="p-4 md:p-5 space-y-4">
+                        <table id="mytable_getcompKin"
+                            class="display nowrap w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-300"
+                            style="width:100%">
+                            <thead>
+                                <tr>
+                                    <th scope="col" class="px-6 py-3">
+                                        Name
+                                    </th>
+                                    <th scope="col" class="px-6 py-3">
+                                        Email
+                                    </th>
+                                    <th scope="col" class="px-6 py-3">
+                                        Specialisation
+                                    </th>
+                                    <th scope="col" class="px-6 py-3">
+                                        Université
+                                    </th>
+                                    <th scope="col" class="px-6 py-3">
+                                        Specialisation Complete
+                                    </th>
+                                    <th scope="col" class="px-6 py-3">
+                                        Latest Program Activity Date
+                                    </th>
+
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach ($getcompleteKin1 as $completeSpec)
+                                    <tr>
+                                        <td class="px-6 py-4">
+                                            {{ $completeSpec->name }}
+                                        </td>
+                                        <td class="px-6 py-4">
+                                            {{ $completeSpec->email }}
+                                        </td>
+                                        <td class="px-6 py-4">{{ $completeSpec->specialisaton }}
+                                        </td>
+                                        </td>
+                                        <td class="px-6 py-4">{{ $completeSpec->university }}
+                                        </td>
+                                        <td class="px-6 py-4">{{ $completeSpec->completed }}</td>
+                                        <td class="px-6 py-4">{{ $completeSpec->last_specialisation_activity }}</td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
+                    <!-- Modal footer -->
+                    
+                </div>
+            </div>
+        </div>
+
+
+        <div id="default-getcompLub"
+            class="dark:text-gray-300 hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
+            <div class="relative p-4 w-full max-w-xl lg:max-w-6xl xl:max-w-7xl max-h-full">
+                <!-- Modal content -->
+                <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
+                    <!-- Modal header -->
+                    <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
+                        <h3 class="text-xl font-semibold text-gray-900 dark:text-white">
+                            Ceux de Lubumbashi qui ont fini leur parcours
+                        </h3>
+                        <button type="button"
+                            class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
+                            data-modal-hide="default-getcompLub">
+                            <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
+                                viewBox="0 0 14 14">
+                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                    stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
+                            </svg>
+                            <span class="sr-only">Close modal</span>
+                        </button>
+                    </div>
+                    <!-- Modal body -->
+                    <div class="p-4 md:p-5 space-y-4">
+                        <table id="mytable_getcompLub"
+                            class="display nowrap w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-300"
+                            style="width:100%">
+                            <thead>
+                                <tr>
+                                    <th scope="col" class="px-6 py-3">
+                                        Name
+                                    </th>
+                                    <th scope="col" class="px-6 py-3">
+                                        Email
+                                    </th>
+                                    <th scope="col" class="px-6 py-3">
+                                        Specialisation
+                                    </th>
+                                    <th scope="col" class="px-6 py-3">
+                                        Université
+                                    </th>
+                                    <th scope="col" class="px-6 py-3">
+                                        Specialisation Complete
+                                    </th>
+                                    <th scope="col" class="px-6 py-3">
+                                        Latest Program Activity Date
+                                    </th>
+
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach ($getcompleteLub1 as $completeSpec)
+                                    <tr>
+                                        <td class="px-6 py-4">
+                                            {{ $completeSpec->name }}
+                                        </td>
+                                        <td class="px-6 py-4">
+                                            {{ $completeSpec->email }}
+                                        </td>
+                                        <td class="px-6 py-4">{{ $completeSpec->specialisaton }}
+                                        </td>
+                                        </td>
+                                        <td class="px-6 py-4">{{ $completeSpec->university }}
+                                        </td>
+                                        <td class="px-6 py-4">{{ $completeSpec->completed }}</td>
+                                        <td class="px-6 py-4">{{ $completeSpec->last_specialisation_activity }}</td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
+                    <!-- Modal footer -->
+                    
+                </div>
+            </div>
+        </div>
+
+        <div id="default-getcompKan"
+            class="dark:text-gray-300 hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
+            <div class="relative p-4 w-full max-w-xl lg:max-w-6xl xl:max-w-7xl max-h-full">
+                <!-- Modal content -->
+                <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
+                    <!-- Modal header -->
+                    <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
+                        <h3 class="text-xl font-semibold text-gray-900 dark:text-white">
+                            Ceux de kananga qui ont fini leur parcours
+                        </h3>
+                        <button type="button"
+                            class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
+                            data-modal-hide="default-getcompKan">
+                            <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
+                                viewBox="0 0 14 14">
+                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                    stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
+                            </svg>
+                            <span class="sr-only">Close modal</span>
+                        </button>
+                    </div>
+                    <!-- Modal body -->
+                    <div class="p-4 md:p-5 space-y-4">
+                        <table id="mytable_getcompKan"
+                            class="display nowrap w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-300"
+                            style="width:100%">
+                            <thead>
+                                <tr>
+                                    <th scope="col" class="px-6 py-3">
+                                        Name
+                                    </th>
+                                    <th scope="col" class="px-6 py-3">
+                                        Email
+                                    </th>
+                                    <th scope="col" class="px-6 py-3">
+                                        Specialisation
+                                    </th>
+                                    <th scope="col" class="px-6 py-3">
+                                        Université
+                                    </th>
+                                    <th scope="col" class="px-6 py-3">
+                                        Specialisation Complete
+                                    </th>
+                                    <th scope="col" class="px-6 py-3">
+                                        Latest Program Activity Date
+                                    </th>
+
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach ($getcompleteKan1 as $completeSpec)
+                                    <tr>
+                                        <td class="px-6 py-4">
+                                            {{ $completeSpec->name }}
+                                        </td>
+                                        <td class="px-6 py-4">
+                                            {{ $completeSpec->email }}
+                                        </td>
+                                        <td class="px-6 py-4">{{ $completeSpec->specialisaton }}
+                                        </td>
+                                        </td>
+                                        <td class="px-6 py-4">{{ $completeSpec->university }}
+                                        </td>
+                                        <td class="px-6 py-4">{{ $completeSpec->completed }}</td>
+                                        <td class="px-6 py-4">{{ $completeSpec->last_specialisation_activity }}</td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
+                    <!-- Modal footer -->
+                    
+                </div>
+            </div>
+        </div>
+
+        <div id="default-getcompMat"
+            class="dark:text-gray-300 hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
+            <div class="relative p-4 w-full max-w-xl lg:max-w-6xl xl:max-w-7xl max-h-full">
+                <!-- Modal content -->
+                <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
+                    <!-- Modal header -->
+                    <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
+                        <h3 class="text-xl font-semibold text-gray-900 dark:text-white">
+                            Ceux de Matadi qui ont fini leur parcours
+                        </h3>
+                        <button type="button"
+                            class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
+                            data-modal-hide="default-getcompMat">
+                            <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
+                                viewBox="0 0 14 14">
+                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                    stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
+                            </svg>
+                            <span class="sr-only">Close modal</span>
+                        </button>
+                    </div>
+                    <!-- Modal body -->
+                    <div class="p-4 md:p-5 space-y-4">
+                        <table id="mytable_getcompMat"
+                            class="display nowrap w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-300"
+                            style="width:100%">
+                            <thead>
+                                <tr>
+                                    <th scope="col" class="px-6 py-3">
+                                        Name
+                                    </th>
+                                    <th scope="col" class="px-6 py-3">
+                                        Email
+                                    </th>
+                                    <th scope="col" class="px-6 py-3">
+                                        Specialisation
+                                    </th>
+                                    <th scope="col" class="px-6 py-3">
+                                        Université
+                                    </th>
+                                    <th scope="col" class="px-6 py-3">
+                                        Specialisation Complete
+                                    </th>
+                                    <th scope="col" class="px-6 py-3">
+                                        Latest Program Activity Date
+                                    </th>
+
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach ($getcompleteMat1 as $completeSpec)
+                                    <tr>
+                                        <td class="px-6 py-4">
+                                            {{ $completeSpec->name }}
+                                        </td>
+                                        <td class="px-6 py-4">
+                                            {{ $completeSpec->email }}
+                                        </td>
+                                        <td class="px-6 py-4">{{ $completeSpec->specialisaton }}
+                                        </td>
+                                        </td>
+                                        <td class="px-6 py-4">{{ $completeSpec->university }}
+                                        </td>
+                                        <td class="px-6 py-4">{{ $completeSpec->completed }}</td>
+                                        <td class="px-6 py-4">{{ $completeSpec->last_specialisation_activity }}</td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
+                    <!-- Modal footer -->
+                    
+                </div>
+            </div>
+        </div>
+
+
+
+        <div id="default-non_inscritKin"
+            class="dark:text-gray-300 hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
+            <div class="relative p-4 w-full max-w-xl lg:max-w-6xl xl:max-w-7xl max-h-full">
+                <!-- Modal content -->
+                <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
+                    <!-- Modal header -->
+                    <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
+                        <h3 class="text-xl font-semibold text-gray-900 dark:text-white">
+                            Ceux de Kinshasa qui sont invités et ne  sont inscrit à aucun cours depuis 7 jours
+                        </h3>
+                        <button type="button"
+                            class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
+                            data-modal-hide="default-non_inscritKin">
+                            <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
+                                viewBox="0 0 14 14">
+                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                    stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
+                            </svg>
+                            <span class="sr-only">Close modal</span>
+                        </button>
+                    </div>
+                    <!-- Modal body -->
+                    <div class="p-4 md:p-5 space-y-4">
+                        <table id="mytable_non_inscritKin"
+                class="display nowrap w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-300"
+                style="width:100%">
+                <thead>
+                    <tr>
+                        <th scope="col" class="px-6 py-3">
+                            Nom
+                        </th>
+                        <th scope="col" class="px-6 py-3">
+                            Email
+                        </th>
+
+                        <th scope="col" class="px-6 py-3">Cours</th>
+
+                        <th scope="col" class="px-6 py-3">
+                            Université
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach ($non_inscritKin as $inscrit)
+                        <tr>
+                            <td class="px-6 py-4">
+                                {{ $inscrit->name }}
+
+                            </td>
+
+                            <td class="px-6 py-4">
+                                {{ $inscrit->email }}
+
+                            </td>
+
+                            <td class="px-6 py-4">
+                                {{ $inscrit->course_slug }}
+                            </td>
+
+                            <td class="px-6 py-4">{{ $inscrit->university }}</td>
+                        </tr>
+                    @endforeach
+                </tbody>
+            </table>
+                    </div>
+                    <!-- Modal footer -->
+                    
+                </div>
+            </div>
+        </div>
+
+
+        <div id="default-non_inscritKan"
+            class="dark:text-gray-300 hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
+            <div class="relative p-4 w-full max-w-xl lg:max-w-6xl xl:max-w-7xl max-h-full">
+                <!-- Modal content -->
+                <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
+                    <!-- Modal header -->
+                    <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
+                        <h3 class="text-xl font-semibold text-gray-900 dark:text-white">
+                            Ceux de Kananga qui sont invités et ne  sont inscrit à aucun cours depuis 7 jours
+                        </h3>
+                        <button type="button"
+                            class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
+                            data-modal-hide="default-non_inscritKan">
+                            <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
+                                viewBox="0 0 14 14">
+                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                    stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
+                            </svg>
+                            <span class="sr-only">Close modal</span>
+                        </button>
+                    </div>
+                    <!-- Modal body -->
+                    <div class="p-4 md:p-5 space-y-4">
+                        <table id="mytable_non_inscritKan"
+                class="display nowrap w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-300"
+                style="width:100%">
+                <thead>
+                    <tr>
+                        <th scope="col" class="px-6 py-3">
+                            Nom
+                        </th>
+                        <th scope="col" class="px-6 py-3">
+                            Email
+                        </th>
+
+                        <th scope="col" class="px-6 py-3">Cours</th>
+
+                        <th scope="col" class="px-6 py-3">
+                            Université
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach ($non_inscritKan as $inscrit)
+                        <tr>
+                            <td class="px-6 py-4">
+                                {{ $inscrit->name }}
+
+                            </td>
+
+                            <td class="px-6 py-4">
+                                {{ $inscrit->email }}
+
+                            </td>
+
+                            <td class="px-6 py-4">
+                                {{ $inscrit->course_slug }}
+                            </td>
+
+                            <td class="px-6 py-4">{{ $inscrit->university }}</td>
+                        </tr>
+                    @endforeach
+                </tbody>
+            </table>
+                    </div>
+                    <!-- Modal footer -->
+                    
+                </div>
+            </div>
+        </div>
+
+
+        <div id="default-non_inscritLub"
+            class="dark:text-gray-300 hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
+            <div class="relative p-4 w-full max-w-xl lg:max-w-6xl xl:max-w-7xl max-h-full">
+                <!-- Modal content -->
+                <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
+                    <!-- Modal header -->
+                    <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
+                        <h3 class="text-xl font-semibold text-gray-900 dark:text-white">
+                            Ceux de Lubumbashi qui sont invités et ne  sont inscrit à aucun cours depuis 7 jours
+                        </h3>
+                        <button type="button"
+                            class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
+                            data-modal-hide="default-non_inscritLub">
+                            <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
+                                viewBox="0 0 14 14">
+                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                    stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
+                            </svg>
+                            <span class="sr-only">Close modal</span>
+                        </button>
+                    </div>
+                    <!-- Modal body -->
+                    <div class="p-4 md:p-5 space-y-4">
+                        <table id="mytable_non_inscritLub"
+                class="display nowrap w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-300"
+                style="width:100%">
+                <thead>
+                    <tr>
+                        <th scope="col" class="px-6 py-3">
+                            Nom
+                        </th>
+                        <th scope="col" class="px-6 py-3">
+                            Email
+                        </th>
+
+                        <th scope="col" class="px-6 py-3">Cours</th>
+
+                        <th scope="col" class="px-6 py-3">
+                            Université
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach ($non_inscritLub as $inscrit)
+                        <tr>
+                            <td class="px-6 py-4">
+                                {{ $inscrit->name }}
+
+                            </td>
+
+                            <td class="px-6 py-4">
+                                {{ $inscrit->email }}
+
+                            </td>
+
+                            <td class="px-6 py-4">
+                                {{ $inscrit->course_slug }}
+                            </td>
+
+                            <td class="px-6 py-4">{{ $inscrit->university }}</td>
+                        </tr>
+                    @endforeach
+                </tbody>
+            </table>
+                    </div>
+                    <!-- Modal footer -->
+                    
+                </div>
+            </div>
+        </div>
+
+
+        <div id="default-non_inscritMat"
+            class="dark:text-gray-300 hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
+            <div class="relative p-4 w-full max-w-xl lg:max-w-6xl xl:max-w-7xl max-h-full">
+                <!-- Modal content -->
+                <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
+                    <!-- Modal header -->
+                    <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
+                        <h3 class="text-xl font-semibold text-gray-900 dark:text-white">
+                            Ceux de Matadi qui sont invités et ne  sont inscrit à aucun cours depuis 7 jours
+                        </h3>
+                        <button type="button"
+                            class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
+                            data-modal-hide="default-non_inscritMat">
+                            <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
+                                viewBox="0 0 14 14">
+                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                    stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
+                            </svg>
+                            <span class="sr-only">Close modal</span>
+                        </button>
+                    </div>
+                    <!-- Modal body -->
+                    <div class="p-4 md:p-5 space-y-4">
+                        <table id="mytable_non_inscritMat"
+                class="display nowrap w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-300"
+                style="width:100%">
+                <thead>
+                    <tr>
+                        <th scope="col" class="px-6 py-3">
+                            Nom
+                        </th>
+                        <th scope="col" class="px-6 py-3">
+                            Email
+                        </th>
+
+                        <th scope="col" class="px-6 py-3">Cours</th>
+
+                        <th scope="col" class="px-6 py-3">
+                            Université
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach ($non_inscritMat as $inscrit)
+                        <tr>
+                            <td class="px-6 py-4">
+                                {{ $inscrit->name }}
+
+                            </td>
+
+                            <td class="px-6 py-4">
+                                {{ $inscrit->email }}
+
+                            </td>
+
+                            <td class="px-6 py-4">
+                                {{ $inscrit->course_slug }}
+                            </td>
+
+                            <td class="px-6 py-4">{{ $inscrit->university }}</td>
+                        </tr>
+                    @endforeach
+                </tbody>
+            </table>
+                    </div>
+                    <!-- Modal footer -->
+                    
                 </div>
             </div>
         </div>
@@ -859,8 +1527,8 @@
                             </div>
                         </div>
                     </button>
-                     <button data-modal-target="default-modal-obtenue" data-modal-toggle="default-modal-obtenue" class="block"
-                        type="button">
+                    <button data-modal-target="default-modal-obtenue" data-modal-toggle="default-modal-obtenue"
+                        class="block" type="button">
                         <div
                             class=" h-16 flex shadow-lg dark:shadow-lg dark:shadow-gray-500/20   w-full gap-1 items-center p-2 mb-2 rounded-xl bg-[#fcdab40a] dark:bg-gray-800 dark:hover:bg-gray-600 hover:bg-[#f8f0e7] hover:scale-105 transition duration-700 ease-in-out">
                             <div>
@@ -1029,6 +1697,160 @@
                     }
                 })
             });
+            $(document).ready(function() {
+                $('#mytable_getcompKin').DataTable({
+                    "scrollX": true,
+                    "fixedColumns": {
+                        "start": 3
+                    },
+
+                    "dom": 'Bfrtip', // Ajouter les boutons
+                    "buttons": [{
+                        extend: 'excelHtml5',
+                        text: 'Exporter en Excel',
+                        title: 'Données Exportées',
+                        exportOptions: {
+                            columns: ':visible' // Exporter toutes les colonnes visibles
+                        }
+                    }]
+                })
+            });
+            
+            $(document).ready(function() {
+                $('#mytable_getcompKan').DataTable({
+                    "scrollX": true,
+                    "fixedColumns": {
+                        "start": 3
+                    },
+
+                    "dom": 'Bfrtip', // Ajouter les boutons
+                    "buttons": [{
+                        extend: 'excelHtml5',
+                        text: 'Exporter en Excel',
+                        title: 'Données Exportées',
+                        exportOptions: {
+                            columns: ':visible' // Exporter toutes les colonnes visibles
+                        }
+                    }]
+                })
+            });
+
+            $(document).ready(function() {
+                $('#mytable_getcompLub').DataTable({
+                    "scrollX": true,
+                    "fixedColumns": {
+                        "start": 3
+                    },
+
+                    "dom": 'Bfrtip', // Ajouter les boutons
+                    "buttons": [{
+                        extend: 'excelHtml5',
+                        text: 'Exporter en Excel',
+                        title: 'Données Exportées',
+                        exportOptions: {
+                            columns: ':visible' // Exporter toutes les colonnes visibles
+                        }
+                    }]
+                })
+            });
+
+            $(document).ready(function() {
+                $('#mytable_getcompMat').DataTable({
+                    "scrollX": true,
+                    "fixedColumns": {
+                        "start": 3
+                    },
+
+                    "dom": 'Bfrtip', // Ajouter les boutons
+                    "buttons": [{
+                        extend: 'excelHtml5',
+                        text: 'Exporter en Excel',
+                        title: 'Données Exportées',
+                        exportOptions: {
+                            columns: ':visible' // Exporter toutes les colonnes visibles
+                        }
+                    }]
+                })
+            });
+
+
+
+
+            $(document).ready(function() {
+                $('#mytable_non_inscritKin').DataTable({
+                    "scrollX": true,
+                    "fixedColumns": {
+                        "start": 3
+                    },
+
+                    "dom": 'Bfrtip', // Ajouter les boutons
+                    "buttons": [{
+                        extend: 'excelHtml5',
+                        text: 'Exporter en Excel',
+                        title: 'Données Exportées',
+                        exportOptions: {
+                            columns: ':visible' // Exporter toutes les colonnes visibles
+                        }
+                    }]
+                })
+            });
+
+            $(document).ready(function() {
+                $('#mytable_non_inscritKan').DataTable({
+                    "scrollX": true,
+                    "fixedColumns": {
+                        "start": 3
+                    },
+
+                    "dom": 'Bfrtip', // Ajouter les boutons
+                    "buttons": [{
+                        extend: 'excelHtml5',
+                        text: 'Exporter en Excel',
+                        title: 'Données Exportées',
+                        exportOptions: {
+                            columns: ':visible' // Exporter toutes les colonnes visibles
+                        }
+                    }]
+                })
+            });
+
+            $(document).ready(function() {
+                $('#mytable_non_inscritMat').DataTable({
+                    "scrollX": true,
+                    "fixedColumns": {
+                        "start": 3
+                    },
+
+                    "dom": 'Bfrtip', // Ajouter les boutons
+                    "buttons": [{
+                        extend: 'excelHtml5',
+                        text: 'Exporter en Excel',
+                        title: 'Données Exportées',
+                        exportOptions: {
+                            columns: ':visible' // Exporter toutes les colonnes visibles
+                        }
+                    }]
+                })
+            });
+
+            $(document).ready(function() {
+                $('#mytable_non_inscritLub').DataTable({
+                    "scrollX": true,
+                    "fixedColumns": {
+                        "start": 3
+                    },
+
+                    "dom": 'Bfrtip', // Ajouter les boutons
+                    "buttons": [{
+                        extend: 'excelHtml5',
+                        text: 'Exporter en Excel',
+                        title: 'Données Exportées',
+                        exportOptions: {
+                            columns: ':visible' // Exporter toutes les colonnes visibles
+                        }
+                    }]
+                })
+            });
         </script>
 
         <script>
@@ -1041,8 +1863,13 @@
                 },
             });
         </script>
+
+<link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/jquery.dataTables.min.css">
+<link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.3.6/css/buttons.dataTables.min.css">
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/2.3.6/js/dataTables.buttons.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/2.3.6/js/buttons.html5.min.js"></script>
     @endsection
-
-
-
 </x-app-layout>
