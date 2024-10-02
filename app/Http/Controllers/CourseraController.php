@@ -222,20 +222,48 @@ class CourseraController extends Controller
         $non_inscritMat_count = $non_inscritMat->count();
         $non_inscritKan_count = $non_inscritKan->count();
 
+       
         $non_inscrit_cours_count = $non_inscrit_cours->count();
 
         $last_activity = CourseraMember::select([
             'name',
             'email',
             'join_date',
-            'latest_program_activity_date'
+            'latest_program_activity_date',
+            'external_id'
 
         ])->where('latest_program_activity_date', '>', '2024-09-01')->get();
 
         $last_activity_count = $last_activity->count();
 
+        
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+       
+        $last_activityKin = $last_activity->filter(function ($member) {
+            return preg_match('/^1\d*/', $member->external_id);
+        });
 
-        $taux_utilisation = CourseraUsage::select('cm.email', 'cm.name', 'coursera_usages.university', 'coursera_usages.course', 'coursera_usages.course_slug', 'coursera_usages.last_course_activity')
+        $last_activityLub = $last_activity->filter(function ($member) {
+            return preg_match('/^2\d*/', $member->external_id);
+        });
+
+        $last_activityMat = $last_activity->filter(function ($member) {
+            return preg_match('/^3\d*/', $member->external_id);
+        });
+
+        $last_activityKan = $last_activity->filter(function ($member) {
+            return preg_match('/^4\d*/', $member->external_id);
+        });
+
+
+
+        $last_activityKin_count = $last_activityKin->count();
+        $last_activityMat_count = $last_activityMat->count();
+        $last_activityLub_count = $last_activityLub->count();
+        $last_activityKan_count = $last_activityKan->count();
+
+
+        $taux_utilisation = CourseraUsage::select('cm.email', 'cm.name', 'cm.external_id','coursera_usages.university', 'coursera_usages.course', 'coursera_usages.course_slug', 'coursera_usages.last_course_activity')
             ->leftJoin('coursera_members AS cm', 'cm.id', '=', 'coursera_usages.coursera_member_id')
             ->where('coursera_usages.removed_from_program', '=', 'Yes')
             ->where('coursera_usages.last_course_activity', '>', Carbon::now()->subDays(21)) // Assurez-vous que 'last_course_activity' est dans 'coursera_usages'
@@ -246,15 +274,15 @@ class CourseraController extends Controller
             return preg_match('/^1\d*/', $member->external_id);
         });
 
-        $taux_util_kin = $taux_utilisation->filter(function ($member) {
+        $taux_util_lub = $taux_utilisation->filter(function ($member) {
             return preg_match('/^2\d*/', $member->external_id);
         });
 
-        $taux_util_kin = $taux_utilisation->filter(function ($member) {
+        $taux_util_mat = $taux_utilisation->filter(function ($member) {
             return preg_match('/^3\d*/', $member->external_id);
         });
 
-        $taux_util_kin = $taux_utilisation->filter(function ($member) {
+        $taux_util_kan = $taux_utilisation->filter(function ($member) {
             return preg_match('/^4\d*/', $member->external_id);
         });
 
@@ -262,6 +290,14 @@ class CourseraController extends Controller
         $taux_count = $taux_utilisation->count();
         $taux = ($taux_count * 100) / 125;
 
+
+        $taux_util_kin_count = $taux_util_kin->count();
+        $taux_util_lub_count = $taux_util_lub->count();
+        $taux_util_mat_count = $taux_util_mat->count();
+        $taux_util_kan_count = $taux_util_kan->count();
+
+      
+        $taux_kin = ($taux_util_kin_count * 100) / $taux_utilisation->count();
 
         $membersKinshasa = CourseraMember::where('external_id', 'REGEXP', '^[10]\d*')
             ->get();
@@ -346,8 +382,25 @@ class CourseraController extends Controller
             "licenceKinEnCours",
             "licenceLubEnCours",
             "licenceKanEnCours",
-            "licenceMatEnCours"
+            "licenceMatEnCours",
+            "last_activityKin",
+            "last_activityKan",
+            "last_activityMat",
+            "last_activityLub",
 
+            "last_activityKin_count",
+            "last_activityKan_count",
+            "last_activityMat_count",
+            "last_activityLub_count",
+            "taux_util_kin",
+            "taux_util_kan",
+            "taux_util_mat",
+            "taux_util_lub",
+
+            "taux_util_kin_count",
+            "taux_util_kan_count",
+            "taux_util_mat_count",
+            "taux_util_lub_count",
         ));
     }
     public function licence_encours()
