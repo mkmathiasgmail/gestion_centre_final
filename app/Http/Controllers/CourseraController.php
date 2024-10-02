@@ -68,6 +68,7 @@ class CourseraController extends Controller
         $noAcceptInvitation = CourseraMember::where('member_state', 'INVITED')->get();
         $noAcceptInvitation_cout = $noAcceptInvitation->count();
         $acceptInvitation_count = $acceptInvitation->count();
+
         $allMembers = CourseraMember::all();
 
         //$membersKinshasa = $allMembers->where('external_id', 'REGEXP', '^1\d*');
@@ -81,7 +82,10 @@ class CourseraController extends Controller
             ->selectRaw("count(case when completed = 'No' then 1 end) as noCompleted")
             ->first();
 
-        $nombre_cours = CourseraSpecialisation::sum('courses_in_specialisation');
+        $nombre_cours = CourseraUsage::distinct('course')->count();
+        
+        $total_cours =  CourseraUsage::select('course')->distinct()->get();
+
         $getCompletedUsages = CourseraUsage::join('coursera_members as cmem', 'cmem.id', '=', 'coursera_usages.coursera_member_id')->select([
             'cmem.name',
             'cmem.email',
@@ -94,7 +98,7 @@ class CourseraController extends Controller
 
 
         //Specialisation__________________________________________
-        $allSpecialisations = CourseraSpecialisation::select('specialisaton') // Remplacez par le nom de la colonne que vous souhaitez
+        $allSpecialisations = CourseraSpecialisation::select('specialisaton', 'courses_in_specialisation') // Remplacez par le nom de la colonne que vous souhaitez
             ->distinct()
             ->get();
         $specialisationsCount = $allSpecialisations->count();
@@ -317,10 +321,140 @@ class CourseraController extends Controller
             "apprenants_30day_lubumbashi",
             "apprenants_30day_matadi",
             "apprenants_30day_kananga",
+            "total_cours",
 
 
         ));
     }
+
+    public function memberexcel(){
+
+        $allMembers = CourseraMember::all();
+
+        //vériefie si les members ont été trouvés
+        if($allMembers->isEmpty()){
+            return response()->json(['message' => 'Aucun membre trouvé.'], 404);
+        }
+
+        $spreadsheet = new Spreadsheet();
+        $worksheet = $spreadsheet->getActiveSheet();
+
+        $worksheet->setCellValue('A1', 'Name');
+        $worksheet->getStyle('A1')
+                ->getFill()
+                ->setFillType(Fill::FILL_SOLID)
+                ->setStartColor(new Color('D3D3D3'));
+
+        $worksheet->setCellValue('B1', 'Email');
+        $worksheet->getStyle('B1')
+            ->getFill()
+            ->setFillType(Fill::FILL_SOLID)
+            ->setStartColor(new Color('D3D3D3'));
+
+        $worksheet->setCellValue('C1', 'External Id');
+        $worksheet->getStyle('C1')
+            ->getFill()
+            ->setFillType(Fill::FILL_SOLID)
+            ->setStartColor(new Color('D3D3D3'));
+
+        $worksheet->setCellValue('D1', 'Enrolled Courses');
+        $worksheet->getStyle('D1')
+            ->getFill()
+            ->setFillType(Fill::FILL_SOLID)
+            ->setStartColor(new Color('D3D3D3'));
+
+        $worksheet->setCellValue('E1', 'Completed Courses');
+        $worksheet->getStyle('E1')
+            ->getFill()
+            ->setFillType(Fill::FILL_SOLID)
+            ->setStartColor(new Color('D3D3D3'));
+
+        $worksheet->setCellValue('F1', 'Member State');
+        $worksheet->getStyle('F1')
+            ->getFill()
+            ->setFillType(Fill::FILL_SOLID)
+            ->setStartColor(new Color('D3D3D3'));
+
+        $worksheet->setCellValue('G1', 'Join Date');
+        $worksheet->getStyle('G1')
+            ->getFill()
+            ->setFillType(Fill::FILL_SOLID)
+            ->setStartColor(new Color('D3D3D3'));
+
+
+        $worksheet->setCellValue('H1', 'Invitation Date');
+        $worksheet->getStyle('H1')
+            ->getFill()
+            ->setFillType(Fill::FILL_SOLID)
+            ->setStartColor(new Color('D3D3D3'));
+
+        $worksheet->setCellValue('I1', 'Lastest Program ACtivity Date');
+        $worksheet->getStyle('I1')
+            ->getFill()
+            ->setFillType(Fill::FILL_SOLID)
+            ->setStartColor(new Color('D3D3D3'));
+
+        $row = 2;
+
+        foreach ($allMembers as $member) {
+            $worksheet->setCellValue('A' . $row, $member->name)
+                ->getStyle('A' . $row)
+                ->getAlignment()
+                ->setHorizontal(Alignment::HORIZONTAL_LEFT);
+
+            $worksheet->setCellValue('B' . $row, $member->email)
+                ->getStyle('B' . $row)
+                ->getAlignment()
+                ->setHorizontal(Alignment::HORIZONTAL_LEFT);
+
+            $worksheet->setCellValue('C' . $row, $member->external_id)
+                ->getStyle('C'. $row)
+                ->getAlignment()
+                ->setHorizontal(Alignment::HORIZONTAL_LEFT);
+                
+            $worksheet->setCellValue('D' . $row, $member->enrolled_courses)
+                ->getStyle('D'. $row)
+                ->getAlignment()
+                ->setHorizontal(Alignment::HORIZONTAL_LEFT);
+
+            $worksheet->setCellValue('E' . $row, $member->completed_courses)
+                ->getStyle('E' . $row)
+                ->getAlignment()
+                ->setHorizontal(Alignment::HORIZONTAL_LEFT);
+            
+            $worksheet->setCellValue('F' . $row, $member->member_state)
+                ->getStyle('F' . $row)
+                ->getAlignment()
+                ->setHorizontal(Alignment::HORIZONTAL_LEFT);
+
+            $worksheet->setCellValue('G' . $row, $member->join_date)
+                ->getStyle('G' . $row)
+                ->getAlignment()
+                ->setHorizontal(Alignment::HORIZONTAL_LEFT);
+            
+            $worksheet->setCellValue('H' . $row, $member->invitation_date)
+                ->getStyle('H' . $row)
+                ->getAlignment()
+                ->setHorizontal(Alignment::HORIZONTAL_LEFT);
+            
+            $worksheet->setCellValue('I' . $row, $member->latest_program_activity_date)
+                ->getStyle('I' . $row)
+                ->getAlignment()
+                ->setHorizontal(Alignment::HORIZONTAL_LEFT);
+
+            $row++;
+        }
+        // On crée le fichier Excel
+        $writer = new Xlsx($spreadsheet);
+        $fileName = "Tous_les_members_Coursera.xlsx";
+        $tempFile = tempnam(sys_get_temp_dir(), $fileName);
+        $writer->save($tempFile);
+
+        // On renvoie le fichier Excel au navigateur
+        return response()->download($tempFile, $fileName)->deleteFileAfterSend(true);
+    }
+
+
     public function licence_encours()
     {
         $licence_en_cours = CourseraUsage::leftJoin('coursera_members as cm', 'cm.id', '=', 'coursera_usages.coursera_member_id')
@@ -390,7 +524,7 @@ class CourseraController extends Controller
 
         // On crée le fichier Excel
         $writer = new Xlsx($spreadsheet);
-        $fileName = "Coursera_Invitation.xlsx";
+        $fileName = "Coursera_licence_en_cours.xlsx";
         $tempFile = tempnam(sys_get_temp_dir(), $fileName);
         $writer->save($tempFile);
 
@@ -470,7 +604,7 @@ class CourseraController extends Controller
 
         // On crée le fichier Excel
         $writer = new Xlsx($spreadsheet);
-        $fileName = "Invitater.xlsx";
+        $fileName = "coursera_membre_depuis_30jours_pas_de_certificat.xlsx";
         $tempFile = tempnam(sys_get_temp_dir(), $fileName);
         $writer->save($tempFile);
 
@@ -623,7 +757,7 @@ class CourseraController extends Controller
 
         // On crée le fichier Excel
         $writer = new Xlsx($spreadsheet);
-        $fileName = "Invitater.xlsx";
+        $fileName = "liste_non_inscrit_aux_cours.xlsx";
         $tempFile = tempnam(sys_get_temp_dir(), $fileName);
         $writer->save($tempFile);
 
@@ -700,7 +834,7 @@ class CourseraController extends Controller
 
         // On crée le fichier Excel
         $writer = new Xlsx($spreadsheet);
-        $fileName = "Invitater.xlsx";
+        $fileName = "taux_utilisation.xlsx";
         $tempFile = tempnam(sys_get_temp_dir(), $fileName);
         $writer->save($tempFile);
 
@@ -773,7 +907,7 @@ class CourseraController extends Controller
 
         // On crée le fichier Excel
         $writer = new Xlsx($spreadsheet);
-        $fileName = "Invitater.xlsx";
+        $fileName = "last_activity.xlsx";
         $tempFile = tempnam(sys_get_temp_dir(), $fileName);
         $writer->save($tempFile);
 
