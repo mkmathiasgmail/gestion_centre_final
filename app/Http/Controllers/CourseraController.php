@@ -117,7 +117,6 @@ class CourseraController extends Controller
             ->select('cm.email', 'cm.name', 'coursera_usages.course', 'coursera_usages.course_slug', 'coursera_usages.university', 'cm.external_id')
             ->get();
 
-        //dd($licence_en_cours);
 
         $licenceKinEnCours = $licence_en_cours->filter(function ($member) {
             return preg_match('/^[10]\d*/', $member->external_id);
@@ -141,17 +140,41 @@ class CourseraController extends Controller
 
         $licence_en_cours_count = $licence_en_cours->count();
 
+        //nombres de ceux qui ont obtenues les certificats
         $certificats = CourseraUsage::leftJoin('coursera_members as cm', 'cm.id', '=', 'coursera_usages.coursera_member_id')
             ->where('course_certificate_url', '!=', '')
-            ->select('cm.name', 'cm.email', 'coursera_usages.university', 'coursera_usages.course', 'coursera_usages.course_slug')
+            ->select('cm.name', 'cm.email', 'cm.external_id', 'coursera_usages.university', 'coursera_usages.course', 'coursera_usages.course_slug')
             ->get();
 
+        //count pour ceux qui ont obtenues les certificats
         $certificat_count = $certificats->count();
+
+        //obtenue certificats à kinshasa
+        $certificat_obtenue_kinshasa = $certificats->filter(function ($member) {
+            return preg_match('/^[10]\d*/', $member->external_id);
+        });
+        $certificat_obtenue_kinshasa_count=$certificat_obtenue_kinshasa->count();
+
+        //obtenue certificat à lubumbashi
+        $certificat_obtenue_lubumbashi = $certificats->filter(function($member){
+            return preg_match('/^[2]\d*/', $member->external_id);
+        });
+        $certificat_obtenue_lubumbashi_count=$certificat_obtenue_lubumbashi->count();
+        //obtenue certificat à matadi
+        $certificat_obtenue_matadi = $certificats->filter(function($member){
+            return preg_match('/^[3]\d*/', $member->external_id);
+        });
+        $certificat_obtenue_matadi_count=$certificat_obtenue_matadi->count();
+        //obtenue certificat à kananga
+        $certificat_obtenue_kananga = $certificats->filter(function($member){
+            return preg_match('/^[4]\d*/', $member->external_id);
+        });
+        $certificat_obtenue_kananga_count=$certificat_obtenue_kananga->count();
 
         $thirtyDaysAgo = Carbon::now()->subDays(30);
 
 
-        $apprenants_30day = CourseraMember::select('coursera_members.name', 'coursera_members.email', 'cu.university', 'cu.course', 'cu.course_slug', 'cu.course_certificate_url')
+        $apprenants_30day = CourseraMember::select('coursera_members.name','coursera_members.external_id', 'coursera_members.email', 'cu.university', 'cu.course', 'cu.course_slug', 'cu.course_certificate_url')
             ->leftJoin('coursera_usages as cu', 'coursera_members.id', '=', 'cu.coursera_member_id')
             ->where('coursera_members.join_date', '>=', Carbon::now()->subDays(30))
             ->where(function ($query) {
@@ -160,6 +183,28 @@ class CourseraController extends Controller
             })
             ->get();
         $apprenants_30day_count = $apprenants_30day->count();
+
+        //apprenants 30 jours pas de certificat à kinshasa
+         $apprenants_30day_kinshasa = $apprenants_30day->filter(function ($member) {
+            return preg_match('/^[10]\d*/', $member->external_id);
+        });
+        $apprenants_30day_kinshasa_count=$apprenants_30day_kinshasa->count();
+
+        //obtenue 30 jours pas de certificat à lubumbashi
+        $apprenants_30day_lubumbashi = $apprenants_30day->filter(function($member){
+            return preg_match('/^[2]\d*/', $member->external_id);
+        });
+        $certificat_30day_lubumbashi_count=$apprenants_30day_lubumbashi->count();
+        //obtenue certificat à matadi
+        $apprenants_30day_matadi = $apprenants_30day->filter(function($member){
+            return preg_match('/^[3]\d*/', $member->external_id);
+        });
+        $apprenants_30day_matadi_count=$apprenants_30day_matadi->count();
+        //obtenue certificat à kananga
+        $apprenants_30day_kananga = $apprenants_30day->filter(function($member){
+            return preg_match('/^[4]\d*/', $member->external_id);
+        });
+        $apprenants_30day_kananga_count=$apprenants_30day_kananga->count();
 
 
         $non_inscrit_cours = CourseraMember::select('coursera_members.name', 'coursera_members.email', 'cu.university', 'cu.course', 'cu.course_slug', 'cu.course_certificate_url')
@@ -255,7 +300,23 @@ class CourseraController extends Controller
             "licenceKinEnCours",
             "licenceLubEnCours",
             "licenceKanEnCours",
-            "licenceMatEnCours"
+            "licenceMatEnCours",
+            "certificat_obtenue_kinshasa",
+            "certificat_obtenue_lubumbashi",
+            "certificat_obtenue_matadi",
+            "certificat_obtenue_kananga",
+            "certificat_obtenue_kinshasa_count",
+            "certificat_obtenue_lubumbashi_count",
+            "certificat_obtenue_matadi_count",
+            "certificat_obtenue_kananga_count",
+            "apprenants_30day_kinshasa_count",
+            "certificat_30day_lubumbashi_count",
+            "apprenants_30day_matadi_count",
+            "apprenants_30day_kananga_count",
+            "apprenants_30day_kinshasa",
+            "apprenants_30day_lubumbashi",
+            "apprenants_30day_matadi",
+            "apprenants_30day_kananga",
 
 
         ));
