@@ -85,13 +85,77 @@
             </a>
         </div>
     </section>
-    @section('modal')
+
+@section('modal')
+
+
+<div id="default-tab-content">
+        {{-- <div class="hidden p-4 rounded-lg bg-gray-50 dark:bg-gray-800" id="profile" role="tabpanel" aria-labelledby="profile-tab p-4 md:p-5 space-y-4"> --}}
+            {{-- <table id="licence_kinshasa"
+                class="display nowrap w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-300"
+                style="width:100%">
+                <thead>
+                    <tr>
+                        <th scope="col" class="px-6 py-3">
+                            Nom
+                        </th>
+                        <th scope="col" class="px-6 py-3">
+                            Email
+                        </th>
+
+                        <th scope="col" class="px-6 py-3">Cours</th>
+
+                        <th scope="col" class="px-6 py-3">
+                            Université
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach ($licenceKinEnCours as $licence)
+                        <tr>
+                            <td class="px-6 py-4">
+                                {{ $licence->name }}
+                            </td>
+                            <td class="px-6 py-4">
+                                {{ $licence->email }}
+
+                            </td>
+
+                            <td class="px-6 py-4">
+                                {{ $licence->course }}
+                            </td>
+
+                            <td class="px-6 py-4">{{ $licence->university }}</td>
+                        </tr>
+                    @endforeach
+                </tbody>
+            </table> --}}
+        </div>
+
+    <div class="hidden p-4 rounded-lg bg-gray-50 dark:bg-gray-800" id="dashboard" role="tabpanel" aria-labelledby="dashboard-tab">
+        <p class="text-sm text-gray-500 dark:text-gray-400">This is some placeholder content the <strong class="font-medium text-gray-800 dark:text-white">Dashboard tab's associated content</strong>. Clicking another tab will toggle the visibility of this one for the next. The tab JavaScript swaps classes to control the content visibility and styling.</p>
+    </div>
+    <div class="hidden p-4 rounded-lg bg-gray-50 dark:bg-gray-800" id="settings" role="tabpanel" aria-labelledby="settings-tab">
+        <p class="text-sm text-gray-500 dark:text-gray-400">This is some placeholder content the <strong class="font-medium text-gray-800 dark:text-white">Settings tab's associated content</strong>. Clicking another tab will toggle the visibility of this one for the next. The tab JavaScript swaps classes to control the content visibility and styling.</p>
+    </div>
+    <div class="hidden p-4 rounded-lg bg-gray-50 dark:bg-gray-800" id="contacts" role="tabpanel" aria-labelledby="contacts-tab">
+        <p class="text-sm text-gray-500 dark:text-gray-400">This is some placeholder content the <strong class="font-medium text-gray-800 dark:text-white">Contacts tab's associated content</strong>. Clicking another tab will toggle the visibility of this one for the next. The tab JavaScript swaps classes to control the content visibility and styling.</p>
+    </div>
+</div>
+
+
+
+
+
+
+
+
         <!-- Main modal licences en cours d'utilisations -->
-        <div id="default-modal" dark:text-gray-300
+    <div id="default-modal" dark:text-gray-300
             class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
-            <div class="relative p-4 w-full max-w-xl lg:max-w-6xl xl:max-w-7xl max-h-full">
+        <div class="relative p-4 w-full max-w-xl lg:max-w-6xl xl:max-w-7xl max-h-full">
                 <!-- Modal content -->
-                <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
+            <div class="relative bg-white rounded-lg shadow dark:bg-gray-700 p-4">
                     <!-- Modal header -->
                     <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
                         <h3 class="text-xl font-semibold text-gray-900 dark:text-white">
@@ -109,362 +173,274 @@
                         </button>
                     </div>
                     <!-- Modal body -->
-                    <div class="p-4 md:p-5 space-y-4">
-                        <table id="mytable"
-                            class="display nowrap w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-300"
-                            style="width:100%">
-                            <thead>
-                                <tr>
-                                    <th scope="col" class="px-6 py-3">
-                                        Nom
-                                    </th>
-                                    <th scope="col" class="px-6 py-3">
-                                        Email
-                                    </th>
-
-                                    <th scope="col" class="px-6 py-3">Cours</th>
-
-                                    <th scope="col" class="px-6 py-3">
-                                        Université
-                                    </th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach ($licence_en_cours as $licence)
+            <div>
+                    <div id="toutAfficher" role="tabpanel" aria-labelledby="toutAfficher-tab p-4 md:p-5 space-y-4"
+                        class="hidden p-4 rounded-lg bg-gray-50 dark:bg-gray-800 top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
+                            <table id="mytable"
+                                class="display nowrap w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-300"
+                                style="width:100%">
+                                <thead>
                                     <tr>
-                                        <td class="px-6 py-4">
-                                            {{ $licence->name }}
-                                        </td>
-                                        <td class="px-6 py-4">
-                                            {{ $licence->email }}
+                                        <th scope="col" class="px-6 py-3">
+                                            Nom
+                                        </th>
+                                        <th scope="col" class="px-6 py-3">
+                                            Email
+                                        </th>
 
-                                        </td>
+                                        <th scope="col" class="px-6 py-3">Cours</th>
 
-                                        <td class="px-6 py-4">
-                                            {{ $licence->course }}
-                                        </td>
-
-                                        <td class="px-6 py-4">{{ $licence->university }}</td>
+                                        <th scope="col" class="px-6 py-3">
+                                            Université
+                                        </th>
                                     </tr>
-                                @endforeach
-                            </tbody>
-                        </table>
+                                </thead>
+                                <tbody>
+                                    @foreach ($licence_en_cours as $licence)
+                                        <tr>
+                                            <td class="px-6 py-4">
+                                                {{ $licence->name }}
+                                            </td>
+                                            <td class="px-6 py-4">
+                                                {{ $licence->email }}
+
+                                            </td>
+
+                                            <td class="px-6 py-4">
+                                                {{ $licence->course }}
+                                            </td>
+
+                                            <td class="px-6 py-4">{{ $licence->university }}</td>
+                                        </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
                     </div>
-                    <!-- Modal footer -->
-                    <div class="flex items-center p-4 md:p-5 border-t border-gray-200 rounded-b dark:border-gray-600">
+
+              <!-- Main modal licences en cours d'utilisations à Kinshasa -->
+                <div id="kinshasa" role="tabpanel" aria-labelledby="kinshasa-tab p-4 md:p-5 space-y-4"
+                        class="hidden p-4 rounded-lg bg-gray-50 dark:bg-gray-800 top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
+                            <table id="licence_kinshasa"
+                                class="display nowrap w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-300"
+                                style="width:100%">
+                                <thead>
+                                    <tr>
+                                        <th scope="col" class="px-6 py-3">
+                                            Nom
+                                        </th>
+                                        <th scope="col" class="px-6 py-3">
+                                            Email
+                                        </th>
+
+                                        <th scope="col" class="px-6 py-3">Cours</th>
+
+                                        <th scope="col" class="px-6 py-3">
+                                            Université
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach ($licenceKinEnCours as $licence)
+                                        <tr>
+                                            <td class="px-6 py-4">
+                                                {{ $licence->name }}
+                                            </td>
+                                            <td class="px-6 py-4">
+                                                {{ $licence->email }}
+
+                                            </td>
+
+                                            <td class="px-6 py-4">
+                                                {{ $licence->course }}
+                                            </td>
+
+                                            <td class="px-6 py-4">{{ $licence->university }}</td>
+                                        </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+                    </div>
+
+            <!-- Main modal licences en cours d'utilisations à Lubumbashi -->
+            <div id="lubumbashi" role="tabpanel" aria-labelledby="lubumbashi-tab p-4 md:p-5 space-y-4"
+            class="hidden p-4 rounded-lg bg-gray-50 dark:bg-gray-800 top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
+                <table id="licence_lubumbashi"
+                    class="display nowrap w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-300"
+                    style="width:100%">
+                    <thead>
+                        <tr>
+                            <th scope="col" class="px-6 py-3">
+                                Nom
+                            </th>
+                            <th scope="col" class="px-6 py-3">
+                                Email
+                            </th>
+
+                            <th scope="col" class="px-6 py-3">Cours</th>
+
+                            <th scope="col" class="px-6 py-3">
+                                Université
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach ($licenceLubEnCours as $licence)
+                            <tr>
+                                <td class="px-6 py-4">
+                                    {{ $licence->name }}
+                                </td>
+                                <td class="px-6 py-4">
+                                    {{ $licence->email }}
+
+                                </td>
+
+                                <td class="px-6 py-4">
+                                    {{ $licence->course }}
+                                </td>
+
+                                <td class="px-6 py-4">{{ $licence->university }}</td>
+                            </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
+
+            {{-- licences en cours d'utilisation à Matadi --}}
+            <div id="matadi" role="tabpanel" aria-labelledby="matadi-tab p-4 md:p-5 space-y-4"
+            class="hidden p-4 rounded-lg bg-gray-50 dark:bg-gray-800 top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
+                <table id="licence_matadi"
+                    class="display nowrap w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-300"
+                    style="width:100%">
+                    <thead>
+                        <tr>
+                            <th scope="col" class="px-6 py-3">
+                                Nom
+                            </th>
+                            <th scope="col" class="px-6 py-3">
+                                Email
+                            </th>
+
+                            <th scope="col" class="px-6 py-3">Cours</th>
+
+                            <th scope="col" class="px-6 py-3">
+                                Université
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach ($licenceMatEnCours as $licence)
+                            <tr>
+                                <td class="px-6 py-4">
+                                    {{ $licence->name }}
+                                </td>
+                                <td class="px-6 py-4">
+                                    {{ $licence->email }}
+
+                                </td>
+
+                                <td class="px-6 py-4">
+                                    {{ $licence->course }}
+                                </td>
+
+                                <td class="px-6 py-4">{{ $licence->university }}</td>
+                            </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
+
+            {{-- Licence en cours d'utilisation a kananga --}}
+            <div id="kananga" role="tabpanel" aria-labelledby="kananga-tab p-4 md:p-5 space-y-4"
+            class="hidden p-4 rounded-lg bg-gray-50 dark:bg-gray-800 top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
+                <table id="licence_kananga"
+                    class="display nowrap w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-300"
+                    style="width:100%">
+                    <thead>
+                        <tr>
+                            <th scope="col" class="px-6 py-3">
+                                Nom
+                            </th>
+                            <th scope="col" class="px-6 py-3">
+                                Email
+                            </th>
+
+                            <th scope="col" class="px-6 py-3">Cours</th>
+
+                            <th scope="col" class="px-6 py-3">
+                                Université
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach ($licenceKanEnCours as $licence)
+                            <tr>
+                                <td class="px-6 py-4">
+                                    {{ $licence->name }}
+                                </td>
+                                <td class="px-6 py-4">
+                                    {{ $licence->email }}
+
+                                </td>
+
+                                <td class="px-6 py-4">
+                                    {{ $licence->course }}
+                                </td>
+
+                                <td class="px-6 py-4">{{ $licence->university }}</td>
+                            </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Modal footer -->
+                <div class="flex items-center p-4 md:p-5 border-t border-gray-200 rounded-b dark:border-gray-600">
                         <a href="{{ route('licencesCoursera') }}" data-modal-hide="default-modal" type="button"
                             class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-transparent bg-[#FF7322] text-white hover:bg-[#FF6822] focus:outline-none focus:bg-[#FF6822] disabled:opacity-50 disabled:pointer-events-none">
                             Exporte en Excel</a>
-                        <button data-modal-target="default-modal-licence-kinshasa"
-                            data-modal-toggle="default-modal-licence-kinshasa" data-modal-hide="default-modal"
-                            type="button"
-                            class="py-2.5 px-5 ms-3 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">Kinshasa:
-                            {{ $licenceKinEnCours_count }}</button>
-                        <button data-modal-target="default-modal-licence-lubumbashi"
-                            data-modal-toggle="default-modal-licence-lubumbashi" data-modal-hide="default-modal"
-                            type="button"
-                            class="py-2.5 px-5 ms-3 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">Lubumbashi:
-                            {{ $licenceLubEnCours_count }}</button>
-                        <button data-modal-target="default-modal-licence-matadi"
-                            data-modal-toggle="default-modal-licence-matadi" data-modal-hide="default-modal" type="button"
-                            class="py-2.5 px-5 ms-3 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">Matadi
-                            : {{ $licenceMatEnCours_count }}</button>
-                        <button data-modal-target="default-modal-licence-kananga"
-                            data-modal-toggle="default-modal-licence-kananga" data-modal-hide="default-modal" type="button"
-                            class="py-2.5 px-5 ms-3 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">Kananga
-                            : {{ $licenceKanEnCours_count }}</button>
+
+                             <div class="px-8 mb-4">
+                                <ul class="flex flex-wrap -mb-px text-sm font-medium text-center" id="default-tab" data-tabs-toggle="#default-tab-content" data-tabs-active-classes="text-orange-600 hover:text-orange-600 dark:text-orange-500 dark:hover:text-orange-500 border-orange-600 dark:border-orange-500" data-tabs-inactive-classes="dark:border-transparent text-gray-500 hover:text-gray-600 dark:text-gray-400 border-gray-100 hover:border-gray-300 dark:border-gray-700 dark:hover:text-gray-300" role="tablist">
+                                    <li class="me-2" role="presentation">
+                                        <button class="inline-block p-4 border-b-2 rounded-t-lg" id="toutAfficher-tab" data-tabs-target="#toutAfficher" type="button" role="tab" aria-controls="toutAfficher" aria-selected="false"
+                                    class="py-2.5 px-5 ms-3 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">Tout afficher:
+                                    {{ $licence_en_cours_count }}</button>
+                                    </li>
+
+                                    <li class="me-2" role="presentation">
+                                        <button class="inline-block p-4 border-b-2 rounded-t-lg" id="kinshasa-tab" data-tabs-target="#kinshasa" type="button" role="tab" aria-controls="kinshasa" aria-selected="false"
+                                    class="py-2.5 px-5 ms-3 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">Kinshasa:
+                                    {{ $licenceKinEnCours_count }}</button>
+                                    </li>
+                                    <li class="me-2" role="presentation">
+                                        <button class="inline-block p-4 border-b-2 rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300" id="lubumbashi-tab" data-tabs-target="#lubumbashi" type="button" role="tab" aria-controls="lubumbashi" aria-selected="false"
+                                        class="py-2.5 px-5 ms-3 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">Lubumbashi:
+                                        {{ $licenceLubEnCours_count }}</button>
+                                    </li>
+                                    <li class="me-2" role="presentation">
+                                        <button  class="inline-block p-4 border-b-2 rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300" id="matadi-tab" data-tabs-target="#matadi" type="button" role="tab" aria-controls="matadi" aria-selected="false"
+                                        class="py-2.5 px-5 ms-3 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">Matadi
+                                        : {{ $licenceMatEnCours_count }}</button>
+                                    </li>
+                                    <li role="presentation">
+                                        <button class="inline-block p-4 border-b-2 rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300" id="kananga-tab" data-tabs-target="#kananga" type="button" role="tab" aria-controls="kananga" aria-selected="false"
+                                    class="py-2.5 px-5 ms-3 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">Kananga
+                                    : {{ $licenceKanEnCours_count }}</button>
+                                    </li>
+                                </ul>
+                            </div>
                     </div>
-                </div>
+            </div>
             </div>
         </div>
-
-        <!-- Main modal licences en cours d'utilisations à Kinshasa -->
-        <div id="default-modal-licence-kinshasa" dark:text-gray-300
-            class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
-            <div class="relative p-4 w-full max-w-xl lg:max-w-6xl xl:max-w-7xl max-h-full">
-                <!-- Modal content -->
-                <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
-                    <!-- Modal header -->
-                    <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
-                        <h3 class="text-xl font-semibold text-gray-900 dark:text-white">
-                            Licences en cours d'utilisation à Kinshasa
-                        </h3>
-                        <button type="button"
-                            class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
-                            data-modal-hide="default-modal">
-                            <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
-                                viewBox="0 0 14 14">
-                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
-                                    stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
-                            </svg>
-                            <span class="sr-only">Close modal</span>
-                        </button>
-                    </div>
-                    <!-- Modal body -->
-                    <div class="p-4 md:p-5 space-y-4">
-                        <table id="licence_kinshasa"
-                            class="display nowrap w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-300"
-                            style="width:100%">
-                            <thead>
-                                <tr>
-                                    <th scope="col" class="px-6 py-3">
-                                        Nom
-                                    </th>
-                                    <th scope="col" class="px-6 py-3">
-                                        Email
-                                    </th>
-
-                                    <th scope="col" class="px-6 py-3">Cours</th>
-
-                                    <th scope="col" class="px-6 py-3">
-                                        Université
-                                    </th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach ($licenceKinEnCours as $licence)
-                                    <tr>
-                                        <td class="px-6 py-4">
-                                            {{ $licence->name }}
-                                        </td>
-                                        <td class="px-6 py-4">
-                                            {{ $licence->email }}
-
-                                        </td>
-
-                                        <td class="px-6 py-4">
-                                            {{ $licence->course }}
-                                        </td>
-
-                                        <td class="px-6 py-4">{{ $licence->university }}</td>
-                                    </tr>
-                                @endforeach
-                            </tbody>
-                        </table>
-                    </div>
-                    <!-- Modal footer -->
-                    <div class="flex items-center p-4 md:p-5 border-t border-gray-200 rounded-b dark:border-gray-600">
-                    </div>
-                </div>
-            </div>
-        </div>
-        <!-- Main modal licences en cours d'utilisations à Lubumbashi -->
-        <div id="default-modal-licence-lubumbashi" dark:text-gray-300
-            class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
-            <div class="relative p-4 w-full max-w-xl lg:max-w-6xl xl:max-w-7xl max-h-full">
-                <!-- Modal content -->
-                <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
-                    <!-- Modal header -->
-                    <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
-                        <h3 class="text-xl font-semibold text-gray-900 dark:text-white">
-                            Licences en cours d'utilisation à Lubumbashi
-                        </h3>
-                        <button type="button"
-                            class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
-                            data-modal-hide="default-modal">
-                            <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
-                                viewBox="0 0 14 14">
-                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
-                                    stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
-                            </svg>
-                            <span class="sr-only">Close modal</span>
-                        </button>
-                    </div>
-                    <!-- Modal body -->
-                    <div class="p-4 md:p-5 space-y-4">
-                        <table id="licence_lubumbashi"
-                            class="display nowrap w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-300"
-                            style="width:100%">
-                            <thead>
-                                <tr>
-                                    <th scope="col" class="px-6 py-3">
-                                        Nom
-                                    </th>
-                                    <th scope="col" class="px-6 py-3">
-                                        Email
-                                    </th>
-
-                                    <th scope="col" class="px-6 py-3">Cours</th>
-
-                                    <th scope="col" class="px-6 py-3">
-                                        Université
-                                    </th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach ($licenceLubEnCours as $licence)
-                                    <tr>
-                                        <td class="px-6 py-4">
-                                            {{ $licence->name }}
-                                        </td>
-                                        <td class="px-6 py-4">
-                                            {{ $licence->email }}
-
-                                        </td>
-
-                                        <td class="px-6 py-4">
-                                            {{ $licence->course }}
-                                        </td>
-
-                                        <td class="px-6 py-4">{{ $licence->university }}</td>
-                                    </tr>
-                                @endforeach
-                            </tbody>
-                        </table>
-                    </div>
-                    <!-- Modal footer -->
-                    <div class="flex items-center p-4 md:p-5 border-t border-gray-200 rounded-b dark:border-gray-600">
-                    </div>
-                </div>
-            </div>
-        </div>
-        {{-- licences en cours d'utilisation à Matadi --}}
-        <div id="default-modal-licence-matadi" dark:text-gray-300
-            class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
-            <div class="relative p-4 w-full max-w-xl lg:max-w-6xl xl:max-w-7xl max-h-full">
-                <!-- Modal content -->
-                <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
-                    <!-- Modal header -->
-                    <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
-                        <h3 class="text-xl font-semibold text-gray-900 dark:text-white">
-                            Licences en cours d'utilisation à Matadi
-                        </h3>
-                        <button type="button"
-                            class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
-                            data-modal-hide="default-modal">
-                            <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
-                                viewBox="0 0 14 14">
-                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
-                                    stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
-                            </svg>
-                            <span class="sr-only">Close modal</span>
-                        </button>
-                    </div>
-                    <!-- Modal body -->
-                    <div class="p-4 md:p-5 space-y-4">
-                        <table id="licence_matadi"
-                            class="display nowrap w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-300"
-                            style="width:100%">
-                            <thead>
-                                <tr>
-                                    <th scope="col" class="px-6 py-3">
-                                        Nom
-                                    </th>
-                                    <th scope="col" class="px-6 py-3">
-                                        Email
-                                    </th>
-
-                                    <th scope="col" class="px-6 py-3">Cours</th>
-
-                                    <th scope="col" class="px-6 py-3">
-                                        Université
-                                    </th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach ($licenceMatEnCours as $licence)
-                                    <tr>
-                                        <td class="px-6 py-4">
-                                            {{ $licence->name }}
-                                        </td>
-                                        <td class="px-6 py-4">
-                                            {{ $licence->email }}
-
-                                        </td>
-
-                                        <td class="px-6 py-4">
-                                            {{ $licence->course }}
-                                        </td>
-
-                                        <td class="px-6 py-4">{{ $licence->university }}</td>
-                                    </tr>
-                                @endforeach
-                            </tbody>
-                        </table>
-                    </div>
-                    <!-- Modal footer -->
-                    <div class="flex items-center p-4 md:p-5 border-t border-gray-200 rounded-b dark:border-gray-600">
-                    </div>
-                </div>
-            </div>
-        </div>
-         <!-- Main modal licences en cours d'utilisations à kananga -->
-        <div id="default-modal-licence-kananga" dark:text-gray-300
-            class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
-            <div class="relative p-4 w-full max-w-xl lg:max-w-6xl xl:max-w-7xl max-h-full">
-                <!-- Modal content -->
-                <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
-                    <!-- Modal header -->
-                    <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
-                        <h3 class="text-xl font-semibold text-gray-900 dark:text-white">
-                            Licences en cours d'utilisation à Kinshasa
-                        </h3>
-                        <button type="button"
-                            class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
-                            data-modal-hide="default-modal">
-                            <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
-                                viewBox="0 0 14 14">
-                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
-                                    stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
-                            </svg>
-                            <span class="sr-only">Close modal</span>
-                        </button>
-                    </div>
-                    <!-- Modal body -->
-                    <div class="p-4 md:p-5 space-y-4">
-                        <table id="licence_kananga"
-                            class="display nowrap w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-300"
-                            style="width:100%">
-                            <thead>
-                                <tr>
-                                    <th scope="col" class="px-6 py-3">
-                                        Nom
-                                    </th>
-                                    <th scope="col" class="px-6 py-3">
-                                        Email
-                                    </th>
-
-                                    <th scope="col" class="px-6 py-3">Cours</th>
-
-                                    <th scope="col" class="px-6 py-3">
-                                        Université
-                                    </th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach ($licenceKanEnCours as $licence)
-                                    <tr>
-                                        <td class="px-6 py-4">
-                                            {{ $licence->name }}
-                                        </td>
-                                        <td class="px-6 py-4">
-                                            {{ $licence->email }}
-
-                                        </td>
-
-                                        <td class="px-6 py-4">
-                                            {{ $licence->course }}
-                                        </td>
-
-                                        <td class="px-6 py-4">{{ $licence->university }}</td>
-                                    </tr>
-                                @endforeach
-                            </tbody>
-                        </table>
-                    </div>
-                    <!-- Modal footer -->
-                    <div class="flex items-center p-4 md:p-5 border-t border-gray-200 rounded-b dark:border-gray-600">
-                    </div>
-                </div>
-            </div>
-        </div>
+    </div>
 
         <!-- Main modal Nombres de ceux qui ont obtenu les certificats -->
         <div id="default-modal2" dark:text-gray-300
             class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
             <div class="relative p-4 w-full max-w-xl lg:max-w-6xl xl:max-w-7xl max-h-full">
                 <!-- Modal content -->
-                <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
+                <div class="relative bg-white rounded-lg shadow dark:bg-gray-700 p-4">
                     <!-- Modal header -->
                     <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
                         <h3 class="text-xl font-semibold text-gray-900 dark:text-white">
@@ -481,8 +457,13 @@
                             <span class="sr-only">Close modal</span>
                         </button>
                     </div>
+
                     <!-- Modal body -->
-                    <div class="p-4 md:p-5 space-y-4">
+                <div>
+
+
+                <div id="toutAfficher_certificat" role="tabpanel" aria-labelledby="toutAfficher_certificat-tab p-4 md:p-5 space-y-4"
+                    class="hidden p-4 rounded-lg bg-gray-50 dark:bg-gray-800 top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
                         <table id="mytable2"
                             class="display nowrap w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-300"
                             style="width:100%">
@@ -523,24 +504,233 @@
                             </tbody>
                         </table>
                     </div>
+
+                    {{-- Nombres de ceux qui ont obtenu les certificats à kinshasa --}}
+                    <div id="kinshasa_certificat" role="tabpanel" aria-labelledby="kinshasa_certificat-tab p-4 md:p-5 space-y-4"
+                    class="hidden p-4 rounded-lg bg-gray-50 dark:bg-gray-800 top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
+                        <table id="certificat_kinshasa"
+                            class="display nowrap w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-300"
+                            style="width:100%">
+                            <thead>
+                                <tr>
+                                    <th scope="col" class="px-6 py-3">
+                                        Nom
+                                    </th>
+                                    <th scope="col" class="px-6 py-3">
+                                        Email
+                                    </th>
+
+                                    <th scope="col" class="px-6 py-3">Cours</th>
+
+                                    <th scope="col" class="px-6 py-3">
+                                        Université
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach ($certificat_obtenue_kinshasa as $certif)
+                                    <tr>
+                                        <td class="px-6 py-4">
+                                            {{ $certif->name }}
+
+                                        </td>
+
+                                        <td class="px-6 py-4">
+                                            {{ $certif->email }}
+                                        </td>
+
+                                        <td class="px-6 py-4">{{ $certif->course }}</td>
+                                        </td>
+
+                                        <td class="px-6 py-4">{{ $certif->university }}</td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
+
+                    {{-- Main modal Nombres de ceux qui ont obtenu les certificats à lubumbashi--}}
+                    <div id="lubumbashi_certificat" role="tabpanel" aria-labelledby="lubumbashi_certificat-tab p-4 md:p-5 space-y-4"
+                    class="hidden p-4 rounded-lg bg-gray-50 dark:bg-gray-800 top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
+
+                        <table id="certificat_lubumbashi"
+                            class="display nowrap w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-300"
+                            style="width:100%">
+                            <thead>
+                                <tr>
+                                    <th scope="col" class="px-6 py-3">
+                                        Nom
+                                    </th>
+                                    <th scope="col" class="px-6 py-3">
+                                        Email
+                                    </th>
+
+                                    <th scope="col" class="px-6 py-3">Cours</th>
+
+                                    <th scope="col" class="px-6 py-3">
+                                        Université
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach ($certificat_obtenue_lubumbashi as $certif)
+                                    <tr>
+                                        <td class="px-6 py-4">
+                                            {{ $certif->name }}
+
+                                        </td>
+
+                                        <td class="px-6 py-4">
+                                            {{ $certif->email }}
+                                        </td>
+
+                                        <td class="px-6 py-4">{{ $certif->course }}</td>
+                                        </td>
+
+                                        <td class="px-6 py-4">{{ $certif->university }}</td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- Main modal Nombres de ceux qui ont obtenu les certificats à matadi -->
+                    <div id="matadi_certificat" role="tabpanel" aria-labelledby="matadi_certificat-tab p-4 md:p-5 space-y-4"
+                    class="hidden p-4 rounded-lg bg-gray-50 dark:bg-gray-800 top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
+                        <table id="certificat_matadi"
+                            class="display nowrap w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-300"
+                            style="width:100%">
+                            <thead>
+                                <tr>
+                                    <th scope="col" class="px-6 py-3">
+                                        Nom
+                                    </th>
+                                    <th scope="col" class="px-6 py-3">
+                                        Email
+                                    </th>
+
+                                    <th scope="col" class="px-6 py-3">Cours</th>
+
+                                    <th scope="col" class="px-6 py-3">
+                                        Université
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach ($certificat_obtenue_matadi as $certif)
+                                    <tr>
+                                        <td class="px-6 py-4">
+                                            {{ $certif->name }}
+
+                                        </td>
+
+                                        <td class="px-6 py-4">
+                                            {{ $certif->email }}
+                                        </td>
+
+                                        <td class="px-6 py-4">{{ $certif->course }}</td>
+                                        </td>
+
+                                        <td class="px-6 py-4">{{ $certif->university }}</td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
+
+                     <!-- Main modal Nombres de ceux qui ont obtenu les certificats à kananga -->
+                     <div id="kananga_certificat" role="tabpanel" aria-labelledby="matadi_certificat-tab p-4 md:p-5 space-y-4"
+                     class="hidden p-4 rounded-lg bg-gray-50 dark:bg-gray-800 top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
+                        <table id="certificat_kananga"
+                            class="display nowrap w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-300"
+                            style="width:100%">
+                            <thead>
+                                <tr>
+                                    <th scope="col" class="px-6 py-3">
+                                        Nom
+                                    </th>
+                                    <th scope="col" class="px-6 py-3">
+                                        Email
+                                    </th>
+
+                                    <th scope="col" class="px-6 py-3">Cours</th>
+
+                                    <th scope="col" class="px-6 py-3">
+                                        Université
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach ($certificat_obtenue_kananga as $certif)
+                                    <tr>
+                                        <td class="px-6 py-4">
+                                            {{ $certif->name }}
+
+                                        </td>
+
+                                        <td class="px-6 py-4">
+                                            {{ $certif->email }}
+                                        </td>
+
+                                        <td class="px-6 py-4">{{ $certif->course }}</td>
+                                        </td>
+
+                                        <td class="px-6 py-4">{{ $certif->university }}</td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
+
+                </div>
                     <!-- Modal footer -->
                     <div class="flex items-center p-4 md:p-5 border-t border-gray-200 rounded-b dark:border-gray-600">
                         <a href="{{ route('certificatscursera') }}" data-modal-hide="default-modal" type="button"
                             class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-transparent bg-[#FF7322] text-white hover:bg-[#FF6822] focus:outline-none focus:bg-[#FF6822] disabled:opacity-50 disabled:pointer-events-none">
                             Exporte en Excel</a>
-                        <button data-modal-hide="default-modal" type="button"
-                            class="py-2.5 px-5 ms-3 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">Decline</button>
+
+                            <div class="px-8 mb-4">
+                                <ul class="flex flex-wrap -mb-px text-sm font-medium text-center" id="default-tab" data-tabs-toggle="#default-tab-content" data-tabs-active-classes="text-orange-600 hover:text-orange-600 dark:text-orange-500 dark:hover:text-orange-500 border-orange-600 dark:border-orange-500" data-tabs-inactive-classes="dark:border-transparent text-gray-500 hover:text-gray-600 dark:text-gray-400 border-gray-100 hover:border-gray-300 dark:border-gray-700 dark:hover:text-gray-300" role="tablist">
+                                    <li class="me-2" role="presentation">
+                                        <button class="inline-block p-4 border-b-2 rounded-t-lg" id="toutAfficher_certificat-tab" data-tabs-target="#toutAfficher_certificat" type="button" role="tab" aria-controls="toutAfficher_certificat" aria-selected="false"
+                                    class="py-2.5 px-5 ms-3 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">Tout afficher:
+                                    {{ $certificat_count }}</button>
+                                    </li>
+
+                                    <li class="me-2" role="presentation">
+                                        <button class="inline-block p-4 border-b-2 rounded-t-lg" id="kinshasa_certificat-tab" data-tabs-target="#kinshasa_certificat" type="button" role="tab" aria-controls="kinshasa_certificat" aria-selected="false"
+                                    class="py-2.5 px-5 ms-3 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">Kinshasa:
+                                    {{ $certificat_obtenue_kinshasa_count }}</button>
+                                    </li>
+                                    <li class="me-2" role="presentation">
+                                        <button class="inline-block p-4 border-b-2 rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300" id="lubumbashi_certificat-tab" data-tabs-target="#lubumbashi_certificat" type="button" role="tab" aria-controls="lubumbashi_certificat" aria-selected="false"
+                                        class="py-2.5 px-5 ms-3 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">Lubumbashi:
+                                        {{ $certificat_obtenue_lubumbashi_count }}</button>
+                                    </li>
+                                    <li class="me-2" role="presentation">
+                                        <button  class="inline-block p-4 border-b-2 rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300" id="matadi_certificat-tab" data-tabs-target="#matadi_certificat" type="button" role="tab" aria-controls="matadi_certificat" aria-selected="false"
+                                        class="py-2.5 px-5 ms-3 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">Matadi
+                                        : {{ $certificat_obtenue_matadi_count }}</button>
+                                    </li>
+                                    <li role="presentation">
+                                        <button class="inline-block p-4 border-b-2 rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300" id="kananga_certificat-tab" data-tabs-target="#kananga_certificat" type="button" role="tab" aria-controls="kananga_certificat" aria-selected="false"
+                                    class="py-2.5 px-5 ms-3 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">Kananga
+                                    : {{ $certificat_obtenue_kananga_count }}</button>
+                                    </li>
+                                </ul>
+                            </div>
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- Main modal -->
+
+        <!-- Main modal nombres des personnes members depuis 30 jours et n'ont pas de certificat -->
         <div id="default-modal3" dark:text-gray-300
             class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
             <div class="relative p-4 w-full max-w-xl lg:max-w-6xl xl:max-w-7xl max-h-full">
                 <!-- Modal content -->
-                <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
+                <div class="relative bg-white rounded-lg shadow dark:bg-gray-700 p-4">
                     <!-- Modal header -->
                     <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
                         <h3 class="text-xl font-semibold text-gray-900 dark:text-white">
@@ -558,7 +748,10 @@
                         </button>
                     </div>
                     <!-- Modal body -->
-                    <div class="p-4 md:p-5 space-y-4">
+
+                    {{-- Nombres des personnes membres depuis 30 jours et n'ont pas de certificat --}}
+                    <div id="apprenant_30daysAll" role="tabpanel" aria-labelledby="apprenant_30daysAll-tab p-4 md:p-5 space-y-4"
+                    class="hidden p-4 rounded-lg bg-gray-50 dark:bg-gray-800 top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
                         <table id="mytable3"
                             class="display nowrap w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-300"
                             style="width:100%">
@@ -601,24 +794,239 @@
                             </tbody>
                         </table>
                     </div>
+
+                     <!-- Main modal nombres des personnes members depuis 30 jours et n'ont pas de certificat à Kinshasa -->
+                <div>
+                     <div id="apprenants_30day_kinshasa" role="tabpanel" aria-labelledby="apprenants_30day_kinshasa-tab p-4 md:p-5 space-y-4"
+                     class="hidden p-4 rounded-lg bg-gray-50 dark:bg-gray-800 top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
+                        <table id="30day_kinshasa"
+                            class="display nowrap w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-300"
+                            style="width:100%">
+                            <thead>
+                                <tr>
+                                    <th scope="col" class="px-6 py-3">
+                                        Nom
+                                    </th>
+
+                                    <th scope="col" class="px-6 py-3">
+                                        Email
+                                    </th>
+
+                                    <th scope="col" class="px-6 py-3">Cours</th>
+
+                                    <th scope="col" class="px-6 py-3">
+                                        Université
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach ($apprenants_30day_kinshasa as $member)
+                                    <tr>
+                                        <td class="px-6 py-4">
+                                            {{ $member->name }}
+
+                                        </td>
+                                        <td class="px-6 py-4">
+                                            {{ $member->email }}
+
+                                        </td>
+
+                                        <td class="px-6 py-4">
+                                            {{ $member->course }}
+                                        </td>
+
+                                        <td class="px-6 py-4">{{ $member->university }}</td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- Main modal nombres des personnes members depuis 30 jours et n'ont pas de certificat à lubumbashi -->
+                    <div id="apprenants_30day_lubumbashi" role="tabpanel" aria-labelledby="apprenants_30day_lubumbashi-tab p-4 md:p-5 space-y-4"
+                    class="hidden p-4 rounded-lg bg-gray-50 dark:bg-gray-800 top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
+                        <table id="30day_lubumbashi"
+                            class="display nowrap w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-300"
+                            style="width:100%">
+                            <thead>
+                                <tr>
+                                    <th scope="col" class="px-6 py-3">
+                                        Nom
+                                    </th>
+
+                                    <th scope="col" class="px-6 py-3">
+                                        Email
+                                    </th>
+
+                                    <th scope="col" class="px-6 py-3">Cours</th>
+
+                                    <th scope="col" class="px-6 py-3">
+                                        Université
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach ($apprenants_30day_lubumbashi as $member)
+                                    <tr>
+                                        <td class="px-6 py-4">
+                                            {{ $member->name }}
+
+                                        </td>
+                                        <td class="px-6 py-4">
+                                            {{ $member->email }}
+
+                                        </td>
+
+                                        <td class="px-6 py-4">
+                                            {{ $member->course }}
+                                        </td>
+
+                                        <td class="px-6 py-4">{{ $member->university }}</td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- Main modal nombres des personnes members depuis 30 jours et n'ont pas de certificat à matadi -->
+                <div id="apprenants_30day_matadi" role="tabpanel" aria-labelledby="apprenants_30day_matadi-tab p-4 md:p-5 space-y-4"
+                    class="hidden p-4 rounded-lg bg-gray-50 dark:bg-gray-800 top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
+                        <table id="30day_matadi"
+                            class="display nowrap w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-300"
+                            style="width:100%">
+                            <thead>
+                                <tr>
+                                    <th scope="col" class="px-6 py-3">
+                                        Nom
+                                    </th>
+
+                                    <th scope="col" class="px-6 py-3">
+                                        Email
+                                    </th>
+
+                                    <th scope="col" class="px-6 py-3">Cours</th>
+
+                                    <th scope="col" class="px-6 py-3">
+                                        Université
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach ($apprenants_30day_matadi as $member)
+                                    <tr>
+                                        <td class="px-6 py-4">
+                                            {{ $member->name }}
+
+                                        </td>
+                                        <td class="px-6 py-4">
+                                            {{ $member->email }}
+
+                                        </td>
+
+                                        <td class="px-6 py-4">
+                                            {{ $member->course }}
+                                        </td>
+
+                                        <td class="px-6 py-4">{{ $member->university }}</td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- Main modal nombres des personnes members depuis 30 jours et n'ont pas de certificat à kananga -->
+                <div id="apprenants_30day_kananga" role="tabpanel" aria-labelledby="apprenants_30day_kananga-tab p-4 md:p-5 space-y-4"
+                    class="hidden p-4 rounded-lg bg-gray-50 dark:bg-gray-800 top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
+                        <table id="30day_kananga"
+                            class="display nowrap w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-300"
+                            style="width:100%">
+                            <thead>
+                                <tr>
+                                    <th scope="col" class="px-6 py-3">
+                                        Nom
+                                    </th>
+
+                                    <th scope="col" class="px-6 py-3">
+                                        Email
+                                    </th>
+
+                                    <th scope="col" class="px-6 py-3">Cours</th>
+
+                                    <th scope="col" class="px-6 py-3">
+                                        Université
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach ($apprenants_30day_kananga as $member)
+                                    <tr>
+                                        <td class="px-6 py-4">
+                                            {{ $member->name }}
+
+                                        </td>
+                                        <td class="px-6 py-4">
+                                            {{ $member->email }}
+
+                                        </td>
+
+                                        <td class="px-6 py-4">
+                                            {{ $member->course }}
+                                        </td>
+
+                                        <td class="px-6 py-4">{{ $member->university }}</td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
                     <!-- Modal footer -->
                     <div class="flex items-center p-4 md:p-5 border-t border-gray-200 rounded-b dark:border-gray-600">
                         <a href="{{ route('membre_30days') }}" data-modal-hide="default-modal" type="button"
                             class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-transparent bg-[#FF7322] text-white hover:bg-[#FF6822] focus:outline-none focus:bg-[#FF6822] disabled:opacity-50 disabled:pointer-events-none">
                             Exporte en Excel</a>
-                        <button data-modal-hide="default-modal" type="button"
-                            class="py-2.5 px-5 ms-3 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">Decline</button>
-                    </div>
+
+                            <div class="px-8 mb-4">
+                                <ul class="flex flex-wrap -mb-px text-sm font-medium text-center" id="default-tab" data-tabs-toggle="#default-tab-content" data-tabs-active-classes="text-orange-600 hover:text-orange-600 dark:text-orange-500 dark:hover:text-orange-500 border-orange-600 dark:border-orange-500" data-tabs-inactive-classes="dark:border-transparent text-gray-500 hover:text-gray-600 dark:text-gray-400 border-gray-100 hover:border-gray-300 dark:border-gray-700 dark:hover:text-gray-300" role="tablist">
+                                    <li class="me-2" role="presentation">
+                                        <button class="inline-block p-4 border-b-2 rounded-t-lg" id="apprenant_30daysAll-tab" data-tabs-target="#apprenant_30daysAll" type="button" role="tab" aria-controls="toutAfficher_certificat" aria-selected="false"
+                                    class="py-2.5 px-5 ms-3 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">Tout afficher:
+                                    {{ $apprenants_30day_count }}</button>
+                                    </li>
+
+                                    <li class="me-2" role="presentation">
+                                        <button class="inline-block p-4 border-b-2 rounded-t-lg" id="apprenants_30day_kinshasa-tab" data-tabs-target="#apprenants_30day_kinshasa" type="button" role="tab" aria-controls="apprenants_30day_kinshasa" aria-selected="false"
+                                    class="py-2.5 px-5 ms-3 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">Kinshasa:
+                                    {{ $apprenants_30day_kinshasa_count }}</button>
+                                    </li>
+                                    <li class="me-2" role="presentation">
+                                        <button class="inline-block p-4 border-b-2 rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300" id="apprenants_30day_lubumbashi-tab" data-tabs-target="#apprenants_30day_lubumbashi" type="button" role="tab" aria-controls="apprenants_30day_lubumbashi" aria-selected="false"
+                                        class="py-2.5 px-5 ms-3 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">Lubumbashi:
+                                        {{ $certificat_30day_lubumbashi_count }}</button>
+                                    </li>
+                                    <li class="me-2" role="presentation">
+                                        <button  class="inline-block p-4 border-b-2 rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300" id="apprenants_30day_matadi-tab" data-tabs-target="#apprenants_30day_matadi" type="button" role="tab" aria-controls="apprenants_30day_matadi" aria-selected="false"
+                                        class="py-2.5 px-5 ms-3 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">Matadi
+                                        : {{ $apprenants_30day_matadi_count}}</button>
+                                    </li>
+                                    <li role="presentation">
+                                        <button class="inline-block p-4 border-b-2 rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300" id="apprenants_30day_kananga-tab" data-tabs-target="#apprenants_30day_kananga" type="button" role="tab" aria-controls="apprenants_30day_kananga" aria-selected="false"
+                                    class="py-2.5 px-5 ms-3 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">Kananga
+                                    : {{  $apprenants_30day_kananga_count }}</button>
+                                    </li>
+                                </ul>
+                            </div>
                 </div>
             </div>
         </div>
+    </div>
 
-        <!-- Main modal -->
+    <!-- Main modal nombres des personnes invitées depuis plus de 7jours et ne sont inscrit a aucun cours-->
         <div id="default-modal4" dark:text-gray-300
             class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
             <div class="relative p-4 w-full max-w-xl lg:max-w-6xl xl:max-w-7xl max-h-full">
                 <!-- Modal content -->
-                <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
+                <div class="relative bg-white rounded-lg shadow dark:bg-gray-700 p-4">
                     <!-- Modal header -->
                     <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
                         <h3 class="text-xl font-semibold text-gray-900 dark:text-white">
@@ -691,12 +1099,12 @@
             </div>
         </div>
 
-        <!-- Main modal -->
+        <!-- Main modal nombres des membres inactifs dépuis le 1er septembre-->
         <div id="default-modal5" dark:text-gray-300
             class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
             <div class="relative p-4 w-full max-w-xl lg:max-w-6xl xl:max-w-7xl max-h-full">
                 <!-- Modal content -->
-                <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
+                <div class="relative bg-white rounded-lg shadow dark:bg-gray-700 p-4">
                     <!-- Modal header -->
                     <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
                         <h3 class="text-xl font-semibold text-gray-900 dark:text-white">
@@ -768,12 +1176,12 @@
             </div>
         </div>
 
-        <!-- Main modal -->
+        <!-- Main modal utilisateurs des licences dans les 21 derniers jours -->
         <div id="default-modal6" dark:text-gray-300
             class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
             <div class="relative p-4 w-full max-w-xl lg:max-w-6xl xl:max-w-7xl max-h-full">
                 <!-- Modal content -->
-                <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
+                <div class="relative bg-white rounded-lg shadow dark:bg-gray-700 p-4">
                     <!-- Modal header -->
                     <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
                         <h3 class="text-xl font-semibold text-gray-900 dark:text-white">
@@ -848,7 +1256,7 @@
             class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
             <div class="relative p-4 w-full max-w-xl lg:max-w-6xl xl:max-w-7xl max-h-full">
                 <!-- Modal content -->
-                <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
+                <div class="relative bg-white rounded-lg shadow dark:bg-gray-700 p-4">
                     <!-- Modal header -->
                     <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
                         <h3 class="text-xl font-semibold text-gray-900 dark:text-white">
@@ -898,7 +1306,7 @@
             class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
             <div class="relative p-4 w-full max-w-xl lg:max-w-6xl xl:max-w-7xl max-h-full">
                 <!-- Modal content -->
-                <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
+                <div class="relative bg-white rounded-lg shadow dark:bg-gray-700 p-4">
                     <!-- Modal header -->
                     <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
                         <h3 class="text-xl font-semibold text-gray-900 dark:text-white">
@@ -906,7 +1314,7 @@
                         </h3>
                         <button type="button"
                             class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
-                            data-modal-hide="default-modal">
+                            data-modal-hide="default-modal-member">
                             <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
                                 viewBox="0 0 14 14">
                                 <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
@@ -916,7 +1324,11 @@
                         </button>
                     </div>
                     <!-- Modal body -->
-                    <div class="relative overflow-x-auto">
+
+                <div>
+                     <!-- Main modal tous les memebres coursera-->
+                    <div id="membersAll" role="tabpanel" aria-labelledby="membersAll-tab p-4 md:p-5 space-y-4"
+                    class="hidden p-4 rounded-lg bg-gray-50 dark:bg-gray-800 top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
                         <table id="mytable_member"
                             class="display nowrap w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-300"
                             style="width:100%">
@@ -980,59 +1392,10 @@
                             </tbody>
                         </table>
                     </div>
-                    <!-- Modal footer -->
-                    <div class="flex items-center p-4 md:p-5 border-t border-gray-200 rounded-b dark:border-gray-600">
-                        <a href="{{ route('licencesCoursera') }}" data-modal-hide="default-modal" type="button"
-                            class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-transparent bg-[#FF7322] text-white hover:bg-[#FF6822] focus:outline-none focus:bg-[#FF6822] disabled:opacity-50 disabled:pointer-events-none">
-                            Exporte en Excel</a>
-                        <button data-modal-target="default-modal-member-kinshasa"
-                            data-modal-toggle="default-modal-member-kinshasa" data-modal-hide="default-modal"
-                            type="button"
-                            class="py-2.5 px-5 ms-3 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">Kinshasa:
-                            {{ $membersKinshasa_count }}</button>
-                        <button data-modal-target="default-modal-member-lubumbashi"
-                            data-modal-toggle="default-modal-member-lubumbashi" data-modal-hide="default-modal"
-                            type="button"
-                            class="py-2.5 px-5 ms-3 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">Lubumbashi:
-                            {{ $membersLubumbashi_count }}</button>
-                        <button data-modal-target="default-modal-member-Matadi"
-                            data-modal-toggle="default-modal-member-Matadi" data-modal-hide="default-modal"
-                            type="button"
-                            class="py-2.5 px-5 ms-3 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">Matadi
-                            : {{ $membersMatadi_count }}</button>
-                        <button data-modal-target="default-modal-member-kananga"
-                            data-modal-toggle="default-modal-member-kananga" data-modal-hide="default-modal"
-                            type="button"
-                            class="py-2.5 px-5 ms-3 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">Kananga
-                            : {{ $membersKananga_count }}</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <!-- Main modal memebres coursera à kinshasa -->
-        <div id="default-modal-member-kinshasa" dark:text-gray-300
-            class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
-            <div class="relative p-4 w-full max-w-xl lg:max-w-6xl xl:max-w-7xl max-h-full">
-                <!-- Modal content -->
-                <div class="relative bg-white rounded-lg shadow dark:bg-gray-700 p-4">
-                    <!-- Modal header -->
-                    <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
-                        <h3 class="text-xl font-semibold text-gray-900 dark:text-white">
-                            Membres du programme coursera à Kinshasa
-                        </h3>
-                        <button type="button"
-                            class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
-                            data-modal-hide="default-modal">
-                            <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
-                                viewBox="0 0 14 14">
-                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
-                                    stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
-                            </svg>
-                            <span class="sr-only">Close modal</span>
-                        </button>
-                    </div>
-                    <!-- Modal body -->
-                    <div class="relative overflow-x-auto">
+
+                    <!-- Main modal tous les memebres coursera à Kinshasa-->
+                    <div id="members_kinshasa" role="tabpanel" aria-labelledby="members_kinshasa p-4 md:p-5 space-y-4"
+                    class="hidden p-4 rounded-lg bg-gray-50 dark:bg-gray-800 top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
                         <table id="mytable_member_kinshasa"
                             class="display nowrap w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-300"
                             style="width:100%">
@@ -1096,36 +1459,11 @@
                             </tbody>
                         </table>
                     </div>
-                    <!-- Modal footer -->
-                    <div class="flex items-center p-4 md:p-5 border-t border-gray-200 rounded-b dark:border-gray-600">
-                    </div>
-                </div>
-            </div>
-        </div>
-        <!-- Main modal memebres coursera à lubumbashi -->
-        <div id="default-modal-member-lubumbashi" dark:text-gray-300
-            class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
-            <div class="relative p-4 w-full max-w-xl lg:max-w-6xl xl:max-w-7xl max-h-full">
-                <!-- Modal content -->
-                <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
-                    <!-- Modal header -->
-                    <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
-                        <h3 class="text-xl font-semibold text-gray-900 dark:text-white">
-                            Membres du programme coursera à Lubumbashi
-                        </h3>
-                        <button type="button"
-                            class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
-                            data-modal-hide="default-modal">
-                            <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
-                                viewBox="0 0 14 14">
-                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
-                                    stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
-                            </svg>
-                            <span class="sr-only">Close modal</span>
-                        </button>
-                    </div>
-                    <!-- Modal body -->
-                    <div class="relative overflow-x-auto">
+
+                    <!-- Main modal memebres coursera à lubumbashi -->
+
+                    <div id="members_lubumbashi" role="tabpanel" aria-labelledby="members_lubumbashi p-4 md:p-5 space-y-4"
+                    class="hidden p-4 rounded-lg bg-gray-50 dark:bg-gray-800 top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
                         <table id="mytable_member_lubumbashi"
                             class="display nowrap w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-300"
                             style="width:100%">
@@ -1189,37 +1527,10 @@
                             </tbody>
                         </table>
                     </div>
-                    <!-- Modal footer -->
-                    <div class="flex items-center p-4 md:p-5 border-t border-gray-200 rounded-b dark:border-gray-600">
-                    </div>
-                </div>
-            </div>
-        </div>
 
-        <!-- Main modal memebres coursera à Matadi -->
-        <div id="default-modal-member-Matadi" dark:text-gray-300
-            class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
-            <div class="relative p-4 w-full max-w-xl lg:max-w-6xl xl:max-w-7xl max-h-full">
-                <!-- Modal content -->
-                <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
-                    <!-- Modal header -->
-                    <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
-                        <h3 class="text-xl font-semibold text-gray-900 dark:text-white">
-                            Membres du programme coursera à Matadi
-                        </h3>
-                        <button type="button"
-                            class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
-                            data-modal-hide="default-modal">
-                            <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
-                                viewBox="0 0 14 14">
-                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
-                                    stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
-                            </svg>
-                            <span class="sr-only">Close modal</span>
-                        </button>
-                    </div>
-                    <!-- Modal body -->
-                    <div class="relative overflow-x-auto">
+                    <!-- Main modal memebres coursera à Matadi -->
+                    <div id="members_matadi" role="tabpanel" aria-labelledby="members_matadi p-4 md:p-5 space-y-4"
+                    class="hidden p-4 rounded-lg bg-gray-50 dark:bg-gray-800 top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
                         <table id="mytable_member_matadi"
                             class="display nowrap w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-300"
                             style="width:100%">
@@ -1283,37 +1594,10 @@
                             </tbody>
                         </table>
                     </div>
-                    <!-- Modal footer -->
-                    <div class="flex items-center p-4 md:p-5 border-t border-gray-200 rounded-b dark:border-gray-600">
-                    </div>
-                </div>
-            </div>
-        </div>
 
-        <!-- Main modal memebres coursera à kananga -->
-        <div id="default-modal-member-kananga" dark:text-gray-300
-            class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
-            <div class="relative p-4 w-full max-w-xl lg:max-w-6xl xl:max-w-7xl max-h-full">
-                <!-- Modal content -->
-                <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
-                    <!-- Modal header -->
-                    <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
-                        <h3 class="text-xl font-semibold text-gray-900 dark:text-white">
-                            Membres du programme coursera à Kananga
-                        </h3>
-                        <button type="button"
-                            class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
-                            data-modal-hide="default-modal">
-                            <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
-                                viewBox="0 0 14 14">
-                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
-                                    stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
-                            </svg>
-                            <span class="sr-only">Close modal</span>
-                        </button>
-                    </div>
-                    <!-- Modal body -->
-                    <div class="relative overflow-x-auto">
+                    <!-- Main modal memebres coursera à kananga -->
+                    <div id="members_kananga" role="tabpanel" aria-labelledby="members_kananga p-4 md:p-5 space-y-4"
+                    class="hidden p-4 rounded-lg bg-gray-50 dark:bg-gray-800 top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
                         <table id="mytable_member_kananga"
                             class="display nowrap w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-300"
                             style="width:100%">
@@ -1377,18 +1661,75 @@
                             </tbody>
                         </table>
                     </div>
+                </div>
                     <!-- Modal footer -->
+
                     <div class="flex items-center p-4 md:p-5 border-t border-gray-200 rounded-b dark:border-gray-600">
+                        <a href="{{ route('licencesCoursera') }}" data-modal-hide="default-modal" type="button"
+                            class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-transparent bg-[#FF7322] text-white hover:bg-[#FF6822] focus:outline-none focus:bg-[#FF6822] disabled:opacity-50 disabled:pointer-events-none">
+                            Exporte en Excel</a>
+
+                        <div class="px-8 mb-4">
+                            <ul class="flex flex-wrap -mb-px text-sm font-medium text-center" id="default-tab"
+                                data-tabs-toggle="#default-tab-content"
+                                data-tabs-active-classes="text-orange-600 hover:text-orange-600 dark:text-orange-500 dark:hover:text-orange-500 border-orange-600 dark:border-orange-500"
+                                data-tabs-inactive-classes="dark:border-transparent text-gray-500 hover:text-gray-600 dark:text-gray-400 border-gray-100 hover:border-gray-300 dark:border-gray-700 dark:hover:text-gray-300"
+                                role="tablist">
+                                <li class="me-2" role="presentation">
+                                    <button class="inline-block p-4 border-b-2 rounded-t-lg"
+                                        id="membersAll-tab" data-tabs-target="#membersAll"
+                                        type="button" role="tab" aria-controls="membersAll"
+                                        aria-selected="false"
+                                        class="py-2.5 px-5 ms-3 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">Tout
+                                        afficher:
+                                        {{ $coursera_members }}</button>
+                                </li>
+
+                                <li class="me-2" role="presentation">
+                                    <button class="inline-block p-4 border-b-2 rounded-t-lg" id="members_kinshasa-tab"
+                                        data-tabs-target="#members_kinshasa" type="button" role="tab"
+                                        aria-controls="members_kinshasa" aria-selected="false"
+                                        class="py-2.5 px-5 ms-3 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">Kinshasa:
+                                        {{ $membersKinshasa_count }}</button>
+                                </li>
+                                <li class="me-2" role="presentation">
+                                    <button
+                                        class="inline-block p-4 border-b-2 rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300"
+                                        id="members_lubumbashi-tab" data-tabs-target="#members_lubumbashi"
+                                        type="button" role="tab" aria-controls="members_lubumbashi"
+                                        aria-selected="false"
+                                        class="py-2.5 px-5 ms-3 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">Lubumbashi:
+                                        {{ $membersLubumbashi_count }}</button>
+                                </li>
+                                <li class="me-2" role="presentation">
+                                    <button
+                                        class="inline-block p-4 border-b-2 rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300"
+                                        id="members_matadi-tab" data-tabs-target="#members_matadi" type="button"
+                                        role="tab" aria-controls="members_matadi" aria-selected="false"
+                                        class="py-2.5 px-5 ms-3 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">Matadi
+                                        : {{ $membersMatadi_count }}</button>
+                                </li>
+                                <li role="presentation">
+                                    <button
+                                        class="inline-block p-4 border-b-2 rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300"
+                                        id="members_kananga-tab" data-tabs-target="#members_kananga" type="button"
+                                        role="tab" aria-controls="members_kananga" aria-selected="false"
+                                        class="py-2.5 px-5 ms-3 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">Kananga
+                                        : {{ $membersKananga_count }}</button>
+                                </li>
+                            </ul>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
+
         <!-- Main modal specialisation obtenues-->
         <div id="default-modal-obtenue" dark:text-gray-300
             class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
             <div class="relative p-4 w-full max-w-xl lg:max-w-6xl xl:max-w-7xl max-h-full">
                 <!-- Modal content -->
-                <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
+                <div class="relative bg-white rounded-lg shadow dark:bg-gray-700 p-4">
                     <!-- Modal header -->
                     <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
                         <h3 class="text-xl font-semibold text-gray-900 dark:text-white">
@@ -1397,8 +1738,8 @@
                         <button type="button"
                             class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
                             data-modal-hide="default-modal">
-                            <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
-                                viewBox="0 0 14 14">
+                            <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
+                                fill="none" viewBox="0 0 14 14">
                                 <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
                                     stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
                             </svg>
@@ -1456,7 +1797,8 @@
                     </div>
                     <!-- Modal footer -->
                     <div class="flex items-center p-4 md:p-5 border-t border-gray-200 rounded-b dark:border-gray-600">
-                        <a href="{{ route('complete_specialisation') }}" data-modal-hide="default-modal" type="button"
+                        <a href="{{ route('complete_specialisation') }}" data-modal-hide="default-modal"
+                            type="button"
                             class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-transparent bg-[#FF7322] text-white hover:bg-[#FF6822] focus:outline-none focus:bg-[#FF6822] disabled:opacity-50 disabled:pointer-events-none">
                             Experte en Excel</a>
                         <button data-modal-hide="default-modal" type="button"
@@ -1465,7 +1807,7 @@
                 </div>
             </div>
         </div>
-    @endsection
+@endsection
 
 
     <section class="flex justify-between p-4 gap-4 w-full md:inset-0 h-[calc(100%-1rem)] max-h-full mb-8">
@@ -1476,7 +1818,7 @@
                     <a href="{{ route('import.specialisations') }}" class=" flex items-center">
                         {{-- <span class="text-gray-800 lg:text-sm  dark:text-gray-200"></span> --}}
                         <button type="button"
-                            class="text-white-700 hover:text-white border border-blue-700 hover:bg-blue-800 focus:ring-4 
+                            class="text-white-700 hover:text-white border border-blue-700 hover:bg-blue-800 focus:ring-4
                         focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2 dark:border-blue-500 dark:text-blue-500 dark:hover:text-white dark:hover:bg-blue-500 dark:focus:ring-blue-800">import
                             specialisation csv</button>
                     </a>
@@ -1485,7 +1827,7 @@
                     <a href="{{ route('import.members') }}" class=" flex items-center">
                         {{-- <span class="text-gray-800 lg:text-sm  dark:text-gray-200"></span> --}}
                         <button type="button"
-                            class="text-green-700 hover:text-white border border-green-700 hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm 
+                            class="text-green-700 hover:text-white border border-green-700 hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm
                         px-5 py-2.5 text-center me-2 mb-2 dark:border-green-500 dark:text-green-500 dark:hover:text-white dark:hover:bg-green-600 dark:focus:ring-green-800">import
                             members csv</button>
                     </a>
@@ -1493,7 +1835,7 @@
                 <div>
                     <a href="{{ route('import.usages') }}" class=" flex items-center">
                         <button type="button"
-                            class="text-gray-900 hover:text-white border border-gray-800 hover:bg-gray-900 focus:ring-4 focus:outline-none focus:ring-gray-300 font-medium rounded-lg text-sm px-5 
+                            class="text-gray-900 hover:text-white border border-gray-800 hover:bg-gray-900 focus:ring-4 focus:outline-none focus:ring-gray-300 font-medium rounded-lg text-sm px-5
                         py-2.5 text-center me-2 mb-2 dark:border-gray-600 dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-800">import
                             usages csv</button>
                     </a>
@@ -1808,7 +2150,7 @@
                     }]
                 })
             });
-             $(document).ready(function() {
+            $(document).ready(function() {
                 $('#licence_lubumbashi').DataTable({
                     "scrollX": true,
                     "fixedColumns": {
@@ -1825,7 +2167,7 @@
                     }]
                 })
             });
-             $(document).ready(function() {
+            $(document).ready(function() {
                 $('#licence_matadi').DataTable({
                     "scrollX": true,
                     "fixedColumns": {
@@ -1844,6 +2186,142 @@
             });
             $(document).ready(function() {
                 $('#licence_kananga').DataTable({
+                    "scrollX": true,
+                    "fixedColumns": {
+                        "start": 3
+                    },
+                    "dom": 'Bfrtip', // Ajouter les boutons
+                    "buttons": [{
+                        extend: 'excelHtml5',
+                        text: 'Exporter en Excel',
+                        title: 'Données Exportées',
+                        exportOptions: {
+                            columns: ':visible' // Exporter toutes les colonnes visibles
+                        }
+                    }]
+                })
+            });
+            $(document).ready(function() {
+                $('#certificat_kinshasa').DataTable({
+                    "scrollX": true,
+                    "fixedColumns": {
+                        "start": 3
+                    },
+                    "dom": 'Bfrtip', // Ajouter les boutons
+                    "buttons": [{
+                        extend: 'excelHtml5',
+                        text: 'Exporter en Excel',
+                        title: 'Données Exportées',
+                        exportOptions: {
+                            columns: ':visible' // Exporter toutes les colonnes visibles
+                        }
+                    }]
+                })
+            });
+            $(document).ready(function() {
+                $('#certificat_matadi').DataTable({
+                    "scrollX": true,
+                    "fixedColumns": {
+                        "start": 3
+                    },
+                    "dom": 'Bfrtip', // Ajouter les boutons
+                    "buttons": [{
+                        extend: 'excelHtml5',
+                        text: 'Exporter en Excel',
+                        title: 'Données Exportées',
+                        exportOptions: {
+                            columns: ':visible' // Exporter toutes les colonnes visibles
+                        }
+                    }]
+                })
+            });
+            $(document).ready(function() {
+                $('#certificat_lubumbashi').DataTable({
+                    "scrollX": true,
+                    "fixedColumns": {
+                        "start": 3
+                    },
+                    "dom": 'Bfrtip', // Ajouter les boutons
+                    "buttons": [{
+                        extend: 'excelHtml5',
+                        text: 'Exporter en Excel',
+                        title: 'Données Exportées',
+                        exportOptions: {
+                            columns: ':visible' // Exporter toutes les colonnes visibles
+                        }
+                    }]
+                })
+            });
+            $(document).ready(function() {
+                $('#certificat_kananga').DataTable({
+                    "scrollX": true,
+                    "fixedColumns": {
+                        "start": 3
+                    },
+                    "dom": 'Bfrtip', // Ajouter les boutons
+                    "buttons": [{
+                        extend: 'excelHtml5',
+                        text: 'Exporter en Excel',
+                        title: 'Données Exportées',
+                        exportOptions: {
+                            columns: ':visible' // Exporter toutes les colonnes visibles
+                        }
+                    }]
+                })
+            });
+            $(document).ready(function() {
+                $('#30day_kinshasa').DataTable({
+                    "scrollX": true,
+                    "fixedColumns": {
+                        "start": 3
+                    },
+                    "dom": 'Bfrtip', // Ajouter les boutons
+                    "buttons": [{
+                        extend: 'excelHtml5',
+                        text: 'Exporter en Excel',
+                        title: 'Données Exportées',
+                        exportOptions: {
+                            columns: ':visible' // Exporter toutes les colonnes visibles
+                        }
+                    }]
+                })
+            });
+            $(document).ready(function() {
+                $('#30day_matadi').DataTable({
+                    "scrollX": true,
+                    "fixedColumns": {
+                        "start": 3
+                    },
+                    "dom": 'Bfrtip', // Ajouter les boutons
+                    "buttons": [{
+                        extend: 'excelHtml5',
+                        text: 'Exporter en Excel',
+                        title: 'Données Exportées',
+                        exportOptions: {
+                            columns: ':visible' // Exporter toutes les colonnes visibles
+                        }
+                    }]
+                })
+            });
+            $(document).ready(function() {
+                $('#30day_kananga').DataTable({
+                    "scrollX": true,
+                    "fixedColumns": {
+                        "start": 3
+                    },
+                    "dom": 'Bfrtip', // Ajouter les boutons
+                    "buttons": [{
+                        extend: 'excelHtml5',
+                        text: 'Exporter en Excel',
+                        title: 'Données Exportées',
+                        exportOptions: {
+                            columns: ':visible' // Exporter toutes les colonnes visibles
+                        }
+                    }]
+                })
+            });
+            $(document).ready(function() {
+                $('#30day_lubumbashi').DataTable({
                     "scrollX": true,
                     "fixedColumns": {
                         "start": 3
@@ -1879,7 +2357,5 @@
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
         <script src="https://cdn.datatables.net/buttons/2.3.6/js/buttons.html5.min.js"></script>
     @endsection
-
-
 
 </x-app-layout>
