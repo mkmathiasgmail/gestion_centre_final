@@ -110,7 +110,36 @@ class CourseraController extends Controller
             'coursera_specialisations.university',
             'coursera_specialisations.last_specialisation_activity',
             'coursera_specialisations.completed',
+            'coursera_members.external_id',
         ])->where('completed', 'Yes')->get();
+
+        ////////////////////////////////////////specialisations obtenues par province//////////////////////////////////////////////////////////////////////////////////////////////////////
+        $getcompleteKin1 = $getcompleteSpecialisation->filter(function ($member) {
+            return preg_match('/^1\d*/', $member->external_id);
+        });
+
+
+
+        $getcompleteKan1 = $getcompleteSpecialisation->filter(function ($member) {
+            return preg_match('/^2\d*/', $member->external_id);
+        });
+
+        $getcompleteLub1 = $getcompleteSpecialisation->filter(function ($member) {
+            return preg_match('/^3\d*/', $member->external_id);
+        });
+
+
+        $getcompleteMat1 = $getcompleteSpecialisation->filter(function ($member) {
+            return preg_match('/^4\d*/', $member->external_id);
+        });
+
+
+        $getcomplete_count = $getcompleteSpecialisation->count();
+
+        $getcompleteKin_count = $getcompleteKin1->count();
+        $getcompleteLub_count = $getcompleteLub1->count();
+        $getcompleteMat_count = $getcompleteMat1->count();
+        $getcompleteKan_count = $getcompleteKan1->count();
 
         $completedSpecialisations = CourseraSpecialisation::where('completed', 'Yes')->count();
 
@@ -125,7 +154,9 @@ class CourseraController extends Controller
         $licenceKinEnCours = $licence_en_cours->filter(function ($member) {
             return preg_match('/^[10]\d*/', $member->external_id);
         });
+
         $licenceKinEnCours_count=$licenceKinEnCours->count();
+
 
         $licenceLubEnCours = $licence_en_cours->filter(function ($member) {
             return preg_match('/^2\d*/', $member->external_id);
@@ -140,6 +171,7 @@ class CourseraController extends Controller
         $licenceMatEnCours = $licence_en_cours->filter(function ($member) {
             return preg_match('/^3\d*/', $member->external_id);
         });
+        
         $licenceMatEnCours_count=$licenceMatEnCours->count();
 
         $licence_en_cours_count = $licence_en_cours->count();
@@ -211,33 +243,113 @@ class CourseraController extends Controller
         $apprenants_30day_kananga_count=$apprenants_30day_kananga->count();
 
 
-        $non_inscrit_cours = CourseraMember::select('coursera_members.name', 'coursera_members.email', 'cu.university', 'cu.course', 'cu.course_slug', 'cu.course_certificate_url')
+        $non_inscrit_cours = CourseraMember::select('coursera_members.external_id','coursera_members.name', 'coursera_members.email', 'cu.university', 'cu.course', 'cu.course_slug', 'cu.course_certificate_url')
             ->leftJoin('coursera_usages as cu', 'coursera_members.id', '=', 'cu.coursera_member_id')
             ->where('coursera_members.join_date', '>', Carbon::now()->subDays(7))
             ->where('coursera_members.member_state', '=', 'INVITED')
             ->get();
 
+        ///////////////////////////////non_inscrit par province////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        $non_inscritKin = $non_inscrit_cours->filter(function ($member) {
+            return preg_match('/^1\d*/', $member->external_id);
+        });
+
+
+        $non_inscritLub = $non_inscrit_cours->filter(function ($member) {
+            return preg_match('/^2\d*/', $member->external_id);
+        });
+
+
+        $non_inscritMat = $non_inscrit_cours->filter(function ($member) {
+            return preg_match('/^3\d*/', $member->external_id);
+        });
+
+
+        $non_inscritKan = $non_inscrit_cours->filter(function ($member) {
+            return preg_match('/^4\d*/', $member->external_id);
+        });
+
+        $non_inscritKin_count = $non_inscritKin->count();
+        $non_inscritLub_count = $non_inscritLub->count();
+        $non_inscritMat_count = $non_inscritMat->count();
+        $non_inscritKan_count = $non_inscritKan->count();
+
+       
         $non_inscrit_cours_count = $non_inscrit_cours->count();
 
         $last_activity = CourseraMember::select([
             'name',
             'email',
             'join_date',
-            'latest_program_activity_date'
+            'latest_program_activity_date',
+            'external_id'
 
         ])->where('latest_program_activity_date', '>', '2024-09-01')->get();
 
         $last_activity_count = $last_activity->count();
 
+        
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+       
+        $last_activityKin = $last_activity->filter(function ($member) {
+            return preg_match('/^1\d*/', $member->external_id);
+        });
 
-        $taux_utilisation = CourseraUsage::select('cm.email', 'cm.name', 'coursera_usages.university', 'coursera_usages.course', 'coursera_usages.course_slug', 'coursera_usages.last_course_activity')
+        $last_activityLub = $last_activity->filter(function ($member) {
+            return preg_match('/^2\d*/', $member->external_id);
+        });
+
+        $last_activityMat = $last_activity->filter(function ($member) {
+            return preg_match('/^3\d*/', $member->external_id);
+        });
+
+        $last_activityKan = $last_activity->filter(function ($member) {
+            return preg_match('/^4\d*/', $member->external_id);
+        });
+
+
+
+        $last_activityKin_count = $last_activityKin->count();
+        $last_activityMat_count = $last_activityMat->count();
+        $last_activityLub_count = $last_activityLub->count();
+        $last_activityKan_count = $last_activityKan->count();
+
+
+        $taux_utilisation = CourseraUsage::select('cm.email', 'cm.name', 'cm.external_id','coursera_usages.university', 'coursera_usages.course', 'coursera_usages.course_slug', 'coursera_usages.last_course_activity')
             ->leftJoin('coursera_members AS cm', 'cm.id', '=', 'coursera_usages.coursera_member_id')
             ->where('coursera_usages.removed_from_program', '=', 'Yes')
             ->where('coursera_usages.last_course_activity', '>', Carbon::now()->subDays(21)) // Assurez-vous que 'last_course_activity' est dans 'coursera_usages'
             ->get();
+
+        //////////////////////////////////////////////////////////taux d'utilisation par province///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        $taux_util_kin = $taux_utilisation->filter(function ($member) {
+            return preg_match('/^1\d*/', $member->external_id);
+        });
+
+        $taux_util_lub = $taux_utilisation->filter(function ($member) {
+            return preg_match('/^2\d*/', $member->external_id);
+        });
+
+        $taux_util_mat = $taux_utilisation->filter(function ($member) {
+            return preg_match('/^3\d*/', $member->external_id);
+        });
+
+        $taux_util_kan = $taux_utilisation->filter(function ($member) {
+            return preg_match('/^4\d*/', $member->external_id);
+        });
+
+
         $taux_count = $taux_utilisation->count();
         $taux = ($taux_count * 100) / 125;
 
+
+        $taux_util_kin_count = $taux_util_kin->count();
+        $taux_util_lub_count = $taux_util_lub->count();
+        $taux_util_mat_count = $taux_util_mat->count();
+        $taux_util_kan_count = $taux_util_kan->count();
+
+      
+        $taux_kin = ($taux_util_kin_count * 100) / $taux_utilisation->count();
 
         $membersKinshasa = CourseraMember::where('external_id', 'REGEXP', '^[10]\d*')
             ->get();
@@ -288,6 +400,24 @@ class CourseraController extends Controller
             "allUsages",
             "allSpecialisations",
             "getcompleteSpecialisation",
+            "getcomplete_count",
+            "getcompleteKin_count",
+            "getcompleteKan_count",
+            "getcompleteMat_count",
+            "getcompleteLub_count",
+            "getcompleteKin1",
+            "getcompleteKan1",
+            "getcompleteMat1",
+            "getcompleteLub1",
+            "non_inscritKin",
+            "non_inscritKan",
+            "non_inscritMat",
+            "non_inscritLub",
+            "non_inscritKin_count",
+            "non_inscritKan_count",
+            "non_inscritLub_count",
+            "non_inscritMat_count",
+
             "membersKinshasa_count",
             "membersKinshasa",
             "membersLubumbashi_count",
@@ -305,6 +435,10 @@ class CourseraController extends Controller
             "licenceLubEnCours",
             "licenceKanEnCours",
             "licenceMatEnCours",
+            "last_activityKin",
+            "last_activityKan",
+            "last_activityMat",
+            "last_activityLub",
             "certificat_obtenue_kinshasa",
             "certificat_obtenue_lubumbashi",
             "certificat_obtenue_matadi",
@@ -323,7 +457,19 @@ class CourseraController extends Controller
             "apprenants_30day_kananga",
             "total_cours",
 
+            "last_activityKin_count",
+            "last_activityKan_count",
+            "last_activityMat_count",
+            "last_activityLub_count",
+            "taux_util_kin",
+            "taux_util_kan",
+            "taux_util_mat",
+            "taux_util_lub",
 
+            "taux_util_kin_count",
+            "taux_util_kan_count",
+            "taux_util_mat_count",
+            "taux_util_lub_count",
         ));
     }
 
