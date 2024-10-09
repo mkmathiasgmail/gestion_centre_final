@@ -140,7 +140,7 @@ class RapportSemestrielController extends Controller
         $worksheet->getStyle('AC1:AE3500')->getBorders()->getAllBorders()->setBorderStyle(Border::BORDER_THIN);
         $worksheet->getStyle('AF3:AF3500')->getBorders()->getAllBorders()->setBorderStyle(Border::BORDER_THIN);
 
-        //-------------------------ajoute des filtres pour chaque lignes 
+        //-------------------------ajoute des filtres pour chaque lignes
 
         // Récupérer la feuille de travail
         $worksheet = $spreadsheet->getActiveSheet();
@@ -215,7 +215,7 @@ class RapportSemestrielController extends Controller
         applyColorToColumn($worksheet, 1, 'AB', 'aeaaaa');
 
 
-        //on  defini les en-têtes de colonne        
+        //on  defini les en-têtes de colonne
         $worksheet->setCellValue('A3', 'name')
             ->getStyle('A3')
             ->getFont()
@@ -595,13 +595,13 @@ class RapportSemestrielController extends Controller
                 foreach ($odcusers as $key => $odcuser) {
                     $detail_profession = json_decode($odcuser->detail_profession, true);
                     $universiteValue = $detail_profession['university'] ?? '';
-                }   
+                }
             }else{
                 $universiteValue = '';
             }
 
 
-            //Recuperation des profession et specialités des 
+            //Recuperation des profession et specialités des
             $profess = ['Profession'];
 
             $professLabelAttribute = DB::table('candidat_attributes')
@@ -614,7 +614,7 @@ class RapportSemestrielController extends Controller
             ->first();
 
             // Initialisation de la variable
-            $professionValue = ''; 
+            $professionValue = '';
 
             if ($professLabelAttribute) {
                 $professionValue = $professLabelAttribute->value;
@@ -675,14 +675,14 @@ class RapportSemestrielController extends Controller
             } elseif ($ages >= 35) {
                 $tranche = "35 > years";
             }
-            //verification des sexes 
-            
+            //verification des sexes
+
             $gender= $candidat->gender;
 
-            if ($gender == 'M') 
+            if ($gender == 'M'||'Garcon')
             {
                 $gender = "male";
-            }elseif($gender =='F')
+            }elseif($gender == 'F' || 'Fille')
             {
                 $gender = "female";
             }
@@ -758,10 +758,6 @@ class RapportSemestrielController extends Controller
                     ->getStyle('M' . $row)
                     ->getAlignment()
                     ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
-                $worksheet->setCellValue('M' . $row, $candidat->startYear)
-                    ->getStyle('M' . $row)
-                    ->getAlignment()
-                    ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
                 $worksheet->setCellValue('N' . $row, $candidat->number_day)
                     ->getStyle('N' . $row)
                     ->getAlignment()
@@ -801,7 +797,7 @@ class RapportSemestrielController extends Controller
         }
 
 
-        
+
 
 
         //on cree le fichier Excel
