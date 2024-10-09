@@ -116,7 +116,7 @@
         <div class=" flex justify-between gap-4 w-full md:inset-0  mb-8">
             @if (count($activitesP) > 0)
                 @foreach ($activitesP as $item)
-                    <div
+                    <a href="{{route('activites.show',$item->id)}}"
                         class=" h-36  flex  items-center  p-4 w-full rounded-lg shadow-lg dark:shadow-lg dark:shadow-gray-500/20 backdrop-blur-xl bg-cover bg-white dark:bg-gray-800 dark:hover:bg-gray-700  hover:bg-[#f8f0e7] hover:scale-105 transition duration-700 ease-in-out border-l-8 border-[#ff9822] hover:border-l-10 ">
 
                         <div>
@@ -128,7 +128,7 @@
                                 {{ $item->title }}
                             </h3>
                         </div>
-                    </div>
+                    </a>
                 @endforeach
             @else
                 <div class=" flex justify-center items-center w-full h-full">

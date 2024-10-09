@@ -281,7 +281,7 @@ class ActiviteController extends Controller
     public function edit(Activite $activite)
     {
         $typeEvent = TypeEvent::all();
-        $categories = Categorie::has('articles')->get();
+        $categories = Categorie::has('activites')->get();
         $hashtag = Hashtag::has('activite')->get();
         return view('activites.edit', compact('activite', 'typeEvent', 'categories', 'hashtag'));
     }
@@ -297,6 +297,8 @@ class ActiviteController extends Controller
                 'contents' => $request->contents,
                 'start_date' => $request->startDate,
                 'end_date' => $request->endDate,
+                'jour' => $request->number_day,
+                'hour' => $request->number_hour,
                 'location' => $request->location,
                 "thumbnail_url" => $request->thumbnailURL,
             ]);
@@ -716,17 +718,28 @@ class ActiviteController extends Controller
 
     public function critereParticipant($id)
     {
+        // Vérifie d'abord si l'activité en question est un parcours
+        $isParcour = Activite::where('id', $id)
+            ->where('title', 'LIKE', '%parcour%')
+            ->exists();
 
-        $candidats = Candidat::join('activites', 'candidats.activite_id', '=', 'activites.id')
-            ->join('odcusers', 'candidats.odcuser_id', '=', 'odcusers.id')
-            ->where('activites.id', $id)
-            ->where('activites.title', 'LIKE', '%parcour%')
-            ->select('activites.title AS activite_title', 'odcusers.first_name AS candidat_nom')
-            ->get();
+        // Si l'activité est un parcours, on ne l'affiche pas parmi les activités suivies
+        if ($isParcour) {
+            $candidats = Candidat::join('activites', 'candidats.activite_id', '=', 'activites.id')
+                ->join('odcusers', 'candidats.odcuser_id', '=', 'odcusers.id')
+                ->where('activites.id', '=', $id)
+                ->where('activites.title', 'LIKE', '%parcour%')
+                ->whereNotNull('candidats.odcuser_id')
+                ->select('activites.title AS activite_title', 'odcusers.first_name AS candidat_nom', 'odcusers.last_name AS candidat_prenom')
+                ->get();
+        } else {
+            $candidats = Candidat::join('activites', 'candidats.activite_id', '=', 'activites.id')
+                ->join('odcusers', 'candidats.odcuser_id', '=', 'odcusers.id')
+                ->where('activites.id', $id)
+                ->select('activites.title AS activite_title', 'odcusers.first_name AS candidat_nom')
+                ->get();
+        }
 
-
-
-
-        return  view('activites.parcour', compact('candidats'));
+        return view('activites.parcour', compact('candidats'));
     }
 }

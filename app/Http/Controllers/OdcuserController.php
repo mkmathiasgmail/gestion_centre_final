@@ -95,21 +95,23 @@ class OdcuserController extends Controller
             FROM activites act
             JOIN candidats c ON act.id = c.activite_id
             JOIN categories cat ON act.categorie_id = cat.id
-            WHERE c.odcuser_id = ? AND c.status=\'accept\'
+            WHERE c.odcuser_id = ? AND (c.status = ? OR c.status = ?)
             ORDER BY c.createdAt
             LIMIT 3',
-            [$userId]
+            [$userId, 'accept', 1]
         );
+
 
         $activitespAll = DB::select(
             '
-            SELECT act.*, cat.name
+           SELECT act.*, cat.name
             FROM activites act
             JOIN candidats c ON act.id = c.activite_id
             JOIN categories cat ON act.categorie_id = cat.id
-            WHERE c.odcuser_id = ? AND c.status=\'accept\'
-            ORDER BY c.createdAt',
-            [$userId]
+            WHERE c.odcuser_id = ? AND (c.status = ? OR c.status = ?)
+            ORDER BY c.createdAt
+            LIMIT 3',
+            [$userId, 'accept', 1]
         );
 
         $activitesC = DB::select(
