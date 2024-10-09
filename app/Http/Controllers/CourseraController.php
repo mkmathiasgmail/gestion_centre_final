@@ -9,6 +9,7 @@ use App\Models\CourseraMember;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use App\Models\CourseraSpecialisation;
+use App\Models\Odcuser;
 use PhpOffice\PhpSpreadsheet\Style\Fill;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Style\Color;
@@ -92,7 +93,52 @@ class CourseraController extends Controller
             'coursera_usages.university',
             'coursera_usages.course_slug',
         ])->where('completed', 'Yes')->get();
+
+        
+        $getAllParticipants = CourseraUsage::leftjoin('coursera_members as cmem', 'cmem.id', '=', 'coursera_usages.coursera_member_id')
+            ->leftJoin('odcusers as us', 'us.email', '=', 'cmem.email')    
+            ->select([
+            'cmem.name',
+            'cmem.email',
+            'coursera_usages.class_start_time',
+            'coursera_usages.class_end_time',
+            'coursera_usages.course',
+            'coursera_usages.completed',
+            'cmem.external_id',
+            'us.gender'
+            ])->get();
+ 
+
+        $getAllParticipants_count = $getAllParticipants->count();
+
+        //obtenue certificats à kinshasa
+        $getAllParticipants_kin = $getAllParticipants->filter(function ($member) {
+            return preg_match('/^[10]\d*/', $member->external_id);
+        });
+        $getAllParticipants_kin_count = $getAllParticipants_kin->count();
+
+        //obtenue certificat à lubumbashi
+        $getAllParticipants_lub = $getAllParticipants->filter(function ($member) {
+            return preg_match('/^[2]\d*/', $member->external_id);
+        });
+        $getAllParticipants_lub_count = $getAllParticipants_lub->count();
+        //obtenue certificat à matadi
+        $getAllParticipants_mat = $getAllParticipants->filter(function ($member) {
+            return preg_match('/^[3]\d*/', $member->external_id);
+        });
+        $getAllParticipants_mat_count = $getAllParticipants_mat->count();
+        //obtenue certificat à kananga
+        $getAllParticipants_kan = $getAllParticipants->filter(function ($member) {
+            return preg_match('/^[4]\d*/', $member->external_id);
+        });
+
+        $getAllParticipants_kan_count = $getAllParticipants_kan->count();
+
+
+
+
         $uncompletedUsages = CourseraUsage::where('completed', 'NO')->get();
+
         $allUsages = CourseraUsage::all();
 
 
@@ -115,22 +161,22 @@ class CourseraController extends Controller
 
         ////////////////////////////////////////specialisations obtenues par province//////////////////////////////////////////////////////////////////////////////////////////////////////
         $getcompleteKin1 = $getcompleteSpecialisation->filter(function ($member) {
-            return preg_match('/^1\d*/', $member->external_id);
+            return preg_match('/^[10]\d*/', $member->external_id);
         });
 
 
 
         $getcompleteKan1 = $getcompleteSpecialisation->filter(function ($member) {
-            return preg_match('/^2\d*/', $member->external_id);
+            return preg_match('/^[2]\d*/', $member->external_id);
         });
 
         $getcompleteLub1 = $getcompleteSpecialisation->filter(function ($member) {
-            return preg_match('/^3\d*/', $member->external_id);
+            return preg_match('/^[3]\d*/', $member->external_id);
         });
 
 
         $getcompleteMat1 = $getcompleteSpecialisation->filter(function ($member) {
-            return preg_match('/^4\d*/', $member->external_id);
+            return preg_match('/^[4]\d*/', $member->external_id);
         });
 
 
@@ -470,6 +516,18 @@ class CourseraController extends Controller
             "taux_util_kan_count",
             "taux_util_mat_count",
             "taux_util_lub_count",
+            "getAllParticipants",
+            "getAllParticipants_count",
+
+            "getAllParticipants_kin",
+            "getAllParticipants_kan",
+            "getAllParticipants_lub",
+            "getAllParticipants_mat",
+
+            "getAllParticipants_kin_count",
+            "getAllParticipants_kan_count",
+            "getAllParticipants_lub_count",
+            "getAllParticipants_mat_count",
         ));
     }
 
@@ -1156,6 +1214,125 @@ class CourseraController extends Controller
         // On crée le fichier Excel
         $writer = new Xlsx($spreadsheet);
         $fileName = "Invitater.xlsx";
+        $tempFile = tempnam(sys_get_temp_dir(), $fileName);
+        $writer->save($tempFile);
+
+        // On renvoie le fichier Excel au navigateur
+        return response()->download($tempFile, $fileName)->deleteFileAfterSend(true);
+    }
+
+
+
+    public function participants_coursera()
+    {
+        $getAllParticipants = CourseraUsage::leftjoin('coursera_members as cmem', 'cmem.id', '=', 'coursera_usages.coursera_member_id')
+            ->leftJoin('odcusers as us', 'us.email', '=', 'cmem.email')    
+            ->select([
+            'cmem.name',
+            'cmem.email',
+            'coursera_usages.class_start_time',
+            'coursera_usages.class_end_time',
+            'coursera_usages.course',
+            'coursera_usages.completed',
+            'cmem.external_id',
+            'us.gender'
+            ])->get();
+
+        // Vérifie si des membres ont été trouvés
+        if ($getAllParticipants->isEmpty()) {
+            return response()->json(['message' => 'Aucune invitation trouvée.'], 404);
+        }
+
+        $spreadsheet = new Spreadsheet();
+        $worksheet = $spreadsheet->getActiveSheet();
+
+        $worksheet->setCellValue('A1', 'Name');
+        $worksheet->getStyle('A1')
+            ->getFill()
+            ->setFillType(Fill::FILL_SOLID)
+            ->setStartColor(new Color('D3D3D3'));
+
+        $worksheet->setCellValue('B1', 'Email');
+        $worksheet->getStyle('B1')
+            ->getFill()
+            ->setFillType(Fill::FILL_SOLID)
+            ->setStartColor(new Color('D3D3D3'));
+
+        $worksheet->setCellValue('C1', 'gender');
+        $worksheet->getStyle('C1')
+            ->getFill()
+            ->setFillType(Fill::FILL_SOLID)
+            ->setStartColor(new Color('D3D3D3'));
+
+        $worksheet->setCellValue('D1', 'course');
+        $worksheet->getStyle('D1')
+            ->getFill()
+            ->setFillType(Fill::FILL_SOLID)
+            ->setStartColor(new Color('D3D3D3'));
+
+        $worksheet->setCellValue('E1', 'class_start_time');
+        $worksheet->getStyle('E1')
+            ->getFill()
+            ->setFillType(Fill::FILL_SOLID)
+            ->setStartColor(new Color('D3D3D3'));
+
+        $worksheet->setCellValue('F1', 'class_end_time');
+        $worksheet->getStyle('F1')
+            ->getFill()
+            ->setFillType(Fill::FILL_SOLID)
+            ->setStartColor(new Color('D3D3D3'));
+
+        $worksheet->setCellValue('G1', 'completed');
+        $worksheet->getStyle('G1')
+            ->getFill()
+            ->setFillType(Fill::FILL_SOLID)
+            ->setStartColor(new Color('D3D3D3'));
+
+        // Définition des bordures
+        $worksheet->getStyle('A1:D1')->getBorders()->getAllBorders()->setBorderStyle(Border::BORDER_THIN);
+        $row = 2;
+
+        foreach ($getAllParticipants as $member) {
+            $worksheet->setCellValue('A' . $row, $member->name)
+                ->getStyle('A' . $row)
+                ->getAlignment()
+                ->setHorizontal(Alignment::HORIZONTAL_LEFT);
+
+            $worksheet->setCellValue('B' . $row, $member->email)
+                ->getStyle('B' . $row)
+                ->getAlignment()
+                ->setHorizontal(Alignment::HORIZONTAL_LEFT);
+
+            $worksheet->setCellValue('C' . $row, $member->gender)
+                ->getStyle('C' . $row)
+                ->getAlignment()
+                ->setHorizontal(Alignment::HORIZONTAL_LEFT);
+
+            $worksheet->setCellValue('D' . $row, $member->course)
+                ->getStyle('D' . $row)
+                ->getAlignment()
+                ->setHorizontal(Alignment::HORIZONTAL_LEFT);
+
+            $worksheet->setCellValue('E' . $row, $member->class_start_time)
+            ->getStyle('E' . $row)
+            ->getAlignment()
+            ->setHorizontal(Alignment::HORIZONTAL_LEFT);
+
+            $worksheet->setCellValue('F' . $row, $member->class_end_time)
+                ->getStyle('F' . $row)
+                ->getAlignment()
+                ->setHorizontal(Alignment::HORIZONTAL_LEFT);
+
+            $worksheet->setCellValue('G' . $row, $member->completed)
+            ->getStyle('G' . $row)
+            ->getAlignment()
+            ->setHorizontal(Alignment::HORIZONTAL_LEFT);
+            $row++;
+        }
+
+        // On crée le fichier Excel
+        $writer = new Xlsx($spreadsheet);
+        $fileName = "participants_coursera.xlsx";
         $tempFile = tempnam(sys_get_temp_dir(), $fileName);
         $writer->save($tempFile);
 
