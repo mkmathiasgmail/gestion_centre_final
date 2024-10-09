@@ -46,14 +46,14 @@ class RapportSemestrielController extends Controller
 
         //On recuper les données depuis le model
         $activites = Activite::all();
-        $candidats = Presence::leftJoin('candidats as ca', 'ca.id', '=', 'presences.candidat_id')
-            ->leftJoin('odcusers as us', 'us.id', '=', 'ca.odcuser_id')
-            ->leftJoin('activites as ac', 'ac.id', '=', 'ca.activite_id')
-            ->leftJoin('categories  as cat', 'cat.id', '=', 'ac.categorie_id')
-            ->leftJoin('activite_type_event as acty', 'acty.activite_id', '=', 'ac.id')
-            ->leftJoin('type_events as typ', 'typ.id', '=', 'acty.type_event_id')
-            ->leftJoin('employabilites as empl', 'empl.odcuser_id', '=', 'us.id')
-            ->leftJoin('type_contrats as typecont', 'typecont.id', '=', 'empl.type_contrat_id')
+        $candidats = Presence::leftJoin('candidats as ca', 'presences.candidat_id', '=', 'ca.id')
+            ->leftJoin('odcusers as us', 'ca.odcuser_id', '=', 'us.id')
+            ->leftJoin('activites as ac', 'ca.activite_id', '=', 'ac.id')
+            ->leftJoin('categories  as cat', 'ac.categorie_id', '=', 'cat.id')
+            ->leftJoin('activite_type_event as acty', 'ac.id', '=', 'acty.activite_id')
+            ->leftJoin('type_events as typ', 'acty.type_event_id ', '=', 'typ.id')
+            ->leftJoin('employabilites as empl', 'us.id', '=', 'empl.odcuser_id')
+            ->leftJoin('type_contrats as typecont', 'empl.type_contrat_id', '=', 'typecont.id')
             // ->leftJoin('postes as pst', 'pst.employabilite_id', '=', 'empl.id')
             // ->leftJoin('entreprises as entrp', 'entrp.employabilite_id', '=', 'empl.id')
             // ->leftJoin('postes as pst', 'pst.employabilite_id', '=', 'empl.id')
@@ -550,7 +550,6 @@ class RapportSemestrielController extends Controller
 
         $typeparc = env('TYPE_PARCOURS');
         $typeparc = explode(',', $typeparc);
-
         //fixation des colonnes lors du deliments de la feuilles
         $worksheet->freezePane('A4');
         $worksheet->freezePane('E4');
@@ -668,7 +667,16 @@ class RapportSemestrielController extends Controller
             // if ($ages >= 3 && $ages <= 14) {
             //     $tranche = "0 - 14 years";
             // }
-            if ($ages >= 15 && $ages <= 24) {
+
+            if (in_array($candidat->code, ['SUCO', 'MAJU']))
+            {
+                $ages = rand(12, 14);
+            }
+
+            if($ages >= 12 && $ages <= 14){
+                $tranche = "12 - 14 years";
+            }
+            elseif($ages >= 15 && $ages <= 24 || $ages == "") {
                 $tranche = "15 - 24 years";
             } elseif ($ages >= 25 && $ages <= 34) {
                 $tranche = "25 - 34 years";
