@@ -752,6 +752,406 @@
         </div>
 
 
+
+
+
+
+
+
+
+        <div id="modal_participants"
+            class="dark:text-gray-300 hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
+            <div class="relative p-4 w-full max-w-xl lg:max-w-6xl xl:max-w-7xl max-h-full">
+                <!-- Modal content -->
+                <div class="relative bg-white rounded-lg shadow dark:bg-gray-700 p-4">
+                    <!-- Modal header -->
+                    <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
+                        <h3 class="text-xl font-semibold text-gray-900 dark:text-white">
+                            Nombre de participants qui suivent les cours coursera
+                        </h3>
+                        <button type="button"
+                            class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
+                            data-modal-hide="modal_participants">
+                            <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
+                                viewBox="0 0 14 14">
+                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                    stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
+                            </svg>
+                            <span class="sr-only">Close modal</span>
+                        </button>
+                    </div>
+
+                    <!-- Modal body -->
+                    <div>
+
+
+                        <div id="toutAfficher_parts" role="tabpanel"
+                            aria-labelledby="toutAfficher_certificat-tab p-4 md:p-5 space-y-4"
+                            class="hidden p-4 rounded-lg bg-gray-50 dark:bg-gray-800 top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
+                            <table id="mytable_participants"
+                                class="display nowrap w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-300 cell-border compact stripe"
+                                style="width:100%">
+                                <thead>
+                                    <tr>
+                                        <th scope="col" class="px-6 py-3">
+                                            Name
+                                        </th>
+                                        <th scope="col" class="px-6 py-3">
+                                            Email
+                                        </th>
+                                        <th scope="col" class="px-6 py-3">
+                                            gender
+                                         </th>
+                                        <th scope="col" class="px-6 py-3">Course</th>
+
+                                        <th scope="col" class="px-6 py-3">
+                                            class_start_time
+                                        </th>
+                                         <th scope="col" class="px-6 py-3">
+                                            class_en_time
+                                         </th>
+                                         <th scope="col" class="px-6 py-3">
+                                            completed
+                                         </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach ($getAllParticipants as $parts)
+                                        <tr>
+                                            <td class="px-6 py-4">
+                                                {{ $parts->name }}
+
+                                            </td>
+
+                                            <td class="px-6 py-4">
+                                                {{ $parts->email }}
+                                            </td>
+
+                                            <td class="px-6 py-4">
+                                                {{ $parts->gender }}
+                                            </td>
+
+                                            <td class="px-6 py-4">{{ $parts->course }}</td>
+                                            </td>
+
+                                            <td class="px-6 py-4">{{ $parts->class_start_time }}</td>
+                                             <td class="px-6 py-4">{{ $parts->class_end_time }}</td>
+                                              <td class="px-6 py-4">{{ $parts->completed }}</td>
+                                        </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        </div>
+
+                        {{-- Nombres de ceux qui ont obtenu les certificats à kinshasa --}}
+                        <div id="kinshasa_parts" role="tabpanel"
+                            aria-labelledby="kinshasa_parts-tab p-4 md:p-5 space-y-4"
+                            class="hidden p-4 rounded-lg bg-gray-50 dark:bg-gray-800 top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
+                            <table id="mytable_participantskin"
+                                class="display nowrap w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-300 cell-border compact stripe"
+                                style="width:100%">
+                                <thead>
+                                    <tr>
+                                        <th scope="col" class="px-6 py-3">
+                                            Name
+                                        </th>
+                                        <th scope="col" class="px-6 py-3">
+                                            Email
+                                        </th>
+                                        <th scope="col" class="px-6 py-3">
+                                            gender
+                                         </th>
+                                        <th scope="col" class="px-6 py-3">Course</th>
+
+                                        <th scope="col" class="px-6 py-3">
+                                            class_start_time
+                                        </th>
+                                         <th scope="col" class="px-6 py-3">
+                                            class_en_time
+                                         </th>
+                                         <th scope="col" class="px-6 py-3">
+                                            completed
+                                         </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach ($getAllParticipants_kin as $parts)
+                                        <tr>
+                                            <td class="px-6 py-4">
+                                                {{ $parts->name }}
+
+                                            </td>
+
+                                            <td class="px-6 py-4">
+                                                {{ $parts->email }}
+                                            </td>
+
+                                            <td class="px-6 py-4">
+                                                {{ $parts->gender }}
+                                            </td>
+
+                                            <td class="px-6 py-4">{{ $parts->course }}</td>
+                                            </td>
+
+                                            <td class="px-6 py-4">{{ $parts->class_start_time }}</td>
+                                             <td class="px-6 py-4">{{ $parts->class_end_time }}</td>
+                                              <td class="px-6 py-4">{{ $parts->completed }}</td>
+                                        </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        </div>
+
+                        {{-- Main modal Nombres de ceux qui ont obtenu les certificats à lubumbashi --}}
+                        <div id="lubumbashi_parts" role="tabpanel"
+                            aria-labelledby="lubumbashi_parts-tab p-4 md:p-5 space-y-4"
+                            class="hidden p-4 rounded-lg bg-gray-50 dark:bg-gray-800 top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
+
+                            <table id="mytable_participantslub"
+                                class="display nowrap w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-300 cell-border compact stripe"
+                                style="width:100%">
+                                <thead>
+                                    <tr>
+                                        <th scope="col" class="px-6 py-3">
+                                            Name
+                                        </th>
+                                        <th scope="col" class="px-6 py-3">
+                                            Email
+                                        </th>
+                                        <th scope="col" class="px-6 py-3">
+                                            gender
+                                         </th>
+                                        <th scope="col" class="px-6 py-3">Course</th>
+
+                                        <th scope="col" class="px-6 py-3">
+                                            class_start_time
+                                        </th>
+                                         <th scope="col" class="px-6 py-3">
+                                            class_en_time
+                                         </th>
+                                         <th scope="col" class="px-6 py-3">
+                                            completed
+                                         </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach ($getAllParticipants_lub as $parts)
+                                        <tr>
+                                            <td class="px-6 py-4">
+                                                {{ $parts->name }}
+
+                                            </td>
+
+                                            <td class="px-6 py-4">
+                                                {{ $parts->email }}
+                                            </td>
+
+                                            <td class="px-6 py-4">
+                                                {{ $parts->gender }}
+                                            </td>
+
+                                            <td class="px-6 py-4">{{ $parts->course }}</td>
+                                            </td>
+
+                                            <td class="px-6 py-4">{{ $parts->class_start_time }}</td>
+                                             <td class="px-6 py-4">{{ $parts->class_end_time }}</td>
+                                              <td class="px-6 py-4">{{ $parts->completed }}</td>
+                                        </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <!-- Main modal Nombres de ceux qui ont obtenu les certificats à matadi -->
+                        <div id="matadi_parts" role="tabpanel"
+                            aria-labelledby="matadi_parts-tab p-4 md:p-5 space-y-4"
+                            class="hidden p-4 rounded-lg bg-gray-50 dark:bg-gray-800 top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
+                            <table id="mytable_participantsmat"
+                                class="display nowrap w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-300 cell-border compact stripe"
+                                style="width:100%">
+                                <thead>
+                                     <tr>
+                                        <th scope="col" class="px-6 py-3">
+                                            Name
+                                        </th>
+                                        <th scope="col" class="px-6 py-3">
+                                            Email
+                                        </th>
+                                        <th scope="col" class="px-6 py-3">
+                                            gender
+                                         </th>
+                                        <th scope="col" class="px-6 py-3">Course</th>
+
+                                        <th scope="col" class="px-6 py-3">
+                                            class_start_time
+                                        </th>
+                                         <th scope="col" class="px-6 py-3">
+                                            class_en_time
+                                         </th>
+                                         <th scope="col" class="px-6 py-3">
+                                            completed
+                                         </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach ($getAllParticipants_mat as $parts)
+                                        <tr>
+                                            <td class="px-6 py-4">
+                                                {{ $parts->name }}
+
+                                            </td>
+
+                                            <td class="px-6 py-4">
+                                                {{ $parts->email }}
+                                            </td>
+
+                                            <td class="px-6 py-4">
+                                                {{ $parts->gender }}
+                                            </td>
+
+                                            <td class="px-6 py-4">{{ $parts->course }}</td>
+                                            </td>
+
+                                            <td class="px-6 py-4">{{ $parts->class_start_time }}</td>
+                                             <td class="px-6 py-4">{{ $parts->class_end_time }}</td>
+                                              <td class="px-6 py-4">{{ $parts->completed }}</td>
+                                        </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <!-- Main modal Nombres de ceux qui ont obtenu les certificats à kananga -->
+                        <div id="kananga_parts" role="tabpanel"
+                            aria-labelledby="matadi_parts-tab p-4 md:p-5 space-y-4"
+                            class="hidden p-4 rounded-lg bg-gray-50 dark:bg-gray-800 top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
+                            <table id="mytable_participantskan"
+                                class="display nowrap w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-300 cell-border compact stripe"
+                                style="width:100%">
+                                <thead>
+                                     <tr>
+                                        <th scope="col" class="px-6 py-3">
+                                            Name
+                                        </th>
+                                        <th scope="col" class="px-6 py-3">
+                                            Email
+                                        </th>
+                                        <th scope="col" class="px-6 py-3">
+                                            gender
+                                         </th>
+                                        <th scope="col" class="px-6 py-3">Course</th>
+
+                                        <th scope="col" class="px-6 py-3">
+                                            class_start_time
+                                        </th>
+                                         <th scope="col" class="px-6 py-3">
+                                            class_en_time
+                                         </th>
+                                         <th scope="col" class="px-6 py-3">
+                                            completed
+                                         </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach ($getAllParticipants_kan as $parts)
+                                        <tr>
+                                            <td class="px-6 py-4">
+                                                {{ $parts->name }}
+
+                                            </td>
+
+                                            <td class="px-6 py-4">
+                                                {{ $parts->email }}
+                                            </td>
+
+                                            <td class="px-6 py-4">
+                                                {{ $parts->gender }}
+                                            </td>
+
+                                            <td class="px-6 py-4">{{ $parts->course }}</td>
+                                            </td>
+
+                                            <td class="px-6 py-4">{{ $parts->class_start_time }}</td>
+                                             <td class="px-6 py-4">{{ $parts->class_end_time }}</td>
+                                              <td class="px-6 py-4">{{ $parts->completed }}</td>
+                                        </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        </div>
+
+                    </div>
+                    <!-- Modal footer -->
+                    <div class="flex items-center p-4 md:p-5 border-t border-gray-200 rounded-b dark:border-gray-600">
+                        <a href="{{ route('participants_coursera') }}" data-modal-hide="default-modal" type="button"
+                            class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-transparent bg-[#FF7322] text-white hover:bg-[#FF6822] focus:outline-none focus:bg-[#FF6822] disabled:opacity-50 disabled:pointer-events-none">
+                            Exporte en Excel</a>
+
+                        <div class="px-8 mb-4">
+                            <ul class="flex flex-wrap -mb-px text-sm font-medium text-center" id="default-tab0"
+                                data-tabs-toggle="#default-tab-content0"
+                                data-tabs-active-classes="text-orange-600 hover:text-orange-600 dark:text-orange-500 dark:hover:text-orange-500 border-orange-600 dark:border-orange-500"
+                                data-tabs-inactive-classes="dark:border-transparent text-gray-500 hover:text-gray-600 dark:text-gray-400 border-gray-100 hover:border-gray-300 dark:border-gray-700 dark:hover:text-gray-300"
+                                role="tablist">
+                                <li class="me-2" role="presentation">
+                                    <button class="inline-block p-4 border-b-2 rounded-t-lg"
+                                        id="toutAfficher_parts-tab" data-tabs-target="#toutAfficher_parts"
+                                        type="button" role="tab" aria-controls="toutAfficher_parts"
+                                        aria-selected="false"
+                                        class="py-2.5 px-5 ms-3 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">Tout
+                                        afficher:
+                                        {{ $getAllParticipants_count }}</button>
+                                </li>
+
+                                <li class="me-2" role="presentation">
+                                    <button class="inline-block p-4 border-b-2 rounded-t-lg" id="kinshasa_parts-tab"
+                                        data-tabs-target="#kinshasa_parts" type="button" role="tab"
+                                        aria-controls="kinshasa_parts" aria-selected="false"
+                                        class="py-2.5 px-5 ms-3 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">Kinshasa:
+                                        {{ $getAllParticipants_kin_count }}</button>
+                                </li>
+                                <li class="me-2" role="presentation">
+                                    <button
+                                        class="inline-block p-4 border-b-2 rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300"
+                                        id="lubumbashi_parts-tab" data-tabs-target="#lubumbashi_parts"
+                                        type="button" role="tab" aria-controls="lubumbashi_parts"
+                                        aria-selected="false"
+                                        class="py-2.5 px-5 ms-3 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">Lubumbashi:
+                                        {{ $getAllParticipants_lub_count }}</button>
+                                </li>
+                                <li class="me-2" role="presentation">
+                                    <button
+                                        class="inline-block p-4 border-b-2 rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300"
+                                        id="matadi_parts-tab" data-tabs-target="#matadi_parts" type="button"
+                                        role="tab" aria-controls="matadi_parts" aria-selected="false"
+                                        class="py-2.5 px-5 ms-3 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">Matadi
+                                        : {{ $getAllParticipants_mat_count }}</button>
+                                </li>
+                                <li role="presentation">
+                                    <button
+                                        class="inline-block p-4 border-b-2 rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300"
+                                        id="kananga_parts-tab" data-tabs-target="#kananga_parts" type="button"
+                                        role="tab" aria-controls="kananga_parts" aria-selected="false"
+                                        class="py-2.5 px-5 ms-3 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">Kananga
+                                        : {{ $getAllParticipants_kan_count }}</button>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
+
+
+
+
+
+
+
+
         <!-- Main modal nombres des personnes members depuis 30 jours et n'ont pas de certificat -->
         <div id="default-modal3"
             class="dark:text-gray-300 hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
@@ -2927,6 +3327,20 @@
                     </h4>
                 </div>
                 <div style="width: 80%" class="text-left">
+                    <button data-modal-target="modal_participants" data-modal-toggle="modal_participants" class="block"
+                        type="button">
+                        <div style="width: 420px;"
+                            class=" h-16 flex shadow-lg dark:shadow-lg dark:shadow-gray-500/20   w-full gap-1 items-center p-2 mb-2 rounded-xl bg-[#fcdab40a] dark:bg-gray-800 dark:hover:bg-gray-600 hover:bg-[#f8f0e7] hover:scale-105 transition duration-700 ease-in-out">
+                            <div>
+                                <p href=""
+                                    class="text-left text-xs font-normal text-gray-800 lg:text-sm  dark:text-gray-400">
+                                    Nombre des participants qui suivent les cours coursera : <span
+                                        class="text-[#36d4fc]">{{ $getAllParticipants_count }}</span>
+                                </p>
+                            </div>
+                        </div>
+                    </button>
+
                     <button data-modal-target="default-modal" data-modal-toggle="default-modal" class="block"
                         type="button">
                         <div style="width: 420px;"
@@ -3034,6 +3448,101 @@
         <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
         <script>
+
+            $(document).ready(function() {
+                $('#mytable_participants').DataTable({
+                    "language": {
+                        "url": "//cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/French.json"
+                    },
+                });
+            });
+
+            
+
+
+
+            $(document).ready(function() {
+                $('#mytable_participantskin').DataTable({
+                    "language": {
+                        "url": "//cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/French.json"
+                    },
+                
+                    "dom": 'Bfrtip', // Ajouter les boutons
+                    "buttons": [{
+                        extend: 'excelHtml5',
+                        text: 'Exporter en Excel',
+                        title: 'Données Exportées',
+                        exportOptions: {
+                            columns: ':visible' // Exporter toutes les colonnes visibles
+                        }
+                    }]
+                })
+            });
+
+
+
+             $(document).ready(function() {
+                $('#mytable_participantsmat').DataTable({
+                    "language": {
+                        "url": "//cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/French.json"
+                    },
+                
+                    "dom": 'Bfrtip', // Ajouter les boutons
+                    "buttons": [{
+                        extend: 'excelHtml5',
+                        text: 'Exporter en Excel',
+                        title: 'Données Exportées',
+                        exportOptions: {
+                            columns: ':visible' // Exporter toutes les colonnes visibles
+                        }
+                    }]
+                })
+            });
+
+
+
+
+             $(document).ready(function() {
+                $('#mytable_participantslub').DataTable({
+                    "language": {
+                        "url": "//cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/French.json"
+                    },
+                
+                    "dom": 'Bfrtip', // Ajouter les boutons
+                    "buttons": [{
+                        extend: 'excelHtml5',
+                        text: 'Exporter en Excel',
+                        title: 'Données Exportées',
+                        exportOptions: {
+                            columns: ':visible' // Exporter toutes les colonnes visibles
+                        }
+                    }]
+                })
+            });
+
+
+
+             $(document).ready(function() {
+                $('#mytable_participantskan').DataTable({
+                    "language": {
+                        "url": "//cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/French.json"
+                    },
+                
+                    "dom": 'Bfrtip', // Ajouter les boutons
+                    "buttons": [{
+                        extend: 'excelHtml5',
+                        text: 'Exporter en Excel',
+                        title: 'Données Exportées',
+                        exportOptions: {
+                            columns: ':visible' // Exporter toutes les colonnes visibles
+                        }
+                    }]
+                })
+            });
+
+
+
+
             $(document).ready(function() {
                 $('#mytable').DataTable({
                     "language": {
@@ -3095,6 +3604,7 @@
                     },
                 })
             });
+
             $(document).ready(function() {
                 $('#mytable_specialite').DataTable({
                     "language": {
@@ -3112,6 +3622,7 @@
                     }]
                 })
             });
+
             $(document).ready(function() {
                 $('#mytable_obtenue').DataTable({
                     "language": {
