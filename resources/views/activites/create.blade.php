@@ -502,7 +502,7 @@
                 console.error(error);
             });
         </script>
-        <script>
+        {{-- <script>
             document.addEventListener('DOMContentLoaded', function() {
                 var today = new Date().toISOString().split('T')[0];
                 document.getElementById('datepicker').setAttribute('min', today);
@@ -513,7 +513,7 @@
                 var today = new Date().toISOString().split('T')[0];
                 document.getElementById('datepickers').setAttribute('min', today);
             })
-        </script>
+        </script> --}}
         <script>
             $(document).ready(function() {
                 $("#preview").click(function() {

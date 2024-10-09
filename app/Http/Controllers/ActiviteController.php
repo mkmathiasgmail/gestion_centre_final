@@ -281,7 +281,7 @@ class ActiviteController extends Controller
     public function edit(Activite $activite)
     {
         $typeEvent = TypeEvent::all();
-        $categories = Categorie::has('articles')->get();
+        $categories = Categorie::has('activites')->get();
         $hashtag = Hashtag::has('activite')->get();
         return view('activites.edit', compact('activite', 'typeEvent', 'categories', 'hashtag'));
     }

@@ -9,61 +9,70 @@
             </div>
         @endforeach
     @endif
+    <x-slot name="header">
+        <div class="flex justify-between items-center">
+            <div>
+                @section('svg')
+                    <svg aria-hidden="false" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none"
+                        viewBox="0 0 24 24">
+                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M15 4h3a1 1 0 0 1 1 1v15a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1V5a1 1 0 0 1 1-1h3m0 3h6m-3 5h3m-6 0h.01M12 16h3m-6 0h.01M10 3v4h4V3h-4Z" />
+                    </svg>
+                @endsection
+                <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
+                    {{ __('Formulaire Modification Activite') }}
+                </h2>
+            </div>
+
+
+
+        </div>
+
+
+    </x-slot>
     <form action="{{ route('activites.update', $activite) }}" method="POST">
-        <div class="p-5 md:p-5 space-y-4 mb-6 text-lg font-normal text-gray-800 lg:text-xl  dark:text-gray-400">
-            @csrf
-            @method('PUT')
-
+        @csrf
+        @method('PUT')
+        <div class="grid gap-6 mb-6 md:grid-cols-2 mt-4">
             <div>
-                <label for="title">Title</label>
-                <input type="text" name="title" id="title" class="w-full h-10 rounded-md text-gray-600"
-                    placeholder="Donne un titre à votre Article" required value="{{ $activite->title }}">
-            </div>
-
-            <div>
-                <label for="date_debut">Start Date</label>
-                <input type="date" name="startDate" id="date_debut" class="w-full h-10 rounded-md text-gray-600"
-                    required value="{{ $activite->start_date }}">
-            </div>
-
-            <div>
-                <label for="date_fin">End Date</label>
-                <input type="date" name="endDate" id="date_fin" class="w-full h-10 rounded-md text-gray-600"
-                    required value="{{ $activite->end_date }}">
+                <label for="first_name"
+                    class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Titre</label>
+                <input type="text" id="first_name" name="title"
+                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                    placeholder="John" required value="{{ $activite->title }}" />
             </div>
             <div>
+                <label for="last_name"
+                    class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">categories</label>
+                <select type="text" name="categories" id="categorie_id"
+                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                    placeholder="Doe" required>
+                    <option value="{{ $activite->categorie->id }}">{{ $activite->categorie->name }}</option>
+                    @foreach ($categories as $category)
+                        <option value="{{ $category->id }}">{{ $category->name }}</option>
+                    @endforeach
 
-                <label for="date_debut">Upload File</label>
-                <div class=" flex items-center gap-4">
-
-                    <input type="file" id="file"
-                        class="block w-full mb-4 text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400" />
-                    <input onclick="formImg()" type="button"
-                        class="py-2.5 px-5 me-2 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700"
-                        value="Upload" id="but_upload">
-                </div>
-
-                <div class='preview' id="preview">
-                    <img src="{{ $activite->thumbnail_url }}" id="img" class=" w-96 h-96 object-cover">
-                    <input type="text" name="thumbnailURL" value="{{ $activite->thumbnail_url }}" class=" hidden" id="imgGet">
-                </div>
-
-            </div>
-
-            <div>
-                <label for="lieu">Location</label>
-                <select name="location" id="lieu" class="w-full h-9 rounded-md text-gray-600">
-                    <option value="{{ $activite->location }}">{{ $activite->location }}</option>
-                    <option value="ODC Kinshasa">ODC Kinshasa</option>
-                    <option value="ODC Lubumbashi">ODC Lubumbashi</option>
-                    <option value="ODC Matadi">ODC Matadi</option>
                 </select>
             </div>
-
             <div>
-                <label for="tags">Hashtags</label>
-                <select name="hashtags[]" id="tags" multiple
-                    class="w-full rounded-md text-gray-600 js-example-basic-multiple">
+                <label for="company" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Type
+                    Events</label>
+                <select type="text" name="typeEvent[]" id="typeEvent" multiple="multiple"
+                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 js-example-basic-multiple"
+                    placeholder="Doe" >
+                    @foreach ($typeEvent as $event)
+                        <option value="{{ $event->id }}" @if (in_array($event->id, $activite->typEvent->pluck('id')->toArray())) selected @endif>
+                            {{ $event->title }}
+                        </option>
+                    @endforeach
+
+                </select>
+            </div>
+            <div>
+                <label for="phone" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Tags</label>
+                <select type="text" name="hashtags[]" id="tags" multiple="multiple"
+                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 js-example-basic-multiple"
+                    placeholder="Doe" required>
                     @foreach ($hashtag as $item)
                         <option value="{{ $item->id }}"
                             {{ collect(old('tags', $activite->hashtag->pluck('id')->toArray()))->contains($item->id) ? 'selected' : '' }}>
@@ -71,46 +80,64 @@
 
                         </option>
                     @endforeach
+
                 </select>
             </div>
-
-            <div class="flex gap-4 w-full">
-                <div class="w-1/2">
-                    <label for="typeEvent">Type Events</label>
-                    <select name="typeEvent[]" id="typeEvent"
-                        class="w-full rounded-md text-gray-600 js-example-basic-multiple" multiple="multiple">
-                        @foreach ($typeEvent as $event)
-                            <option value="{{ $event->id }}" @if (in_array($event->id, $activite->typEvent->pluck('id')->toArray())) selected @endif>
-                                {{ $event->title }}
-                            </option>
-                        @endforeach
-                    </select>
-                </div>
-                <div class="w-1/2">
-                    <label for="categorie_id">Categorie</label>
-                    <select name="categories" id="categorie_id" class="w-full h-10 rounded-md text-gray-600">
-                        <option value="{{ $activite->categorie->id }}">{{ $activite->categorie->name }}</option>
-                        @foreach ($categories as $category)
-                            <option value="{{ $category->id }}">{{ $category->name }}</option>
-                        @endforeach
-                    </select>
-                </div>
+            <div>
+                <label for="website" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Date
+                    Debut</label>
+                <input type="date" name="startDate" id="date_debut"
+                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                    placeholder="flowbite.com" required value="{{ $activite->start_date }}" />
             </div>
-
-            <div class="mb-5 mt-5">
-                <label for="contenue">Content</label>
-                <textarea name="contents" id="editor" class="w-full text-gray-600">{{ $activite->content }}</textarea>
+            <div>
+                <label for="visitors" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Date
+                    Fin</label>
+                <input type="date" name="endDate" id="date_fin"
+                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                    placeholder="" required value="{{ $activite->end_date }}" />
             </div>
         </div>
+        <div class="mb-6">
+            <label for="email" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Lieu</label>
+            <select name="location" id="lieu"
+                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                placeholder="john.doe@company.com" required>
+                <option value="{{ $activite->location }}">{{ $activite->location }}</option>
+                <option value="ODC Kinshasa">ODC Kinshasa</option>
+                <option value="ODC Lubumbashi">ODC Lubumbashi</option>
+                <option value="ODC Matadi">ODC Matadi</option>
 
-        <div class="flex items-center p-4 md:p-5 border-t border-gray-200 rounded-b dark:border-gray-600">
+            </select>
+        </div>
+        <div class="mb-6">
+            <label for="password" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Image</label>
+            <input type="file" id="file"
+                class="block w-full mb-4 text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
+                 />
+            <input onclick="formImg()" type="button"
+                class=" hidden py-2.5 px-5 me-2 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700"
+                value="Upload" id="but_upload">
+
+            <div class='preview' id="preview">
+                <img src="{{ $activite->thumbnail_url }}" id="img" class=" w-96 h-96 object-cover">
+                <input type="text" name="thumbnailURL" value="{{ $activite->thumbnail_url }}" class=" hidden"
+                    id="imgGet">
+            </div>
+        </div>
+        <div class="mb-6">
+            <label for="confirm_password"
+                class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Content</label>
+            <textarea name="contents" id="editor" class="w-full text-gray-600">{{ $activite->content }}</textarea>
+        </div>
+        <div class="flex items-start p-4 mb-6 border-t border-gray-200">
             <button type="submit"
-                class="cursor-pointer mt-5 bg-slate-600 p-2 rounded-sm font-bold">I
-                accept</button>
-            <button type="reset"
-                class="py-2.5 px-5 ms-3 text-sm font-medium text-gray-900 bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100">Decline</button>
+                class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-transparent bg-[#ff7322] text-white hover:bg-[#ff6822] focus:outline-none focus:bg-[#ff6822] disabled:opacity-50 disabled:pointer-events-none">
+                Modifier Activite</button>
         </div>
+
     </form>
+
 
     @section('script')
         <script>
