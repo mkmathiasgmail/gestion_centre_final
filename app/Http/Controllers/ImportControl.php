@@ -130,11 +130,39 @@ class ImportControl extends Controller
                 //dd($setEtablissement);
 
                 //dd($candidat);
-                //dump($rowData);
+
+                $keyAsValue = $header;
+                $position = $keyAsValue[6];
+                //dd($position);
+                $dateSave= explode('_', $position);
+                //dd($dateSave[1]);
+                //dd($position);
+                //dd($rowData($keyAsValue[6]));
+                $valueOfKey = $rowData[$position];
+                if($valueOfKey == 1){
+                    
+                    $presence = Presence::firstOrCreate(
+                        [
+                            'candidat_id' => $candidat->id,
+                        ],
+                        [
+                            'date' => $dateSave[1],
+                            'candidat_id' => $candidat->id,
+                        ]);
+                }
+                else{
+                    continue;
+                }
+                //dd($rowData[$position]);
+                //dd(array_keys($rowData));
+                //array_keys
+                /*
                 $date = $rowData['Date_1977-01-01'];
                 //dd($date);
                 //on remplie la table presence
                 $datemodif = explode('_', $date);
+                */
+                /*
                 if (empty($date)){
                     continue; // Skip rows with empty date
                 }else{
@@ -142,7 +170,7 @@ class ImportControl extends Controller
                         'date' => $datemodif[1],
                         'candidat_id' => $candidat->id,
                     ]);*/
-                    
+                    /*
                     Presence::firstOrCreate(
                         [
                             'candidat_id' => $candidat->id,
@@ -152,7 +180,7 @@ class ImportControl extends Controller
                             'candidat_id' => $candidat->id,
                         ]
                     );
-                }
+                } */
                 //dd($date);
 
                 //dump($validatedData['statut']);
