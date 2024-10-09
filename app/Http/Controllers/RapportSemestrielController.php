@@ -73,6 +73,7 @@ class RapportSemestrielController extends Controller
                 'ca.odcuser_id',
                 'ac.end_date',
                 'ac.title',
+                'ac.number_day',
                 'typecont.libelle as type_contrat',
                 'empl.nomboite as entreprise',
                 'empl.poste',
@@ -319,6 +320,225 @@ class RapportSemestrielController extends Controller
         $newColumnWidth = 3;
         $worksheet->getColumnDimension($columnLetter)->setWidth($newColumnWidth);
 
+        //Deuxieme section du tableau
+
+        $worksheet->mergeCells('L1:AB1');
+        $worksheet->setCellValue('L1', 'Participation in : Training / Internship / Event ');
+        $worksheet->getStyle('L1')
+        ->getFill()
+        ->setFillType(FILL::FILL_SOLID)
+        ->setStartColor(new Color('f4b084'));
+
+        //allignement de mergecellule
+
+        $worksheet->getStyle('L1')
+        ->getAlignment()
+        ->setHorizontal(Alignment::HORIZONTAL_CENTER);
+
+        //sous section
+        $worksheet->mergeCells('L2:O2');
+        $worksheet->setCellValue('L2', 'To be specified if Training');
+        $worksheet->getStyle('L2')
+        ->getFill()
+        ->setFillType(FILL::FILL_SOLID)
+        ->setStartColor(new Color('c6e0b4'));
+
+        $worksheet->getStyle('L2')
+            ->getAlignment()
+            ->setHorizontal(Alignment::HORIZONTAL_CENTER);
+
+        $worksheet->setCellValue('L3', 'Place')
+        ->getStyle('L3')
+        ->getFont()
+        ->setSize(10)
+        ->setBold(true);
+        $worksheet->setCellValue('M3', 'Training Date')
+            ->getStyle('M3')
+            ->getFont()
+            ->setSize(10)
+            ->setBold(true);
+        $worksheet->setCellValue('N3', 'Training Duration')
+            ->getStyle('N3')
+            ->getFont()
+            ->setSize(10)
+            ->setBold(true);
+        $worksheet->setCellValue('O3', 'Name of Training Conducted')
+        ->getStyle('O3')
+        ->getFont()
+        ->setSize(10)
+        ->setBold(true);
+
+
+
+        //Code formule pour avoir le nombre de jours de durée d'une activité
+
+        // Récupérer la feuille de travail
+        $worksheet = $spreadsheet->getActiveSheet();
+
+        // // Parcourir les lignes
+        // for ($row = 1; $row <= $worksheet->getHighestRow(); $row++) {
+        //     // Récupérer les valeurs des cellules R et S
+        //     $dateStart = $worksheet->getCell('R' . $row)->getValue();
+        //     $dateEnd = $worksheet->getCell('S' . $row)->getValue();
+
+        //     // Vérifier si les cellules contiennent des dates valides
+        //     if ($dateStart && $dateEnd) {
+        //         // Créer des objets DateTime à partir des valeurs des cellules
+        //         $dateStartObj = new \DateTime($dateStart);
+        //         $dateEndObj = new \DateTime($dateEnd);
+
+        //         // Calculer le nombre de jours entre les deux dates
+        //         $interval = $dateStartObj->diff($dateEndObj);
+        //         $days = $interval->days;
+
+        //         // Écrire le résultat dans la cellule correspondante de la colonne T
+        //         $worksheet->getCell('T' . $row)->setValue($days+1);
+        //     } else {
+        //         // Si les cellules ne contiennent pas de dates valides, laisser la cellule vide
+        //         $worksheet->getCell('T' . $row)->setValue('');
+        //     }
+        // }
+
+
+        //3ème section du tableau
+
+        $worksheet->mergeCells('Q2:V2');
+        $worksheet->setCellValue('Q2', 'To be specified if internship');
+        $worksheet->getStyle('Q2')
+        ->getFill()
+        ->setFillType(FILL::FILL_SOLID)
+        ->setStartColor(new Color('bdd7ee'));
+
+        $worksheet->getStyle('Q2')
+            ->getAlignment()
+            ->setHorizontal(Alignment::HORIZONTAL_CENTER);
+
+        $worksheet->setCellValue('Q3', 'Place')
+        ->getStyle('Q3')
+        ->getFont()
+        ->setSize(10)
+        ->setBold(true);
+        $worksheet->setCellValue('R3', 'Internship Start date')
+            ->getStyle('R3')
+            ->getFont()
+            ->setSize(10)
+            ->setBold(true);
+        $worksheet->setCellValue('S3', 'Internship end date')
+            ->getStyle('S3')
+            ->getFont()
+            ->setSize(10)
+            ->setBold(true);
+        $worksheet->setCellValue('T3', 'Internship duration (number of days')
+        ->getStyle('T3')
+        ->getFont()
+        ->setSize(10)
+        ->setBold(true);
+        $worksheet->setCellValue('U3', 'Intership Name')
+            ->getStyle('U3')
+            ->getFont()
+            ->setSize(10)
+            ->setBold(true);
+        $worksheet->setCellValue('V3', 'Project/Solutions developed')
+        ->getStyle('V3')
+        ->getFont()
+        ->setSize(10)
+        ->setBold(true);
+
+        //remplissage des données
+
+
+
+        //4ème section du tableau
+        $worksheet->mergeCells('X2:AA2');
+        $worksheet->setCellValue('X2', 'To be specified if Event');
+        $worksheet->getStyle('X2')
+        ->getFill()
+        ->setFillType(FILL::FILL_SOLID)
+        ->setStartColor(new Color('ffd5f7'));
+
+        $worksheet->getStyle('X2')
+            ->getAlignment()
+            ->setHorizontal(Alignment::HORIZONTAL_CENTER);
+
+        $worksheet->setCellValue('X3', 'Place')
+        ->getStyle('X3')
+        ->getFont()
+        ->setSize(10)
+        ->setBold(true);
+        $worksheet->setCellValue('Y3', 'Event date')
+            ->getStyle('Y3')
+            ->getFont()
+            ->setSize(10)
+            ->setBold(true);
+        $worksheet->setCellValue('Z3', 'Event duration(number od days)')
+        ->getStyle('Z3')
+        ->getFont()
+        ->setSize(10)
+        ->setBold(true);
+        $worksheet->setCellValue('AA3', 'Name of the Event')
+            ->getStyle('AA3')
+            ->getFont()
+            ->setSize(10)
+            ->setBold(true);
+
+        //remplissage des donnes
+
+
+
+        //5ème section du tableau
+
+        $worksheet->mergeCells('AC1:AE1');
+        $worksheet->setCellValue('AC1', 'Jobs Created');
+        $worksheet->getStyle('AC1')
+            ->getFill()
+            ->setFillType(FILL::FILL_SOLID)
+            ->setStartColor(new Color('a9d08e'));
+
+        $worksheet->getStyle('AC1')
+            ->getAlignment()
+            ->setHorizontal(Alignment::HORIZONTAL_CENTER);
+
+        // Élargir la largeur des colonnes de AE1 à AG1
+        $startColumn = 'AC';
+        $endColumn = 'AE';
+        $columnWidth = 15; // Définissez la largeur souhaitée en points
+        for ($column = $startColumn; $column <= $endColumn; $column++) {
+            $worksheet->getColumnDimension($column)->setWidth($columnWidth);
+        }
+
+
+        $worksheet->mergeCells('AC2:AE2');
+        $worksheet->setCellValue('AC2', 'Employement of beneficiaires after ODC');
+        $worksheet->getStyle('AC2')
+        ->getFill()
+        ->setFillType(FILL::FILL_SOLID)
+        ->setStartColor(new Color('ddebf7'));
+
+        $worksheet->getStyle('AC2')
+            ->getAlignment()
+            ->setHorizontal(Alignment::HORIZONTAL_CENTER);
+
+        $worksheet->setCellValue('AC3', 'Company Name')
+        ->getStyle('AC3')
+            ->getFont()
+            ->setSize(10)
+            ->setBold(true);
+        $worksheet->setCellValue('AD3', 'Contract type')
+            ->getStyle('AD3')
+            ->getFont()
+            ->setSize(10)
+            ->setBold(true);
+        $worksheet->setCellValue('AE3', 'Job Position')
+            ->getStyle('AE3')
+            ->getFont()
+            ->setSize(10)
+            ->setBold(true);
+        $worksheet->setCellValue('AF3', 'Comments')
+            ->getStyle('AF3')
+            ->getFont()
+            ->setSize(10)
+            ->setBold(true);
+
 
         //Remplissage de données du rapport semestriel selon les choix selectionné dans le select
         $row = 4;
@@ -443,11 +663,11 @@ class RapportSemestrielController extends Controller
             $interval = $today->diff($birthDay);
             $ages = $interval->y; // Âge en années
 
+            //verification des ages des participants
             $tranche = "";
-
-            if ($ages >= 3 && $ages <= 14) {
-                $tranche = "0 - 14 years";
-            }
+            // if ($ages >= 3 && $ages <= 14) {
+            //     $tranche = "0 - 14 years";
+            // }
             if ($ages >= 15 && $ages <= 24) {
                 $tranche = "15 - 24 years";
             } elseif ($ages >= 25 && $ages <= 34) {
@@ -455,6 +675,18 @@ class RapportSemestrielController extends Controller
             } elseif ($ages >= 35) {
                 $tranche = "35 > years";
             }
+            //verification des sexes 
+            
+            $gender= $candidat->gender;
+
+            if ($gender == 'M') 
+            {
+                $gender = "male";
+            }elseif($gender =='F')
+            {
+                $gender = "female";
+            }
+
             $worksheet->setCellValue('A' . $row, $candidat->first_name)
                 ->getStyle('A' . $row)
                 ->getAlignment()
@@ -463,7 +695,7 @@ class RapportSemestrielController extends Controller
                 ->getStyle('B' . $row)
                 ->getAlignment()
                 ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_LEFT);
-            $worksheet->setCellValue('C' . $row, $candidat->gender)
+            $worksheet->setCellValue('C' . $row, $gender)
                 ->getStyle('C' . $row)
                 ->getAlignment()
                 ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
@@ -509,6 +741,10 @@ class RapportSemestrielController extends Controller
                     ->getStyle('S' . $row)
                     ->getAlignment()
                     ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
+                $worksheet->setCellValue('T' . $row, $candidat->number_day)
+                    ->getStyle('T' . $row)
+                    ->getAlignment()
+                    ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
                 $worksheet->setCellValue('U' . $row, $candidat->title)
                     ->getStyle('U' . $row)
                     ->getAlignment()
@@ -522,8 +758,12 @@ class RapportSemestrielController extends Controller
                     ->getStyle('M' . $row)
                     ->getAlignment()
                     ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
-                $worksheet->setCellValue('O' . $row, $candidat->title)
-                    ->getStyle('O' . $row)
+                $worksheet->setCellValue('M' . $row, $candidat->startYear)
+                    ->getStyle('M' . $row)
+                    ->getAlignment()
+                    ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
+                $worksheet->setCellValue('N' . $row, $candidat->number_day)
+                    ->getStyle('N' . $row)
                     ->getAlignment()
                     ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
             } elseif (in_array($candidat->code, $typeconf)) {
@@ -533,6 +773,10 @@ class RapportSemestrielController extends Controller
                     ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
                 $worksheet->setCellValue('Y' . $row, $candidat->startYear)
                     ->getStyle('Y' . $row)
+                    ->getAlignment()
+                    ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
+                $worksheet->setCellValue('Z' . $row, $candidat->number_day)
+                    ->getStyle('Z' . $row)
                     ->getAlignment()
                     ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
                 $worksheet->setCellValue('AA' . $row, $candidat->title)
@@ -557,229 +801,7 @@ class RapportSemestrielController extends Controller
         }
 
 
-        //Deuxieme section du tableau
-
-        $worksheet->mergeCells('L1:AB1');
-        $worksheet->setCellValue('L1', 'Participation in : Training / Internship / Event ');
-        $worksheet->getStyle('L1')
-            ->getFill()
-            ->setFillType(FILL::FILL_SOLID)
-            ->setStartColor(new Color('f4b084'));
-
-        //allignement de mergecellule
-
-        $worksheet->getStyle('L1')
-            ->getAlignment()
-            ->setHorizontal(Alignment::HORIZONTAL_CENTER);
-
-        //sous section
-        $worksheet->mergeCells('L2:O2');
-        $worksheet->setCellValue('L2', 'To be specified if Training');
-        $worksheet->getStyle('L2')
-            ->getFill()
-            ->setFillType(FILL::FILL_SOLID)
-            ->setStartColor(new Color('c6e0b4'));
-
-        $worksheet->getStyle('L2')
-            ->getAlignment()
-            ->setHorizontal(Alignment::HORIZONTAL_CENTER);
-
-        $worksheet->setCellValue('L3', 'Place')
-            ->getStyle('L3')
-            ->getFont()
-            ->setSize(10)
-            ->setBold(true);
-        $worksheet->setCellValue('M3', 'Training Date')
-            ->getStyle('M3')
-            ->getFont()
-            ->setSize(10)
-            ->setBold(true);
-        $worksheet->setCellValue('N3', 'Training Duration')
-            ->getStyle('N3')
-            ->getFont()
-            ->setSize(10)
-            ->setBold(true);
-        $worksheet->setCellValue('O3', 'Name of Training Conducted')
-            ->getStyle('O3')
-            ->getFont()
-            ->setSize(10)
-            ->setBold(true);
-
-
-
-        //Code formule pour avoir le nombre de jours de durée d'une activité
-
-        // Récupérer la feuille de travail
-        $worksheet = $spreadsheet->getActiveSheet();
-
-        // // Parcourir les lignes
-        // for ($row = 1; $row <= $worksheet->getHighestRow(); $row++) {
-        //     // Récupérer les valeurs des cellules R et S
-        //     $dateStart = $worksheet->getCell('R' . $row)->getValue();
-        //     $dateEnd = $worksheet->getCell('S' . $row)->getValue();
-
-        //     // Vérifier si les cellules contiennent des dates valides
-        //     if ($dateStart && $dateEnd) {
-        //         // Créer des objets DateTime à partir des valeurs des cellules
-        //         $dateStartObj = new \DateTime($dateStart);
-        //         $dateEndObj = new \DateTime($dateEnd);
-
-        //         // Calculer le nombre de jours entre les deux dates
-        //         $interval = $dateStartObj->diff($dateEndObj);
-        //         $days = $interval->days;
-
-        //         // Écrire le résultat dans la cellule correspondante de la colonne T
-        //         $worksheet->getCell('T' . $row)->setValue($days+1);
-        //     } else {
-        //         // Si les cellules ne contiennent pas de dates valides, laisser la cellule vide
-        //         $worksheet->getCell('T' . $row)->setValue('');
-        //     }
-        // }
-
-
-        //3ème section du tableau
-
-        $worksheet->mergeCells('Q2:V2');
-        $worksheet->setCellValue('Q2', 'To be specified if internship');
-        $worksheet->getStyle('Q2')
-            ->getFill()
-            ->setFillType(FILL::FILL_SOLID)
-            ->setStartColor(new Color('bdd7ee'));
-
-        $worksheet->getStyle('Q2')
-            ->getAlignment()
-            ->setHorizontal(Alignment::HORIZONTAL_CENTER);
-
-        $worksheet->setCellValue('Q3', 'Place')
-            ->getStyle('Q3')
-            ->getFont()
-            ->setSize(10)
-            ->setBold(true);
-        $worksheet->setCellValue('R3', 'Internship Start date')
-            ->getStyle('R3')
-            ->getFont()
-            ->setSize(10)
-            ->setBold(true);
-        $worksheet->setCellValue('S3', 'Internship end date')
-            ->getStyle('S3')
-            ->getFont()
-            ->setSize(10)
-            ->setBold(true);
-        $worksheet->setCellValue('T3', 'Internship duration (number of days')
-            ->getStyle('T3')
-            ->getFont()
-            ->setSize(10)
-            ->setBold(true);
-        $worksheet->setCellValue('U3', 'Intership Name')
-            ->getStyle('U3')
-            ->getFont()
-            ->setSize(10)
-            ->setBold(true);
-        $worksheet->setCellValue('V3', 'Project/Solutions developed')
-            ->getStyle('V3')
-            ->getFont()
-            ->setSize(10)
-            ->setBold(true);
-
-        //remplissage des données
-
-
-
-
-
-        //4ème section du tableau
-        $worksheet->mergeCells('X2:AA2');
-        $worksheet->setCellValue('X2', 'To be specified if Event');
-        $worksheet->getStyle('X2')
-            ->getFill()
-            ->setFillType(FILL::FILL_SOLID)
-            ->setStartColor(new Color('ffd5f7'));
-
-        $worksheet->getStyle('X2')
-            ->getAlignment()
-            ->setHorizontal(Alignment::HORIZONTAL_CENTER);
-
-        $worksheet->setCellValue('X3', 'Place')
-            ->getStyle('X3')
-            ->getFont()
-            ->setSize(10)
-            ->setBold(true);
-        $worksheet->setCellValue('Y3', 'Event date')
-            ->getStyle('Y3')
-            ->getFont()
-            ->setSize(10)
-            ->setBold(true);
-        $worksheet->setCellValue('Z3', 'Event duration(number od days)')
-            ->getStyle('Z3')
-            ->getFont()
-            ->setSize(10)
-            ->setBold(true);
-        $worksheet->setCellValue('AA3', 'Name of the Event')
-            ->getStyle('AA3')
-            ->getFont()
-            ->setSize(10)
-            ->setBold(true);
-
-        //remplissage des donnes
-
-
-
-        //5ème section du tableau
-
-        $worksheet->mergeCells('AC1:AE1');
-        $worksheet->setCellValue('AC1', 'Jobs Created');
-        $worksheet->getStyle('AC1')
-            ->getFill()
-            ->setFillType(FILL::FILL_SOLID)
-            ->setStartColor(new Color('a9d08e'));
-
-        $worksheet->getStyle('AC1')
-            ->getAlignment()
-            ->setHorizontal(Alignment::HORIZONTAL_CENTER);
-
-        // Élargir la largeur des colonnes de AE1 à AG1
-        $startColumn = 'AC';
-        $endColumn = 'AE';
-        $columnWidth = 15; // Définissez la largeur souhaitée en points
-        for ($column = $startColumn; $column <= $endColumn; $column++) {
-            $worksheet->getColumnDimension($column)->setWidth($columnWidth);
-        }
-
-
-        $worksheet->mergeCells('AC2:AE2');
-        $worksheet->setCellValue('AC2', 'Employement of beneficiaires after ODC');
-        $worksheet->getStyle('AC2')
-            ->getFill()
-            ->setFillType(FILL::FILL_SOLID)
-            ->setStartColor(new Color('ddebf7'));
-
-        $worksheet->getStyle('AC2')
-            ->getAlignment()
-            ->setHorizontal(Alignment::HORIZONTAL_CENTER);
-
-        $worksheet->setCellValue('AC3', 'Company Name')
-            ->getStyle('AC3')
-            ->getFont()
-            ->setSize(10)
-            ->setBold(true);
-        $worksheet->setCellValue('AD3', 'Contract type')
-            ->getStyle('AD3')
-            ->getFont()
-            ->setSize(10)
-            ->setBold(true);
-        $worksheet->setCellValue('AE3', 'Job Position')
-            ->getStyle('AE3')
-            ->getFont()
-            ->setSize(10)
-            ->setBold(true);
-        $worksheet->setCellValue('AF3', 'Comments')
-            ->getStyle('AF3')
-            ->getFont()
-            ->setSize(10)
-            ->setBold(true);
-
-
-
+        
 
 
         //on cree le fichier Excel
