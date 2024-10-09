@@ -421,7 +421,7 @@
             $(document).ready(function() {
                 $('dt-length-0').addClass('w-24')
                 $('#table').DataTable({
-                    searching: false,
+                    searching: true,
                     processing: true,
                     serverSide: true,
                     language: {
@@ -446,11 +446,11 @@
                         },
                         {
                             data: 'title',
-                            name: 'titre'
+                            name: 'title'
                         },
                         {
-                            data: 'categories',
-                            name: 'categories'
+                            data: 'categorie_id',
+                            name: 'categorie_id'
                         },
                         {
                             data: 'typEvent',

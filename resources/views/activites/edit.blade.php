@@ -39,14 +39,14 @@
                     class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Titre</label>
                 <input type="text" id="first_name" name="title"
                     class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                    placeholder="John" required value="{{ $activite->title }}" />
+                    placeholder="John"  value="{{ $activite->title }}" />
             </div>
             <div>
                 <label for="last_name"
                     class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">categories</label>
                 <select type="text" name="categories" id="categorie_id"
                     class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                    placeholder="Doe" required>
+                    placeholder="Doe" >
                     <option value="{{ $activite->categorie->id }}">{{ $activite->categorie->name }}</option>
                     @foreach ($categories as $category)
                         <option value="{{ $category->id }}">{{ $category->name }}</option>
@@ -72,7 +72,7 @@
                 <label for="phone" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Tags</label>
                 <select type="text" name="hashtags[]" id="tags" multiple="multiple"
                     class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 js-example-basic-multiple"
-                    placeholder="Doe" required>
+                    placeholder="Doe" >
                     @foreach ($hashtag as $item)
                         <option value="{{ $item->id }}"
                             {{ collect(old('tags', $activite->hashtag->pluck('id')->toArray()))->contains($item->id) ? 'selected' : '' }}>
@@ -88,14 +88,14 @@
                     Debut</label>
                 <input type="date" name="startDate" id="date_debut"
                     class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                    placeholder="flowbite.com" required value="{{ $activite->start_date }}" />
+                    placeholder="flowbite.com"  value="{{ $activite->start_date }}" />
             </div>
             <div>
                 <label for="visitors" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Date
                     Fin</label>
                 <input type="date" name="endDate" id="date_fin"
                     class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                    placeholder="" required value="{{ $activite->end_date }}" />
+                    placeholder=""  value="{{ $activite->end_date }}" />
             </div>
 
 
@@ -103,7 +103,7 @@
                 <label for="visitors" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Nombre des Jours</label>
                 <input type="number"  name="jour" id="date_fin"
                     class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                    placeholder="" required value="{{ $activite->number_day }}" />
+                    placeholder=""  value="{{ $activite->number_day }}" />
             </div>
 
 
@@ -111,14 +111,14 @@
                 <label for="visitors" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Nombre des heures</label>
                 <input type="number" name="hour" id="date_fin"
                     class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                    placeholder="" required value="{{ $activite->number_hour }}" />
+                    placeholder=""  value="{{ $activite->number_hour }}" />
             </div>
         </div>
         <div class="mb-6">
             <label for="email" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Lieu</label>
             <select name="location" id="lieu"
                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                placeholder="john.doe@company.com" required>
+                placeholder="john.doe@company.com" >
                 <option value="{{ $activite->location }}">{{ $activite->location }}</option>
                 <option value="ODC Kinshasa">ODC Kinshasa</option>
                 <option value="ODC Lubumbashi">ODC Lubumbashi</option>
