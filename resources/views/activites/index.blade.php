@@ -216,7 +216,7 @@
                     <th scope="col" class="px-6 py-3">dureé</th>
                     <th scope="col" class="px-6 py-3">Status</th>
                     <th scope="col" class="px-6 py-3">Book In seat</th>
-                    <th scope="col" class="px-6 py-3">nombre d'heure</th>
+                    <th scope="col" class="px-6 py-3">nombre de jour</th>
                     <th scope="col" class="px-6 py-3">Date Début</th>
                     <th scope="col" class="px-6 py-3">Date Fin</th>
                     <th scope="col" class="px-6 py-3">Action</th>
@@ -421,7 +421,7 @@
             $(document).ready(function() {
                 $('dt-length-0').addClass('w-24')
                 $('#table').DataTable({
-                    searching: true,
+                    searching: false,
                     processing: true,
                     serverSide: true,
                     language: {
@@ -458,7 +458,7 @@
                         },
                         {
                             data: 'location',
-                            name: 'lieu'
+                            name: 'location'
                         },
                         {
                             data: 'message',
@@ -473,8 +473,8 @@
                             name: 'book_a_seat'
                         },
                         {
-                            data: 'number_hour',
-                            name: 'number_hour'
+                            data: 'number_day',
+                            name: 'number_day'
                         },
                         {
                             data: 'start_date',
