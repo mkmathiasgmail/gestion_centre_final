@@ -97,6 +97,22 @@
                     class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                     placeholder="" required value="{{ $activite->end_date }}" />
             </div>
+
+
+            <div>
+                <label for="visitors" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Nombre des Jours</label>
+                <input type="number"  name="jour" id="date_fin"
+                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                    placeholder="" required value="{{ $activite->number_day }}" />
+            </div>
+
+
+            <div>
+                <label for="visitors" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Nombre des heures</label>
+                <input type="number" name="hour" id="date_fin"
+                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                    placeholder="" required value="{{ $activite->number_hour }}" />
+            </div>
         </div>
         <div class="mb-6">
             <label for="email" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Lieu</label>

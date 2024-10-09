@@ -126,7 +126,7 @@
                         Exporter
                     </button>
 
-                    
+
                     <div id="dropdownInformation"
                         class="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700 dark:divide-gray-600">
                         <div class="py-2 first:pt-0 last:pb-0">
@@ -473,8 +473,8 @@
                             name: 'book_a_seat'
                         },
                         {
-                            data: 'number_day',
-                            name: 'number_day'
+                            data: 'number_hour',
+                            name: 'number_hour'
                         },
                         {
                             data: 'start_date',

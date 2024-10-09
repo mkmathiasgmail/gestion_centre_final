@@ -297,6 +297,8 @@ class ActiviteController extends Controller
                 'contents' => $request->contents,
                 'start_date' => $request->startDate,
                 'end_date' => $request->endDate,
+                'jour' => $request->number_day,
+                'hour' => $request->number_hour,
                 'location' => $request->location,
                 "thumbnail_url" => $request->thumbnailURL,
             ]);
