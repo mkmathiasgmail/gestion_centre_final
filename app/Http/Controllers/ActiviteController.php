@@ -393,7 +393,10 @@ class ActiviteController extends Controller
         $user = Odcuser::all();
 
 
-        return view('dashboard', compact('activites', 'user', 'data', 'hommes', 'femmes', "activityForWeekend", 'requestActivityperiode'));
+        $coursera_members = CourseraMember::all();
+
+
+        return view('dashboard', compact('activites', 'user', 'data', 'hommes', 'femmes', "activityForWeekend", 'requestActivityperiode', 'coursera_members'));
     }
     public function showInCalendar(Request $request, $id)
     {

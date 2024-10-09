@@ -85,15 +85,15 @@
                 </svg>
 
                 <h3 class="text-xl font-semibold text-gray-800 dark:text-gray-200">
-
+                    Membres des formations coursera
 
                 </h3>
 
             </div>
             <div>
 
-                <p class="text-sm font-normal text-gray-400 dark:text-gray-400">
-
+                <p class="text-4xl font-bold text-[#ff9822] dark:text-gray-400">
+                    {{ $coursera_members->count() }}
                 </p>
             </div>
 
