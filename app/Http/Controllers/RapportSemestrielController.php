@@ -663,6 +663,7 @@ class RapportSemestrielController extends Controller
             $interval = $today->diff($birthDay);
             $ages = $interval->y; // Âge en années
 
+            //verification des ages des participants
             $tranche = "";
             // if ($ages >= 3 && $ages <= 14) {
             //     $tranche = "0 - 14 years";
@@ -674,6 +675,18 @@ class RapportSemestrielController extends Controller
             } elseif ($ages >= 35) {
                 $tranche = "35 > years";
             }
+            //verification des sexes 
+            
+            $gender= $candidat->gender;
+
+            if ($gender == 'M') 
+            {
+                $gender = "male";
+            }elseif($gender =='F')
+            {
+                $gender = "female";
+            }
+
             $worksheet->setCellValue('A' . $row, $candidat->first_name)
                 ->getStyle('A' . $row)
                 ->getAlignment()
@@ -682,7 +695,7 @@ class RapportSemestrielController extends Controller
                 ->getStyle('B' . $row)
                 ->getAlignment()
                 ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_LEFT);
-            $worksheet->setCellValue('C' . $row, $candidat->gender)
+            $worksheet->setCellValue('C' . $row, $gender)
                 ->getStyle('C' . $row)
                 ->getAlignment()
                 ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
