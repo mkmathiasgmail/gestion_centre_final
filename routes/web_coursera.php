@@ -39,3 +39,4 @@ Route::get('cursera-taux_utilisation', [CourseraController::class, 'taux_utilisa
 Route::get('cursera-last_activity', [CourseraController::class, 'last_activity'])->name('last_activity');
 Route::get('cursera-complete_specialisation', [CourseraController::class, 'complete_specialisation'])->name('complete_specialisation');
 Route::get('cursera_member_excel', [CourseraController::class, 'memberexcel'])->name('member_excel');
+Route::get('cursera_participants_excel', [CourseraController::class, 'participants_coursera'])->name('participants_coursera');
