@@ -182,8 +182,9 @@ class ActiviteController extends Controller
     {
 
         try {
-            $query = Activite::query()->latest();
 
+
+            $query = Activite::query()->latest();
 
             if ($request->has('start_date') && $request->has('end_date')) {
                 $query->whereBetween('start_date', [$request->start_date, $request->end_date]);
@@ -231,7 +232,7 @@ class ActiviteController extends Controller
                         return '❌';
                     }
                 })
-                ->editColumn('categories', function ($activite) {
+                ->editColumn('categorie_id', function ($activite) {
                     return $activite->categorie->name;
                 })
                 ->editColumn('typEvent', function ($activite) {
@@ -242,7 +243,7 @@ class ActiviteController extends Controller
                 ->addColumn('action', function ($activite) {
                     return view('partials.action-buttons', ['activite' => $activite])->render();
                 })
-             
+
                 ->make(true);
         } catch (\Exception $e) {
             return response()->json(['error' => 'Une erreur est survenue : ' . $e->getMessage()], 500);

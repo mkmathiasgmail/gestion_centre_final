@@ -7,9 +7,12 @@
 
 
     <div class="w-full  mx-auto">
-        <div class="mx-5 my-3 text-sm">
+        <div class="mx-5 my-3 text-sm flex justify-between">
             <a href="{{ route('categorie.activites', $show->categorie->id) }}"
                 class=" text-red-600 font-bold tracking-widest">{{ $show->categorie->name }}</a>
+
+
+            <a href="{{ route('activites.edit', $show->id) }}" class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-transparent bg-[#ff7322] text-white hover:bg-[#ff6822] focus:outline-none focus:bg-[#ff6822] disabled:opacity-50 disabled:pointer-events-none">modifier</a>
         </div>
 
         @if ($show->candidat->count() == 0)
@@ -245,7 +248,7 @@
                         <div class=" mt-6">
                             @foreach ($show->typEvent as $item)
                                 <span class="bg-gray-100 rounded-full px-3 py-1 text-sm font-semibold text-gray-600">
-                                    {{ $item->name }}</span>
+                                    {{ $item->title }}</span>
                             @endforeach
                         </div>
                     </div>
@@ -255,7 +258,7 @@
 
             </div>
         @else
-            <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+            <div class="grid gap-6 grid-cols-1 md:grid-cols-3 lg:grid-cols-3">
                 <div>
                     <div
                         class="lg:h-full py-8 px-6 text-gray-600 dark:text-gray-200 rounded-xl border border-gray-200 bg-white dark:bg-gray-800 dark:border-gray-700">
@@ -275,7 +278,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="md:col-span-2 lg:col-span-1">
+                <div>
                     <div
                         class="h-full py-8 px-6 space-y-6 rounded-xl border border-gray-200 bg-white dark:bg-gray-800 dark:border-gray-700">
                         <div class="py-6" id="chart"></div>
@@ -395,7 +398,7 @@
                                     <td class="text-gray-500 dark:text-gray-200">
 
 
-                                        {{ $Show->_id }}
+                                        {{ $show->_id }}
 
                                     </td>
                                     <td>
@@ -409,6 +412,7 @@
 
                                     </td>
                                 </tr>
+
                                 <tr>
                                     <td class="py-2">Date debut Activite</td>
                                     <td class="text-gray-500 dark:text-gray-200">
@@ -560,7 +564,7 @@
                         <div class=" mt-6">
                             @foreach ($show->typEvent as $item)
                                 <span class="bg-gray-100 rounded-full px-3 py-1 text-sm font-semibold text-gray-600">
-                                    {{ $item->name }}</span>
+                                    {{ $item->title }}</span>
                             @endforeach
                         </div>
 
@@ -605,7 +609,6 @@
 
                     </div>
                 </div>
-
             </div>
 
         @endif
