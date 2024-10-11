@@ -84,7 +84,7 @@ class CourseraController extends Controller
             ->first();
 
         $nombre_cours = CourseraUsage::distinct('course')->count();
-        
+
         $total_cours =  CourseraUsage::select('course')->distinct()->get();
 
         $getCompletedUsages = CourseraUsage::join('coursera_members as cmem', 'cmem.id', '=', 'coursera_usages.coursera_member_id')->select([
@@ -94,20 +94,22 @@ class CourseraController extends Controller
             'coursera_usages.course_slug',
         ])->where('completed', 'Yes')->get();
 
-        
+
         $getAllParticipants = CourseraUsage::leftjoin('coursera_members as cmem', 'cmem.id', '=', 'coursera_usages.coursera_member_id')
-            ->leftJoin('odcusers as us', 'us.email', '=', 'cmem.email')    
+            ->leftJoin('odcusers as us', 'us.email', '=', 'cmem.email')
             ->select([
-            'cmem.name',
-            'cmem.email',
-            'coursera_usages.class_start_time',
-            'coursera_usages.class_end_time',
-            'coursera_usages.course',
-            'coursera_usages.completed',
-            'cmem.external_id',
-            'us.gender'
+                'cmem.name',
+                'cmem.email',
+                'coursera_usages.class_start_time',
+                'coursera_usages.class_end_time',
+                'coursera_usages.course',
+                'coursera_usages.completed',
+                'cmem.external_id',
+                'us.gender',
+                'us.first_name',
+                'us.last_name'
             ])->get();
- 
+
 
         $getAllParticipants_count = $getAllParticipants->count();
 
@@ -201,24 +203,24 @@ class CourseraController extends Controller
             return preg_match('/^[10]\d*/', $member->external_id);
         });
 
-        $licenceKinEnCours_count=$licenceKinEnCours->count();
+        $licenceKinEnCours_count = $licenceKinEnCours->count();
 
 
         $licenceLubEnCours = $licence_en_cours->filter(function ($member) {
             return preg_match('/^2\d*/', $member->external_id);
         });
-        $licenceLubEnCours_count=$licenceLubEnCours->count();
+        $licenceLubEnCours_count = $licenceLubEnCours->count();
 
         $licenceKanEnCours = $licence_en_cours->filter(function ($member) {
             return preg_match('/^4\d*/', $member->external_id);
         });
-        $licenceKanEnCours_count=$licenceKanEnCours->count();
+        $licenceKanEnCours_count = $licenceKanEnCours->count();
 
         $licenceMatEnCours = $licence_en_cours->filter(function ($member) {
             return preg_match('/^3\d*/', $member->external_id);
         });
-        
-        $licenceMatEnCours_count=$licenceMatEnCours->count();
+
+        $licenceMatEnCours_count = $licenceMatEnCours->count();
 
         $licence_en_cours_count = $licence_en_cours->count();
 
@@ -235,28 +237,28 @@ class CourseraController extends Controller
         $certificat_obtenue_kinshasa = $certificats->filter(function ($member) {
             return preg_match('/^[10]\d*/', $member->external_id);
         });
-        $certificat_obtenue_kinshasa_count=$certificat_obtenue_kinshasa->count();
+        $certificat_obtenue_kinshasa_count = $certificat_obtenue_kinshasa->count();
 
         //obtenue certificat à lubumbashi
-        $certificat_obtenue_lubumbashi = $certificats->filter(function($member){
+        $certificat_obtenue_lubumbashi = $certificats->filter(function ($member) {
             return preg_match('/^[2]\d*/', $member->external_id);
         });
-        $certificat_obtenue_lubumbashi_count=$certificat_obtenue_lubumbashi->count();
+        $certificat_obtenue_lubumbashi_count = $certificat_obtenue_lubumbashi->count();
         //obtenue certificat à matadi
-        $certificat_obtenue_matadi = $certificats->filter(function($member){
+        $certificat_obtenue_matadi = $certificats->filter(function ($member) {
             return preg_match('/^[3]\d*/', $member->external_id);
         });
-        $certificat_obtenue_matadi_count=$certificat_obtenue_matadi->count();
+        $certificat_obtenue_matadi_count = $certificat_obtenue_matadi->count();
         //obtenue certificat à kananga
-        $certificat_obtenue_kananga = $certificats->filter(function($member){
+        $certificat_obtenue_kananga = $certificats->filter(function ($member) {
             return preg_match('/^[4]\d*/', $member->external_id);
         });
-        $certificat_obtenue_kananga_count=$certificat_obtenue_kananga->count();
+        $certificat_obtenue_kananga_count = $certificat_obtenue_kananga->count();
 
         $thirtyDaysAgo = Carbon::now()->subDays(30);
 
 
-        $apprenants_30day = CourseraMember::select('coursera_members.name','coursera_members.external_id', 'coursera_members.email', 'cu.university', 'cu.course', 'cu.course_slug', 'cu.course_certificate_url')
+        $apprenants_30day = CourseraMember::select('coursera_members.name', 'coursera_members.external_id', 'coursera_members.email', 'cu.university', 'cu.course', 'cu.course_slug', 'cu.course_certificate_url')
             ->leftJoin('coursera_usages as cu', 'coursera_members.id', '=', 'cu.coursera_member_id')
             ->where('coursera_members.join_date', '>=', Carbon::now()->subDays(30))
             ->where(function ($query) {
@@ -267,29 +269,29 @@ class CourseraController extends Controller
         $apprenants_30day_count = $apprenants_30day->count();
 
         //apprenants 30 jours pas de certificat à kinshasa
-         $apprenants_30day_kinshasa = $apprenants_30day->filter(function ($member) {
+        $apprenants_30day_kinshasa = $apprenants_30day->filter(function ($member) {
             return preg_match('/^[10]\d*/', $member->external_id);
         });
-        $apprenants_30day_kinshasa_count=$apprenants_30day_kinshasa->count();
+        $apprenants_30day_kinshasa_count = $apprenants_30day_kinshasa->count();
 
         //obtenue 30 jours pas de certificat à lubumbashi
-        $apprenants_30day_lubumbashi = $apprenants_30day->filter(function($member){
+        $apprenants_30day_lubumbashi = $apprenants_30day->filter(function ($member) {
             return preg_match('/^[2]\d*/', $member->external_id);
         });
-        $certificat_30day_lubumbashi_count=$apprenants_30day_lubumbashi->count();
+        $certificat_30day_lubumbashi_count = $apprenants_30day_lubumbashi->count();
         //obtenue certificat à matadi
-        $apprenants_30day_matadi = $apprenants_30day->filter(function($member){
+        $apprenants_30day_matadi = $apprenants_30day->filter(function ($member) {
             return preg_match('/^[3]\d*/', $member->external_id);
         });
-        $apprenants_30day_matadi_count=$apprenants_30day_matadi->count();
+        $apprenants_30day_matadi_count = $apprenants_30day_matadi->count();
         //obtenue certificat à kananga
-        $apprenants_30day_kananga = $apprenants_30day->filter(function($member){
+        $apprenants_30day_kananga = $apprenants_30day->filter(function ($member) {
             return preg_match('/^[4]\d*/', $member->external_id);
         });
-        $apprenants_30day_kananga_count=$apprenants_30day_kananga->count();
+        $apprenants_30day_kananga_count = $apprenants_30day_kananga->count();
 
 
-        $non_inscrit_cours = CourseraMember::select('coursera_members.external_id','coursera_members.name', 'coursera_members.email', 'cu.university', 'cu.course', 'cu.course_slug', 'cu.course_certificate_url')
+        $non_inscrit_cours = CourseraMember::select('coursera_members.external_id', 'coursera_members.name', 'coursera_members.email', 'cu.university', 'cu.course', 'cu.course_slug', 'cu.course_certificate_url')
             ->leftJoin('coursera_usages as cu', 'coursera_members.id', '=', 'cu.coursera_member_id')
             ->where('coursera_members.join_date', '>', Carbon::now()->subDays(7))
             ->where('coursera_members.member_state', '=', 'INVITED')
@@ -320,7 +322,7 @@ class CourseraController extends Controller
         $non_inscritMat_count = $non_inscritMat->count();
         $non_inscritKan_count = $non_inscritKan->count();
 
-       
+
         $non_inscrit_cours_count = $non_inscrit_cours->count();
 
         $last_activity = CourseraMember::select([
@@ -334,9 +336,9 @@ class CourseraController extends Controller
 
         $last_activity_count = $last_activity->count();
 
-        
+
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-       
+
         $last_activityKin = $last_activity->filter(function ($member) {
             return preg_match('/^1\d*/', $member->external_id);
         });
@@ -361,7 +363,7 @@ class CourseraController extends Controller
         $last_activityKan_count = $last_activityKan->count();
 
 
-        $taux_utilisation = CourseraUsage::select('cm.email', 'cm.name', 'cm.external_id','coursera_usages.university', 'coursera_usages.course', 'coursera_usages.course_slug', 'coursera_usages.last_course_activity')
+        $taux_utilisation = CourseraUsage::select('cm.email', 'cm.name', 'cm.external_id', 'coursera_usages.university', 'coursera_usages.course', 'coursera_usages.course_slug', 'coursera_usages.last_course_activity')
             ->leftJoin('coursera_members AS cm', 'cm.id', '=', 'coursera_usages.coursera_member_id')
             ->where('coursera_usages.removed_from_program', '=', 'Yes')
             ->where('coursera_usages.last_course_activity', '>', Carbon::now()->subDays(21)) // Assurez-vous que 'last_course_activity' est dans 'coursera_usages'
@@ -394,7 +396,7 @@ class CourseraController extends Controller
         $taux_util_mat_count = $taux_util_mat->count();
         $taux_util_kan_count = $taux_util_kan->count();
 
-      
+
         $taux_kin = ($taux_util_kin_count * 100) / $taux_utilisation->count();
 
         $membersKinshasa = CourseraMember::where('external_id', 'REGEXP', '^[10]\d*')
@@ -531,12 +533,13 @@ class CourseraController extends Controller
         ));
     }
 
-    public function memberexcel(){
+    public function memberexcel()
+    {
 
         $allMembers = CourseraMember::all();
 
         //vériefie si les members ont été trouvés
-        if($allMembers->isEmpty()){
+        if ($allMembers->isEmpty()) {
             return response()->json(['message' => 'Aucun membre trouvé.'], 404);
         }
 
@@ -545,9 +548,9 @@ class CourseraController extends Controller
 
         $worksheet->setCellValue('A1', 'Name');
         $worksheet->getStyle('A1')
-                ->getFill()
-                ->setFillType(Fill::FILL_SOLID)
-                ->setStartColor(new Color('D3D3D3'));
+            ->getFill()
+            ->setFillType(Fill::FILL_SOLID)
+            ->setStartColor(new Color('D3D3D3'));
 
         $worksheet->setCellValue('B1', 'Email');
         $worksheet->getStyle('B1')
@@ -612,12 +615,12 @@ class CourseraController extends Controller
                 ->setHorizontal(Alignment::HORIZONTAL_LEFT);
 
             $worksheet->setCellValue('C' . $row, $member->external_id)
-                ->getStyle('C'. $row)
+                ->getStyle('C' . $row)
                 ->getAlignment()
                 ->setHorizontal(Alignment::HORIZONTAL_LEFT);
-                
+
             $worksheet->setCellValue('D' . $row, $member->enrolled_courses)
-                ->getStyle('D'. $row)
+                ->getStyle('D' . $row)
                 ->getAlignment()
                 ->setHorizontal(Alignment::HORIZONTAL_LEFT);
 
@@ -625,7 +628,7 @@ class CourseraController extends Controller
                 ->getStyle('E' . $row)
                 ->getAlignment()
                 ->setHorizontal(Alignment::HORIZONTAL_LEFT);
-            
+
             $worksheet->setCellValue('F' . $row, $member->member_state)
                 ->getStyle('F' . $row)
                 ->getAlignment()
@@ -635,12 +638,12 @@ class CourseraController extends Controller
                 ->getStyle('G' . $row)
                 ->getAlignment()
                 ->setHorizontal(Alignment::HORIZONTAL_LEFT);
-            
+
             $worksheet->setCellValue('H' . $row, $member->invitation_date)
                 ->getStyle('H' . $row)
                 ->getAlignment()
                 ->setHorizontal(Alignment::HORIZONTAL_LEFT);
-            
+
             $worksheet->setCellValue('I' . $row, $member->latest_program_activity_date)
                 ->getStyle('I' . $row)
                 ->getAlignment()
@@ -1226,22 +1229,26 @@ class CourseraController extends Controller
     public function participants_coursera()
     {
         $getAllParticipants = CourseraUsage::leftjoin('coursera_members as cmem', 'cmem.id', '=', 'coursera_usages.coursera_member_id')
-            ->leftJoin('odcusers as us', 'us.email', '=', 'cmem.email')    
+            ->leftJoin('odcusers as us', 'us.email', '=', 'cmem.email')
             ->select([
-            'cmem.name',
-            'cmem.email',
-            'coursera_usages.class_start_time',
-            'coursera_usages.class_end_time',
-            'coursera_usages.course',
-            'coursera_usages.completed',
-            'cmem.external_id',
-            'us.gender'
+                'cmem.name',
+                'cmem.email',
+                'us.email as odcmail',
+                'coursera_usages.class_start_time',
+                'coursera_usages.class_end_time',
+                'coursera_usages.course',
+                'coursera_usages.completed',
+                'cmem.external_id',
+                'us.gender',
+                'us.first_name',
+                'us.last_name'
             ])->get();
 
         // Vérifie si des membres ont été trouvés
         if ($getAllParticipants->isEmpty()) {
             return response()->json(['message' => 'Aucune invitation trouvée.'], 404);
         }
+
 
         $spreadsheet = new Spreadsheet();
         $worksheet = $spreadsheet->getActiveSheet();
@@ -1252,38 +1259,44 @@ class CourseraController extends Controller
             ->setFillType(Fill::FILL_SOLID)
             ->setStartColor(new Color('D3D3D3'));
 
-        $worksheet->setCellValue('B1', 'Email');
+        $worksheet->setCellValue('B1', 'last_name');
         $worksheet->getStyle('B1')
             ->getFill()
             ->setFillType(Fill::FILL_SOLID)
             ->setStartColor(new Color('D3D3D3'));
 
-        $worksheet->setCellValue('C1', 'gender');
+        $worksheet->setCellValue('C1', 'Email');
         $worksheet->getStyle('C1')
             ->getFill()
             ->setFillType(Fill::FILL_SOLID)
             ->setStartColor(new Color('D3D3D3'));
 
-        $worksheet->setCellValue('D1', 'course');
+        $worksheet->setCellValue('D1', 'gender');
         $worksheet->getStyle('D1')
             ->getFill()
             ->setFillType(Fill::FILL_SOLID)
             ->setStartColor(new Color('D3D3D3'));
 
-        $worksheet->setCellValue('E1', 'class_start_time');
+        $worksheet->setCellValue('E1', 'course');
         $worksheet->getStyle('E1')
             ->getFill()
             ->setFillType(Fill::FILL_SOLID)
             ->setStartColor(new Color('D3D3D3'));
 
-        $worksheet->setCellValue('F1', 'class_end_time');
+        $worksheet->setCellValue('F1', 'class_start_time');
         $worksheet->getStyle('F1')
             ->getFill()
             ->setFillType(Fill::FILL_SOLID)
             ->setStartColor(new Color('D3D3D3'));
 
-        $worksheet->setCellValue('G1', 'completed');
+        $worksheet->setCellValue('G1', 'class_end_time');
         $worksheet->getStyle('G1')
+            ->getFill()
+            ->setFillType(Fill::FILL_SOLID)
+            ->setStartColor(new Color('D3D3D3'));
+
+        $worksheet->setCellValue('H1', 'completed');
+        $worksheet->getStyle('H1')
             ->getFill()
             ->setFillType(Fill::FILL_SOLID)
             ->setStartColor(new Color('D3D3D3'));
@@ -1293,40 +1306,50 @@ class CourseraController extends Controller
         $row = 2;
 
         foreach ($getAllParticipants as $member) {
-            $worksheet->setCellValue('A' . $row, $member->name)
-                ->getStyle('A' . $row)
-                ->getAlignment()
-                ->setHorizontal(Alignment::HORIZONTAL_LEFT);
-
-            $worksheet->setCellValue('B' . $row, $member->email)
-                ->getStyle('B' . $row)
-                ->getAlignment()
-                ->setHorizontal(Alignment::HORIZONTAL_LEFT);
-
-            $worksheet->setCellValue('C' . $row, $member->gender)
+            if ($member->email == $member->odcmail) {
+                $worksheet->setCellValue('A' . $row, $member->first_name)
+                    ->getStyle('A' . $row)
+                    ->getAlignment()
+                    ->setHorizontal(Alignment::HORIZONTAL_LEFT);
+                $worksheet->setCellValue('B' . $row, $member->last_name)
+                    ->getStyle('B' . $row)
+                    ->getAlignment()
+                    ->setHorizontal(Alignment::HORIZONTAL_LEFT);
+            }else{
+                $worksheet->setCellValue('A' . $row, $member->name)
+                    ->getStyle('A' . $row)
+                    ->getAlignment()
+                    ->setHorizontal(Alignment::HORIZONTAL_LEFT);
+            }
+            $worksheet->setCellValue('C' . $row, $member->email)
                 ->getStyle('C' . $row)
                 ->getAlignment()
                 ->setHorizontal(Alignment::HORIZONTAL_LEFT);
 
-            $worksheet->setCellValue('D' . $row, $member->course)
+            $worksheet->setCellValue('D' . $row, $member->gender)
                 ->getStyle('D' . $row)
                 ->getAlignment()
                 ->setHorizontal(Alignment::HORIZONTAL_LEFT);
 
-            $worksheet->setCellValue('E' . $row, $member->class_start_time)
-            ->getStyle('E' . $row)
-            ->getAlignment()
-            ->setHorizontal(Alignment::HORIZONTAL_LEFT);
+            $worksheet->setCellValue('E' . $row, $member->course)
+                ->getStyle('E' . $row)
+                ->getAlignment()
+                ->setHorizontal(Alignment::HORIZONTAL_LEFT);
 
-            $worksheet->setCellValue('F' . $row, $member->class_end_time)
+            $worksheet->setCellValue('F' . $row, $member->class_start_time)
                 ->getStyle('F' . $row)
                 ->getAlignment()
                 ->setHorizontal(Alignment::HORIZONTAL_LEFT);
 
-            $worksheet->setCellValue('G' . $row, $member->completed)
-            ->getStyle('G' . $row)
-            ->getAlignment()
-            ->setHorizontal(Alignment::HORIZONTAL_LEFT);
+            $worksheet->setCellValue('G' . $row, $member->class_end_time)
+                ->getStyle('G' . $row)
+                ->getAlignment()
+                ->setHorizontal(Alignment::HORIZONTAL_LEFT);
+
+            $worksheet->setCellValue('H' . $row, $member->completed)
+                ->getStyle('H' . $row)
+                ->getAlignment()
+                ->setHorizontal(Alignment::HORIZONTAL_LEFT);
             $row++;
         }
 

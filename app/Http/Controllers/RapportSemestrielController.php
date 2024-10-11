@@ -46,49 +46,49 @@ class RapportSemestrielController extends Controller
 
         //On recuper les données depuis le model
         $activites = Activite::all();
-        $candidats = Presence::leftJoin('candidats as ca', 'presences.candidat_id', '=', 'ca.id')
-            ->leftJoin('odcusers as us', 'ca.odcuser_id', '=', 'us.id')
-            ->leftJoin('activites as ac', 'ca.activite_id', '=', 'ac.id')
-            ->leftJoin('categories  as cat', 'ac.categorie_id', '=', 'cat.id')
-            ->leftJoin('activite_type_event as acty', 'ac.id', '=', 'acty.activite_id')
-            ->leftJoin('type_events as typ', 'acty.type_event_id ', '=', 'typ.id')
-            ->leftJoin('employabilites as empl', 'us.id', '=', 'empl.odcuser_id')
-            ->leftJoin('type_contrats as typecont', 'empl.type_contrat_id', '=', 'typecont.id')
-            // ->leftJoin('postes as pst', 'pst.employabilite_id', '=', 'empl.id')
-            // ->leftJoin('entreprises as entrp', 'entrp.employabilite_id', '=', 'empl.id')
-            // ->leftJoin('postes as pst', 'pst.employabilite_id', '=', 'empl.id')
-            // ->leftJoin('entreprises as entrp', 'entrp.employabilite_id', '=', 'empl.id')
-            ->whereNotNull('ac.title')
-            ->whereBetween('ac.start_date', [$startDate, $endDate])
-            ->orderBy('ac.start_date', 'asc')
-            ->orderBy('ac.title', 'asc')
-            ->select([
-                'presences.candidat_id',
-                'us.first_name',
-                'us.last_name',
-                'us.email',
-                'us.gender',
-                'us.birth_date',
-                'us.linkedin',
-                'ca.odcuser_id',
-                'ac.end_date',
-                'ac.title',
-                'ac.number_day',
-                'typecont.libelle as type_contrat',
-                'empl.nomboite as entreprise',
-                'empl.poste',
-                DB::raw('(ac.start_date) as startYear'),
-                'cat.name as namecat',
-                'typ.title as titletype',
-                'typ.code',
-                'ca.id',
+        // $candidats = Presence::leftJoin('candidats as ca', 'presences.candidat_id', '=', 'ca.id')
+        //     ->leftJoin('odcusers as us', 'ca.odcuser_id', '=', 'us.id')
+        //     ->leftJoin('activites as ac', 'ca.activite_id', '=', 'ac.id')
+        //     ->leftJoin('categories  as cat', 'ac.categorie_id', '=', 'cat.id')
+        //     ->leftJoin('activite_type_event as acty', 'ac.id', '=', 'acty.activite_id')
+        //     ->leftJoin('type_events as typ', 'acty.type_event_id ', '=', 'typ.id')
+        //     ->leftJoin('employabilites as empl', 'us.id', '=', 'empl.odcuser_id')
+        //     ->leftJoin('type_contrats as typecont', 'empl.type_contrat_id', '=', 'typecont.id')
+        //     // ->leftJoin('postes as pst', 'pst.employabilite_id', '=', 'empl.id')
+        //     // ->leftJoin('entreprises as entrp', 'entrp.employabilite_id', '=', 'empl.id')
+        //     // ->leftJoin('postes as pst', 'pst.employabilite_id', '=', 'empl.id')
+        //     // ->leftJoin('entreprises as entrp', 'entrp.employabilite_id', '=', 'empl.id')
+        //     ->whereNotNull('ac.title')
+        //     ->whereBetween('ac.start_date', [$startDate, $endDate])
+        //     ->orderBy('ac.start_date', 'asc')
+        //     ->orderBy('ac.title', 'asc')
+        //     ->select([
+        //         'presences.candidat_id',
+        //         'us.first_name',
+        //         'us.last_name',
+        //         'us.email',
+        //         'us.gender',
+        //         'us.birth_date',
+        //         'us.linkedin',
+        //         'ca.odcuser_id',
+        //         'ac.end_date',
+        //         'ac.title',
+        //         'ac.number_day',
+        //         'typecont.libelle as type_contrat',
+        //         'empl.nomboite as entreprise',
+        //         'empl.poste',
+        //         DB::raw('(ac.start_date) as startYear'),
+        //         'cat.name as namecat',
+        //         'typ.title as titletype',
+        //         'typ.code',
+        //         'ca.id',
 
-            ])->distinct()
-            ->get();
-
+        //     ])->distinct()
+        //     ->get();
+        $candidats = DB::select("select * from semestre_report_views  where datepresence between '{$startDate}' and '{$endDate}'");
+        // dd($candidats);
         //$queries = DB::getQueryLog();
         //dd($queries);
-
         //on cree un nouveau classeur PhpSpreadsheet
         $spreadsheet = new Spreadsheet();
         $worksheet = $spreadsheet->getActiveSheet();
@@ -554,108 +554,10 @@ class RapportSemestrielController extends Controller
         $worksheet->freezePane('A4');
         $worksheet->freezePane('E4');
 
-        foreach ($candidats as $candidat) {
-            ini_set('max_execution_time', 10000);
+        foreach ($candidats as $z => $candidat) {
+            // ini_set('max_execution_time', 10000);
 
-            //recuperation et filtrage des numeros de telephone
-            $phoneNumberResult = DB::table('candidat_attributes')
-                ->whereRaw('LENGTH(CAST(RIGHT(value, 9) AS SIGNED)) = 9')
-                ->select(DB::raw('CAST(RIGHT(value, 9) AS SIGNED) AS phone_number'))
-                ->where('candidat_id', $candidat->id)
-                ->first();
-
-            if ($phoneNumberResult) {
-                $phoneNumber = $phoneNumberResult->phone_number;
-            } else {
-                $phoneNumber = '';
-            }
-            //fin recuperation et filtrage des numeros de telephone
-
-            // Récupération de l'université du candidat dans la table candidat_attributes et odcusers
-            $variables = ['Université', 'Etablissement', 'Structure', 'Entreprise', 'Si autre université'];
-
-            $universiteLabelAttribute = DB::table('candidat_attributes')
-                ->where(function ($query) use ($variables) {
-                    foreach ($variables as $value) {
-                        $query->orWhere('label', 'LIKE', "%{$value}%");
-                    }
-                })
-                ->where('candidat_id', $candidat->id)
-                ->first();
-                $universiteValue ='';
-            if ($universiteLabelAttribute) {
-                $universiteValue = $universiteLabelAttribute->value;
-            } elseif ($universiteValue === null) {
-                $odcusers = Odcuser::where('id', $candidat->id)
-                ->get();
-                if (request()->expectsJson()) {
-                    return response()->json($odcusers);
-                }
-                foreach ($odcusers as $key => $odcuser) {
-                    $detail_profession = json_decode($odcuser->detail_profession, true);
-                    $universiteValue = $detail_profession['university'] ?? '';
-                }
-            }else{
-                $universiteValue = '';
-            }
-
-
-            //Recuperation des profession et specialités des
-            $profess = ['Profession'];
-
-            $professLabelAttribute = DB::table('candidat_attributes')
-            ->where(function ($query) use ($profess) {
-                foreach ($profess as $value) {
-                    $query->orWhere('label', 'LIKE BINARY', "%{$value}%");
-                }
-            })
-            ->where('candidat_id', $candidat->id)
-            ->first();
-
-            // Initialisation de la variable
-            $professionValue = '';
-
-            if ($professLabelAttribute) {
-                $professionValue = $professLabelAttribute->value;
-            } elseif ($professionValue === null) { // Vérifie si la variable est nulle
-                $profSpeciality = Odcuser::where('id', $candidat->odcuser_id)->get();
-                if (request()->expectsJson()) {
-                    return response()->json($profSpeciality);
-                }
-                foreach ($profSpeciality as $key => $odcuser) {
-                    $profession = json_decode($odcuser->profession, true);
-                    $professionValue = $profession['translations']['fr']['profession'] ?? '';
-                }
-            } else {
-                $professionValue = ''; // Option par défaut si aucune condition n'est remplie
-            }
-            //recuperation des speciality
-            $special = ['Spécialité ou domaine (étude ou profession)', 'Spécialité ou domaine'];
-            $specialLabelAttribute = DB::table('candidat_attributes')
-            ->where(function ($query) use ($special) {
-                foreach ($special as $value) {
-                    $query->orWhere('label', 'LIKE', "%{$value}%");
-                }
-            })
-            ->where('candidat_id', $candidat->id)
-            ->first();
-
-            $specialiteValue = '';
-
-            if ($specialLabelAttribute) {
-                $specialiteValue = $specialLabelAttribute->value; // Correction ici
-            } elseif ($specialiteValue === null) { // Utilisation de === pour la comparaison
-                $speciality = Odcuser::where('id', $candidat->odcuser_id)->get();
-                if (request()->expectsJson()) {
-                    return response()->json($speciality);
-                }
-                foreach ($speciality as $key => $odcuser) {
-                    $detail_profession = json_decode($odcuser->detail_profession, true);
-                    $specialiteValue = $detail_profession['speciality'] ?? '';
-                }
-            } else {
-                $specialiteValue = ''; // Option par défaut si aucune condition n'est remplie
-            }
+   
             //calcule d'age du candidats
             $today = new DateTime(); // Date d'aujourd'hui
             $birthDay = new DateTime($candidat->birth_date); // Date de naissance du candidat
@@ -668,7 +570,7 @@ class RapportSemestrielController extends Controller
             //     $tranche = "0 - 14 years";
             // }
 
-            if (in_array($candidat->code, ['SUCO', 'MAJU']))
+            if (in_array($candidat->typecode, ['SUCO', 'MAJU']))
             {
                 $ages = rand(12, 14);
             }
@@ -694,6 +596,39 @@ class RapportSemestrielController extends Controller
             {
                 $gender = "female";
             }
+            //$universite=json_decode(json_encode(trim($candidat->university, '"')), true);
+
+            //$universite = json_decode($candidat->university);
+            //$universite = json_encode($candidat->university, true);
+            $universityData = trim(stripslashes($candidat->university),'"');
+            $speciality = $university = $company = $profession='';
+            if(is_array(json_decode($universityData, true))) { // $universityData est un tableau
+                extract(json_decode($universityData, true));
+            }else{ // $universityData est une chaine de caractère
+                $university = $universityData;
+            }
+
+            $specialityData = trim(stripslashes($candidat->speciality), '"');
+            if(is_array(json_decode($specialityData, true))) { // $universityData est un tableau
+             $profession = json_decode($specialityData, true)['translations']['fr']['profession'];
+            }else{ // $universityData est une chaine de caractère
+                $profession = $universityData;
+            }
+            // echo $university;
+            // echo " >>> ";
+            // echo $profession;
+            // echo " >>> ";
+            // echo $speciality;
+            // echo " >>> ";
+            // echo $company;
+            // echo "<br>";
+            // if($z==100){
+            //     continue;
+            // }
+            
+            //continue;
+
+
 
             $worksheet->setCellValue('A' . $row, $candidat->first_name)
                 ->getStyle('A' . $row)
@@ -711,15 +646,15 @@ class RapportSemestrielController extends Controller
                 ->getStyle('D' . $row)
                 ->getAlignment()
                 ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_LEFT);
-            $worksheet->setCellValue('E' . $row, $professionValue)
+            $worksheet->setCellValue('E' . $row, $profession ?? $company )
                 ->getStyle('E' . $row)
                 ->getAlignment()
                 ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_LEFT);
-            $worksheet->setCellValue('F' . $row, $universiteValue)
+            $worksheet->setCellValue('F' . $row, $university)
                 ->getStyle('F' . $row)
                 ->getAlignment()
                 ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_LEFT);
-            $worksheet->setCellValue('G' . $row, $specialiteValue)
+            $worksheet->setCellValue('G' . $row, $speciality)
                 ->getStyle('G' . $row)
                 ->getAlignment()
                 ->setHorizontal(Alignment::HORIZONTAL_LEFT);
@@ -727,7 +662,7 @@ class RapportSemestrielController extends Controller
                 ->getStyle('H' . $row)
                 ->getAlignment()
                 ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
-            $worksheet->setCellValue('I' . $row, $phoneNumber)
+            $worksheet->setCellValue('I' . $row, $candidat->phone_number)
                 ->getStyle('I' . $row)
                 ->getAlignment()
                 ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
@@ -736,7 +671,7 @@ class RapportSemestrielController extends Controller
                 ->getAlignment()
                 ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
 
-            if (in_array($candidat->code, $typeform)) {
+            if (in_array($candidat->typecode, $typeparc)) {
                 $worksheet->setCellValue('Q' . $row, $candidat->namecat)
                     ->getStyle('Q' . $row)
                     ->getAlignment()
@@ -757,7 +692,7 @@ class RapportSemestrielController extends Controller
                     ->getStyle('U' . $row)
                     ->getAlignment()
                     ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
-            } elseif (in_array($candidat->code, $typeparc)) {
+            } elseif (in_array($candidat->typecode, $typeform)) {
                 $worksheet->setCellValue('L' . $row, $candidat->namecat)
                     ->getStyle('L' . $row)
                     ->getAlignment()
@@ -770,7 +705,11 @@ class RapportSemestrielController extends Controller
                     ->getStyle('N' . $row)
                     ->getAlignment()
                     ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
-            } elseif (in_array($candidat->code, $typeconf)) {
+                $worksheet->setCellValue('O' . $row, $candidat->title)
+                    ->getStyle('O' . $row)
+                    ->getAlignment()
+                    ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
+            } elseif (in_array($candidat->typecode, $typeconf)) {
                 $worksheet->setCellValue('X' . $row, $candidat->namecat)
                     ->getStyle('X' . $row)
                     ->getAlignment()
