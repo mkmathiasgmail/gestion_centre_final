@@ -578,7 +578,7 @@ class RapportSemestrielController extends Controller
             if($ages >= 12 && $ages <= 14){
                 $tranche = "12 - 14 years";
             }
-            elseif($ages >= 15 && $ages <= 24 || $ages == "") {
+            elseif($ages >= 15 && $ages <= 24 ?? $ages == "") {
                 $tranche = "15 - 24 years";
             } elseif ($ages >= 25 && $ages <= 34) {
                 $tranche = "25 - 34 years";
@@ -587,13 +587,12 @@ class RapportSemestrielController extends Controller
             }
             //verification des sexes
 
-            $gender= $candidat->gender;
+            $gender = $candidat->gender;
 
-            if ($gender == 'M'||'Garcon')
-            {
+            if ($gender === 'M' || $gender === 'Garçon'
+            ) {
                 $gender = "male";
-            }elseif($gender == 'F' || 'Fille')
-            {
+            } elseif ($gender === 'F' || $gender === 'Fille') {
                 $gender = "female";
             }
             //$universite=json_decode(json_encode(trim($candidat->university, '"')), true);
@@ -680,7 +679,7 @@ class RapportSemestrielController extends Controller
                     ->getStyle('R' . $row)
                     ->getAlignment()
                     ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
-                $worksheet->setCellValue('S' . $row, $candidat->end_date)
+                $worksheet->setCellValue('S' . $row, $candidat->activdate_end)
                     ->getStyle('S' . $row)
                     ->getAlignment()
                     ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
