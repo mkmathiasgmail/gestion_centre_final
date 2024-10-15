@@ -5,9 +5,9 @@
     <link rel="stylesheet" href="asset(css/style.css)">
     <div class="text-center flex justify-center m-20 text-white">
         <div class="">
-        
-            {{ $code }}
+
+            {{-- {{ $code }} --}}
         </div>
     </div>
-   
+
 </x-app-layout>

@@ -29,26 +29,34 @@ class QrCodeController extends Controller
             ->where('activites.id', $id)
             ->select('candidats.*')
             ->get();
+
         if (!$candidatsAccept->isEmpty()) {
             foreach ($candidatsAccept as $candidat) {
                 $candidatId = $candidat->id;
-                $url = env('IP_QRCODE');
-                $svgString = QrCode::size(300)->generate("$url/$candidatId");
-                $directory = 'app/public/qrcodes';
+                $url = 'http://10.252.252.58:8000/participant/' . $candidatId;
+
+                // Générer le QR Code en format PNG
+                $qrCode = QrCode::format('png')->size(300)->generate($url);
+
+                // Chemin de stockage des fichiers dans 'storage/app/public/qrcodes'
+                $directory = storage_path('app/public/qrcodes');
                 if (!is_dir($directory)) {
                     mkdir($directory, 0755, true);
                 }
+
+                // Chemin complet de l'image QR Code
                 $imagePath = "$directory/qrcode_$candidatId.png";
-                $image = Svg::make($svgString);
-                $image->saveAsWebp($imagePath);
-                $candidat->codeqr = $imagePath;
+
+                file_put_contents($imagePath, $qrCode);
+                $candidat->codeqr = 'qrcodes/qrcode_' . $candidatId . '.png';
                 $candidat->save();
             }
             return redirect()->back()->with('success', 'QR Codes générés avec succès.');
         } else {
-            return redirect()->back()->with('success', 'Pas de participant pour cette activite, donc pas moyen de generer le qrcode!');
+            return redirect()->back()->with('success', 'Pas de participant pour cette activité, donc pas moyen de générer le QR Code!');
         }
     }
+
     public function participant($id)
     {
         $candidat = Candidat::find($id);
@@ -56,7 +64,6 @@ class QrCodeController extends Controller
             $qrCodeUrl = Storage::url($candidat->codeqr);
             return view('presences.enregistrement', compact('candidat', 'qrCodeUrl', 'id'));
         }
-
     }
 
     public function store($id)
@@ -81,5 +88,3 @@ class QrCodeController extends Controller
         }
     }
 }
-
-   

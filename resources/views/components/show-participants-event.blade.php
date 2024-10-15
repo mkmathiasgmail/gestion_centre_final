@@ -1,4 +1,14 @@
-@props(['labels', 'participantsData', 'participantsData', 'url', 'id', 'activite_Id', 'odcusers', 'activite'])
+@props([
+    'labels',
+    'participantsData',
+    'participantsData',
+    'url',
+    'id',
+    'activite_Id',
+    'odcusers',
+    'activite',
+    'modelMail',
+])
 
 
 <div class="flex justify-between mt-1 ">
@@ -128,9 +138,235 @@
         </button>
     </div>
 
-    <div class="flex justify-between">
+    <div class="flex justify-between items-center">
+        <!-- Modal toggle -->
+        <div class="flex justify-end mt-6 mr-4 center">
+            <button id="dropdownDefaultButton" data-dropdown-toggle="dropdown"
+                class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-transparent bg-[#ff7322] text-white hover:bg-[#ff6822] focus:outline-none focus:bg-[#ff6822] disabled:opacity-50 disabled:pointer-events-none"
+                type="button">Envoyer <svg class="w-2.5 h-2.5 ms-3" aria-hidden="true"
+                    xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
+                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="m1 1 4 4 4-4" />
+                </svg>
+            </button>
+        </div>
 
-        <form action="{{ route('importAndgenerate') }}" method="POST" enctype="multipart/form-data" class="flex">
+        <!-- Dropdown menu -->
+        <div id="dropdown"
+            class="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-28 dark:bg-gray-700">
+            <ul class="py-2 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdownDefaultButton">
+                <li>
+                    <a href="#" data-modal-target="mail-modal" data-modal-toggle="mail-modal"
+                        class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Mail</a>
+                </li>
+                <li>
+                    <a href="#" data-modal-target="sms-modal" data-modal-toggle="sms-modal"
+                        class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">SMS</a>
+                </li>
+            </ul>
+        </div>
+
+        @section('modalparticipants')
+            <!-- Mail modal -->
+            <div id="mail-modal" tabindex="-1" aria-hidden="true"
+                class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
+                <div class="relative w-full max-w-5xl max-h-full p-4">
+                    <!-- Modal content -->
+                    <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
+                        <!-- Modal header -->
+                        <div class="flex items-center justify-between p-4 border-b rounded-t md:p-5 dark:border-gray-600">
+                            <h3 class="text-lg font-semibold text-gray-900 dark:text-white">
+                                Envoie des mails
+                            </h3>
+                            <button type="button"
+                                class="inline-flex items-center justify-center w-8 h-8 text-sm text-gray-400 bg-transparent rounded-lg hover:bg-gray-200 hover:text-gray-900 ms-auto dark:hover:bg-gray-600 dark:hover:text-white"
+                                data-modal-toggle="mail-modal">
+                                <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
+                                    fill="none" viewBox="0 0 14 14">
+                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                        stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
+                                </svg>
+                                <span class="sr-only">Close modal</span>
+                            </button>
+                        </div>
+
+                        <!-- Modal body -->
+                        <form action="{{ route('sendMailActivite') }}" class="p-4 md:p-5" method="post">
+                            @csrf
+                            @method('GET')
+                            <div class="grid grid-cols-2 gap-4 mb-4">
+                                <div class="col-span-2">
+                                    <label for="activity"
+                                        class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Activité</label>
+                                    <select id="activity" name="activity"
+                                        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
+                                        <option value="{{ $activite->id }}">{{ $activite->title }}</option>
+                                    </select>
+                                </div>
+                                <div id="model-mail-div" class="col-span-2">
+                                    <label id="label-model-mail" for="model-mail"
+                                        class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Modèle de
+                                        mail</label>
+                                    <select id="model-mail" name="model-mail"
+                                        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
+                                        <option value="" selected="">Sélectionner un modèle de mail</option>
+                                    
+                                        @foreach ($modelMail as $item)
+                                            <option value="{{ $item->message }}">{{ $item->title }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                                <div class="col-span-2 sm:col-span-1">
+                                    <label for="subject"
+                                        class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Sujet</label>
+                                    <input type="text" name="subject" id="subject"
+                                        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                                        placeholder="Entrer un sujet de mail" required="">
+                                </div>
+
+                                {{ csrf_field() }}
+
+                                <div class="col-span-2">
+                                    <label for="message"
+                                        class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Message</label>
+                                    <textarea id="message" name="message" rows="6"
+                                        class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                        placeholder="Write your message here"></textarea>
+                                </div>
+                            </div>
+                            <button type="submit"
+                                class="text-white inline-flex w-full justify-center bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+                                Envoyer
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Sms modal -->
+            <div id="sms-modal" tabindex="-1" aria-hidden="true"
+                class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
+                <div class="relative w-full max-w-5xl max-h-full p-4">
+                    <!-- Modal content -->
+                    <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
+                        <!-- Modal header -->
+                        <div class="flex items-center justify-between p-4 border-b rounded-t md:p-5 dark:border-gray-600">
+                            <h3 class="text-lg font-semibold text-gray-900 dark:text-white">
+                                Envoie des sms
+                            </h3>
+                            <button type="button"
+                                class="inline-flex items-center justify-center w-8 h-8 text-sm text-gray-400 bg-transparent rounded-lg hover:bg-gray-200 hover:text-gray-900 ms-auto dark:hover:bg-gray-600 dark:hover:text-white"
+                                data-modal-toggle="sms-modal">
+                                <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
+                                    fill="none" viewBox="0 0 14 14">
+                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                        stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
+                                </svg>
+                                <span class="sr-only">Close modal</span>
+                            </button>
+                        </div>
+
+                        <!-- Modal body -->
+                        {{-- <form action="{{ route('sendSms') }}" class="p-4 md:p-5" method="post">
+                            @csrf
+                            @method('GET')
+                            <div class="grid grid-cols-2 gap-4 mb-4">
+                                <div class="col-span-2">
+                                    <label for="sms-activity"
+                                        class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Activité</label>
+                                    <select id="sms-activity" name="sms-activity"
+                                        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
+                                        <option value="{{ $activite->id }}">{{ $activite->title }}</option>
+                                    </select>
+                                </div>
+                                <div id="model-sms-div" class="col-span-2">
+                                    <label id="label-model-sms" for="model-sms"
+                                        class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Modèle de
+                                        sms</label>
+                                    <select id="model-sms" name="model-sms"
+                                        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
+                                        <option value="" selected="">Sélectionner un modèle de sms</option>
+                                        {{ $modelSms }}
+                                        @foreach ($modelSms as $item)
+                                            <option value="{{ $item->message }}">{{ $item->title }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                                <div class="col-span-2">
+                                    <label for="sms-cible"
+                                        class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Cible</label>
+                                    <select id="sms-cible" name="sms-cible"
+                                        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
+                                        <option value="tout-le-monde" selected="">Tous le monde</option>
+                                        <option value="activité">Par rapport à une activité</option>
+                                        <option value="age-cible">Age</option>
+                                        <option value="sexe-cible">Genre</option>
+                                        <option value="personnalise">Personnalisé</option>
+                                    </select>
+                                </div>
+                                <div id="sms-per-activity-div" class="col-span-2">
+                                    <label for="sms-per-activity"
+                                        class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Par rapport à
+                                        une activité</label>
+                                    <input type="text" list="sms-activity_name_list" name="sms-per-activity"
+                                        id="sms-per-activity"
+                                        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                                        placeholder="Entrer une activité">
+                                    <div id="sms-activity_name_list" class="text-black bg-gray-300 rounded-lg "></div>
+                                </div>
+
+                                {{ csrf_field() }}
+
+                                <div id="sms-age-div" class="col-span-2">
+                                    <label for="sms-age"
+                                        class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Age</label>
+                                    <select id="sms-age" name="sms-age"
+                                        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
+                                        <option value="" selected="">Sélectionner un âge</option>
+                                        <option value=">18">> à 18</option>
+                                        <option value="<18">
+                                            < à 18</option>
+                                        <option value=">25">> à 25</option>
+                                        <option value=">30">> à 30</option>
+                                    </select>
+                                </div>
+                                <div id="sms-sexe-div" class="col-span-2">
+                                    <label for="sms-sexe"
+                                        class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Genre</label>
+                                    <select id="sms-sexe" name="sms-sexe"
+                                        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
+                                        <option value="" selected="">Sélectionner un genre</option>
+                                        <option value="M">Masculin</option>
+                                        <option value="F">Feminin</option>
+                                    </select>
+                                </div>
+                                <div id="sms-personnalise-div" class="col-span-2">
+                                    <label for="sms-person"
+                                        class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Personnalisé</label>
+                                    <input type="text" name="sms-person" id="sms-person"
+                                        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                                        placeholder="821002525, 821060509, ...">
+                                </div>
+                                <div class="col-span-2">
+                                    <label for="sms-message"
+                                        class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Message</label>
+                                    <textarea id="sms-message" name="sms-message" rows="6"
+                                        class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                        placeholder="Write your message here"></textarea>
+                                </div>
+                            </div>
+                            <button type="submit"
+                                class="text-white inline-flex w-full justify-center bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+                                Envoyer
+                            </button>
+                        </form> --}}
+                    </div>
+                </div>
+            </div>
+        @endsection
+
+        <form action="{{ route('importAndgenerate') }}" method="POST" enctype="multipart/form-data"
+            class="flex">
             @csrf
             {{-- <p class="block mb-2 text-sm font-medium text-gray-900 dark:text-white text-center">Importer et Generer les certificats</p> --}}
             <input type="hidden" name="activite" value="{{ $activite->id }}">
@@ -138,15 +374,19 @@
                 <input
                     class="block  w-full text-sm  text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
                     aria-describedby="user_avatar_help" id="file" type="file" accept=".xlsx"
-                    name="file" >
+                    name="file">
 
             </div>
             <div class="ml-2">
-                <button type="submit" class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-transparent bg-[#FF7322] text-white hover:bg-[#FF6822] focus:outline-none focus:bg-[#FF6822] disabled:opacity-50 disabled:pointer-events-none">
-                    <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e8eaed"><path d=" M480-320 280-520l56-58 104 104v-326h80v326l104-104 56
+                <button type="submit"
+                    class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-transparent bg-[#FF7322] text-white hover:bg-[#FF6822] focus:outline-none focus:bg-[#FF6822] disabled:opacity-50 disabled:pointer-events-none">
+                    <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px"
+                        fill="#e8eaed">
+                        <path d=" M480-320 280-520l56-58 104 104v-326h80v326l104-104 56
                     58-200 200ZM240-160q-33 0-56.5-23.5T160-240v-120h80v120h480v-120h80v120q0 33-23.5
-                    56.5T720-160H240Z" /></svg>
-                Importer
+                    56.5T720-160H240Z" />
+                    </svg>
+                    Importer
                 </button>
             </div>
 
@@ -213,6 +453,9 @@
             </div>
         </div>
     </div>
+
+
+
 @endsection
 
 

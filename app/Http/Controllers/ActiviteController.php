@@ -22,6 +22,7 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Http;
 use App\Models\CourseraSpecialisation;
+use App\Models\ModelMail;
 use Ramsey\Uuid\Uuid;
 
 use function PHPUnit\Framework\isEmpty;
@@ -274,7 +275,9 @@ class ActiviteController extends Controller
             ->groupBy('activites.title')
             ->get();
 
-        return view('activites.show', compact('participantsData', 'datachart', 'candidatsData', 'labels', 'data', 'activite', 'id', 'candidats', 'activite_Id', 'odcusers', 'fullDates', 'dates', 'countdate', 'presences'));
+            $modelMail = ModelMail::all();
+
+        return view('activites.show', compact('participantsData', 'datachart', 'candidatsData', 'labels', 'data', 'activite', 'id', 'candidats', 'activite_Id', 'odcusers', 'fullDates', 'dates', 'countdate', 'presences','modelMail'));
     }
 
 

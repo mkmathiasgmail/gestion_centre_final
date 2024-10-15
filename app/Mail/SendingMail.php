@@ -4,11 +4,7 @@ namespace App\Mail;
 
 use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
-use Illuminate\Support\Facades\Log;
-use Illuminate\Mail\Mailables\Content;
 use Illuminate\Queue\SerializesModels;
-use Illuminate\Mail\Mailables\Envelope;
-use Illuminate\Contracts\Queue\ShouldQueue;
 
 class SendingMail extends Mailable
 {
@@ -16,50 +12,47 @@ class SendingMail extends Mailable
 
     public $subject;
     public $message;
+    public $codeqr; // Chemin vers le QR code
+    public $lieu;
+    public $prenom;
+    public $nom;
+    public $date;
+    public $title;
 
     /**
      * Create a new message instance.
      */
-    public function __construct($subject, $message)
+    public function __construct($subject, $message, $codeqr, $lieu, $prenom, $nom, $date, $title)
     {
         $this->subject = $subject;
         $this->message = $message;
+        $this->codeqr = $codeqr;
+        $this->prenom = $prenom;
+        $this->nom = $nom;
+        $this->date = $date;
+        $this->title = $title;
     }
 
     public function build()
     {
+        // Remplacez [Nom de l'activité] par le titre de l'activité
+        $body = str_replace('[Nom de l\'activité]', $this->title, $this->message);
+
+        // Assurez-vous que $this->codeqr est le chemin du fichier
+        $filePath = storage_path('app/public/' . $this->codeqr); // Chemin complet
+
         return $this->view('notifications.mail')
-                    ->subject($this->subject)
-                    ->with(['body' => $this->message]);
+            ->subject($this->subject)
+            ->with([
+                'prenom' => $this->prenom,
+                'nom' => $this->nom,
+                'body' => $body, // Utilisez la variable modifiée
+                'date' => $this->date,
+                'lieu' => $this->lieu,
+            ])
+            ->attach($filePath, [
+                'as' => 'qrcode.png', // Nom du fichier dans le mail
+                'mime' => 'image/png',
+            ]);
     }
-
-    // /**
-    //  * Get the message envelope.
-    //  */
-    // public function envelope(): Envelope
-    // {
-    //     return new Envelope(
-    //         subject: 'Sending Mail',
-    //     );
-    // }
-
-    // /**
-    //  * Get the message content definition.
-    //  */
-    // public function content(): Content
-    // {
-    //     return new Content(
-    //         view: 'notifications.mail',
-    //     );
-    // }
-
-    // /**
-    //  * Get the attachments for the message.
-    //  *
-    //  * @return array<int, \Illuminate\Mail\Mailables\Attachment>
-    //  */
-    // public function attachments(): array
-    // {
-    //     return [];
-    // }
 }
