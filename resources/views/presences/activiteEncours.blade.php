@@ -149,7 +149,7 @@
 
                                                 </div>
                                             </div>
-                                            <div class="hidden" id="confirmDiv">
+                                            <div class="hidden" id="confirmDiv{{ $item->id }}">
                                                 <form class="space-y-5" action="{{ route('presences.store') }}"
                                                     method="post" id="confirmForm">
                                                     @csrf
@@ -182,7 +182,7 @@
                                                     <div class="flex items-center mb-4 space-x-5 eventinputdiv">
                                                         <label for="activite"
                                                             class="block mb-2 w-36 text-sm font-medium text-gray-900 dark:text-white">Activite</label>
-                                                        <input type="text" name="idactivite" id="activite"
+                                                        <input type="text" name="idactivite" id="activite{{$item->id}}"
                                                             class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                                                             required="" readonly>
                                                     </div>
@@ -263,17 +263,17 @@
                     } else if (data.error ===
                         "Désolé, vous n\'êtes pas enregistré sur cette activité. Merci !") {
                         $('.modal-title').text("Enregistrez vous     à l'activité")
-                        $("#confirmDiv").removeClass('hidden');
+                        $("#confirmDiv" + activityId).removeClass('hidden');
                         $('.filterForms').addClass('hidden');
-                        $('#activite').attr('value', data.title);
+                        $('#activite' + activityId).attr('value', data.title);
                     } else {
                         $('.filterForms').addClass('hidden');
-                        $("#confirmDiv").removeClass('hidden');
+                        $("#confirmDiv" + activityId).removeClass('hidden');
                         $('.modal-title').text("Confirmation des informations")
                         $('#firstname').attr('value', data.prenom);
                         $('#lastname').attr('value', data.nom);
                         $('#confirm-email').attr('value', data.email);
-                        $('#activite').attr('value', data.activite);
+                        $('#activite' + activityId).attr('value', data.activite);
                     }
                 }
             });
