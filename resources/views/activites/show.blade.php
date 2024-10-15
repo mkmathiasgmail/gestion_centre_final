@@ -27,7 +27,7 @@
             <span class="font-medium">{{ session('success') }}</span>
         </div>
     @endif
-    
+
     <!-- Tab navigation -->
     <div class="mb-4 border-b border-gray-200 dark:border-gray-700">
         <ul class="flex flex-wrap -mb-px text-sm font-medium text-center" id="default-styled-tab"
@@ -80,7 +80,7 @@
         <div class="hidden p-4 rounded-lg bg-gray-50 dark:bg-gray-800" id="participants-tab" role="tabpanel"
             aria-labelledby="participants-tab">
             <x-show-participants-event :participantsData="$participantsData" :activite="$activite" :labels="$labels" :candidatsData="$candidatsData"
-                :odcusers="$odcusers" :activite_Id="$activite_Id" :id="$id" />
+                :odcusers="$odcusers" :activite_Id="$activite_Id" :id="$id" :modelMail="$modelMail" />
         </div>
 
         <!-- Presence tab content -->
@@ -583,6 +583,15 @@
                 const lien = event.target.getAttribute("href");
                 document.querySelector("#choixCertificat-modal form").setAttribute("action", lien);
             }
+        </script>
+
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                document.getElementById('model-mail').addEventListener('change', function() {
+                    var selectedMessage = this.value;
+                    document.getElementById('message').value = selectedMessage;
+                });
+            });
         </script>
     @endsection
 </x-app-layout>
