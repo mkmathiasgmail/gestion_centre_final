@@ -60,14 +60,14 @@
                 @csrf
 
 
-                <div class="grid max-w-screen-2xl px-4 py-8 mx-auto lg:gap-8 xl:gap-0 lg:py-16 lg:grid-cols-12">
-                    <div class="mr-auto w-1/2 place-self-center lg:col-span-7">
+                <div class="grid gap-8 grid-cols-1 md:grid-cols-2 lg:grid-cols-2 items-center">
+                    <div class="mr-auto w-full  place-self-center ">
                         <div class=" mt-4 mb-4">
                             <label for="title"
                                 class="mb-6 text-lg font-normal text-gray-800 lg:text-xl  dark:text-gray-400">Titre</label>
                             <input type="text" name="title" id="title"
                                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                                placeholder="Donne un titre à votre Article" required value="">
+                                placeholder="Donne un titre à votre Article"  value="">
                         </div>
 
                         <div class=" mb-4">
@@ -76,7 +76,7 @@
                                 debut</label>
                             <input type="date" name="startDate" id="datepicker" min="today"
                                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                                required value="">
+                                 value="">
                         </div>
 
                         <div class=" mb-4">
@@ -85,7 +85,7 @@
                                 Fin</label>
                             <input type="date" name="endDate" id="datepickers"
                                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                                required>
+                                >
                         </div>
                         <div class="flex gap-4 w-full mb-4">
                             <div class="w-1/2">
@@ -130,7 +130,7 @@
 
                     </div>
 
-                    <div class=" w-full lg:mt-0 lg:col-span-5 ">
+                    <div class=" w-full lg:mt-0  ">
 
                         <div class=" mb-4">
 
@@ -188,7 +188,7 @@
                                 des Jours</label>
                             <input type="number" name="day" id="day"
                                 class=" bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                                placeholder="1h" required="" min="1">
+                                placeholder="1h" ="" min="1">
                         </div>
 
 
@@ -219,14 +219,14 @@
                 @csrf
 
 
-                <div class="grid max-w-screen-2xl px-4 py-8 mx-auto lg:gap-8 xl:gap-0 lg:py-16 lg:grid-cols-12">
-                    <div class="mr-auto place-self-center lg:col-span-7">
+                <div class="grid gap-8 grid-cols-1 md:grid-cols-2 lg:grid-cols-2 items-center">
+                    <div class="mr-auto place-self-center  w-full">
                         <div class=" mt-4 mb-4">
                             <label for="title"
                                 class="mb-6 text-lg font-normal text-gray-800 lg:text-xl  dark:text-gray-400">Titre</label>
                             <input type="text" name="title" id="title"
                                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                                placeholder="Donne un titre à votre Article" required value="">
+                                placeholder="Donne un titre à votre Article"  value="">
                         </div>
 
                         <div class=" mb-4">
@@ -235,14 +235,14 @@
                                 debut</label>
                             <input type="date" name="startDate" id="datepicker" min="today"
                                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                                required value="">
+                                 value="">
                         </div>
 
                         <div class=" mb-4">
                             <label for="date_fin">Date Fin</label>
                             <input type="date" name="endDate" id="datepicker"
                                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                                required>
+                                >
                         </div>
                         <div class=" w-full mb-4">
 
@@ -284,7 +284,7 @@
                         </div>
                     </div>
 
-                    <div class=" w-full lg:mt-0 lg:col-span-5 ">
+                    <div class=" w-full lg:mt-0  ">
 
                         <div class=" mb-4">
 
@@ -353,8 +353,8 @@
                         class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-transparent bg-[#ff7322] text-white hover:bg-[#ff6822] focus:outline-none focus:bg-[#ff6822] disabled:opacity-50 disabled:pointer-events-none">I
                         Creer une Activites</button>
                     <button type="reset"
-                        class="py-2.5 px-5 ms-3 text-sm font-medium text-gray-900 bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100">Decline</button>
-                </div>
+                        class="ine</button>
+                </div>py-2.5 px-5 ms-3 text-sm font-medium text-gray-900 bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100">Decl
             </form>
         </div>
 
@@ -502,7 +502,7 @@
                 console.error(error);
             });
         </script>
-        <script>
+        {{-- <script>
             document.addEventListener('DOMContentLoaded', function() {
                 var today = new Date().toISOString().split('T')[0];
                 document.getElementById('datepicker').setAttribute('min', today);
@@ -513,7 +513,7 @@
                 var today = new Date().toISOString().split('T')[0];
                 document.getElementById('datepickers').setAttribute('min', today);
             })
-        </script>
+        </script> --}}
         <script>
             $(document).ready(function() {
                 $("#preview").click(function() {
@@ -615,7 +615,7 @@
                                 </button>
                     </div>
                     <input type="hidden" name="content[${contentIndex}][type]" value="socialMedia">
-                    <input type="text" id="socialMediaLink_${contentIndex}" name="content[${contentIndex}][link]" required  class=" bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                    <input type="text" id="socialMediaLink_${contentIndex}" name="content[${contentIndex}][link]"   class=" bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
 
                 </div>
             `;
@@ -652,7 +652,7 @@
                                 </button>
                     </div>
                     <input type="hidden" name="content[${contentIndex}][type]" value="paragraph">
-                    <textarea id="paragraph" name="content[${contentIndex}][item]" required class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"></textarea>
+                    <textarea id="paragraph" name="content[${contentIndex}][item]"  class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"></textarea>
 
                 </div>
             `;

@@ -46,48 +46,49 @@ class RapportSemestrielController extends Controller
 
         //On recuper les données depuis le model
         $activites = Activite::all();
-        $candidats = Presence::leftJoin('candidats as ca', 'ca.id', '=', 'presences.candidat_id')
-            ->leftJoin('odcusers as us', 'us.id', '=', 'ca.odcuser_id')
-            ->leftJoin('activites as ac', 'ac.id', '=', 'ca.activite_id')
-            ->leftJoin('categories  as cat', 'cat.id', '=', 'ac.categorie_id')
-            ->leftJoin('activite_type_event as acty', 'acty.activite_id', '=', 'ac.id')
-            ->leftJoin('type_events as typ', 'typ.id', '=', 'acty.type_event_id')
-            ->leftJoin('employabilites as empl', 'empl.odcuser_id', '=', 'us.id')
-            ->leftJoin('type_contrats as typecont', 'typecont.id', '=', 'empl.type_contrat_id')
-            // ->leftJoin('postes as pst', 'pst.employabilite_id', '=', 'empl.id')
-            // ->leftJoin('entreprises as entrp', 'entrp.employabilite_id', '=', 'empl.id')
-            // ->leftJoin('postes as pst', 'pst.employabilite_id', '=', 'empl.id')
-            // ->leftJoin('entreprises as entrp', 'entrp.employabilite_id', '=', 'empl.id')
-            ->whereNotNull('ac.title')
-            ->whereBetween('ac.start_date', [$startDate, $endDate])
-            ->orderBy('ac.start_date', 'asc')
-            ->orderBy('ac.title', 'asc')
-            ->select([
-                'presences.candidat_id',
-                'us.first_name',
-                'us.last_name',
-                'us.email',
-                'us.gender',
-                'us.birth_date',
-                'us.linkedin',
-                'ca.odcuser_id',
-                'ac.end_date',
-                'ac.title',
-                'typecont.libelle as type_contrat',
-                'empl.nomboite as entreprise',
-                'empl.poste',
-                DB::raw('(ac.start_date) as startYear'),
-                'cat.name as namecat',
-                'typ.title as titletype',
-                'typ.code',
-                'ca.id',
+        // $candidats = Presence::leftJoin('candidats as ca', 'presences.candidat_id', '=', 'ca.id')
+        //     ->leftJoin('odcusers as us', 'ca.odcuser_id', '=', 'us.id')
+        //     ->leftJoin('activites as ac', 'ca.activite_id', '=', 'ac.id')
+        //     ->leftJoin('categories  as cat', 'ac.categorie_id', '=', 'cat.id')
+        //     ->leftJoin('activite_type_event as acty', 'ac.id', '=', 'acty.activite_id')
+        //     ->leftJoin('type_events as typ', 'acty.type_event_id ', '=', 'typ.id')
+        //     ->leftJoin('employabilites as empl', 'us.id', '=', 'empl.odcuser_id')
+        //     ->leftJoin('type_contrats as typecont', 'empl.type_contrat_id', '=', 'typecont.id')
+        //     // ->leftJoin('postes as pst', 'pst.employabilite_id', '=', 'empl.id')
+        //     // ->leftJoin('entreprises as entrp', 'entrp.employabilite_id', '=', 'empl.id')
+        //     // ->leftJoin('postes as pst', 'pst.employabilite_id', '=', 'empl.id')
+        //     // ->leftJoin('entreprises as entrp', 'entrp.employabilite_id', '=', 'empl.id')
+        //     ->whereNotNull('ac.title')
+        //     ->whereBetween('ac.start_date', [$startDate, $endDate])
+        //     ->orderBy('ac.start_date', 'asc')
+        //     ->orderBy('ac.title', 'asc')
+        //     ->select([
+        //         'presences.candidat_id',
+        //         'us.first_name',
+        //         'us.last_name',
+        //         'us.email',
+        //         'us.gender',
+        //         'us.birth_date',
+        //         'us.linkedin',
+        //         'ca.odcuser_id',
+        //         'ac.end_date',
+        //         'ac.title',
+        //         'ac.number_day',
+        //         'typecont.libelle as type_contrat',
+        //         'empl.nomboite as entreprise',
+        //         'empl.poste',
+        //         DB::raw('(ac.start_date) as startYear'),
+        //         'cat.name as namecat',
+        //         'typ.title as titletype',
+        //         'typ.code',
+        //         'ca.id',
 
-            ])->distinct()
-            ->get();
-
+        //     ])->distinct()
+        //     ->get();
+        $candidats = DB::select("select * from semestre_report_views  where datepresence between '{$startDate}' and '{$endDate}'");
+        // dd($candidats);
         //$queries = DB::getQueryLog();
         //dd($queries);
-
         //on cree un nouveau classeur PhpSpreadsheet
         $spreadsheet = new Spreadsheet();
         $worksheet = $spreadsheet->getActiveSheet();
@@ -139,7 +140,7 @@ class RapportSemestrielController extends Controller
         $worksheet->getStyle('AC1:AE3500')->getBorders()->getAllBorders()->setBorderStyle(Border::BORDER_THIN);
         $worksheet->getStyle('AF3:AF3500')->getBorders()->getAllBorders()->setBorderStyle(Border::BORDER_THIN);
 
-        //-------------------------ajoute des filtres pour chaque lignes 
+        //-------------------------ajoute des filtres pour chaque lignes
 
         // Récupérer la feuille de travail
         $worksheet = $spreadsheet->getActiveSheet();
@@ -214,7 +215,7 @@ class RapportSemestrielController extends Controller
         applyColorToColumn($worksheet, 1, 'AB', 'aeaaaa');
 
 
-        //on  defini les en-têtes de colonne        
+        //on  defini les en-têtes de colonne
         $worksheet->setCellValue('A3', 'name')
             ->getStyle('A3')
             ->getFont()
@@ -319,276 +320,38 @@ class RapportSemestrielController extends Controller
         $newColumnWidth = 3;
         $worksheet->getColumnDimension($columnLetter)->setWidth($newColumnWidth);
 
-
-        //Remplissage de données du rapport semestriel selon les choix selectionné dans le select
-        $row = 4;
-        $typeform = env('TYPE_FORMATION');
-        $typeform = explode(',', $typeform);
-
-        $typeconf = env('TYPE_CONFERENCE');
-        $typeconf = explode(',', $typeconf);
-
-        $typeparc = env('TYPE_PARCOURS');
-        $typeparc = explode(',', $typeparc);
-
-        //fixation des colonnes lors du deliments de la feuilles
-        $worksheet->freezePane('A4');
-        $worksheet->freezePane('E4');
-
-        foreach ($candidats as $candidat) {
-            ini_set('max_execution_time', 10000);
-
-            //recuperation et filtrage des numeros de telephone
-            $phoneNumberResult = DB::table('candidat_attributes')
-                ->whereRaw('LENGTH(CAST(RIGHT(value, 9) AS SIGNED)) = 9')
-                ->select(DB::raw('CAST(RIGHT(value, 9) AS SIGNED) AS phone_number'))
-                ->where('candidat_id', $candidat->id)
-                ->first();
-
-            if ($phoneNumberResult) {
-                $phoneNumber = $phoneNumberResult->phone_number;
-            } else {
-                $phoneNumber = '';
-            }
-            //fin recuperation et filtrage des numeros de telephone
-
-            // Récupération de l'université du candidat dans la table candidat_attributes et odcusers
-            $variables = ['Université', 'Etablissement', 'Structure', 'Entreprise', 'Si autre université'];
-
-            $universiteLabelAttribute = DB::table('candidat_attributes')
-                ->where(function ($query) use ($variables) {
-                    foreach ($variables as $value) {
-                        $query->orWhere('label', 'LIKE', "%{$value}%");
-                    }
-                })
-                ->where('candidat_id', $candidat->id)
-                ->first();
-                $universiteValue ='';
-            if ($universiteLabelAttribute) {
-                $universiteValue = $universiteLabelAttribute->value;
-            } elseif ($universiteValue === null) {
-                $odcusers = Odcuser::where('id', $candidat->id)
-                ->get();
-                if (request()->expectsJson()) {
-                    return response()->json($odcusers);
-                }
-                foreach ($odcusers as $key => $odcuser) {
-                    $detail_profession = json_decode($odcuser->detail_profession, true);
-                    $universiteValue = $detail_profession['university'] ?? '';
-                }   
-            }else{
-                $universiteValue = '';
-            }
-
-
-            //Recuperation des profession et specialités des 
-            $profess = ['Profession'];
-
-            $professLabelAttribute = DB::table('candidat_attributes')
-            ->where(function ($query) use ($profess) {
-                foreach ($profess as $value) {
-                    $query->orWhere('label', 'LIKE BINARY', "%{$value}%");
-                }
-            })
-            ->where('candidat_id', $candidat->id)
-            ->first();
-
-            // Initialisation de la variable
-            $professionValue = ''; 
-
-            if ($professLabelAttribute) {
-                $professionValue = $professLabelAttribute->value;
-            } elseif ($professionValue === null) { // Vérifie si la variable est nulle
-                $profSpeciality = Odcuser::where('id', $candidat->odcuser_id)->get();
-                if (request()->expectsJson()) {
-                    return response()->json($profSpeciality);
-                }
-                foreach ($profSpeciality as $key => $odcuser) {
-                    $profession = json_decode($odcuser->profession, true);
-                    $professionValue = $profession['translations']['fr']['profession'] ?? '';
-                }
-            } else {
-                $professionValue = ''; // Option par défaut si aucune condition n'est remplie
-            }
-            //recuperation des speciality
-            $special = ['Spécialité ou domaine (étude ou profession)', 'Spécialité ou domaine'];
-            $specialLabelAttribute = DB::table('candidat_attributes')
-            ->where(function ($query) use ($special) {
-                foreach ($special as $value) {
-                    $query->orWhere('label', 'LIKE', "%{$value}%");
-                }
-            })
-            ->where('candidat_id', $candidat->id)
-            ->first();
-
-            $specialiteValue = '';
-
-            if ($specialLabelAttribute) {
-                $specialiteValue = $specialLabelAttribute->value; // Correction ici
-            } elseif ($specialiteValue === null) { // Utilisation de === pour la comparaison
-                $speciality = Odcuser::where('id', $candidat->odcuser_id)->get();
-                if (request()->expectsJson()) {
-                    return response()->json($speciality);
-                }
-                foreach ($speciality as $key => $odcuser) {
-                    $detail_profession = json_decode($odcuser->detail_profession, true);
-                    $specialiteValue = $detail_profession['speciality'] ?? '';
-                }
-            } else {
-                $specialiteValue = ''; // Option par défaut si aucune condition n'est remplie
-            }
-            //calcule d'age du candidats
-            $today = new DateTime(); // Date d'aujourd'hui
-            $birthDay = new DateTime($candidat->birth_date); // Date de naissance du candidat
-            $interval = $today->diff($birthDay);
-            $ages = $interval->y; // Âge en années
-
-            $tranche = "";
-
-            if ($ages >= 3 && $ages <= 14) {
-                $tranche = "0 - 14 years";
-            }
-            if ($ages >= 15 && $ages <= 24) {
-                $tranche = "15 - 24 years";
-            } elseif ($ages >= 25 && $ages <= 34) {
-                $tranche = "25 - 34 years";
-            } elseif ($ages >= 35) {
-                $tranche = "35 > years";
-            }
-            $worksheet->setCellValue('A' . $row, $candidat->first_name)
-                ->getStyle('A' . $row)
-                ->getAlignment()
-                ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_LEFT);
-            $worksheet->setCellValue('B' . $row, $candidat->last_name)
-                ->getStyle('B' . $row)
-                ->getAlignment()
-                ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_LEFT);
-            $worksheet->setCellValue('C' . $row, $candidat->gender)
-                ->getStyle('C' . $row)
-                ->getAlignment()
-                ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
-            $worksheet->setCellValue('D' . $row, $tranche)
-                ->getStyle('D' . $row)
-                ->getAlignment()
-                ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_LEFT);
-            $worksheet->setCellValue('E' . $row, $professionValue)
-                ->getStyle('E' . $row)
-                ->getAlignment()
-                ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_LEFT);
-            $worksheet->setCellValue('F' . $row, $universiteValue)
-                ->getStyle('F' . $row)
-                ->getAlignment()
-                ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_LEFT);
-            $worksheet->setCellValue('G' . $row, $specialiteValue)
-                ->getStyle('G' . $row)
-                ->getAlignment()
-                ->setHorizontal(Alignment::HORIZONTAL_LEFT);
-            $worksheet->setCellValue('H' . $row, $candidat->email)
-                ->getStyle('H' . $row)
-                ->getAlignment()
-                ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
-            $worksheet->setCellValue('I' . $row, $phoneNumber)
-                ->getStyle('I' . $row)
-                ->getAlignment()
-                ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
-            $worksheet->setCellValue('J' . $row, $candidat->linkedin)
-                ->getStyle('J' . $row)
-                ->getAlignment()
-                ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
-
-            if (in_array($candidat->code, $typeform)) {
-                $worksheet->setCellValue('Q' . $row, $candidat->namecat)
-                    ->getStyle('Q' . $row)
-                    ->getAlignment()
-                    ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
-                $worksheet->setCellValue('R' . $row, $candidat->startYear)
-                    ->getStyle('R' . $row)
-                    ->getAlignment()
-                    ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
-                $worksheet->setCellValue('S' . $row, $candidat->end_date)
-                    ->getStyle('S' . $row)
-                    ->getAlignment()
-                    ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
-                $worksheet->setCellValue('U' . $row, $candidat->title)
-                    ->getStyle('U' . $row)
-                    ->getAlignment()
-                    ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
-            } elseif (in_array($candidat->code, $typeparc)) {
-                $worksheet->setCellValue('L' . $row, $candidat->namecat)
-                    ->getStyle('L' . $row)
-                    ->getAlignment()
-                    ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
-                $worksheet->setCellValue('M' . $row, $candidat->startYear)
-                    ->getStyle('M' . $row)
-                    ->getAlignment()
-                    ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
-                $worksheet->setCellValue('O' . $row, $candidat->title)
-                    ->getStyle('O' . $row)
-                    ->getAlignment()
-                    ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
-            } elseif (in_array($candidat->code, $typeconf)) {
-                $worksheet->setCellValue('X' . $row, $candidat->namecat)
-                    ->getStyle('X' . $row)
-                    ->getAlignment()
-                    ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
-                $worksheet->setCellValue('Y' . $row, $candidat->startYear)
-                    ->getStyle('Y' . $row)
-                    ->getAlignment()
-                    ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
-                $worksheet->setCellValue('AA' . $row, $candidat->title)
-                    ->getStyle('AA' . $row)
-                    ->getAlignment()
-                    ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
-            }
-            $worksheet->setCellValue('AC' . $row, $candidat->entreprise)
-                ->getStyle('AC' . $row)
-                ->getAlignment()
-                ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
-            $worksheet->setCellValue('AD' . $row, $candidat->type_contrat)
-                ->getStyle('AD' . $row)
-                ->getAlignment()
-                ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
-            $worksheet->setCellValue('AE' . $row, $candidat->poste)
-                ->getStyle('AD' . $row)
-                ->getAlignment()
-                ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
-
-            $row++;
-        }
-
-
         //Deuxieme section du tableau
 
         $worksheet->mergeCells('L1:AB1');
         $worksheet->setCellValue('L1', 'Participation in : Training / Internship / Event ');
         $worksheet->getStyle('L1')
-            ->getFill()
-            ->setFillType(FILL::FILL_SOLID)
-            ->setStartColor(new Color('f4b084'));
+        ->getFill()
+        ->setFillType(FILL::FILL_SOLID)
+        ->setStartColor(new Color('f4b084'));
 
         //allignement de mergecellule
 
         $worksheet->getStyle('L1')
-            ->getAlignment()
-            ->setHorizontal(Alignment::HORIZONTAL_CENTER);
+        ->getAlignment()
+        ->setHorizontal(Alignment::HORIZONTAL_CENTER);
 
         //sous section
         $worksheet->mergeCells('L2:O2');
         $worksheet->setCellValue('L2', 'To be specified if Training');
         $worksheet->getStyle('L2')
-            ->getFill()
-            ->setFillType(FILL::FILL_SOLID)
-            ->setStartColor(new Color('c6e0b4'));
+        ->getFill()
+        ->setFillType(FILL::FILL_SOLID)
+        ->setStartColor(new Color('c6e0b4'));
 
         $worksheet->getStyle('L2')
             ->getAlignment()
             ->setHorizontal(Alignment::HORIZONTAL_CENTER);
 
         $worksheet->setCellValue('L3', 'Place')
-            ->getStyle('L3')
-            ->getFont()
-            ->setSize(10)
-            ->setBold(true);
+        ->getStyle('L3')
+        ->getFont()
+        ->setSize(10)
+        ->setBold(true);
         $worksheet->setCellValue('M3', 'Training Date')
             ->getStyle('M3')
             ->getFont()
@@ -600,10 +363,10 @@ class RapportSemestrielController extends Controller
             ->setSize(10)
             ->setBold(true);
         $worksheet->setCellValue('O3', 'Name of Training Conducted')
-            ->getStyle('O3')
-            ->getFont()
-            ->setSize(10)
-            ->setBold(true);
+        ->getStyle('O3')
+        ->getFont()
+        ->setSize(10)
+        ->setBold(true);
 
 
 
@@ -642,19 +405,19 @@ class RapportSemestrielController extends Controller
         $worksheet->mergeCells('Q2:V2');
         $worksheet->setCellValue('Q2', 'To be specified if internship');
         $worksheet->getStyle('Q2')
-            ->getFill()
-            ->setFillType(FILL::FILL_SOLID)
-            ->setStartColor(new Color('bdd7ee'));
+        ->getFill()
+        ->setFillType(FILL::FILL_SOLID)
+        ->setStartColor(new Color('bdd7ee'));
 
         $worksheet->getStyle('Q2')
             ->getAlignment()
             ->setHorizontal(Alignment::HORIZONTAL_CENTER);
 
         $worksheet->setCellValue('Q3', 'Place')
-            ->getStyle('Q3')
-            ->getFont()
-            ->setSize(10)
-            ->setBold(true);
+        ->getStyle('Q3')
+        ->getFont()
+        ->setSize(10)
+        ->setBold(true);
         $worksheet->setCellValue('R3', 'Internship Start date')
             ->getStyle('R3')
             ->getFont()
@@ -666,24 +429,22 @@ class RapportSemestrielController extends Controller
             ->setSize(10)
             ->setBold(true);
         $worksheet->setCellValue('T3', 'Internship duration (number of days')
-            ->getStyle('T3')
-            ->getFont()
-            ->setSize(10)
-            ->setBold(true);
+        ->getStyle('T3')
+        ->getFont()
+        ->setSize(10)
+        ->setBold(true);
         $worksheet->setCellValue('U3', 'Intership Name')
             ->getStyle('U3')
             ->getFont()
             ->setSize(10)
             ->setBold(true);
         $worksheet->setCellValue('V3', 'Project/Solutions developed')
-            ->getStyle('V3')
-            ->getFont()
-            ->setSize(10)
-            ->setBold(true);
+        ->getStyle('V3')
+        ->getFont()
+        ->setSize(10)
+        ->setBold(true);
 
         //remplissage des données
-
-
 
 
 
@@ -691,29 +452,29 @@ class RapportSemestrielController extends Controller
         $worksheet->mergeCells('X2:AA2');
         $worksheet->setCellValue('X2', 'To be specified if Event');
         $worksheet->getStyle('X2')
-            ->getFill()
-            ->setFillType(FILL::FILL_SOLID)
-            ->setStartColor(new Color('ffd5f7'));
+        ->getFill()
+        ->setFillType(FILL::FILL_SOLID)
+        ->setStartColor(new Color('ffd5f7'));
 
         $worksheet->getStyle('X2')
             ->getAlignment()
             ->setHorizontal(Alignment::HORIZONTAL_CENTER);
 
         $worksheet->setCellValue('X3', 'Place')
-            ->getStyle('X3')
-            ->getFont()
-            ->setSize(10)
-            ->setBold(true);
+        ->getStyle('X3')
+        ->getFont()
+        ->setSize(10)
+        ->setBold(true);
         $worksheet->setCellValue('Y3', 'Event date')
             ->getStyle('Y3')
             ->getFont()
             ->setSize(10)
             ->setBold(true);
         $worksheet->setCellValue('Z3', 'Event duration(number od days)')
-            ->getStyle('Z3')
-            ->getFont()
-            ->setSize(10)
-            ->setBold(true);
+        ->getStyle('Z3')
+        ->getFont()
+        ->setSize(10)
+        ->setBold(true);
         $worksheet->setCellValue('AA3', 'Name of the Event')
             ->getStyle('AA3')
             ->getFont()
@@ -749,16 +510,16 @@ class RapportSemestrielController extends Controller
         $worksheet->mergeCells('AC2:AE2');
         $worksheet->setCellValue('AC2', 'Employement of beneficiaires after ODC');
         $worksheet->getStyle('AC2')
-            ->getFill()
-            ->setFillType(FILL::FILL_SOLID)
-            ->setStartColor(new Color('ddebf7'));
+        ->getFill()
+        ->setFillType(FILL::FILL_SOLID)
+        ->setStartColor(new Color('ddebf7'));
 
         $worksheet->getStyle('AC2')
             ->getAlignment()
             ->setHorizontal(Alignment::HORIZONTAL_CENTER);
 
         $worksheet->setCellValue('AC3', 'Company Name')
-            ->getStyle('AC3')
+        ->getStyle('AC3')
             ->getFont()
             ->setSize(10)
             ->setBold(true);
@@ -777,6 +538,209 @@ class RapportSemestrielController extends Controller
             ->getFont()
             ->setSize(10)
             ->setBold(true);
+
+
+        //Remplissage de données du rapport semestriel selon les choix selectionné dans le select
+        $row = 4;
+        $typeform = env('TYPE_FORMATION');
+        $typeform = explode(',', $typeform);
+
+        $typeconf = env('TYPE_CONFERENCE');
+        $typeconf = explode(',', $typeconf);
+
+        $typeparc = env('TYPE_PARCOURS');
+        $typeparc = explode(',', $typeparc);
+        //fixation des colonnes lors du deliments de la feuilles
+        $worksheet->freezePane('A4');
+        $worksheet->freezePane('E4');
+
+        foreach ($candidats as $z => $candidat) {
+            // ini_set('max_execution_time', 10000);
+
+   
+            //calcule d'age du candidats
+            $today = new DateTime(); // Date d'aujourd'hui
+            $birthDay = new DateTime($candidat->birth_date); // Date de naissance du candidat
+            $interval = $today->diff($birthDay);
+            $ages = $interval->y; // Âge en années
+
+            //verification des ages des participants
+            $tranche = "";
+            // if ($ages >= 3 && $ages <= 14) {
+            //     $tranche = "0 - 14 years";
+            // }
+
+            if (in_array($candidat->typecode, ['SUCO', 'MAJU']))
+            {
+                $ages = rand(12, 14);
+            }
+
+            if($ages >= 12 && $ages <= 14){
+                $tranche = "12 - 14 years";
+            }
+            elseif($ages >= 15 && $ages <= 24 ?? $ages == "") {
+                $tranche = "15 - 24 years";
+            } elseif ($ages >= 25 && $ages <= 34) {
+                $tranche = "25 - 34 years";
+            } elseif ($ages >= 35) {
+                $tranche = "35 > years";
+            }
+            //verification des sexes
+
+            $gender = $candidat->gender;
+
+            if ($gender === 'M' || $gender === 'Garçon'
+            ) {
+                $gender = "male";
+            } elseif ($gender === 'F' || $gender === 'Fille') {
+                $gender = "female";
+            }
+            //$universite=json_decode(json_encode(trim($candidat->university, '"')), true);
+
+            //$universite = json_decode($candidat->university);
+            //$universite = json_encode($candidat->university, true);
+            $universityData = trim(stripslashes($candidat->university),'"');
+            $speciality = $university = $company = $profession='';
+            if(is_array(json_decode($universityData, true))) { // $universityData est un tableau
+                extract(json_decode($universityData, true));
+            }else{ // $universityData est une chaine de caractère
+                $university = $universityData;
+            }
+
+            $specialityData = trim(stripslashes($candidat->speciality), '"');
+            if(is_array(json_decode($specialityData, true))) { // $universityData est un tableau
+             $profession = json_decode($specialityData, true)['translations']['fr']['profession'];
+            }else{ // $universityData est une chaine de caractère
+                $profession = $universityData;
+            }
+            // echo $university;
+            // echo " >>> ";
+            // echo $profession;
+            // echo " >>> ";
+            // echo $speciality;
+            // echo " >>> ";
+            // echo $company;
+            // echo "<br>";
+            // if($z==100){
+            //     continue;
+            // }
+            
+            //continue;
+
+
+
+            $worksheet->setCellValue('A' . $row, $candidat->first_name)
+                ->getStyle('A' . $row)
+                ->getAlignment()
+                ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_LEFT);
+            $worksheet->setCellValue('B' . $row, $candidat->last_name)
+                ->getStyle('B' . $row)
+                ->getAlignment()
+                ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_LEFT);
+            $worksheet->setCellValue('C' . $row, $gender)
+                ->getStyle('C' . $row)
+                ->getAlignment()
+                ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
+            $worksheet->setCellValue('D' . $row, $tranche)
+                ->getStyle('D' . $row)
+                ->getAlignment()
+                ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_LEFT);
+            $worksheet->setCellValue('E' . $row, $profession ?? $company )
+                ->getStyle('E' . $row)
+                ->getAlignment()
+                ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_LEFT);
+            $worksheet->setCellValue('F' . $row, $university)
+                ->getStyle('F' . $row)
+                ->getAlignment()
+                ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_LEFT);
+            $worksheet->setCellValue('G' . $row, $speciality)
+                ->getStyle('G' . $row)
+                ->getAlignment()
+                ->setHorizontal(Alignment::HORIZONTAL_LEFT);
+            $worksheet->setCellValue('H' . $row, $candidat->email)
+                ->getStyle('H' . $row)
+                ->getAlignment()
+                ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
+            $worksheet->setCellValue('I' . $row, $candidat->phone_number)
+                ->getStyle('I' . $row)
+                ->getAlignment()
+                ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
+            $worksheet->setCellValue('J' . $row, $candidat->linkedin)
+                ->getStyle('J' . $row)
+                ->getAlignment()
+                ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
+
+            if (in_array($candidat->typecode, $typeparc)) {
+                $worksheet->setCellValue('Q' . $row, $candidat->namecat)
+                    ->getStyle('Q' . $row)
+                    ->getAlignment()
+                    ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
+                $worksheet->setCellValue('R' . $row, $candidat->startYear)
+                    ->getStyle('R' . $row)
+                    ->getAlignment()
+                    ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
+                $worksheet->setCellValue('S' . $row, $candidat->activdate_end)
+                    ->getStyle('S' . $row)
+                    ->getAlignment()
+                    ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
+                $worksheet->setCellValue('T' . $row, $candidat->number_day)
+                    ->getStyle('T' . $row)
+                    ->getAlignment()
+                    ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
+                $worksheet->setCellValue('U' . $row, $candidat->title)
+                    ->getStyle('U' . $row)
+                    ->getAlignment()
+                    ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
+            } elseif (in_array($candidat->typecode, $typeform)) {
+                $worksheet->setCellValue('L' . $row, $candidat->namecat)
+                    ->getStyle('L' . $row)
+                    ->getAlignment()
+                    ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
+                $worksheet->setCellValue('M' . $row, $candidat->startYear)
+                    ->getStyle('M' . $row)
+                    ->getAlignment()
+                    ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
+                $worksheet->setCellValue('N' . $row, $candidat->number_day)
+                    ->getStyle('N' . $row)
+                    ->getAlignment()
+                    ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
+                $worksheet->setCellValue('O' . $row, $candidat->title)
+                    ->getStyle('O' . $row)
+                    ->getAlignment()
+                    ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
+            } elseif (in_array($candidat->typecode, $typeconf)) {
+                $worksheet->setCellValue('X' . $row, $candidat->namecat)
+                    ->getStyle('X' . $row)
+                    ->getAlignment()
+                    ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
+                $worksheet->setCellValue('Y' . $row, $candidat->startYear)
+                    ->getStyle('Y' . $row)
+                    ->getAlignment()
+                    ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
+                $worksheet->setCellValue('Z' . $row, $candidat->number_day)
+                    ->getStyle('Z' . $row)
+                    ->getAlignment()
+                    ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
+                $worksheet->setCellValue('AA' . $row, $candidat->title)
+                    ->getStyle('AA' . $row)
+                    ->getAlignment()
+                    ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
+            }
+            $worksheet->setCellValue('AC' . $row, $candidat->entreprise)
+                ->getStyle('AC' . $row)
+                ->getAlignment()
+                ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
+            $worksheet->setCellValue('AD' . $row, $candidat->type_contrat)
+                ->getStyle('AD' . $row)
+                ->getAlignment()
+                ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
+            $worksheet->setCellValue('AE' . $row, $candidat->poste)
+                ->getStyle('AD' . $row)
+                ->getAlignment()
+                ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
+
+            $row++;
+        }
 
 
 

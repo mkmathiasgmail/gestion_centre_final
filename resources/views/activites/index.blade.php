@@ -42,8 +42,6 @@
         </div>
     @endif
 
-
-
     <div class=" w-full bg-[#fcdab40a] darj p-4 rounded-lg bg-opacity-5 relative">
         <!-- Header -->
         <div
@@ -77,8 +75,6 @@
 
                         </div>
                     </form>
-
-
 
                     @section('modal')
                         <!-- Main modal -->
@@ -117,8 +113,6 @@
                         </div>
                     @endsection
 
-
-
                     <button id="dropdownInformationButton" data-dropdown-toggle="dropdownInformation"
                         class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-gray-200 bg-white text-gray-800 shadow-sm hover:bg-gray-50 focus:outline-none focus:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-800 dark:border-neutral-700 dark:text-white dark:hover:bg-neutral-700 dark:focus:bg-neutral-700"
                         type="button">
@@ -132,7 +126,7 @@
                         Exporter
                     </button>
 
-                    <!-- Dropdown menu -->
+
                     <div id="dropdownInformation"
                         class="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700 dark:divide-gray-600">
                         <div class="py-2 first:pt-0 last:pb-0">
@@ -203,19 +197,13 @@
                         </div>
 
                     </div>
-
-
                     <a href="{{ route('activites.create') }}"
                         class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-transparent bg-[#ff7322] text-white hover:bg-[#ff6822] focus:outline-none focus:bg-[#ff6822] disabled:opacity-50 disabled:pointer-events-none">
                         Créer une activité
                     </a>
-
-
-
                 </div>
             </div>
         </div>
-        <!-- End Header -->
         <table id="table"
             class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400 cell-border display">
             <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
@@ -228,7 +216,7 @@
                     <th scope="col" class="px-6 py-3">dureé</th>
                     <th scope="col" class="px-6 py-3">Status</th>
                     <th scope="col" class="px-6 py-3">Book In seat</th>
-                    <th scope="col" class="px-6 py-3">nombre d'heure</th>
+                    <th scope="col" class="px-6 py-3">nombre de jour</th>
                     <th scope="col" class="px-6 py-3">Date Début</th>
                     <th scope="col" class="px-6 py-3">Date Fin</th>
                     <th scope="col" class="px-6 py-3">Action</th>
@@ -237,10 +225,6 @@
             <tbody></tbody>
         </table>
     </div>
-
-
-
-
 
     @section('script')
         <script>
@@ -462,11 +446,11 @@
                         },
                         {
                             data: 'title',
-                            name: 'titre'
+                            name: 'title'
                         },
                         {
-                            data: 'categories',
-                            name: 'categories'
+                            data: 'categorie_id',
+                            name: 'categorie_id'
                         },
                         {
                             data: 'typEvent',
@@ -474,7 +458,7 @@
                         },
                         {
                             data: 'location',
-                            name: 'lieu'
+                            name: 'location'
                         },
                         {
                             data: 'message',
@@ -528,6 +512,5 @@
             });
         </script>
     @endsection
-
 
 </x-app-layout>

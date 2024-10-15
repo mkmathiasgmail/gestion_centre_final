@@ -7,9 +7,12 @@
 
 
     <div class="w-full  mx-auto">
-        <div class="mx-5 my-3 text-sm">
+        <div class="mx-5 my-3 text-sm flex justify-between">
             <a href="{{ route('categorie.activites', $show->categorie->id) }}"
                 class=" text-red-600 font-bold tracking-widest">{{ $show->categorie->name }}</a>
+
+
+            <a href="{{ route('activites.edit', $show->id) }}" class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-transparent bg-[#ff7322] text-white hover:bg-[#ff6822] focus:outline-none focus:bg-[#ff6822] disabled:opacity-50 disabled:pointer-events-none">modifier</a>
         </div>
 
         @if ($show->candidat->count() == 0)
@@ -146,6 +149,25 @@
                         <table class="w-full text-gray-600">
                             <tbody>
                                 <tr>
+                                    <td class="py-2">Identifiant</td>
+                                    <td class="text-gray-500 dark:text-gray-200">
+
+
+                                        {{ $show->_id }}
+
+                                    </td>
+                                    <td>
+                                        <svg class="w-16 ml-auto text-gray-800 dark:text-white" aria-hidden="true"
+                                            xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                            fill="currentColor" viewBox="0 0 24 24">
+                                            <path
+                                                d="M18.045 3.007 12.31 3a1.965 1.965 0 0 0-1.4.585l-7.33 7.394a2 2 0 0 0 0 2.805l6.573 6.631a1.957 1.957 0 0 0 1.4.585 1.965 1.965 0 0 0 1.4-.585l7.409-7.477A2 2 0 0 0 21 11.479v-5.5a2.972 2.972 0 0 0-2.955-2.972Zm-2.452 6.438a1 1 0 1 1 0-2 1 1 0 0 1 0 2Z" />
+                                        </svg>
+
+
+                                    </td>
+                                </tr>
+                                <tr>
                                     <td class="py-2">Date debut Activite</td>
                                     <td class="text-gray-500">
                                         @php
@@ -223,13 +245,20 @@
                             </tbody>
                         </table>
 
-
+                        <div class=" mt-6">
+                            @foreach ($show->typEvent as $item)
+                                <span class="bg-gray-100 rounded-full px-3 py-1 text-sm font-semibold text-gray-600">
+                                    {{ $item->title }}</span>
+                            @endforeach
+                        </div>
                     </div>
+
+
                 </div>
 
             </div>
         @else
-            <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+            <div class="grid gap-6 grid-cols-1 md:grid-cols-3 lg:grid-cols-3">
                 <div>
                     <div
                         class="lg:h-full py-8 px-6 text-gray-600 dark:text-gray-200 rounded-xl border border-gray-200 bg-white dark:bg-gray-800 dark:border-gray-700">
@@ -249,7 +278,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="md:col-span-2 lg:col-span-1">
+                <div>
                     <div
                         class="h-full py-8 px-6 space-y-6 rounded-xl border border-gray-200 bg-white dark:bg-gray-800 dark:border-gray-700">
                         <div class="py-6" id="chart"></div>
@@ -364,6 +393,26 @@
 
                         <table class="w-full text-gray-600 dark:text-gray-200">
                             <tbody>
+                                <tr>
+                                    <td class="py-2">Identifiant</td>
+                                    <td class="text-gray-500 dark:text-gray-200">
+
+
+                                        {{ $show->_id }}
+
+                                    </td>
+                                    <td>
+                                        <svg class="w-16 ml-auto text-gray-800 dark:text-white" aria-hidden="true"
+                                            xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                            fill="currentColor" viewBox="0 0 24 24">
+                                            <path fill-rule="evenodd"
+                                                d="M5 5a1 1 0 0 0 1-1 1 1 0 1 1 2 0 1 1 0 0 0 1 1h1a1 1 0 0 0 1-1 1 1 0 1 1 2 0 1 1 0 0 0 1 1h1a1 1 0 0 0 1-1 1 1 0 1 1 2 0 1 1 0 0 0 1 1 2 2 0 0 1 2 2v1a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V7a2 2 0 0 1 2-2ZM3 19v-7a1 1 0 0 1 1-1h16a1 1 0 0 1 1 1v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2Zm6.01-6a1 1 0 1 0-2 0 1 1 0 0 0 2 0Zm2 0a1 1 0 1 1 2 0 1 1 0 0 1-2 0Zm6 0a1 1 0 1 0-2 0 1 1 0 0 0 2 0Zm-10 4a1 1 0 1 1 2 0 1 1 0 0 1-2 0Zm6 0a1 1 0 1 0-2 0 1 1 0 0 0 2 0Zm2 0a1 1 0 1 1 2 0 1 1 0 0 1-2 0Z"
+                                                clip-rule="evenodd" />
+                                        </svg>
+
+                                    </td>
+                                </tr>
+
                                 <tr>
                                     <td class="py-2">Date debut Activite</td>
                                     <td class="text-gray-500 dark:text-gray-200">
@@ -484,9 +533,13 @@
                                         {{ $show->show_in_calendar ? '✔️' : '⭕️' }}
                                     </td>
                                     <td>
-                                        <svg class="w-16 ml-auto text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
-                                            <path fill-rule="evenodd" d="M18 5.05h1a2 2 0 0 1 2 2v2H3v-2a2 2 0 0 1 2-2h1v-1a1 1 0 1 1 2 0v1h3v-1a1 1 0 1 1 2 0v1h3v-1a1 1 0 1 1 2 0v1Zm-15 6v8a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-8H3ZM11 18a1 1 0 1 0 2 0v-1h1a1 1 0 1 0 0-2h-1v-1a1 1 0 1 0-2 0v1h-1a1 1 0 1 0 0 2h1v1Z" clip-rule="evenodd"/>
-                                          </svg>
+                                        <svg class="w-16 ml-auto text-gray-800 dark:text-white" aria-hidden="true"
+                                            xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                            fill="currentColor" viewBox="0 0 24 24">
+                                            <path fill-rule="evenodd"
+                                                d="M18 5.05h1a2 2 0 0 1 2 2v2H3v-2a2 2 0 0 1 2-2h1v-1a1 1 0 1 1 2 0v1h3v-1a1 1 0 1 1 2 0v1h3v-1a1 1 0 1 1 2 0v1Zm-15 6v8a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-8H3ZM11 18a1 1 0 1 0 2 0v-1h1a1 1 0 1 0 0-2h-1v-1a1 1 0 1 0-2 0v1h-1a1 1 0 1 0 0 2h1v1Z"
+                                                clip-rule="evenodd" />
+                                        </svg>
 
 
                                     </td>
@@ -507,6 +560,13 @@
                                 </tr>
                             </tbody>
                         </table>
+
+                        <div class=" mt-6">
+                            @foreach ($show->typEvent as $item)
+                                <span class="bg-gray-100 rounded-full px-3 py-1 text-sm font-semibold text-gray-600">
+                                    {{ $item->title }}</span>
+                            @endforeach
+                        </div>
 
                         {{-- <div class="flex w-full md:max-w-xl  rounded shadow mt-5">
 
@@ -549,7 +609,6 @@
 
                     </div>
                 </div>
-
             </div>
 
         @endif
